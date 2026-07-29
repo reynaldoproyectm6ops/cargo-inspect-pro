@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifiesto de Carga Masiva ULD | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #0A2540; 
+            --amerijet-blue-dark: #051529; 
+            --amerijet-red: #E11D48; 
+            --bg-color: #F8FAFC; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 50px; }
+        
+        /* NAVBAR PREMIUM */
+        .navbar { background-color: var(--amerijet-blue); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(10,37,64,0.05); }
+        .navbar-brand { font-weight: 800; font-size: 20px; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px; cursor: pointer; }
+        .navbar-brand img { height: 28px; background: white; padding: 3px; border-radius: 6px; }
+        .btn-back { background-color: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .btn-back:hover { background: white; color: var(--amerijet-blue); }
+
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 25px; }
+        
+        /* CABECERA DE OPERACIÓN */
+        .flight-header { background: white; padding: 20px 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #E2E8F0; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .flight-info h1 { color: var(--amerijet-blue); font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .flight-info p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .flight-badge { background-color: #EFF6FF; color: #2563EB; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 14px; border: 1px solid #BFDBFE; display: flex; align-items: center; gap: 8px; }
+
+        .splitter { display: grid; grid-template-columns: 420px 1fr; gap: 25px; }
+        @media(max-width: 1000px) { .splitter { grid-template-columns: 1fr; } }
+
+        /* PANELES MODERNOS */
+        .panel { background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #E2E8F0; height: fit-content; }
+        .panel h2 { font-size: 14px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 15px; border-bottom: 2px solid var(--amerijet-blue); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+        .badge-count { background: var(--amerijet-blue); color: white; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+
+        /* LISTA SELECCIONABLE VISUAL */
+        .inventory-scroll { max-height: 280px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 8px; margin-bottom: 15px; background: #F8FAFC; }
+        .inventory-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #E2E8F0; cursor: pointer; transition: 0.2s; font-size: 13px; }
+        .inventory-row:hover { background: #EDF2F7; }
+        .inventory-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--amerijet-blue); cursor: pointer; }
+        .uld-meta { display: flex; flex-direction: column; }
+        .uld-name { font-weight: 700; color: var(--amerijet-blue-dark); }
+        .uld-cond { font-size: 11px; color: var(--text-muted); }
+
+        /* TABLAS ESTILIZADAS */
+        .uld-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        .vuelos-table-row { border-bottom: 1px solid #F1F5F9; transition: background 0.2s; }
+        .vuelos-table-row:hover { background: #F8FAFC; }
+        .matrix-th { padding: 12px; background: #F8FAFC; color: #475569; font-weight: 700; border-bottom: 2px solid #E2E8F0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .matrix-td { padding: 12px; color: var(--text-main); }
+
+        .form-group { display: flex; flex-direction: column; margin-bottom: 12px; }
+        .form-group label { font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .form-group input { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background-color: #F8FAFC; color: var(--text-main); }
+        .form-group input:focus { border-color: #3B82F6; background-color: white; outline: none; }
+        
+        .btn-add { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(16,185,129,0.15); transition: 0.2s; margin-top: 5px; }
+        .btn-add:hover { transform: translateY(-0.5px); box-shadow: 0 6px 14px rgba(16,185,129,0.25); }
+        
+        .btn-delete-mass { background: linear-gradient(135deg, #EF4444, #DC2626); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(239,68,68,0.15); transition: 0.2s; }
+        .btn-delete-mass:hover { background: #B91C1C; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand" id="navBrand"><img src="logo_3.png" alt="Logo"> Cargo Inspect Pro</div>
+        <button class="btn-back" id="btnBack">⬅️ Volver al Monitor</button>
+    </nav>
+
+    <div class="container">
+        
+        <div class="flight-header">
+            <div class="flight-info">
+                <h1>Panel de Despacho Masivo de ULDs</h1>
+                <p>Selecciona múltiples unidades en rampa y procésalas en un solo lote operativo.</p>
+            </div>
+            <div class="flight-badge">
+                <span>Vuelo:</span> <strong id="lblVuelo" style="color: #2563EB;">---</strong> | 
+                <span>Tail:</span> <strong id="lblTail" style="color: #2563EB;">---</strong>
+            </div>
+        </div>
+
+        <div class="splitter">
+            
+            <div class="panel">
+                <h2>Disponibles en Rampa <span class="badge-count" id="lblInvCount">0</span></h2>
+                <div class="inventory-scroll" id="inventoryContainer">
+                    <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px; font-style: italic;">Cargando unidades...</div>
+                </div>
+
+                <h2>Detalles del Lote Masivo</h2>
+                <form id="manifestForm">
+                    <div style="font-size: 12px; font-weight:700; color: var(--amerijet-blue); margin-bottom: 12px;">
+                        Unidades marcadas: <span id="lblCountMarcados" style="color: var(--amerijet-red); font-size: 14px;">0</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Destino Común (DEST)</label>
+                        <input type="text" id="dest" placeholder="Ej: MIA" maxlength="3" required style="text-transform: uppercase;">
+                    </div>
+                    <div class="form-group">
+                        <label>Contenido / Remarks Generales</label>
+                        <input type="text" id="content_remarks" placeholder="Ej: CO-LOAD / NETS OK">
+                    </div>
+                    <button type="submit" class="btn-add" id="btnSubmitManifest">✈️ Cargar Lote al Avión</button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid var(--amerijet-blue); padding-bottom: 6px;">
+                    <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">ULDs Manifestados en este Vuelo</h2>
+                    <button id="btnBajarMasivo" class="btn-delete-mass">🔽 Bajar Marcados</button>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="uld-table">
+                        <thead>
+                            <tr>
+                                <th class="matrix-th" style="width: 40px; text-align: center;"><input type="checkbox" id="chkAllManifest" onchange="seleccionarTodoManifiesto(this)"></th>
+                                <th class="matrix-th" style="text-align: center;">Tipo</th>
+                                <th class="matrix-th">Número ULD</th>
+                                <th class="matrix-th" style="text-align: center;">Código</th>
+                                <th class="matrix-th" style="text-align: center;">Destino</th>
+                                <th class="matrix-th">Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manifestTableBody">
+                            <tr><td colspan="6" style="text-align: center; color: #666; padding: 20px; font-style: italic;">Cargando manifiesto...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const operacionId = urlParams.get('id');
+        let miEstacion = "SAL"; 
+        let miCorreo = "";
+        let uldsSeleccionadosRampa = [];
+
+        async function inicializarApp() {
+            if(!operacionId) { window.location.href='dashboard.html'; return; }
+            
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) { window.location.href = 'index.html'; return; }
+                miCorreo = session.user.email;
+                
+                const { data: perfil } = await supabaseClient.from('perfiles').select('estacion_base').eq('id', session.user.id).single();
+                if(perfil && perfil.estacion_base) {
+                     miEstacion = perfil.estacion_base;
+                }
+
+                const { data: op } = await supabaseClient.from('vuelos_operaciones')
+                    .select('vuelo_id, fecha, matricula_avion')
+                    .eq('id', operacionId).single();
+
+                if(op) {
+                    document.getElementById('lblVuelo').innerText = op.vuelo_id;
+                    document.getElementById('lblTail').innerText = op.matricula_avion;
+                }
+
+                cargarInventarioLocalRampa();
+                cargarTablaManifiesto();
+
+            } catch(e) { console.error("Error Inicialización:", e); }
+        }
+
+        // --- RENDERIZA LA LISTA CON CHECKBOXES MASIVOS ---
+        async function cargarInventarioLocalRampa() {
+            const container = document.getElementById('inventoryContainer');
+            uldsSeleccionadosRampa = [];
+            actualizarContadorMarcados();
+            
+            try {
+                let { data: ulds, error } = await supabaseClient.from('uld_inventario')
+                    .select('id, uld_type, uld_number, airline_code, uld_status')
+                    .eq('station', miEstacion)
+                    .order('uld_type', { ascending: true });
+
+                if (error) throw error;
+                const inventario = ulds || [];
+                document.getElementById('lblInvCount').innerText = inventario.length;
+
+                if(inventario.length === 0) {
+                    container.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">No hay ULDs libres en rampa (${miEstacion}).</div>`;
+                    return;
+                }
+
+                container.innerHTML = "";
+                inventario.forEach(u => {
+                    const row = document.createElement('label');
+                    row.className = 'inventory-row';
+                    const uldDataString = JSON.stringify({ id: u.id, type: u.uld_type, num: u.uld_number, code: u.airline_code });
+                    
+                    row.innerHTML = `
+                        <input type="checkbox" class="chk-rampa-uld" value='${uldDataString}' onchange="manejarSeleccionRampa(this)">
+                        <div class="uld-meta">
+                            <span class="uld-name">📦 ${u.uld_type}${u.uld_number}${u.airline_code}</span>
+                            <span class="uld-cond">Condición: ${u.uld_status || 'SERVICEABLE'}</span>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        function manejarSeleccionRampa(checkbox) {
+            const data = JSON.parse(checkbox.value);
+            if(checkbox.checked) {
+                uldsSeleccionadosRampa.push(data);
+            } else {
+                uldsSeleccionadosRampa = uldsSeleccionadosRampa.filter(u => u.id !== data.id);
+            }
+            actualizarContadorMarcados();
+        }
+
+        function actualizarContadorMarcados() {
+            document.getElementById('lblCountMarcados').innerText = uldsSeleccionadosRampa.length;
+        }
+
+        // --- SUBMIT COMPLETO PARA GUARDAR TODO EL LOTE JUNTO ---
+        document.getElementById('manifestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if(uldsSeleccionadosRampa.length === 0) { alert("Debes marcar al menos un ULD de rampa."); return; }
+
+            const dest = document.getElementById('dest').value.trim().toUpperCase();
+            const remarks = document.getElementById('content_remarks').value.trim();
+            const btnSubmit = document.getElementById('btnSubmitManifest');
+            
+            btnSubmit.innerText = "Procesando Lote...";
+            btnSubmit.disabled = true;
+
+            try {
+                for(let uld of uldsSeleccionadosRampa) {
+                    const payload = {
+                        vuelo_operacion_id: operacionId,
+                        uld_type: uld.type,
+                        uld_number: uld.num,
+                        airline_code: uld.code,
+                        rep_position: '-', 
+                        destino_final: dest,
+                        contenido_remarks: remarks
+                    };
+
+                    const { error: insErr } = await supabaseClient.from('vuelo_ulds').insert([payload]);
+                    if (insErr) throw insErr;
+
+                    await supabaseClient.from('uld_inventario').update({ station: `EN_VUELO_${dest}` }).eq('id', uld.id);
+
+                    await supabaseClient.from('uld_movimientos').insert([{
+                        uld_completo: `${uld.type}${uld.num}${uld.code}`,
+                        origen: miEstacion,
+                        destino: dest,
+                        vuelo_asociado: document.getElementById('lblVuelo').innerText,
+                        usuario: miCorreo
+                    }]);
+                }
+
+                document.getElementById('manifestForm').reset();
+                cargarInventarioLocalRampa();
+                cargarTablaManifiesto();
+                alert(`¡Lote de ${uldsSeleccionadosRampa.length} ULDs manifestado y cargado con éxito!`);
+
+            } catch (err) { 
+                alert("🛑 ERROR PROCESANDO LOTE:\n" + err.message); 
+            } finally {
+                btnSubmit.innerText = "✈️ Cargar Lote al Avión";
+                btnSubmit.disabled = false;
+            }
+        });
+
+        // --- CARGA LA TABLA CON CHECKBOXES PARA BAJAR MASIVO ---
+        async function cargarTablaManifiesto() {
+            const tbody = document.getElementById('manifestTableBody');
+            document.getElementById('chkAllManifest').checked = false;
+            try {
+                const { data: ulds, error } = await supabaseClient.from('vuelo_ulds')
+                    .select('*')
+                    .eq('vuelo_operacion_id', operacionId);
+
+                if(error) throw error;
+                const listaManifiesto = ulds || [];
+
+                if(listaManifiesto.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #777; padding: 20px; font-style: italic;">El manifiesto está vacío. Ninguna unidad en este vuelo.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = "";
+                listaManifiesto.forEach(u => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'vuelos-table-row';
+                    const manifestDataString = JSON.stringify({ id: u.id, type: u.uld_type, num: u.uld_number, code: u.airline_code });
+                    
+                    tr.innerHTML = `
+                        <td class="matrix-td" style="text-align:center;"><input type="checkbox" class="chk-manifest-item" value='${manifestDataString}'></td>
+                        <td class="matrix-td" style="text-align:center; font-weight:bold;">${u.uld_type}</td>
+                        <td class="matrix-td" style="font-weight:bold; color:var(--amerijet-blue-dark);">${u.uld_number}</td>
+                        <td class="matrix-td" style="text-align:center; color:#666;">${u.airline_code}</td>
+                        <td class="matrix-td" style="text-align:center; font-weight:bold; color: var(--amerijet-red);">${u.destino_final}</td>
+                        <td class="matrix-td" style="font-style:italic; color:#555;">${u.contenido_remarks || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        function seleccionarTodoManifiesto(masterCheckbox) {
+            const checkboxes = document.querySelectorAll('.chk-manifest-item');
+            checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+        }
+
+        // --- ACCIÓN MASIVA PARA DESCARGAR MÚLTIPLES ULDS DEL AVIÓN ---
+        document.getElementById('btnBajarMasivo').addEventListener('click', async function() {
+            const checkboxes = document.querySelectorAll('.chk-manifest-item:checked');
+            if(checkboxes.length === 0) { alert("Por favor marca las unidades del manifiesto que deseas bajar."); return; }
+
+            if(confirm(`¿Estás seguro de quitar los ${checkboxes.length} ULDs seleccionados del avión y regresarlos a rampa?`)) {
+                const btn = document.getElementById('btnBajarMasivo');
+                btn.innerText = "Bajando Lote...";
+                btn.disabled = true;
+
+                try {
+                    for(let cb of checkboxes) {
+                        const item = JSON.parse(cb.value);
+                        
+                        // Elimina del manifiesto
+                        const { error: delErr } = await supabaseClient.from('vuelo_ulds').delete().eq('id', item.id);
+                        if (delErr) throw delErr;
+                        
+                        // Regresa a la estación local
+                        await supabaseClient.from('uld_inventario')
+                            .update({ station: miEstacion })
+                            .eq('uld_type', item.type)
+                            .eq('uld_number', item.num)
+                            .eq('airline_code', item.code);
+                    }
+
+                    alert("¡Lote de unidades devuelto a rampa de manera exitosa!");
+                    cargarInventarioLocalRampa();
+                    cargarTablaManifiesto();
+
+                } catch(e) {
+                    console.error(e);
+                    alert("Error en proceso masivo: " + e.message);
+                } finally {
+                    btn.innerHTML = "🔽 Bajar Marcados";
+                    btn.disabled = false;
+                }
+            }
+        });
+
+        document.getElementById('btnBack').addEventListener('click', () => window.location.href='dashboard.html');
+        document.getElementById('navBrand').addEventListener('click', () => window.location.href='dashboard.html');
+
+        inicializarApp();
+    </script>
+</body>
+</html>

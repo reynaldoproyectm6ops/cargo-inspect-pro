@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes Históricos | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- LIBRERÍA PARA GRÁFICOS (CHART.JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #0A2540; 
+            --amerijet-blue-dark: #051529;
+            --amerijet-red: #E11D48; 
+            --bg-color: #F1F5F9; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+            --sidebar-width: 260px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR OSCURO PROFESIONAL */
+        .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer; }
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+
+        .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-info-text { display: flex; flex-direction: column; }
+        .user-info-text strong { font-size: 14px; color: white; }
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
+
+        .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; border:none; background:transparent; cursor:pointer; text-align:left;}
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+
+        /* TOP HEADER */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px;}
+
+        /* CONTENIDO PRINCIPAL */
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
+        .container { padding: 30px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+        /* PANEL DE FILTROS */
+        .filter-panel { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; min-width: 140px;}
+        .filter-group label { font-size: 10px; font-weight: 800; color: #64748B; text-transform: uppercase; }
+        .filter-group input, .filter-group select { padding: 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-weight: 600; color: var(--text-main); font-size: 13px; outline: none; width: 100%;}
+        .filter-group input:focus, .filter-group select:focus { border-color: #3B82F6; }
+
+        .btn-filtrar { background: var(--amerijet-blue); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 13px; height: 38px;}
+        .btn-filtrar:hover { background: #051529; }
+        
+        .btn-exportar { background: #10B981; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 13px; height: 38px; display: flex; align-items: center; gap: 6px;}
+        .btn-exportar:hover { background: #059669; }
+
+        /* TABLA DE RESULTADOS */
+        .table-container { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; overflow-x: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 20px;}
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; white-space: nowrap; }
+        th { background-color: #F8FAFC; color: #475569; padding: 14px 15px; font-weight: 800; border-bottom: 2px solid #E2E8F0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; position: sticky; top: 0; z-index: 10;}
+        td { padding: 14px 15px; border-bottom: 1px solid #E2E8F0; color: #334155; font-weight: 500; }
+        tr:hover { background-color: #F1F5F9; }
+        
+        .badge-station { background: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 11px; border: 1px solid #FCD34D;}
+        .badge-done { background: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 10px; border: 1px solid #A7F3D0; }
+
+        .btn-view-master { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 8px 15px; border-radius: 6px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;}
+        .btn-view-master:hover { background: #DBEAFE; transform: translateY(-1px); }
+        .btn-delete { background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; padding: 8px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-delete:hover { background: #FECACA; }
+
+        /* PAGINACIÓN */
+        .pagination-wrapper { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; font-size: 13px; font-weight: 600; color: #475569; background: white; border-top: 1px solid #E2E8F0; }
+        .pag-btns { display: flex; gap: 5px; }
+        .btn-pag { background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; color: var(--amerijet-blue); transition: 0.2s; }
+        .btn-pag:hover:not(:disabled) { background: #E2E8F0; }
+        .btn-pag:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* PANEL ANALÍTICO GLOBAL (KPI) */
+        .kpi-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .kpi-card { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 15px;}
+        .kpi-icon { font-size: 35px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px;}
+        .icon-blue { background: #EFF6FF; color: #2563EB; }
+        .icon-green { background: #ECFDF5; color: #10B981; }
+        .icon-orange { background: #FFFBEB; color: #F59E0B; }
+        
+        .kpi-data { display: flex; flex-direction: column; }
+        .kpi-data span { font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; margin-bottom: 2px;}
+        .kpi-data strong { font-size: 24px; font-weight: 900; color: var(--amerijet-blue-dark); }
+        .kpi-data small { font-size: 11px; color: #94A3B8; font-weight: 600; margin-top: 2px;}
+
+        /* GRÁFICO GLOBAL */
+        .chart-container { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-top: 20px; height: 350px; display: none;}
+
+        /* MODAL MASTER (DASHBOARD DEL VUELO) */
+        .master-modal-content { background: #F8FAFC; border-radius: var(--border-radius); width: 100%; max-width: 900px; height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); animation: slideUp 0.3s ease-out forwards;}
+        .master-header { background: var(--amerijet-blue-dark); padding: 20px 25px; display: flex; flex-direction: column; gap: 15px; flex-shrink: 0;}
+        .master-title-bar { display: flex; justify-content: space-between; align-items: center; }
+        .master-title { color: white; font-size: 22px; font-weight: 900; margin: 0; display: flex; align-items: center; gap: 10px;}
+        .master-title span { background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 700; border: 1px solid rgba(255,255,255,0.1); }
+        .master-close { background: rgba(255,255,255,0.1); border: none; color: white; width: 35px; height: 35px; border-radius: 8px; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; justify-content: center;}
+        .master-close:hover { background: var(--amerijet-red); }
+        
+        .flight-kpis { display: flex; gap: 15px; flex-wrap: wrap; }
+        .fkpi-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px; flex: 1; min-width: 150px; display: flex; flex-direction: column; gap: 2px;}
+        .fkpi-box label { font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;}
+        .fkpi-box strong { font-size: 18px; color: white; font-weight: 900; }
+        .delay-badge { background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; display: inline-block; margin-left: 8px; vertical-align: middle;}
+        .ontime-badge { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; display: inline-block; margin-left: 8px; vertical-align: middle;}
+
+        .master-tabs { display: flex; background: white; border-bottom: 1px solid #E2E8F0; padding: 0 10px; flex-shrink: 0; overflow-x: auto;}
+        .master-tab { padding: 15px 20px; font-size: 14px; font-weight: 800; color: #64748B; border-bottom: 3px solid transparent; cursor: pointer; transition: 0.2s; white-space: nowrap;}
+        .master-tab:hover { color: var(--amerijet-blue); background: #F8FAFC;}
+        .master-tab.active { color: var(--amerijet-blue); border-bottom-color: var(--amerijet-blue); background: #F1F5F9;}
+
+        .master-body { padding: 25px; flex: 1; overflow-y: auto; text-align: left; }
+        .data-card { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); margin-bottom: 20px;}
+        .data-card-title { font-size: 13px; font-weight: 900; color: var(--amerijet-blue-dark); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #F1F5F9; padding-bottom: 8px;}
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .data-box { display: flex; flex-direction: column; gap: 4px; background: #F8FAFC; padding: 12px; border-radius: 8px; border: 1px dashed #CBD5E1;}
+        .data-box label { font-size: 10px; font-weight: 800; color: #64748B; text-transform: uppercase;}
+        .data-box span { font-size: 14px; font-weight: 700; color: #1E293B; }
+        .list-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #E2E8F0; font-size: 13px; font-weight: 600;}
+        .list-row:last-child { border-bottom: none; }
+        .info-text { font-size: 13px; color: #334155; line-height: 1.5; background: white; padding: 15px; border-radius: 8px; border: 1px dashed #CBD5E1; }
+        
+        .master-footer { padding: 15px 25px; background: white; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; gap: 10px; flex-shrink: 0; align-items: center; flex-wrap: wrap;}
+        .btn-pdf-gen { background: #10B981; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.2s;}
+        .btn-pdf-gen:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(16,185,129,0.2);}
+        .btn-excel-gen { background: #3B82F6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.2s;}
+        .btn-excel-gen:hover { background: #2563EB; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(59,130,246,0.2);}
+
+        /* ========================================================= */
+        /* PLANTILLA OFICIAL PARA EL PDF (PROPORCIÓN CARTA PERFECTA) */
+        /* ========================================================= */
+        #pdf-render-zone-com106 {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            background: #e2e8f0;
+            padding: 20px 0;
+            z-index: -9999;
+            min-height: 100vh;
+        }
+        #official-pdf-template { 
+            background: white; 
+            color: black; 
+            font-family: Arial, Helvetica, sans-serif; 
+            width: 800px; 
+            min-height: 1035px; 
+            margin: 0 auto; 
+            padding: 30px 42px 25px 42px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .pdf-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px; }
+        .pdf-header img { height: 50px; object-fit: contain; }
+        .pdf-header h2 { font-size: 23px; font-weight: bold; margin: 0; }
+        
+        .pdf-meta-container { display: flex; justify-content: space-between; align-items: flex-end; font-size: 11.5px; font-weight: bold; margin-bottom: 10px; flex-wrap: nowrap; white-space: nowrap;}
+        .pdf-meta-item { display: flex; align-items: baseline; }
+        .pdf-meta-val { border-bottom: 1px solid black; text-align: center; font-weight: normal; margin-left: 3px; padding: 0 4px; display: inline-block; white-space: nowrap; font-size: 11.5px; }
+        
+        .pdf-timezone-note { text-align: center; font-weight: bold; font-size: 12.5px; margin-bottom: 6px; margin-top: 6px;}
+
+        /* TABLA PRINCIPAL CON CELDAS SEPARADAS DE INICIALES Y HORA */
+        .pdf-table { width: 100%; border-collapse: collapse; font-size: 10.5px; margin-bottom: 0; border: 1.5px solid black; table-layout: fixed;}
+        .pdf-table th, .pdf-table td { border: 1px solid black; padding: 6px 7px; vertical-align: middle; overflow: hidden;}
+        
+        .pdf-table td.event-col { width: 44%; font-size: 10.5px; font-weight: normal; color: #000; line-height: 1.25; }
+        
+        .pdf-table td.ini-col { width: 8%; text-align: center; font-weight: normal; font-size: 11px; text-transform: uppercase; font-family: Arial, sans-serif; }
+        .pdf-table td.time-col { width: 14%; text-align: center; font-weight: bold; font-size: 11px; font-family: monospace; }
+
+        .pdf-table td.remarks-col { width: 34%; vertical-align: top; font-size: 9.5px; line-height: 1.2; word-break: break-word; font-weight: normal; white-space: pre-wrap;}
+        
+        .pdf-section-title { font-weight: bold; font-size: 12.5px; background: #fff;}
+        .pdf-banner-row td { text-align: center; font-weight: bold; font-style: italic; font-size: 11.5px; padding: 5px; }
+        
+        .pdf-cert-box { margin-top: 14px; }
+        .pdf-cert-box h4 { font-size: 11.5px; font-weight: bold; margin-bottom: 3px; text-transform: uppercase;}
+        .pdf-cert-box p { font-size: 10px; text-align: justify; line-height: 1.3; margin: 0; color: #111;}
+
+        .pdf-sign-container { margin-top: 14px; }
+        .pdf-sign-block-title { font-weight: bold; font-size: 11.5px; text-transform: uppercase; margin-bottom: 3px; }
+        .pdf-sign-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .pdf-sign-field { width: 46%; text-align: center; position: relative; }
+        .pdf-sign-line { border-bottom: 1.5px solid #333; height: 25px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; font-family: 'Courier New', Courier, monospace; font-size: 13px; font-weight: bold;}
+        .pdf-sign-img { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); max-height: 40px; max-width: 90%; }
+        .pdf-sign-label { font-weight: bold; font-size: 10px; margin-top: 3px; }
+
+        .pdf-footer { display: flex; justify-content: space-between; align-items: flex-end; font-size: 10px; margin-top: 14px;}
+        .pdf-footer-note { font-weight: bold; font-style: italic; font-size: 10px; width: 68%;}
+        .pdf-footer-meta { text-align: right; width: 30%; font-size: 10px;}
+
+        /* MODALES ALERTA */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1024px) { 
+            .container { padding: 15px; }
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); z-index: 1001;}
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; z-index: 1000;}
+            .menu-toggle { display: block; }
+            .header-title { display: none; } 
+            .filter-panel { flex-direction: column; align-items: stretch; }
+            .btn-filtrar { width: 100%; }
+            .btn-exportar { width: 100%; justify-content: center; margin-left: 0; margin-top: 10px;}
+            .master-modal-content { height: 95vh; max-width: 100%; border-radius: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ LATERAL -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo_3.png" alt="Logo" onclick="navegarA('dashboard.html')" style="cursor:pointer;">
+            <span>Cargo Inspect Pro</span>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info-text">
+                <strong id="lblUserName">Cargando...</strong>
+                <span id="lblUserRol">...</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-link" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
+            <button class="nav-link" onclick="navegarA('uld_gestion.html')">📦 Inventario ULD</button>
+            <button class="nav-link" id="btnAdminPanel" style="display: none;" onclick="navegarA('admin_panel.html')">👑 Panel de Control</button>
+            <button class="nav-link active" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="logoutSeguro()">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="header-title">Archivo Histórico Global</div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="filter-panel">
+                    <div class="filter-group">
+                        <label>Desde Fecha Op.</label>
+                        <input type="date" id="filtro_desde">
+                    </div>
+                    <div class="filter-group">
+                        <label>Hasta Fecha Op.</label>
+                        <input type="date" id="filtro_hasta">
+                    </div>
+                    <div class="filter-group">
+                        <label>Estación</label>
+                        <select id="filtro_estacion">
+                            <option value="ALL">🌍 Todas las Estaciones</option>
+                        </select>
+                    </div>
+                    <button class="btn-filtrar" onclick="ejecutarFiltro()">🔍 Filtrar Vuelos</button>
+                    <button class="btn-exportar" onclick="exportarExcelConsolidado()">⬇️ Exportar Todos a Excel</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="reporteTable">
+                        <thead>
+                            <tr>
+                                <th>Nº Vuelo</th>
+                                <th>Matrícula</th>
+                                <th>Ruta</th>
+                                <th>Fecha Op.</th>
+                                <th>Estación</th>
+                                <th>Estado</th>
+                                <th>Acción Principal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reporteBody">
+                            <tr><td colspan="7" style="text-align: center; padding: 40px; color:#64748B;">Sincronizando archivo histórico... ⏳</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="pagination-wrapper">
+                        <span id="pagInfo">Mostrando 0 de 0</span>
+                        <div class="pag-btns">
+                            <button class="btn-pag" id="btnPrevPage" onclick="cambiarPagina(-1)">⬅️ Ant</button>
+                            <button class="btn-pag" id="btnNextPage" onclick="cambiarPagina(1)">Sig ➡️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD ANALÍTICO GLOBAL (KPI) -->
+                <div class="kpi-section">
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-blue">✈️</div>
+                        <div class="kpi-data">
+                            <span>Vuelos Consultados</span>
+                            <strong id="kpiTotalVuelos">0</strong>
+                            <small>En el rango seleccionado</small>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-green">📦</div>
+                        <div class="kpi-data">
+                            <span>Volumen Carga (ULD)</span>
+                            <strong id="kpiTotalUlds">0</strong>
+                            <small>Unidades exportadas</small>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-orange">⏱️</div>
+                        <div class="kpi-data">
+                            <span>Promedio Despaletizado</span>
+                            <strong id="kpiTiempoImport">0 min</strong>
+                            <small>Tiempo de importación global</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GRÁFICO INTELIGENTE DE TIEMPOS -->
+                <div class="chart-container" id="chartWrapper">
+                    <canvas id="groundTimeChart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================================
+         MODAL MASTER INTERACTIVO (DASHBOARD DEL VUELO) 
+         ======================================================== -->
+    <div class="modal-overlay" id="masterModal" style="z-index: 2500;">
+        <div class="master-modal-content">
+            <div class="master-header">
+                <div class="master-title-bar">
+                    <h2 class="master-title" id="mmTitle">VUELO <span>M6770</span></h2>
+                    <button class="master-close" onclick="cerrarMasterModal()">✖</button>
+                </div>
+                <!-- KPIs INTELIGENTES DEL VUELO -->
+                <div class="flight-kpis" id="mmKpis">
+                    <!-- Inyectado por JS -->
+                </div>
+            </div>
+            
+            <div class="master-tabs" id="mmTabs">
+                <div class="master-tab active" onclick="switchMasterTab('armado', this)">📦 Armado / Export</div>
+                <div class="master-tab" onclick="switchMasterTab('import', this)">🛬 Importación</div>
+                <div class="master-tab" onclick="switchMasterTab('gse', this)">🚜 Equipos GSE</div>
+                <div class="master-tab" onclick="switchMasterTab('com106', this)">📄 COM-106</div>
+                <div class="master-tab" onclick="switchMasterTab('inspeccion', this)">🔍 Inspección Daños</div>
+            </div>
+
+            <div class="master-body" id="mmBody">
+                <!-- Contenido Dinámico inyectado por JS -->
+            </div>
+
+            <div class="master-footer" id="mmFooter">
+                <button class="btn-excel-gen" id="btnModalExcel">📊 Bajar Excel del Vuelo</button>
+                <div id="btnModalPdfContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales Alertas -->
+    <div class="modal-overlay" id="customAlertModal" style="z-index: 3000;">
+        <div class="modal-content">
+            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
+            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
+            <button onclick="document.getElementById('customAlertModal').style.display='none'" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customConfirmModal" style="z-index: 3000;">
+        <div class="modal-content">
+            <div style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
+            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Confirmar</h3>
+            <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
+            <div style="display: flex; gap: 10px;">
+                <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Confirmar</button>
+                <button onclick="document.getElementById('customConfirmModal').style.display='none'" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLANTILLA OCULTA PARA PDF NATIVO DEL COM-106 EXACTA AL ORIGINAL -->
+    <div id="pdf-render-zone-com106">
+        <div id="official-pdf-template">
+            <div>
+                <div class="pdf-header">
+                    <img id="pdfLogoImg" alt="Amerijet Logo">
+                    <h2>Load Verification Form</h2>
+                </div>
+
+                <div class="pdf-meta-container">
+                    <div class="pdf-meta-item">Flight# <span class="pdf-meta-val" id="pdf_flight" style="min-width: 60px;"></span></div>
+                    <div class="pdf-meta-item">Date <span class="pdf-meta-val" id="pdf_date" style="min-width: 90px;"></span></div>
+                    <div class="pdf-meta-item">From/To <span class="pdf-meta-val" id="pdf_route" style="min-width: 90px;"></span></div>
+                    <div class="pdf-meta-item">STA <span class="pdf-meta-val" id="pdf_sta" style="min-width: 35px;"></span></div>
+                    <div class="pdf-meta-item">STD <span class="pdf-meta-val" id="pdf_std" style="min-width: 35px;"></span></div>
+                    <div class="pdf-meta-item">ATA <span class="pdf-meta-val" id="pdf_ata" style="min-width: 35px;"></span></div>
+                    <div class="pdf-meta-item">ATD <span class="pdf-meta-val" id="pdf_atd" style="min-width: 35px;"></span></div>
+                </div>
+
+                <div class="pdf-timezone-note">All times listed in Zulu / GMT</div>
+
+                <table class="pdf-table">
+                    <!-- Block-In -->
+                    <tr>
+                        <td class="pdf-section-title">Block-In</td>
+                        <td class="pdf-section-title" colspan="2" style="text-align: center;">Initials / Times</td>
+                        <td class="pdf-section-title" style="text-align: center;">Remarks</td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Aircraft Block-In (Actual or Visual)</td>
+                        <td class="ini-col" id="pdf_i_block_in"></td>
+                        <td class="time-col" id="pdf_t_block_in"></td>
+                        <td class="remarks-col" rowspan="3" id="pdf_rem_block_in"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Crew Stairs Positioned and Ready</td>
+                        <td class="ini-col" id="pdf_i_stairs"></td>
+                        <td class="time-col" id="pdf_t_stairs"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">GSE Positioned and Ready</td>
+                        <td class="ini-col" id="pdf_i_gse"></td>
+                        <td class="time-col" id="pdf_t_gse"></td>
+                    </tr>
+
+                    <!-- Offload -->
+                    <tr>
+                        <td class="pdf-section-title" style="border-top: 2px solid black;">Offload</td>
+                        <td class="pdf-section-title" colspan="2" style="text-align: center; border-top: 2px solid black;">Initials / Times</td>
+                        <td class="pdf-section-title" style="text-align: center; border-top: 2px solid black;">Remarks</td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Lower Deck Cargo Door Open</td>
+                        <td class="ini-col" id="pdf_i_lower_door"></td>
+                        <td class="time-col" id="pdf_t_lower_door"></td>
+                        <td class="remarks-col" rowspan="4" id="pdf_rem_offload"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Main Deck Cargo Door Open</td>
+                        <td class="ini-col" id="pdf_i_main_door"></td>
+                        <td class="time-col" id="pdf_t_main_door"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">First ULD Off</td>
+                        <td class="ini-col" id="pdf_i_first_uld_off"></td>
+                        <td class="time-col" id="pdf_t_first_uld_off"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Offload Completed</td>
+                        <td class="ini-col" id="pdf_i_offload_comp"></td>
+                        <td class="time-col" id="pdf_t_offload_comp"></td>
+                    </tr>
+
+                    <!-- Banner -->
+                    <tr class="pdf-banner-row"><td colspan="4">All Cargo Compartments Must be Inspected after Offload</td></tr>
+
+                    <!-- Inspection -->
+                    <tr>
+                        <td class="pdf-section-title">Inspection and Damage</td>
+                        <td class="pdf-section-title" colspan="2" style="text-align: center;">Initials / Times</td>
+                        <td class="pdf-section-title" style="text-align: center;">Remarks</td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Forward, AFT and Bulk Hold Inspected</td>
+                        <td class="ini-col" id="pdf_i_fwd_bulk_insp"></td>
+                        <td class="time-col" id="pdf_t_fwd_bulk_insp"></td>
+                        <td class="remarks-col" rowspan="3" id="pdf_rem_insp"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Main Deck Inspected</td>
+                        <td class="ini-col" id="pdf_i_main_deck_insp"></td>
+                        <td class="time-col" id="pdf_t_main_deck_insp"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col" style="font-size: 11px; line-height: 1.25; padding: 6px 8px;">
+                            Damage to Cargo Loading System equipment, aircraft liner, bulkhead, nets, etc. must be reported by Loadmaster or Load Supervisor to local Maintenance, Captain and OCC, as applicable. Must annotate damage in Remarks section<br>
+                        </td>
+                        <td class="ini-col" id="pdf_i_damage_report"></td>
+                        <td class="time-col" id="pdf_t_damage_report"></td>
+                    </tr>
+
+                    <!-- Loading -->
+                    <tr>
+                        <td class="pdf-section-title" style="border-top: 2px solid black;">Loading</td>
+                        <td class="pdf-section-title" colspan="2" style="text-align: center; border-top: 2px solid black;">Initials / Times</td>
+                        <td class="pdf-section-title" style="text-align: center; border-top: 2px solid black;">Remarks</td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Load Plan Received</td>
+                        <td class="ini-col" id="pdf_i_load_plan"></td>
+                        <td class="time-col" id="pdf_t_load_plan"></td>
+                        <td class="remarks-col" rowspan="5" id="pdf_rem_loading"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">First ULD On</td>
+                        <td class="ini-col" id="pdf_i_first_uld_on"></td>
+                        <td class="time-col" id="pdf_t_first_uld_on"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Last ULD On</td>
+                        <td class="ini-col" id="pdf_i_last_uld_on"></td>
+                        <td class="time-col" id="pdf_t_last_uld_on"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Description of Discrepancies in Remarks</td>
+                        <td class="ini-col" id="pdf_i_discrepancies"></td>
+                        <td class="time-col" id="pdf_t_discrepancies"></td>
+                    </tr>
+                    <tr>
+                        <td class="event-col">Final Loadplan and W&B Delivered to Crew</td>
+                        <td class="ini-col" id="pdf_i_final_loadplan"></td>
+                        <td class="time-col" id="pdf_t_final_loadplan"></td>
+                    </tr>
+                </table>
+
+                <div class="pdf-cert-box">
+                    <h4>CERTIFICATION STATEMENT</h4>
+                    <p>I certify the aircraft main deck, lower cargo compartments, and bulk hold have been physically checked, inspected, and verified after offloading was completed and/or before loading started. I certify the aircraft has been loaded in accordance with the loading instructions report. I certify and confirm all locks have been fully engaged and ULDs/cargo secured as per Amerijet aircraft loading procedures and safety standards.</p>
+                </div>
+            </div>
+            
+            <div>
+                <!-- FIRMAS -->
+                <div class="pdf-sign-container">
+                    <!-- OFFLOAD BLOCK -->
+                    <div class="pdf-sign-block-title">OFFLOAD</div>
+                    <div class="pdf-sign-row">
+                        <div class="pdf-sign-field">
+                            <div class="pdf-sign-line" id="pdf_print_offload"></div>
+                            <div class="pdf-sign-label">Print Name</div>
+                        </div>
+                        <div class="pdf-sign-field">
+                            <div class="pdf-sign-line">
+                                <img id="pdf_img_sign_offload" class="pdf-sign-img" style="display:none;" />
+                            </div>
+                            <div class="pdf-sign-label">Signature</div>
+                        </div>
+                    </div>
+
+                    <!-- LOADING BLOCK -->
+                    <div class="pdf-sign-block-title">LOADING</div>
+                    <div class="pdf-sign-row">
+                        <div class="pdf-sign-field">
+                            <div class="pdf-sign-line" id="pdf_print_loading"></div>
+                            <div class="pdf-sign-label">Print Name</div>
+                        </div>
+                        <div class="pdf-sign-field">
+                            <div class="pdf-sign-line">
+                                <img id="pdf_img_sign_loading" class="pdf-sign-img" style="display:none;" />
+                            </div>
+                            <div class="pdf-sign-label">Signature</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="pdf-footer">
+                    <div class="pdf-footer-note">Note: The Load Verification Form (COM-106) shall be completed by trained and qualified Amerijet representative</div>
+                    <div class="pdf-footer-meta"><span>Form COM-106</span> &nbsp;&nbsp;&nbsp;&nbsp; <span>Revision 1, 15 July 2025</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let misEstaciones = [];
+        let datosVistaActual = [];
+        let vueloActivoObj = null; 
+        
+        let paginaActual = 1;
+        const itemsPorPagina = 50;
+        let groundTimeChart = null; 
+
+        function navegarA(url) { window.location.href = url; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+        async function logoutSeguro() { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }
+
+        function showCustomAlert(title, message, type = 'info') {
+            const modal = document.getElementById('customAlertModal');
+            document.getElementById('alertTitle').innerText = title; document.getElementById('alertMessage').innerHTML = message;
+            document.getElementById('alertIcon').innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            document.getElementById('alertTitle').style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            document.getElementById('alertBtn').style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            modal.style.display = 'flex';
+        }
+
+        let currentConfirmCallback = null;
+        function showCustomConfirm(title, message, confirmBtnText, btnColor, callback) {
+            document.getElementById('confirmTitle').innerText = title; document.getElementById('confirmTitle').style.color = btnColor;
+            document.getElementById('confirmMessage').innerHTML = message;
+            const btn = document.getElementById('btnConfirmAction'); btn.innerText = confirmBtnText; btn.style.background = btnColor;
+            currentConfirmCallback = callback; document.getElementById('customConfirmModal').style.display = 'flex';
+        }
+        document.getElementById('btnConfirmAction').addEventListener('click', () => { if(currentConfirmCallback) currentConfirmCallback(); document.getElementById('customConfirmModal').style.display = 'none'; });
+
+        async function inicializarSeguridad() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            const { data: perfil } = await supabaseClient.from('perfiles').select('estacion_base, rol, nombre').eq('id', session.user.id).single();
+            if (!perfil || String(perfil.rol).toLowerCase() === 'user') {
+                alert("Acceso Restringido. Esta vista es exclusiva para Supervisores y Administradores.");
+                window.location.href = 'dashboard.html'; return;
+            }
+
+            document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
+            document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
+            if(String(perfil.rol).toLowerCase() === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+
+            misEstaciones = (perfil.estacion_base || "SAL").split(',').map(s => s.trim());
+            const selector = document.getElementById('filtro_estacion');
+            if(String(perfil.rol).toLowerCase() === 'admin') {
+                const { data: catEst } = await supabaseClient.from('estaciones').select('codigo').order('codigo');
+                if(catEst) catEst.forEach(e => { selector.innerHTML += `<option value="${e.codigo}">${e.codigo}</option>`; });
+            } else {
+                misEstaciones.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+            }
+
+            const hoy = new Date();
+            const hace3Dias = new Date(); hace3Dias.setDate(hoy.getDate() - 3);
+            document.getElementById('filtro_hasta').value = hoy.toISOString().split('T')[0];
+            document.getElementById('filtro_desde').value = hace3Dias.toISOString().split('T')[0];
+
+            cargarReporte();
+        }
+
+        function ejecutarFiltro() { paginaActual = 1; cargarReporte(); }
+
+        function calcMinutesBetweenDates(d1, d2) {
+            if(!d1 || !d2) return 0;
+            let diff = new Date(d2) - new Date(d1);
+            return diff > 0 ? diff / 60000 : 0;
+        }
+
+        function calcMinutesZulu(t1, t2) {
+            if(!t1 || !t2) return 0;
+            let [h1, m1] = t1.replace(/[^0-9:]/g,'').split(':').map(Number);
+            let [h2, m2] = t2.replace(/[^0-9:]/g,'').split(':').map(Number);
+            if(isNaN(h1)||isNaN(m1)||isNaN(h2)||isNaN(m2)) return 0;
+            let min1 = h1 * 60 + m1; let min2 = h2 * 60 + m2;
+            if(min2 < min1) min2 += 24 * 60;
+            return min2 - min1;
+        }
+
+        function formatMins(totalMins) {
+            if (totalMins <= 0) return "0h 0m";
+            const h = Math.floor(totalMins / 60);
+            const m = Math.round(totalMins % 60);
+            return `${h}h ${m}m`;
+        }
+
+        async function cargarReporte() {
+            const tbody = document.getElementById('reporteBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color:#64748B;">Buscando vuelos finalizados... ⏳</td></tr>';
+            
+            const desde = document.getElementById('filtro_desde').value;
+            const hasta = document.getElementById('filtro_hasta').value;
+            const estacion = document.getElementById('filtro_estacion').value;
+
+            try {
+                let query = supabaseClient.from('vuelos_operaciones')
+                    .select(`*, tiempos_armado(*), com106_formularios(*), vuelos_gse(*)`)
+                    .eq('estado', 'FINALIZADO')
+                    .gte('fecha', desde)
+                    .lte('fecha', hasta)
+                    .order('fecha', { ascending: false });
+
+                if (estacion !== 'ALL') { query = query.eq('estacion_registro', estacion); }
+
+                const { data, error } = await query;
+                if (error) throw error;
+
+                datosVistaActual = data || [];
+                calcularKPIsGlobales();
+                dibujarTablaPaginada();
+                renderizarGraficoGlobal();
+
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 30px; color:var(--amerijet-red);">Error de base de datos: ${e.message}</td></tr>`;
+            }
+        }
+
+        function dibujarTablaPaginada() {
+            const tbody = document.getElementById('reporteBody');
+            
+            if (datosVistaActual.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color:#64748B;">No se encontraron vuelos en este rango de fechas. Amplía los filtros si es necesario.</td></tr>';
+                document.getElementById('pagInfo').innerText = `Mostrando 0 de 0`;
+                document.getElementById('btnPrevPage').disabled = true; document.getElementById('btnNextPage').disabled = true;
+                return;
+            }
+
+            const startIndex = (paginaActual - 1) * itemsPorPagina;
+            const endIndex = Math.min(startIndex + itemsPorPagina, datosVistaActual.length);
+            const datosPagina = datosVistaActual.slice(startIndex, endIndex);
+
+            tbody.innerHTML = '';
+            datosPagina.forEach(v => {
+                const d = new Date(v.fecha);
+                const fechaFormat = `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-weight:900; color:var(--amerijet-blue-dark); font-size:15px;">${v.vuelo_id}</td>
+                        <td style="font-weight:700;">✈️ ${v.matricula_avion}</td>
+                        <td>${v.ruta || 'N/A'}</td>
+                        <td style="font-weight:600;">${fechaFormat}</td>
+                        <td><span class="badge-station">${v.estacion_registro}</span></td>
+                        <td><span class="badge-done">✔️ CERRADO</span></td>
+                        <td>
+                            <button class="btn-view-master" onclick="abrirMasterModal('${v.id}')">🎛️ Ver Tablero del Vuelo</button>
+                            <button class="btn-delete" style="margin-left:5px;" onclick="eliminarVueloDefinitivo('${v.id}', '${v.vuelo_id}')">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('pagInfo').innerText = `Mostrando ${startIndex + 1} - ${endIndex} de ${datosVistaActual.length}`;
+            document.getElementById('btnPrevPage').disabled = (paginaActual === 1);
+            document.getElementById('btnNextPage').disabled = (endIndex >= datosVistaActual.length);
+        }
+
+        function cambiarPagina(direccion) { paginaActual += direccion; dibujarTablaPaginada(); }
+
+        function calcularKPIsGlobales() {
+            let totalUlds = 0; let importTimes = [];
+            datosVistaActual.forEach(v => {
+                if(v.tiempos_armado) v.tiempos_armado.forEach(a => totalUlds += (a.uld_count || 0));
+                if(v.hora_inicio_lotificada && v.hora_fin_lotificada) {
+                    let diffMs = new Date(v.hora_fin_lotificada) - new Date(v.hora_inicio_lotificada);
+                    if(diffMs > 0) importTimes.push(diffMs);
+                }
+            });
+            let avgImportMs = importTimes.length > 0 ? (importTimes.reduce((a,b)=>a+b,0) / importTimes.length) : 0;
+            document.getElementById('kpiTotalVuelos').innerText = datosVistaActual.length;
+            document.getElementById('kpiTotalUlds').innerText = totalUlds;
+            document.getElementById('kpiTiempoImport').innerText = `${Math.round(avgImportMs / 60000)} min`;
+        }
+
+        function renderizarGraficoGlobal() {
+            const wrapper = document.getElementById('chartWrapper');
+            if (datosVistaActual.length === 0) {
+                wrapper.style.display = 'none';
+                if(groundTimeChart) groundTimeChart.destroy();
+                return;
+            }
+            
+            wrapper.style.display = 'block';
+            const ctx = document.getElementById('groundTimeChart').getContext('2d');
+            if(groundTimeChart) groundTimeChart.destroy();
+
+            const labels = [];
+            const data = [];
+            const bgColors = [];
+
+            const chartData = [...datosVistaActual].reverse();
+
+            chartData.forEach(v => {
+                const d = new Date(v.fecha);
+                const fechaFormat = `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}`;
+                labels.push(`${v.vuelo_id} (${fechaFormat})`);
+
+                let groundMins = 0;
+                if(v.com106_formularios && v.com106_formularios.length > 0) {
+                    let c = v.com106_formularios[0];
+                    groundMins = calcMinutesZulu(c.block_in_time, c.final_loadplan_time);
+                }
+                
+                if(groundMins < 0 || groundMins > 1440) groundMins = 0; 
+
+                data.push(groundMins);
+                bgColors.push(groundMins > 90 ? '#E11D48' : '#38BDF8'); 
+            });
+
+            groundTimeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tiempo en Tierra (Minutos)',
+                        data: data,
+                        backgroundColor: bgColors,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Tiempos de Operación en Rampa (Block In a Final W&B)', font: { size: 14, weight: 'bold' }, color: '#0A2540'},
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let val = context.raw;
+                                    let status = val > 90 ? '⚠️ DELAY' : '✅ ON TIME';
+                                    return `${val} min - ${status}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Minutos', font: { weight: 'bold' } }
+                        },
+                        x: {
+                            ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function eliminarVueloDefinitivo(id, vueloId) {
+            showCustomConfirm(
+                "Eliminación Total", 
+                `¿Estás seguro de borrar definitivamente el registro de operación del vuelo <b>${vueloId}</b>?<br><br><i>Los daños estructurales registrados en el avión se conservarán en su bitácora. Solo se eliminarán las horas y reportes de este vuelo específico.</i>`, 
+                "Sí, Eliminar Todo", 
+                "var(--amerijet-red)", 
+                async () => {
+                    try {
+                        const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id);
+                        if(error) throw error;
+                        showCustomAlert("Vuelo Eliminado", `El vuelo ${vueloId} fue borrado completamente.`, "success");
+                        cargarReporte(); 
+                    } catch(e) { showCustomAlert("Error al eliminar", e.message, "error"); }
+                }
+            );
+        }
+
+        function abrirMasterModal(idVuelo) {
+            vueloActivoObj = datosVistaActual.find(v => v.id === idVuelo);
+            if(!vueloActivoObj) return;
+
+            const d = new Date(vueloActivoObj.fecha);
+            const fechaStr = `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+            document.getElementById('mmTitle').innerHTML = `VUELO ${vueloActivoObj.vuelo_id} <span>✈️ ${vueloActivoObj.matricula_avion}</span> <span>${vueloActivoObj.ruta}</span> <span>${fechaStr}</span>`;
+
+            let kpiHTML = '';
+
+            let expMins = 0;
+            if(vueloActivoObj.tiempos_armado && vueloActivoObj.tiempos_armado.length > 0) {
+                let initArr = [], finArr = [];
+                vueloActivoObj.tiempos_armado.forEach(a => {
+                    if(a.m6_inicio) initArr.push(new Date(a.m6_inicio));
+                    if(a.m6_fin) finArr.push(new Date(a.m6_fin));
+                });
+                if(initArr.length > 0 && finArr.length > 0) {
+                    let minD = Math.min(...initArr), maxD = Math.max(...finArr);
+                    expMins = calcMinutesBetweenDates(minD, maxD);
+                }
+            }
+            kpiHTML += `<div class="fkpi-box"><label>📦 T. Armado (Export)</label><strong>${formatMins(expMins)}</strong></div>`;
+
+            let groundMins = 0; let delayHTML = '';
+            if(vueloActivoObj.com106_formularios && vueloActivoObj.com106_formularios.length > 0) {
+                let c = vueloActivoObj.com106_formularios[0];
+                groundMins = calcMinutesZulu(c.block_in_time, c.final_loadplan_time);
+                if(groundMins > 0) {
+                    if(groundMins > 90) delayHTML = `<span class="delay-badge">DELAY</span>`;
+                    else delayHTML = `<span class="ontime-badge">ON TIME</span>`;
+                }
+            }
+            kpiHTML += `<div class="fkpi-box"><label>✈️ T. Operación Rampa</label><div><strong>${formatMins(groundMins)}</strong> ${delayHTML}</div></div>`;
+
+            let impMins = calcMinutesBetweenDates(vueloActivoObj.hora_inicio_lotificada, vueloActivoObj.hora_fin_lotificada);
+            kpiHTML += `<div class="fkpi-box"><label>🛬 T. Despaletizado (Import)</label><strong>${formatMins(impMins)}</strong></div>`;
+
+            document.getElementById('mmKpis').innerHTML = kpiHTML;
+            document.getElementById('btnModalExcel').setAttribute('onclick', `exportarExcelVueloIndividual('${vueloActivoObj.id}')`);
+
+            document.getElementById('masterModal').style.display = 'flex';
+            document.querySelector('.master-tab[onclick*="armado"]').click();
+        }
+
+        function cerrarMasterModal() { document.getElementById('masterModal').style.display = 'none'; }
+
+        async function switchMasterTab(tab, btnElement) {
+            document.querySelectorAll('.master-tab').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            const body = document.getElementById('mmBody');
+            const pdfContainer = document.getElementById('btnModalPdfContainer');
+            body.innerHTML = ''; pdfContainer.innerHTML = '';
+            const v = vueloActivoObj;
+
+            if (tab === 'armado') {
+                const armados = v.tiempos_armado || [];
+                if(armados.length === 0) { body.innerHTML = '<div class="info-text">No hay reportes de armado de ULDs registrados.</div>'; return; }
+                
+                let h = '';
+                armados.forEach((a, i) => {
+                    const init = a.m6_inicio ? a.m6_inicio.replace('T', ' ').substring(0,16) : 'N/A';
+                    const fn = a.m6_fin ? a.m6_fin.replace('T', ' ').substring(0,16) : 'N/A';
+                    
+                    h += `<div class="data-card">`;
+                    h += `<div class="data-card-title">📦 Lote de Armado #${i+1}</div>`;
+                    h += `<div class="data-grid">`;
+                    h += `<div class="data-box"><label>Inicio</label><span>${init}</span></div>`;
+                    h += `<div class="data-box"><label>Fin</label><span>${fn}</span></div>`;
+                    h += `<div class="data-box"><label>Total ULDs</label><span>${a.uld_count || 0} pallets</span></div>`;
+                    h += `<div class="data-box"><label>Total Stacks</label><span>${a.stack_count || 0} stacks</span></div>`;
+                    h += `<div class="data-box"><label>Personal Cargo</label><span>${a.personal_m6 || 0}</span></div>`;
+                    h += `<div class="data-box"><label>Personal ADES</label><span>${a.personal_ades || 0}</span></div>`;
+                    h += `</div></div>`;
+                });
+                body.innerHTML = h;
+            }
+            else if (tab === 'import') {
+                const inImp = v.hora_inicio_lotificada ? v.hora_inicio_lotificada.replace('T', ' ').substring(0, 16) : 'N/A';
+                const outImp = v.hora_fin_lotificada ? v.hora_fin_lotificada.replace('T', ' ').substring(0, 16) : 'N/A';
+                
+                if(inImp === 'N/A' && outImp === 'N/A') { body.innerHTML = '<div class="info-text">No hay tiempos de importación registrados.</div>'; return; }
+
+                body.innerHTML = `
+                    <div class="data-card">
+                        <div class="data-card-title">🛬 Tiempos de Despaletizado</div>
+                        <div class="data-grid">
+                            <div class="data-box"><label>Inicio Operación</label><span>${inImp}</span></div>
+                            <div class="data-box"><label>Fin Operación</label><span>${outImp}</span></div>
+                        </div>
+                    </div>`;
+            }
+            else if (tab === 'gse') {
+                let g = null;
+                if (v.vuelos_gse) {
+                    g = Array.isArray(v.vuelos_gse) ? (v.vuelos_gse.length > 0 ? v.vuelos_gse[0] : null) : v.vuelos_gse;
+                }
+
+                if(!g) { body.innerHTML = '<div class="info-text">No se registró uso de equipos terrestres.</div>'; return; }
+
+                body.innerHTML = `
+                    <div class="data-card">
+                        <div class="data-card-title">🚜 Equipos GSE Desplegados</div>
+                        <div class="data-grid">
+                            <div class="data-box"><label>⚡ Planta Eléctrica</label><span>Cant: ${g.planta_elec_cant || 0} | Cod: ${g.planta_elec_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>💨 Planta Neumática</label><span>Cant: ${g.planta_neu_cant || 0} | Cod: ${g.planta_neu_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🏗️ Loader Main Deck</label><span>Cant: ${g.loader_md_cant || 0} | Cod: ${g.loader_md_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🚜 Loader Lower Deck</label><span>Cant: ${g.loader_ld_cant || 0} | Cod: ${g.loader_ld_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🎢 Faja</label><span>Cant: ${g.faja_cant || 0} | Cod: ${g.faja_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🛗 Montacargas</label><span>Cant: ${g.montacargas_cant || 0} | Cod: ${g.montacargas_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🛫 Push Back</label><span>Cant: ${g.pushback_cant || 0} | Cod: ${g.pushback_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🔗 Barra Remolque</label><span>Cant: ${g.barra_cant || 0} | Cod: ${g.barra_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🚂 Tractor</label><span>Cant: ${g.tractor_cant || 0} | Cod: ${g.tractor_cod || 'N/A'}</span></div>
+                            <div class="data-box"><label>🪜 Escalera</label><span>Cant: ${g.escalera_cant || 0} | Cod: ${g.escalera_cod || 'N/A'}</span></div>
+                            <div class="data-box" style="grid-column: 1/-1; background:#EFF6FF; border-color:#BFDBFE;"><label>👥 Personal de Apoyo Total</label><span>${g.personal_apoyo || 0} personas</span></div>
+                        </div>
+                    </div>`;
+            }
+            else if (tab === 'com106') {
+                const c = (v.com106_formularios && v.com106_formularios.length > 0) ? v.com106_formularios[0] : null;
+                if(!c) { body.innerHTML = '<div class="info-text">No se ha llenado el formulario COM-106.</div>'; return; }
+
+                body.innerHTML = `
+                    <div class="data-card">
+                        <div class="data-card-title">📄 Formulario COM-106 (Resumen de Tiempos)</div>
+                        <div class="data-grid" style="margin-bottom: 20px;">
+                            <div class="data-box"><label>STA / STD (Z)</label><span>${c.sta || '--:--'} / ${c.std || '--:--'}</span></div>
+                            <div class="data-box"><label>ATA / ATD (Z)</label><span>${c.ata || '--:--'} / ${c.atd || '--:--'}</span></div>
+                        </div>
+                        <div class="data-card-title" style="font-size:11px; margin-bottom:10px;">Eventos de Llegada</div>
+                        <div class="data-grid" style="margin-bottom: 20px;">
+                            <div class="data-box"><label>Block-In (Z)</label><span>${c.block_in_time || 'N/A'} (Ini: ${c.block_in_ini || '-'})</span></div>
+                            <div class="data-box"><label>Stairs Ready (Z)</label><span>${c.stairs_time || 'N/A'} (Ini: ${c.stairs_ini || '-'})</span></div>
+                            <div class="data-box"><label>GSE Ready (Z)</label><span>${c.gse_time || 'N/A'} (Ini: ${c.gse_ini || '-'})</span></div>
+                        </div>
+                        <div class="data-card-title" style="font-size:11px; margin-bottom:10px;">Eventos de Carga/Descarga</div>
+                        <div class="data-grid">
+                            <div class="data-box"><label>First ULD Off (Z)</label><span>${c.first_uld_off_time || 'N/A'}</span></div>
+                            <div class="data-box"><label>Offload Comp (Z)</label><span>${c.offload_comp_time || 'N/A'}</span></div>
+                            <div class="data-box"><label>First ULD On (Z)</label><span>${c.first_uld_on_time || 'N/A'}</span></div>
+                            <div class="data-box"><label>Final Loadplan Rcvd (Z)</label><span>${c.final_loadplan_time || 'N/A'}</span></div>
+                        </div>
+                    </div>`;
+                
+                pdfContainer.innerHTML = `<button class="btn-pdf-gen" onclick="generarPDFNativoCOM106()">⬇️ Descargar PDF Oficial COM-106</button>`;
+            }
+            else if (tab === 'inspeccion') {
+                body.innerHTML = '<div style="text-align:center; padding:20px;">Consultando historial estructural a la base de datos... ⏳</div>';
+                
+                const { data: insp } = await supabaseClient.from('avion_inspecciones').select('*').eq('vuelo_operacion_id', v.id).maybeSingle();
+                
+                const { data: danosBD } = await supabaseClient.from('avion_danos')
+                    .select('*')
+                    .eq('matricula_avion', v.matricula_avion)
+                    .eq('estado_actual', 'ABIERTO');
+
+                let html = `<div class="data-card"><div class="data-card-title">🔍 Inspección Estructural (${v.matricula_avion})</div>`;
+                html += `<div class="info-text" style="margin-bottom:15px;"><b>Inspector:</b> ${insp ? insp.inspector_nombre : 'No definido'}</div>`;
+                
+                if(danosBD && danosBD.length > 0) {
+                    html += `<div class="data-card-title" style="font-size:11px; color:#B45309; margin-bottom:10px;">Daños Activos en Récord</div>`;
+                    danosBD.forEach((d, idx) => {
+                        let ev = {}; try { ev = JSON.parse(d.evidencia || "{}"); } catch(e){}
+                        html += `
+                            <div class="list-row" style="flex-direction:column; gap:4px;">
+                                <div style="color:var(--amerijet-blue); font-weight:800;">${idx+1}. [${d.area}] - ${d.componente}</div>
+                                <div style="color:var(--amerijet-red); font-size:12px;">Daño: ${d.descripcion}</div>
+                                <div style="color:#64748B; font-size:10px;">Loc: ${ev.ubicacion || 'General'} | Sev: ${d.severidad || 'N/A'}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `<div class="info-text" style="margin-bottom:15px;">Avión sin daños estructurales.</div>`;
+                }
+
+                if (insp && insp.notas_adicionales) {
+                    if(insp.notas_adicionales.includes('||_JSON_||')) {
+                        const p = JSON.parse(insp.notas_adicionales.split('||_JSON_||')[1]);
+                        html += `<div class="data-card-title" style="font-size:11px; margin-top:20px; margin-bottom:10px;">Comentarios del Supervisor</div>`;
+                        html += `<div class="info-text">${p.notas || 'Sin comentarios.'}</div>`;
+                        
+                        if (p.incidencias && p.incidencias.length > 0) {
+                            html += `<div class="data-card-title" style="font-size:11px; color:var(--amerijet-red); margin-top:20px; margin-bottom:10px;">Incidencias Operativas del Vuelo</div>`;
+                            p.incidencias.forEach((inc, idx) => {
+                                html += `<div class="list-row"><span style="color:var(--amerijet-red);">⚠️ ${inc.descripcion}</span></div>`;
+                            });
+                        }
+                    } else {
+                        html += `<div class="data-card-title" style="font-size:11px; margin-top:20px; margin-bottom:10px;">Comentarios del Supervisor</div>`;
+                        html += `<div class="info-text">${insp.notas_adicionales}</div>`;
+                    }
+                }
+                html += `</div>`;
+                body.innerHTML = html;
+                pdfContainer.innerHTML = `<button class="btn-pdf-gen" onclick="generarPDFNativoInspeccion()">⬇️ Descargar PDF Oficial Inspección</button>`;
+            }
+        }
+
+        // ========================================================
+        // REPARACIÓN: PDF COM-106 EXACTO Y AUTO-ESCALADO
+        // ========================================================
+        async function generarPDFNativoCOM106() {
+            const v = vueloActivoObj;
+            if(!v || !v.com106_formularios || v.com106_formularios.length === 0) {
+                showCustomAlert("Error", "No hay datos de COM-106 para este vuelo.", "error");
+                return;
+            }
+            const c = v.com106_formularios[0];
+
+            document.getElementById('pdf_flight').innerText = v.vuelo_id || '';
+            document.getElementById('pdf_date').innerText = v.fecha || '';
+            document.getElementById('pdf_route').innerText = v.ruta || '';
+            document.getElementById('pdf_sta').innerText = c.sta || '';
+            document.getElementById('pdf_std').innerText = c.std || '';
+            document.getElementById('pdf_ata').innerText = c.ata || '';
+            document.getElementById('pdf_atd').innerText = c.atd || '';
+
+            // Celdas independientes para Iniciales y Tiempos
+            const campos = ['block_in', 'stairs', 'gse', 'lower_door', 'main_door', 'first_uld_off', 'offload_comp', 'fwd_bulk_insp', 'main_deck_insp', 'damage_report', 'load_plan', 'first_uld_on', 'last_uld_on', 'discrepancies', 'final_loadplan'];
+            campos.forEach(f => {
+                const cellIni = document.getElementById(`pdf_i_${f}`);
+                const cellTime = document.getElementById(`pdf_t_${f}`);
+                if(cellIni) cellIni.innerText = (c[`${f}_ini`] || '').toUpperCase();
+                if(cellTime) cellTime.innerText = c[`${f}_time`] || '';
+            });
+
+            // Combinar Remarks con saltos de línea HTML correctos
+            const combinarRemarks = (listaValores) => listaValores.map(val => (val||'').trim()).filter(val => val !== "").join('<br>').replace(/\n/g, '<br>');
+            
+            const remBlockIn = combinarRemarks([c.block_in_rem, c.stairs_rem, c.gse_rem]);
+            const remOffload = combinarRemarks([c.lower_door_rem, c.main_door_rem, c.first_uld_off_rem, c.offload_comp_rem]);
+            const remInsp = combinarRemarks([c.fwd_bulk_insp_rem, c.main_deck_insp_rem, c.damage_report_rem]);
+            const remLoading = combinarRemarks([c.load_plan_rem, c.first_uld_on_rem, c.last_uld_on_rem, c.discrepancies_rem, c.final_loadplan_rem]);
+
+            const cellInsp = document.getElementById('pdf_rem_insp');
+            cellInsp.innerHTML = remInsp;
+            
+            // Auto-escalado de fuente en Remarks de Inspección para evitar desbordes
+            if (remInsp.length > 350) {
+                cellInsp.style.fontSize = '7.5px';
+                cellInsp.style.lineHeight = '1.08';
+            } else if (remInsp.length > 180) {
+                cellInsp.style.fontSize = '8.5px';
+                cellInsp.style.lineHeight = '1.12';
+            } else {
+                cellInsp.style.fontSize = '9.5px';
+                cellInsp.style.lineHeight = '1.2';
+            }
+
+            document.getElementById('pdf_rem_block_in').innerHTML = remBlockIn;
+            document.getElementById('pdf_rem_offload').innerHTML = remOffload;
+            document.getElementById('pdf_rem_loading').innerHTML = remLoading;
+
+            // Nombres y Firmas Base64
+            document.getElementById('pdf_print_offload').innerText = c.offload_print_name || '';
+            document.getElementById('pdf_print_loading').innerText = c.loading_print_name || '';
+
+            const imgOff = document.getElementById('pdf_img_sign_offload');
+            if (c.offload_signature) { imgOff.src = c.offload_signature; imgOff.style.display = 'block'; } 
+            else { imgOff.style.display = 'none'; }
+
+            const imgLoad = document.getElementById('pdf_img_sign_loading');
+            if (c.loading_signature) { imgLoad.src = c.loading_signature; imgLoad.style.display = 'block'; } 
+            else { imgLoad.style.display = 'none'; }
+
+            const renderZone = document.getElementById('pdf-render-zone-com106');
+            renderZone.style.display = 'block';
+
+            try {
+                let logoUrl = 'https://amerijet.com/static/23a08da89abd0c86698f28d2a9730500/8b854/amerijet_logo.webp';
+                try {
+                    const res = await fetch(logoUrl, { mode: 'cors' });
+                    const blob = await res.blob();
+                    logoUrl = await new Promise((res) => { const r = new FileReader(); r.onloadend = () => res(r.result); r.readAsDataURL(blob); });
+                } catch(e) { logoUrl = 'logo_3.png'; }
+                document.getElementById('pdfLogoImg').src = logoUrl;
+
+                const pdfTemplate = document.getElementById('official-pdf-template');
+                const canvas = await html2canvas(pdfTemplate, { scale: 2, useCORS: true, allowTaint: true });
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+                
+                // Mantiene el aspect ratio estricto del letter
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                const imgProps = doc.getImageProperties(imgData);
+                const ratio = Math.min(pdfWidth / imgProps.width, pdfHeight / imgProps.height);
+                const scaledWidth = imgProps.width * ratio;
+                const scaledHeight = imgProps.height * ratio;
+                
+                doc.addImage(imgData, 'JPEG', (pdfWidth - scaledWidth) / 2, 0, scaledWidth, scaledHeight);
+                doc.save(`COM106_${v.vuelo_id}_${v.fecha}.pdf`);
+                showCustomAlert("Éxito", "PDF descargado correctamente.", "success");
+            } catch(e) { showCustomAlert("Error PDF", e.message, "error"); }
+            
+            renderZone.style.display = 'none';
+        }
+
+        async function generarPDFNativoInspeccion() {
+            const v = vueloActivoObj;
+            if(!v) return;
+            try {
+                const { data: danosBD } = await supabaseClient.from('avion_danos')
+                    .select('*')
+                    .eq('matricula_avion', v.matricula_avion)
+                    .eq('estado_actual', 'ABIERTO');
+
+                const { data: inspArray } = await supabaseClient.from('avion_inspecciones').select('*').eq('vuelo_operacion_id', v.id).maybeSingle();
+                const i = inspArray;
+                const inspName = i ? i.inspector_nombre : 'N/A';
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                
+                doc.setFillColor(10, 37, 64); doc.rect(0, 0, 215.9, 25, "F");
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(255, 255, 255);
+                doc.text("AMERIJET INTERNATIONAL AIRCRAFT AUDIT", 15, 12);
+                doc.setFontSize(10); doc.setFont("Helvetica", "normal");
+                doc.text("AIRCRAFT STRUCTURAL & OPERATIONAL CONDITION REPORT", 15, 18);
+
+                doc.setTextColor(33, 33, 33);
+                doc.setDrawColor(203, 213, 225); 
+                doc.setFillColor(248, 250, 252); 
+                doc.roundedRect(15, 30, 185.9, 28, 3, 3, "FD");
+
+                doc.setFont("Helvetica", "bold"); doc.text("FLIGHT DETAILS", 20, 37);
+                doc.setFont("Helvetica", "normal"); doc.text(`Flight: ${v.vuelo_id}`, 20, 43);
+                doc.text(`Tail: ${v.matricula_avion}`, 20, 48);
+                doc.text(`Route: ${v.ruta || 'N/A'}`, 20, 53);
+
+                doc.setFont("Helvetica", "bold"); doc.text("INSPECTION DETAILS", 110, 37);
+                doc.setFont("Helvetica", "normal"); doc.text(`Date: ${v.fecha}`, 110, 43);
+                doc.text(`Inspector: ${inspName}`, 110, 48);
+                doc.text(`Status: Official Record`, 110, 53);
+
+                let cy = 65;
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("1. DISCREPANCIES SUMMARY", 15, cy);
+                
+                if(danosBD && danosBD.length > 0) {
+                    const tData = danosBD.map((h, idx) => {
+                        const fRep = h.creado_at ? new Date(h.creado_at).toLocaleDateString() : 'N/A';
+                        return [ idx+1, h.estado_actual, h.area, h.componente, h.descripcion, fRep ];
+                    });
+                    
+                    doc.autoTable({ 
+                        startY: cy + 4, 
+                        head: [['#', 'Status', 'Area', 'Component', 'Damage', 'Reported']], 
+                        body: tData, 
+                        theme: 'grid', 
+                        headStyles: { fillColor: [10, 37, 64] }, 
+                        styles: { fontSize: 8, cellPadding: 3 } 
+                    });
+                    cy = doc.lastAutoTable.finalY + 15;
+                } else { 
+                    cy += 8; doc.setFont("Helvetica", "italic"); doc.setFontSize(10);
+                    doc.text("No structure discrepancies reported for this aircraft.", 15, cy); 
+                    cy += 15; 
+                }
+
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("2. DETAILED FINDINGS & EVIDENCE", 15, cy);
+                cy += 8;
+
+                if(danosBD) {
+                    for (let x = 0; x < danosBD.length; x++) {
+                        const h = danosBD[x];
+                        if(cy > 240) { doc.addPage(); cy = 20; }
+
+                        let ev = {}; try { ev = JSON.parse(h.evidencia); } catch(e){}
+
+                        doc.setFillColor(226, 232, 240);
+                        doc.rect(15, cy, 185.9, 8, "F");
+                        doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.setFont("Helvetica", "bold");
+                        doc.text(`FINDING #${x+1}: [${(h.area||'').toUpperCase()}] - ${(h.componente||'').toUpperCase()}`, 18, cy + 5.5);
+                        cy += 12;
+
+                        doc.setTextColor(51, 65, 85); doc.setFontSize(10); doc.setFont("Helvetica", "normal");
+                        const fRep = h.creado_at ? new Date(h.creado_at).toLocaleDateString() : 'N/A';
+                        const fUpd = h.actualizado_at ? new Date(h.actualizado_at).toLocaleDateString() : 'N/A';
+
+                        doc.text(`Location: ${ev.ubicacion || 'General'}`, 15, cy);
+                        doc.text(`Status: ${h.estado_actual}`, 110, cy); cy += 6;
+                        doc.text(`Reported: ${fRep}  |  Last Update: ${fUpd}`, 15, cy); cy += 7;
+                        
+                        doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
+                        doc.setFont("Helvetica", "normal"); doc.text(`${h.descripcion}`, 33, cy); cy += 6;
+                        
+                        if(h.nota_solucion) {
+                            doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
+                            doc.setFont("Helvetica", "normal"); doc.text(`${h.nota_solucion}`, 28, cy); cy += 6;
+                        }
+                        cy += 2;
+
+                        if (ev.imgAvion && ev.imgPaleta) {
+                            if(cy > 160) { doc.addPage(); cy = 20; }
+                            doc.setFont("Helvetica", "bold"); doc.text("CLS Maps Evidence:", 15, cy); cy += 4;
+                            doc.addImage(ev.imgAvion, 'JPEG', 15, cy, 180, 25); cy += 28;
+                            doc.addImage(ev.imgPaleta, 'JPEG', 45, cy, 110, 55); cy += 60;
+                        }
+                        doc.setDrawColor(226, 232, 240); doc.line(15, cy, 200.9, cy); cy += 8;
+                    }
+                }
+
+                if (i && i.notas_adicionales) {
+                    if(cy > 240) { doc.addPage(); cy = 20; }
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(15, 23, 42);
+                    doc.text("3. FLIGHT OPERATION INCIDENTS & NOTES", 15, cy); cy += 8;
+
+                    if(i.notas_adicionales.includes('||_JSON_||')) {
+                        const p = JSON.parse(i.notas_adicionales.split('||_JSON_||')[1]);
+                        doc.setFont("Helvetica", "bold"); doc.setFontSize(10);
+                        doc.text("Supervisor Notes:", 15, cy); cy += 5;
+                        doc.setFont("Helvetica", "normal");
+                        doc.text(`${p.notas || 'No additional notes.'}`, 15, cy); cy += 8;
+
+                        if (p.incidencias && p.incidencias.length > 0) {
+                            doc.setFont("Helvetica", "bold"); doc.text("Temporary Operational Incidents:", 15, cy); cy += 6;
+                            doc.setFont("Helvetica", "normal");
+                            p.incidencias.forEach((inc, idx) => {
+                                if(cy > 260) { doc.addPage(); cy = 20; }
+                                doc.text(`${idx+1}. ${inc.descripcion}`, 15, cy); cy += 6;
+                            });
+                        }
+                    } else {
+                        doc.setFont("Helvetica", "bold"); doc.setFontSize(10);
+                        doc.text("Supervisor Notes:", 15, cy); cy += 5;
+                        doc.setFont("Helvetica", "normal");
+                        doc.text(`${i.notas_adicionales}`, 15, cy); cy += 8;
+                    }
+                }
+
+                doc.save(`Inspection_${v.matricula_avion}_${v.vuelo_id}.pdf`);
+                showCustomAlert("Éxito", "PDF descargado correctamente.", "success");
+            } catch(e) {
+                showCustomAlert("Error PDF", e.message, "error");
+            }
+        }
+
+        // ========================================================
+        // EXPORTACIÓN EXCEL INDIVIDUAL (TIEMPOS COMPLETOS)
+        // ========================================================
+        function exportarExcelVueloIndividual(idVuelo) {
+            const v = datosVistaActual.find(x => x.id === idVuelo);
+            if(!v) return;
+
+            let csv = "\uFEFF=== DATOS DEL VUELO ===\n";
+            csv += `Vuelo,Matricula,Ruta,Fecha,Estacion\n`;
+            csv += `"${v.vuelo_id}","${v.matricula_avion}","${v.ruta}","${v.fecha}","${v.estacion_registro}"\n\n`;
+
+            csv += `=== TIEMPOS DE ARMADO (EXPORT) ===\n`;
+            if(v.tiempos_armado && v.tiempos_armado.length > 0) {
+                csv += `Lote,Inicio,Fin,Total ULDs,Stacks\n`;
+                v.tiempos_armado.forEach((a, i) => {
+                    const init = a.m6_inicio ? a.m6_inicio.replace('T', ' ').substring(0,16) : 'N/A';
+                    const fn = a.m6_fin ? a.m6_fin.replace('T', ' ').substring(0,16) : 'N/A';
+                    csv += `Lote ${i+1},"${init}","${fn}",${a.uld_count||0},${a.stack_count||0}\n`;
+                });
+            } else { csv += `Sin registros\n`; }
+            csv += `\n`;
+
+            csv += `=== TIEMPOS EN TIERRA (COM-106) ===\n`;
+            if(v.com106_formularios && v.com106_formularios.length > 0) {
+                const c = v.com106_formularios[0];
+                csv += `ATA Aterrizaje (Z),Block-In (Z),First ULD Off (Z),Offload Comp (Z),Load Plan Rcvd (Z),Final W&B (Z)\n`;
+                csv += `"${c.ata||''}","${c.block_in_time||''}","${c.first_uld_off_time||''}","${c.offload_comp_time||''}","${c.load_plan_time||''}","${c.final_loadplan_time||''}"\n`;
+            } else { csv += `Sin registros\n`; }
+            csv += `\n`;
+
+            csv += `=== EQUIPOS DE APOYO (GSE) ===\n`;
+            let gseData = null;
+            if (v.vuelos_gse) {
+                gseData = Array.isArray(v.vuelos_gse) ? (v.vuelos_gse.length > 0 ? v.vuelos_gse[0] : null) : v.vuelos_gse;
+            }
+
+            if(gseData) {
+                csv += `Planta Elec,Planta Neu,Loader MD,Loader LD,Faja,Montacargas,Push Back,Barra,Tractor,Escalera,Personal Apoyo\n`;
+                csv += `${gseData.planta_elec_cant||0},${gseData.planta_neu_cant||0},${gseData.loader_md_cant||0},${gseData.loader_ld_cant||0},${gseData.faja_cant||0},${gseData.montacargas_cant||0},${gseData.pushback_cant||0},${gseData.barra_cant||0},${gseData.tractor_cant||0},${gseData.escalera_cant||0},${gseData.personal_apoyo||0}\n`;
+            } else { csv += `Sin registros\n`; }
+            csv += `\n`;
+
+            csv += `=== IMPORTACION (DESPALETIZADO) ===\n`;
+            const inImp = v.hora_inicio_lotificada ? v.hora_inicio_lotificada.replace('T', ' ').substring(0, 16) : 'N/A';
+            const outImp = v.hora_fin_lotificada ? v.hora_fin_lotificada.replace('T', ' ').substring(0, 16) : 'N/A';
+            csv += `Inicio Despaletizado,Fin Despaletizado\n`;
+            csv += `"${inImp}","${outImp}"\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); 
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Vuelo_${v.vuelo_id}_${v.fecha}_Detalle.csv`); 
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        // ========================================================
+        // MEJORA: EXPORTACIÓN EXCEL GLOBAL (TIEMPOS COMPLETOS)
+        // ========================================================
+        function exportarExcelConsolidado() {
+            if (datosVistaActual.length === 0) { showCustomAlert("Atención", "No hay datos para exportar.", "info"); return; }
+            
+            const btn = document.querySelector('.btn-exportar'); 
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ Generando Reporte..."; btn.disabled = true;
+
+            try {
+                let csv = "\uFEFFVuelo,Matricula,Ruta,Fecha_Op,Estacion,Inicio_Armado_Export,Fin_Armado_Export,Inicio_Importacion,Fin_Importacion,ATA_Aterrizaje_Z,Block_In_Z,Final_Loadplan_Z,Total_Armados,Suma_ULDs_Export,Suma_Stacks_Export,Personal_Total_M6,Personal_Total_ADES,GSE_Planta_Elec,GSE_Planta_Neu,GSE_Loader_MD,GSE_Loader_LD,GSE_Faja,GSE_Montacargas,GSE_PushBack,GSE_Barra,GSE_Tractor,GSE_Escalera,GSE_Personal_Apoyo\n";
+                
+                datosVistaActual.forEach(vuelo => {
+                    // TIEMPOS IMPORTACIÓN
+                    const inImport = vuelo.hora_inicio_lotificada ? vuelo.hora_inicio_lotificada.replace('T', ' ').substring(0, 16) : 'N/A';
+                    const outImport = vuelo.hora_fin_lotificada ? vuelo.hora_fin_lotificada.replace('T', ' ').substring(0, 16) : 'N/A';
+                    
+                    // TIEMPOS ARMADO (M6) EXPORTACIÓN MIN/MAX
+                    let sumaUlds = 0; let sumaStacks = 0; let sumaPersonalM6 = 0; let sumaPersonalAdes = 0;
+                    let minInicioArmado = null; let maxFinArmado = null;
+                    const armados = vuelo.tiempos_armado || [];
+                    
+                    armados.forEach(a => {
+                        sumaUlds += (a.uld_count || 0);
+                        sumaStacks += (a.stack_count || 0);
+                        sumaPersonalM6 += (a.personal_m6 || 0);
+                        sumaPersonalAdes += (a.personal_ades || 0);
+
+                        if(a.m6_inicio) {
+                            let d = new Date(a.m6_inicio);
+                            if(!minInicioArmado || d < minInicioArmado) minInicioArmado = d;
+                        }
+                        if(a.m6_fin) {
+                            let d = new Date(a.m6_fin);
+                            if(!maxFinArmado || d > maxFinArmado) maxFinArmado = d;
+                        }
+                    });
+
+                    let inicioArmadoStr = minInicioArmado ? minInicioArmado.toISOString().replace('T', ' ').substring(0, 16) : 'N/A';
+                    let finArmadoStr = maxFinArmado ? maxFinArmado.toISOString().replace('T', ' ').substring(0, 16) : 'N/A';
+
+                    // TIEMPOS COM-106
+                    let ataStr = 'N/A', blockInStr = 'N/A', finalLoadplanStr = 'N/A';
+                    if (vuelo.com106_formularios && vuelo.com106_formularios.length > 0) {
+                        const c = vuelo.com106_formularios[0];
+                        ataStr = c.ata || 'N/A';
+                        blockInStr = c.block_in_time || 'N/A';
+                        finalLoadplanStr = c.final_loadplan_time || 'N/A';
+                    }
+
+                    // GSE
+                    let gseData = null;
+                    if (vuelo.vuelos_gse) {
+                        gseData = Array.isArray(vuelo.vuelos_gse) ? (vuelo.vuelos_gse.length > 0 ? vuelo.vuelos_gse[0] : null) : vuelo.vuelos_gse;
+                    }
+                    let gseStr = gseData ? 
+                        `${gseData.planta_elec_cant||0},${gseData.planta_neu_cant||0},${gseData.loader_md_cant||0},${gseData.loader_ld_cant||0},${gseData.faja_cant||0},${gseData.montacargas_cant||0},${gseData.pushback_cant||0},${gseData.barra_cant||0},${gseData.tractor_cant||0},${gseData.escalera_cant||0},${gseData.personal_apoyo||0}` 
+                        : `0,0,0,0,0,0,0,0,0,0,0`;
+
+                    // ESCRIBIR FILA
+                    csv += `"${vuelo.vuelo_id}","${vuelo.matricula_avion}","${vuelo.ruta}","${vuelo.fecha}","${vuelo.estacion_registro}","${inicioArmadoStr}","${finArmadoStr}","${inImport}","${outImport}","${ataStr}","${blockInStr}","${finalLoadplanStr}",${armados.length},${sumaUlds},${sumaStacks},${sumaPersonalM6},${sumaPersonalAdes},${gseStr}\n`;
+                });
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); 
+                const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", `Consolidado_Vuelos_${new Date().toISOString().slice(0,10)}.csv`); 
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+
+            } catch (e) {
+                showCustomAlert("Error", "Fallo al construir Excel: " + e.message, "error");
+            } finally {
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
+        }
+
+        inicializarSeguridad();
+    </script>
+</body>
+</html>

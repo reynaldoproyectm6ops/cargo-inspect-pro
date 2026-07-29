@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inventario ULD | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #0A2540; 
+            --amerijet-blue-dark: #051529;
+            --amerijet-red: #E11D48; 
+            --bg-color: #F1F5F9; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+            --sidebar-width: 260px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            display: flex; 
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* SCROLLBAR NATIVO */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        /* =========================================
+           SIDEBAR OSCURO PROFESIONAL
+        ========================================= */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--amerijet-blue-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+
+        .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-info-text { display: flex; flex-direction: column; }
+        .user-info-text strong { font-size: 14px; color: white; }
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
+
+        .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+
+        /* =========================================
+           TOP HEADER 
+        ========================================= */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px;}
+        .station-module { display: flex; align-items: center; gap: 8px; background: #F1F5F9; padding: 8px 15px; border-radius: 8px; border: 1px solid #E2E8F0; }
+        .station-module span { font-size: 11px; color: #64748B; font-weight: 700; text-transform: uppercase; }
+        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 15px; outline: none; cursor: pointer; }
+        .station-static { color: #10B981; font-weight: 800; font-size: 15px; }
+
+        /* CONTENIDO PRINCIPAL */
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
+        .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+        /* BANNER INBOUND (ULDs EN TRÁNSITO) */
+        #inboundBanner { background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(16,185,129,0.2); flex-wrap: wrap; gap: 15px; display: none; }
+        .btn-inbound { background: white; color: #059669; font-weight: 800; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.2s;}
+        .btn-inbound:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+        /* WIDGETS RESUMEN */
+        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .widget-card { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; position: relative; }
+        .widget-title { font-size: 12px; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #F1F5F9; padding-bottom: 10px; padding-right: 110px; line-height: 1.4; }
+        .widget-data { font-size: 28px; font-weight: 800; color: var(--amerijet-blue); }
+        
+        .nets-balance-list { display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; padding-right: 5px; }
+        .balance-item { display: grid; grid-template-columns: 80px 1fr; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; align-items: center; }
+        .balance-ok { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+        .balance-danger { background: #FEF2F2; color: #991B1B; border: 1px solid #FEE2E2; }
+        .balance-warning { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+
+        .widget-subdata { display: flex; justify-content: space-between; font-size: 13px; color: #475569; font-weight: 700; background: #F8FAFC; padding: 8px; border-radius: 6px; border: 1px dashed #CBD5E1; }
+        .btn-update-acc { position: absolute; top: 15px; right: 15px; background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-update-acc:hover { background: #DBEAFE; }
+
+        /* ALERTAS DE ESTADÍA Y STOCK */
+        .aging-banner { background: #FEF2F2; border-left: 4px solid #EF4444; padding: 12px 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1); display: none; margin-bottom: -5px; }
+        .aging-header { display: flex; justify-content: space-between; align-items: center; color: #991B1B; font-weight: 800; font-size: 13px; cursor: pointer; }
+        .aging-list { margin-top: 10px; font-size: 12px; color: #7F1D1D; background: white; padding: 10px; border-radius: 6px; border: 1px solid #FCA5A5; max-height: 150px; overflow-y: auto; display: none;}
+        .aging-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #FECACA; }
+        .aging-item:last-child { border-bottom: none; }
+
+        .stock-banner { padding: 12px 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; display: none; }
+        .stock-banner.danger { background: #FFFBEB; border-left: 4px solid #F59E0B; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1); }
+        .stock-banner.success { background: #ECFDF5; border-left: 4px solid #10B981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1); }
+        .stock-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 13px; cursor: pointer; }
+        .stock-banner.danger .stock-header { color: #B45309; }
+        .stock-banner.success .stock-header { color: #047857; }
+        .stock-list { margin-top: 10px; font-size: 12px; background: white; padding: 10px; border-radius: 6px; max-height: 150px; overflow-y: auto; display: none;}
+        .stock-banner.danger .stock-list { border: 1px solid #FDE68A; color: #92400E; }
+        .stock-banner.success .stock-list { border: 1px solid #A7F3D0; color: #065F46;}
+        .stock-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); }
+        .stock-item:last-child { border-bottom: none; }
+        .stock-item.danger span { color: #B45309; }
+        .stock-item.ok span { color: #047857; }
+
+        /* PANEL SUPERIOR DE REGISTRO */
+        .top-panel { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+        .form-add-uld { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; width: 100%;}
+        .top-panel h2 { font-size: 16px; color: var(--amerijet-blue); margin-right: 15px; display: flex; align-items: center; gap: 8px;}
+        
+        .form-group-inline { display: flex; flex-direction: column; flex-grow: 1; min-width: 150px;}
+        .form-group-inline label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .form-group-inline input, .form-group-inline select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; text-transform: uppercase; font-weight: 600; width: 100%;}
+        .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap;}
+        
+        /* Historial Minimalista */
+        .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-bottom: 5px; }
+        .btn-ver-historial { background: white; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;}
+        .btn-ver-historial:hover { background: #E2E8F0; }
+
+        /* TABLA EXCEL, TOOLBAR Y PAGINACIÓN */
+        .table-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; }
+        .table-toolbar { padding: 15px 20px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .table-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-transfer { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-transfer:hover { background: #FEF3C7; }
+        .btn-excel { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-excel:hover { background: #D1FAE5; }
+        .search-box { display: flex; align-items: center; background: white; border: 1px solid #CBD5E1; border-radius: 8px; padding: 6px 12px; width: 280px; max-width: 100%;}
+        .search-box input { border: none; outline: none; width: 100%; font-size: 13px; font-weight: 600; color: var(--text-main); }
+        
+        .table-container { overflow-x: auto; max-height: 50vh; overflow-y: auto;}
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; white-space: nowrap; }
+        th { background-color: #0078D4; color: white; padding: 12px 10px; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.2); position: sticky; top: 0; z-index: 10;}
+        td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 500; }
+        tr:hover { background-color: #F8FAFC; }
+
+        .val-valido { background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
+        .val-error { background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
+        
+        .btn-edit-uld { background: none; border: none; color: var(--amerijet-blue); cursor: pointer; font-size: 14px; margin-right: 8px; transition: 0.2s;}
+        .btn-edit-uld:hover { transform: scale(1.1); }
+        .btn-delete { background: none; border: none; color: var(--amerijet-red); cursor: pointer; font-size: 14px; transition: 0.2s;}
+        .btn-delete:hover { transform: scale(1.1); }
+
+        .table-bottom-bar { padding: 15px 20px; background: white; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E2E8F0; flex-wrap: wrap; gap: 15px;}
+        .pagination-wrapper { display: flex; align-items: center; gap: 15px; font-size: 13px; font-weight: 600; color: #475569;}
+        .pag-btns { display: flex; gap: 5px; }
+        .btn-pag { background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; color: var(--amerijet-blue); transition: 0.2s; }
+        .btn-pag:hover:not(:disabled) { background: #E2E8F0; }
+        .btn-pag:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-guardar-inv { background: #1E293B; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;}
+        .btn-guardar-inv:hover { background: #0F172A; transform: translateY(-1px); }
+
+        /* ESTILOS VISTA GLOBAL (PIVOT TABLE) */
+        .pivot-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; display: none; margin: 25px; }
+        .pivot-header { background: var(--amerijet-blue-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .pivot-header h2 { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; margin: 0; }
+        .pivot-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+        .pivot-stat-box { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); text-align: center; }
+        .pivot-stat-box span { display: block; font-size: 10px; text-transform: uppercase; font-weight: 700; color: #94A3B8; margin-bottom: 2px;}
+        .pivot-stat-box strong { font-size: 18px; font-weight: 800; color: white; }
+        
+        .pivot-table-container { overflow-x: auto; max-height: 60vh; overflow-y: auto; }
+        .pivot-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 12px; white-space: nowrap; }
+        .pivot-table th { background-color: var(--amerijet-blue); color: white; padding: 12px 10px; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px;}
+        .pivot-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 600; vertical-align: top; }
+        .pivot-table tr:hover { background-color: #F8FAFC; }
+        .pivot-table .col-station { font-weight: 800; text-align: left; background-color: #F8FAFC; position: sticky; left: 0; z-index: 1; border-right: 2px solid #CBD5E1; color: var(--amerijet-blue); vertical-align: middle;}
+        .pivot-table .col-total { font-weight: 800; background-color: #EFF6FF; color: #1D4ED8; vertical-align: middle;}
+        .pivot-table tfoot th { background-color: #E2E8F0; color: var(--amerijet-blue-dark); position: sticky; bottom: 0; z-index: 2; border-top: 2px solid #CBD5E1;}
+        .pivot-table tfoot .col-total { background-color: #DBEAFE; color: #1E40AF; }
+
+        /* Estilos Específicos para Indicadores de Net en Tabla Pivot */
+        .net-badge { font-size: 9px; padding: 3px 5px; border-radius: 4px; margin-top: 5px; font-weight: 800; white-space: nowrap; display: inline-block; }
+        .net-ok { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+        .net-danger { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+        .net-warn { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+
+        /* MODALES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto;}
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .modal-title { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; }
+        .modal-generic { text-align: center; max-width: 350px; }
+        
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) { 
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; }
+            .menu-toggle { display: block; }
+            .header-title { display: none; } 
+            
+            .top-panel { flex-direction: column; align-items: stretch; }
+            .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
+            .form-group-inline { width: 100%; }
+            .btn-crear { width: 100%; margin-top: 5px; }
+            
+            .table-toolbar { flex-direction: column; align-items: stretch; }
+            .table-actions { width: 100%; }
+            .table-actions button { flex-grow: 1; justify-content: center;}
+            .search-box { width: 100%; }
+            
+            .table-bottom-bar { flex-direction: column; align-items: stretch; }
+            .pagination-wrapper { justify-content: space-between; width: 100%;}
+            .btn-guardar-inv { width: 100%; justify-content: center; margin-top: 10px;}
+            
+            .pivot-wrapper { margin: 15px; }
+            .audit-compact { flex-direction: column; gap: 10px; text-align: center; }
+            .modal-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ LATERAL (SIDEBAR) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo_3.png" alt="Logo">
+            <span>Cargo Inspect Pro</span>
+        </div>
+        
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info-text">
+                <strong id="lblUserName">Cargando...</strong>
+                <span id="lblUserRol">...</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link">✈️ Centro de Vuelos</a>
+            <a href="uld_gestion.html" class="nav-link active" id="btnUldMenu">📦 Inventario ULD</a>
+            <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">👑 Panel de Control</a>
+            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">🗄️ Historial de Vuelos</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" id="btnLogout">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <!-- CONTENEDOR PRINCIPAL DERECHO -->
+    <div class="main-wrapper">
+        
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="header-title">Gestión de Inventario ULD</div>
+            
+            <div class="header-station">
+                <div class="station-module" id="divStationSelector" style="display: none;">
+                    <span>📍 ESTACIÓN:</span>
+                    <select id="estacionSelector" class="station-selector"></select>
+                </div>
+                <div class="station-module" id="divStationStatic" style="display: none;">
+                    <span>📍 ESTACIÓN:</span>
+                    <span id="lblUserEstacion" class="station-static">Cargando...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD CONTENT -->
+        <main class="main-content">
+            
+            <!-- BANNER NOTIFICACIÓN INBOUND (TRANSFERENCIAS ENTRANTES) -->
+            <div id="inboundBanner" style="margin: 25px 25px 0 25px;">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="font-size:28px;">🛬</div>
+                    <div>
+                        <h3 style="margin:0; font-size:16px; font-weight:800;">¡Transferencia Entrante!</h3>
+                        <p style="margin:0; font-size:13px; opacity:0.9;">Tienes <span id="inboundCount">0</span> ULD(s) enviados hacia tu estación pendientes de recepción.</p>
+                    </div>
+                </div>
+                <button onclick="abrirModalInbound()" class="btn-inbound">Revisar y Recibir</button>
+            </div>
+
+            <!-- VISTA 1: ESTACIÓN ESPECÍFICA -->
+            <div class="container" id="vistaEstacion">
+                
+                <!-- Alertas de Stock y Estadía -->
+                <div class="stock-banner" id="stockBanner">
+                    <div class="stock-header" onclick="toggleStockList()">
+                        <span id="stockHeaderText">📊 CONTROL DE STOCK</span>
+                        <span style="font-size: 18px;">🔽</span>
+                    </div>
+                    <div class="stock-list" id="stockList"></div>
+                </div>
+
+                <div class="aging-banner" id="agingBanner">
+                    <div class="aging-header" onclick="toggleAgingList()">
+                        <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Sugerencia: Evaluar despacho.</span>
+                        <span style="font-size: 18px;">🔽</span>
+                    </div>
+                    <div class="aging-list" id="agingList"></div>
+                </div>
+
+                <!-- WIDGETS RESUMEN -->
+                <div class="widgets-grid">
+                    <div class="widget-card">
+                        <div class="widget-title" style="padding-right: 0;">📦 Total de ULD en Rampa</div>
+                        <div class="widget-data" id="wgTotalUld">0</div>
+                        <div style="font-size:11px; color:#64748B; font-weight:700; margin-top:5px;">Unidades físicamente en la estación</div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('nets')" id="btnNetDinamico">✏️ Bodega Net</button>
+                        <div class="widget-title">Balance de Redes vs ULDs</div>
+                        <div class="nets-balance-list" id="wgNetsBalanceContainer">
+                            <p style="font-size:12px; color:#64748B; font-style:italic;">Esperando datos...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('straps')" id="btnStrapDinamico">✏️ Bodega Strap</button>
+                        <div class="widget-title">Cinchas de Amarre</div>
+                        <div class="widget-data" id="wgTotalStraps">0</div>
+                        <div class="widget-subdata">
+                            <span>Fricción: <b id="wgStrapFric">0</b></span> 
+                            <span>Presión: <b id="wgStrapPres">0</b></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORMULARIO DE INGRESO DIRECTO -->
+                <div class="top-panel">
+                    <form id="formAddUld" class="form-add-uld">
+                        <h2>📥 <span id="lblFormStation"></span></h2>
+                        <div class="form-group-inline">
+                            <label>ULD Number</label>
+                            <input type="text" id="uld_number" placeholder="EJ: PAG00781M6" required maxlength="10">
+                        </div>
+                        <div class="form-group-inline">
+                            <label>Use Status</label>
+                            <select id="use_status">
+                                <option value="EMPTY">EMPTY</option>
+                                <option value="IN USE">IN USE</option>
+                            </select>
+                        </div>
+                        <div class="form-group-inline">
+                            <label>Condición</label>
+                            <select id="uld_condicion" onchange="toggleDamageReason()">
+                                <option value="SERVICEABLE">SERVICEABLE</option>
+                                <option value="DAMAGED">DAMAGED</option>
+                            </select>
+                        </div>
+                        <div class="form-group-inline" id="div_damage_reason" style="display: none; flex-grow: 2;">
+                            <label style="color: var(--amerijet-red);">Motivo del Daño</label>
+                            <input type="text" id="damage_reason" placeholder="Ej: Esquina doblada..." style="border-color: var(--amerijet-red);">
+                        </div>
+                        <button type="submit" class="btn-crear" id="btnSubmitUld">Registrar Manual</button>
+                    </form>
+                </div>
+
+                <!-- Historial Minimalista -->
+                <div class="audit-compact" id="auditCompactView">
+                    <span>⏱️ Última actualización de inventario: <strong id="lblLastAuditUser">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:normal; font-size:11px;"></span></span>
+                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">Ver historial completo</button>
+                </div>
+
+                <!-- TABLA PRINCIPAL (INVENTARIO EN RAMPA) -->
+                <div class="table-wrapper">
+                    
+                    <div class="table-toolbar">
+                        <div class="table-actions">
+                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">🚚 Transferir Selección</button>
+                            <button class="btn-excel" onclick="exportarExcelLocal()">⬇️ Excel (Vista Actual)</button>
+                        </div>
+                        <div class="search-box">
+                            <span>🔍 </span>
+                            <input type="text" id="searchInput" onkeyup="filtrarYPaginar()" placeholder="Buscar ULD o Tipo..." style="margin-left: 8px;">
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="uldTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30px;"><input type="checkbox" id="chkAll" onclick="toggleAllCheckboxes()"></th>
+                                    <th>ULD Number</th>
+                                    <th>ULD Status</th>
+                                    <th>Location</th>
+                                    <th>Updated On</th>
+                                    <th>Use Status</th>
+                                    <th>Opp Status</th>
+                                    <th>ULD Type</th>
+                                    <th>Owner</th>
+                                    <th>Received On</th>
+                                    <th>Updated UTC</th>
+                                    <th>Validation</th>
+                                    <th id="thAccion">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uldBody">
+                                <tr><td colspan="13" style="text-align: center; padding: 40px; color:#64748B;">Cargando inventario...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-bottom-bar">
+                        <div class="pagination-wrapper">
+                            <span id="pagInfo">Mostrando 0 de 0</span>
+                            <div class="pag-btns">
+                                <button class="btn-pag" id="btnPrevPage" onclick="cambiarPagina(-1)">⬅️ Ant</button>
+                                <button class="btn-pag" id="btnNextPage" onclick="cambiarPagina(1)">Sig ➡️</button>
+                            </div>
+                        </div>
+                        <button class="btn-guardar-inv" onclick="guardarInventarioGlobal()" id="btnGuardarInv">💾 Guardar Inventario Físico</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA 2: GLOBAL (TABLA DINÁMICA DE TODAS LAS ESTACIONES) -->
+            <div id="vistaGlobal" class="pivot-wrapper">
+                <div class="pivot-header">
+                    <h2>🌍 ULD PALLET CONTROL - BY STATION</h2>
+                    <div class="pivot-stats">
+                        <div class="pivot-stat-box">
+                            <span>Total Estaciones</span>
+                            <strong id="pivotTotalStations">0</strong>
+                        </div>
+                        <div class="pivot-stat-box">
+                            <span>Total ULDs Globales</span>
+                            <strong id="pivotTotalUlds">0</strong>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn-excel" style="margin:0;" onclick="exportarTodoExcel()">⬇️ Detalle Global (Excel)</button>
+                        <button class="btn-excel" style="margin:0;" onclick="exportarPivotExcel()">⬇️ Cuadro Global</button>
+                    </div>
+                </div>
+                
+                <div class="pivot-table-container">
+                    <table class="pivot-table" id="pivotTable">
+                        <thead>
+                            <tr id="pivotHeadRow">
+                                <th class="col-station">STATION</th>
+                                <th>LAST UPDATE</th>
+                                <th class="col-total">TOTAL PALLETS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pivotBodyRow">
+                            <tr><td colspan="100%" style="text-align: center; padding: 40px;">Consolidando miles de registros... ⏳</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr id="pivotFootRow">
+                                <th class="col-station">Total by Type</th>
+                                <th></th>
+                                <th class="col-total" id="pivotGrandTotal">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- MODAL RECEPCIÓN INBOUND (INTERACTIVO Y MODERNO) -->
+    <div class="modal-overlay" id="modalInbound">
+        <div class="modal-content" style="max-width: 650px;">
+            <h3 style="font-weight: 800; color: var(--amerijet-blue); margin-bottom: 10px;">📥 Recepción de ULDs (Inbound)</h3>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Confirma la recepción de las unidades. Las recibidas pasarán automáticamente a estado <strong style="color:var(--amerijet-blue);">EMPTY</strong> en tu rampa. Las no recibidas puedes devolverlas.</p>
+            
+            <div style="max-height: 250px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #E2E8F0; border-radius: 8px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align:left;">
+                    <thead style="background: #F8FAFC; position: sticky; top: 0; z-index: 5;">
+                        <tr>
+                            <th style="padding: 10px; border-bottom: 2px solid #CBD5E1;"><input type="checkbox" id="chkAllInbound" onclick="toggleAllInbound()"></th>
+                            <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">ULD Number</th>
+                            <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">Tipo</th>
+                            <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">Enviado El</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inboundBody">
+                        <!-- Llenado vía JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display: flex; gap: 10px;" id="inboundMainButtons">
+                <button onclick="recibirInbound()" style="flex:1; background:#10B981; color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">✅ Recibir (EMPTY)</button>
+                <button onclick="rechazarInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">❌ Devolver</button>
+            </div>
+
+            <div id="divReturnStation" style="display:none; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                <label style="font-size:11px; font-weight:800; color:var(--amerijet-red); margin-bottom:5px; display:block;">SELECCIONA ESTACIÓN PARA DEVOLVER LOS SELECCIONADOS:</label>
+                <select id="selReturnStation" style="width:100%; padding:10px; border-radius:6px; border:1px solid #CBD5E1; margin-bottom:10px; font-weight:600;"></select>
+                <div style="display:flex; gap:10px;">
+                    <button onclick="confirmarRechazoInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Confirmar Devolución</button>
+                    <button onclick="cancelarRechazoInbound()" style="flex:1; background:#E2E8F0; color:#334155; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Cancelar</button>
+                </div>
+            </div>
+
+            <button onclick="cerrarModalInbound()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">Cerrar Pantalla</button>
+        </div>
+    </div>
+
+    <!-- MODAL EDICIÓN ULD RÁPIDA -->
+    <div class="modal-overlay" id="modalEditUld">
+        <div class="modal-content">
+            <div class="modal-title">✏️ Editar ULD <span id="lblEditUldNumber" style="color:var(--amerijet-blue);"></span></div>
+            <form id="formEditUld">
+                <input type="hidden" id="edit_uld_number">
+                
+                <div class="form-group-inline" style="margin-bottom: 15px;">
+                    <label>Use Status</label>
+                    <select id="edit_use_status" style="width: 100%; margin-top: 5px;">
+                        <option value="EMPTY">EMPTY</option>
+                        <option value="IN USE">IN USE</option>
+                    </select>
+                </div>
+                
+                <div class="form-group-inline" style="margin-bottom: 15px;">
+                    <label>Condición</label>
+                    <select id="edit_uld_condicion" onchange="toggleEditDamageReason()" style="width: 100%; margin-top: 5px;">
+                        <option value="SERVICEABLE">SERVICEABLE</option>
+                        <option value="DAMAGED">DAMAGED</option>
+                    </select>
+                </div>
+                
+                <div class="form-group-inline" id="div_edit_damage_reason" style="display: none; margin-bottom: 15px;">
+                    <label style="color: var(--amerijet-red);">Motivo del Daño</label>
+                    <input type="text" id="edit_damage_reason" placeholder="Ej: Esquina doblada..." style="border-color: var(--amerijet-red); width: 100%; margin-top: 5px;">
+                </div>
+                
+                <button type="submit" style="width:100%; background:var(--amerijet-blue); color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">Guardar Cambios</button>
+                <button type="button" onclick="cerrarModalEditUld()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL HISTORIAL LOG COMPLETO -->
+    <div class="modal-overlay" id="modalHistorialLog">
+        <div class="modal-content" style="max-width: 500px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px;">
+                <h3 style="font-weight: 800; color: var(--amerijet-blue); margin:0;">📋 Historial de Cambios</h3>
+                <button onclick="cerrarModalHistorialLog()" style="background:none; border:none; font-size:18px; color:#94A3B8; cursor:pointer;">✖</button>
+            </div>
+            <div id="logContainerModal" style="max-height: 300px; overflow-y: auto;">
+                <p style="font-size:12px; color:#64748B; font-style:italic;">Cargando historial...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ACCESORIOS (BODEGA NET) -->
+    <div class="modal-overlay" id="modalAccesorios">
+        <div class="modal-content">
+            <div class="modal-title" id="modalAccesoriosTitle">Actualizar Bodega</div>
+            <form id="formAccesorios">
+                
+                <div id="secNetsModal" style="display:none;">
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🕸️ CONTEO DE REDES DISPONIBLES</h4>
+                    <div id="modalNetsDinamicoContainer" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+                </div>
+                
+                <div id="secStrapsModal" style="display:none;">
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🔗 CONTEO DE CINCHAS (STRAPS)</h4>
+                    <div class="modal-grid">
+                        <div class="form-group-inline"><label>Straps Fricción</label><input type="number" id="mod_strap_fric" min="0"></div>
+                        <div class="form-group-inline"><label>Straps Presión</label><input type="number" id="mod_strap_pres" min="0"></div>
+                    </div>
+                </div>
+
+                <button type="submit" style="width:100%; background:var(--amerijet-blue); color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:15px;">Guardar Inventario de Bodega</button>
+                <button type="button" onclick="cerrarModalAcc()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TRANSFERENCIA DE LOTE MANUAL -->
+    <div class="modal-overlay" id="modalTransfer">
+        <div class="modal-content">
+            <div class="modal-title">🚚 Transferir ULDs Seleccionados</div>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Selecciona la estación destino. Las unidades pasarán a estado <b>EN TRÁNSITO</b> y notificarán a la estación de destino.</p>
+            <div class="form-group-inline" style="margin-bottom: 20px;">
+                <label>Estación Destino</label>
+                <select id="transfer_target" required></select>
+            </div>
+            <button onclick="ejecutarTransferencia()" style="width:100%; background:#D97706; color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Confirmar Despacho</button>
+            <button type="button" onclick="cerrarModalTransfer()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- MODALES UNIVERSALES (ALERTAS Y CONFIRMACIONES) -->
+    <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
+        <div class="modal-content modal-generic">
+            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
+            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
+            <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
+        <div class="modal-content modal-generic">
+            <div id="confirmIcon" style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
+            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Confirmar</h3>
+            <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
+            <div style="display: flex; gap: 10px;">
+                <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Confirmar</button>
+                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let misEstaciones = [];
+        let todasLasEstacionesBD = [];
+        let limitesEstaciones = {}; 
+        let miRol = "USER";
+        let miNombre = "Usuario";
+        let estacionVista = "";
+        
+        let datosVistaActual = [];    
+        let uldsEnRampa = []; 
+        let uldsEnTransito = []; 
+        let datosFiltrados = [];        
+        let redesIngresadasEnBodega = {}; 
+        let historialAuditoria = [];
+        
+        let paginaActual = 1;
+        const itemsPorPagina = 50;
+        let pivotGlobalData = [];
+
+        function clasificarTipoULD(tipoStr) {
+            if(!tipoStr) return 'OTROS';
+            const t = tipoStr.toUpperCase();
+            if(t.startsWith('PA') || t.startsWith('P1')) return 'PAG/PAJ';
+            if(t.startsWith('PM') || t.startsWith('P6')) return 'PMC/PMH';
+            if(t.startsWith('PQ') || t.startsWith('FQ') || t.startsWith('FA')) return 'PQA/FQA';
+            if(t.startsWith('AK') || t.startsWith('AV')) return 'AKE/AVE';
+            return t;
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function toggleDamageReason() {
+            const cond = document.getElementById('uld_condicion').value;
+            document.getElementById('div_damage_reason').style.display = cond === 'DAMAGED' ? 'flex' : 'none';
+            if (cond === 'SERVICEABLE') { document.getElementById('damage_reason').value = ''; }
+        }
+
+        function toggleEditDamageReason() {
+            const cond = document.getElementById('edit_uld_condicion').value;
+            document.getElementById('div_edit_damage_reason').style.display = cond === 'DAMAGED' ? 'flex' : 'none';
+            if (cond === 'SERVICEABLE') { document.getElementById('edit_damage_reason').value = ''; }
+        }
+
+        function toggleAgingList() {
+            const list = document.getElementById('agingList');
+            list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'block' : 'none';
+        }
+        function toggleStockList() {
+            const list = document.getElementById('stockList');
+            list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'block' : 'none';
+        }
+
+        function showCustomAlert(title, message, type = 'info') {
+            const modal = document.getElementById('customAlertModal');
+            const icon = document.getElementById('alertIcon');
+            const titleEl = document.getElementById('alertTitle');
+            const btn = document.getElementById('alertBtn');
+            titleEl.innerText = title; document.getElementById('alertMessage').innerHTML = message;
+            if(type === 'success') { icon.innerText = '✅'; titleEl.style.color = '#10B981'; btn.style.background = '#10B981'; } 
+            else if(type === 'error') { icon.innerText = '❌'; titleEl.style.color = 'var(--amerijet-red)'; btn.style.background = 'var(--amerijet-red)'; } 
+            else { icon.innerText = 'ℹ️'; titleEl.style.color = 'var(--amerijet-blue)'; btn.style.background = 'var(--amerijet-blue)'; }
+            modal.style.display = 'flex';
+        }
+        function closeCustomAlert() { document.getElementById('customAlertModal').style.display = 'none'; }
+
+        let currentConfirmCallback = null;
+        function showCustomConfirm(title, message, confirmBtnText, btnColor, callback) {
+            document.getElementById('confirmTitle').innerText = title; document.getElementById('confirmTitle').style.color = btnColor;
+            document.getElementById('confirmMessage').innerHTML = message;
+            const btn = document.getElementById('btnConfirmAction'); btn.innerText = confirmBtnText; btn.style.background = btnColor;
+            currentConfirmCallback = callback; document.getElementById('customConfirmModal').style.display = 'flex';
+        }
+        function closeCustomConfirm() { document.getElementById('customConfirmModal').style.display = 'none'; currentConfirmCallback = null; }
+        document.getElementById('btnConfirmAction').addEventListener('click', () => { if(currentConfirmCallback) currentConfirmCallback(); closeCustomConfirm(); });
+
+        async function inicializar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            const { data: perfil } = await supabaseClient.from('perfiles').select('estacion_base, rol, nombre').eq('id', session.user.id).single();
+            if (perfil) {
+                miRol = String(perfil.rol).toLowerCase();
+                miNombre = perfil.nombre || "Usuario";
+                document.getElementById('lblUserName').innerText = miNombre;
+                document.getElementById('lblUserRol').innerText = miRol.toUpperCase();
+                
+                misEstaciones = (perfil.estacion_base || "SAL").split(',').map(s => s.trim());
+                
+                if(miRol === 'admin' || miRol === 'supervisor') {
+                    document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                    if(miRol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+                }
+
+                const { data: catEst } = await supabaseClient.from('estaciones').select('*').order('codigo');
+                if(catEst) {
+                    todasLasEstacionesBD = catEst.map(e => e.codigo);
+                    catEst.forEach(e => { limitesEstaciones[e.codigo] = e.stock_permitido || {}; });
+                }
+
+                configurarSelectorEstacionInteligente();
+                await refrescarPantalla();
+            }
+        }
+
+        function configurarSelectorEstacionInteligente() {
+            const wrapperSelector = document.getElementById('divStationSelector');
+            const wrapperStatic = document.getElementById('divStationStatic');
+            const selector = document.getElementById('estacionSelector');
+            const lblStatic = document.getElementById('lblUserEstacion');
+            
+            let savedStation = localStorage.getItem('cargo_current_station');
+
+            if (misEstaciones.length > 1 || miRol === 'admin' || miRol === 'supervisor') {
+                wrapperSelector.style.display = 'flex'; wrapperStatic.style.display = 'none'; selector.innerHTML = '';
+                
+                if(miRol === 'admin' || miRol === 'supervisor') { selector.innerHTML += `<option value="ALL">MUNDO (TODAS)</option>`; }
+                todasLasEstacionesBD.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+                
+                if (savedStation && (misEstaciones.includes(savedStation) || todasLasEstacionesBD.includes(savedStation) || savedStation === 'ALL')) {
+                    estacionVista = savedStation; 
+                } else {
+                    estacionVista = misEstaciones.includes('SAL') ? 'SAL' : misEstaciones[0];
+                }
+                localStorage.setItem('cargo_current_station', estacionVista);
+                selector.value = estacionVista;
+
+                selector.addEventListener('change', (e) => {
+                    estacionVista = e.target.value; localStorage.setItem('cargo_current_station', estacionVista);
+                    document.getElementById('searchInput').value = ''; 
+                    refrescarPantalla();
+                });
+            } else {
+                wrapperSelector.style.display = 'none'; wrapperStatic.style.display = 'flex';
+                estacionVista = misEstaciones[0]; lblStatic.innerText = estacionVista;
+                localStorage.setItem('cargo_current_station', estacionVista);
+                document.getElementById('thAccion').style.display = 'none';
+            }
+        }
+
+        async function refrescarPantalla() {
+            if(estacionVista === 'ALL') {
+                document.getElementById('vistaEstacion').style.display = 'none';
+                document.getElementById('inboundBanner').style.display = 'none';
+                document.getElementById('vistaGlobal').style.display = 'block';
+                await cargarPivotGlobal();
+            } else {
+                document.getElementById('vistaGlobal').style.display = 'none';
+                document.getElementById('vistaEstacion').style.display = 'flex';
+                document.getElementById('lblFormStation').innerText = `Ingresar a ${estacionVista}`;
+                await cargarInventario();
+                await cargarAccesoriosYCalcularBalance();
+            }
+        }
+
+        async function cargarInventario() {
+            const tbody = document.getElementById('uldBody');
+            try {
+                let query = supabaseClient.from('uld_inventario').select('*').order('updated_ontime', { ascending: false });
+                if (estacionVista !== 'ALL') { query = query.eq('location', estacionVista); }
+
+                const { data: ulds, error } = await query;
+                if (error) throw new Error(error.message);
+                
+                datosVistaActual = ulds || []; 
+                uldsEnTransito = datosVistaActual.filter(u => u.opp_status === 'IN TRANSIT');
+                uldsEnRampa = datosVistaActual.filter(u => u.opp_status !== 'IN TRANSIT');
+
+                document.getElementById('wgTotalUld').innerText = uldsEnRampa.length;
+
+                const bannerInbound = document.getElementById('inboundBanner');
+                if (uldsEnTransito.length > 0) {
+                    document.getElementById('inboundCount').innerText = uldsEnTransito.length;
+                    bannerInbound.style.display = 'flex';
+                } else {
+                    bannerInbound.style.display = 'none';
+                }
+
+                if (estacionVista !== 'ALL') {
+                    calcularStockIdeal(); 
+                    
+                    const agingList = [];
+                    const today = new Date();
+                    uldsEnRampa.forEach(u => {
+                        if(u.received_on) {
+                            const rxDate = new Date(u.received_on);
+                            const diffDays = Math.ceil(Math.abs(today - rxDate) / (1000 * 60 * 60 * 24));
+                            if(diffDays > 7) { agingList.push({ uld: u.uld_number, days: diffDays }); }
+                        }
+                    });
+
+                    const banner = document.getElementById('agingBanner');
+                    if(agingList.length > 0) {
+                        document.getElementById('lblAgingCount').innerText = agingList.length;
+                        const listHtml = agingList.map(a => `<div class="aging-item"><span><b>${a.uld}</b></span> <span>${a.days} días en rampa</span></div>`).join('');
+                        document.getElementById('agingList').innerHTML = listHtml;
+                        banner.style.display = 'flex';
+                    } else {
+                        banner.style.display = 'none';
+                    }
+                }
+
+                filtrarYPaginar(); 
+
+            } catch(err) { tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; color:var(--amerijet-red); padding: 20px;">Error: ${err.message}</td></tr>`; }
+        }
+
+        function calcularStockIdeal() {
+            const banner = document.getElementById('stockBanner');
+            const headerText = document.getElementById('stockHeaderText');
+            const list = document.getElementById('stockList');
+            
+            const limites = limitesEstaciones[estacionVista] || {};
+            if (Object.keys(limites).length === 0) { banner.style.display = 'none'; return; }
+
+            let conteoAgrupado = {};
+            let desgloseAgrupado = {};
+
+            uldsEnRampa.forEach(u => {
+                const literalType = u.uld_type ? u.uld_type.toUpperCase() : 'OTROS';
+                const grupo = clasificarTipoULD(literalType);
+                
+                conteoAgrupado[grupo] = (conteoAgrupado[grupo] || 0) + 1;
+                
+                if(!desgloseAgrupado[grupo]) desgloseAgrupado[grupo] = {};
+                desgloseAgrupado[grupo][literalType] = (desgloseAgrupado[grupo][literalType] || 0) + 1;
+            });
+
+            let alertas = [];
+            let hayExceso = false;
+
+            for (const [grupoKey, limite] of Object.entries(limites)) {
+                const actual = conteoAgrupado[grupoKey] || 0;
+                let labelInteligente = grupoKey.split('/')[0]; 
+                let detalleDesglose = "";
+                
+                if (actual > 0 && desgloseAgrupado[grupoKey]) {
+                    const subTipos = Object.keys(desgloseAgrupado[grupoKey]);
+                    labelInteligente = subTipos.join(" / "); 
+                    if(subTipos.length > 1) {
+                         detalleDesglose = ` <span style="font-size:10px; font-weight:600; opacity:0.8;">(${subTipos.map(k => `${desgloseAgrupado[grupoKey][k]} ${k}`).join(', ')})</span>`;
+                    }
+                }
+
+                if (actual > limite) {
+                    hayExceso = true;
+                    alertas.push(`<div class="stock-item danger"><span>⚠️ <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Depurar: <b>${actual - limite}</b></span></div>`);
+                } else {
+                    alertas.push(`<div class="stock-item ok"><span>✅ <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Stock normal</span></div>`);
+                }
+            }
+            
+            list.innerHTML = alertas.join('');
+            
+            if (hayExceso) {
+                banner.className = 'stock-banner danger';
+                headerText.innerHTML = '<span>⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.</span><span style="font-size: 18px;">🔽</span>';
+            } else {
+                banner.className = 'stock-banner success';
+                headerText.innerHTML = '<span>✅ CONTROL DE STOCK: Tu estación está dentro de los límites.</span><span style="font-size: 18px;">🔽</span>';
+            }
+            banner.style.display = 'flex';
+        }
+
+        function filtrarYPaginar() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            if(searchTerm === '') { datosFiltrados = [...uldsEnRampa]; } 
+            else {
+                datosFiltrados = uldsEnRampa.filter(u => 
+                    (u.uld_number && u.uld_number.toLowerCase().includes(searchTerm)) ||
+                    (u.location && u.location.toLowerCase().includes(searchTerm)) ||
+                    (u.uld_type && u.uld_type.toLowerCase().includes(searchTerm))
+                );
+            }
+            paginaActual = 1; dibujarTablaPaginada();
+        }
+
+        function dibujarTablaPaginada() {
+            const tbody = document.getElementById('uldBody');
+            if (datosFiltrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; color:#64748B; padding: 40px;">No se encontraron ULDs físicamente en rampa.</td></tr>`;
+                document.getElementById('pagInfo').innerText = `Mostrando 0 de 0`;
+                document.getElementById('btnPrevPage').disabled = true; document.getElementById('btnNextPage').disabled = true;
+                return;
+            }
+
+            const startIndex = (paginaActual - 1) * itemsPorPagina;
+            const endIndex = Math.min(startIndex + itemsPorPagina, datosFiltrados.length);
+            const datosPagina = datosFiltrados.slice(startIndex, endIndex);
+
+            tbody.innerHTML = '';
+            datosPagina.forEach(u => {
+                const valClass = u.validation_uld === 'VALIDO' ? 'val-valido' : 'val-error';
+                let rxDate = "N/A"; if(u.received_on) { const [y, m, d] = u.received_on.split('-'); rxDate = `${m}/${d}/${y.slice(-2)}`; }
+                let updTime = "N/A", updDate = "N/A";
+                if(u.updated_ontime) {
+                    const d = new Date(u.updated_ontime);
+                    updDate = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                    let hr = d.getUTCHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12;
+                    updTime = `${updDate} ${hr}:${String(d.getUTCMinutes()).padStart(2,'0')} ${ampm} UTC`;
+                }
+                
+                let statusBadge = `<span style="color:#10B981; font-weight:800;">SERVICEABLE</span>`;
+                if(u.uld_status === 'DAMAGED') {
+                    statusBadge = `<span style="color:var(--amerijet-red); font-weight:800;">DAMAGED</span><br><span style="font-size:10px; color:var(--amerijet-red); line-height:1.2; display:block; margin-top:3px; max-width: 150px; white-space: normal;">${u.damage_reason || ''}</span>`;
+                } else if(u.uld_status) {
+                    statusBadge = `<span style="font-weight:700;">${u.uld_status}</span>`;
+                }
+
+                const displayDelBtn = (miRol === 'admin') ? `inline-block` : `none`;
+                const safeDamageR = (u.damage_reason || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" class="chk-transfer" value="${u.uld_number}"></td>
+                        <td style="font-weight:800;">${u.uld_number}</td>
+                        <td>${statusBadge}</td>
+                        <td style="font-weight:700; color:var(--amerijet-blue);">${u.location}</td>
+                        <td>${updDate}</td>
+                        <td>${u.use_status}</td>
+                        <td>${u.opp_status || 'ARRIVED'}</td>
+                        <td><span style="background:#F1F5F9; border:1px solid #CBD5E1; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:700;">${u.uld_type || ''}</span></td>
+                        <td>${u.owner || ''}</td>
+                        <td>${rxDate}</td>
+                        <td>${updTime}</td>
+                        <td><span class="${valClass}">${u.validation_uld || 'N/A'}</span></td>
+                        <td>
+                            <button class="btn-edit-uld" onclick="abrirModalEditUld('${u.uld_number}', '${u.use_status || 'EMPTY'}', '${u.uld_status || 'SERVICEABLE'}', '${safeDamageR}')" title="Editar">✏️</button>
+                            <button class="btn-delete" style="display:${displayDelBtn};" onclick="borrarUld('${u.uld_number}')" title="Borrar">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('pagInfo').innerText = `Mostrando ${startIndex + 1} - ${endIndex} de ${datosFiltrados.length}`;
+            document.getElementById('btnPrevPage').disabled = (paginaActual === 1);
+            document.getElementById('btnNextPage').disabled = (endIndex >= datosFiltrados.length);
+        }
+
+        function cambiarPagina(direccion) { paginaActual += direccion; dibujarTablaPaginada(); }
+
+        // =====================================
+        // AUDITORÍA Y ACCESORIOS (BODEGA NET / BALANCE)
+        // =====================================
+        async function cargarAccesoriosYCalcularBalance() {
+            try {
+                let conteoFisicoPorTipo = {};
+                uldsEnRampa.forEach(u => { 
+                    if (u.uld_type) {
+                        conteoFisicoPorTipo[u.uld_type.toUpperCase()] = (conteoFisicoPorTipo[u.uld_type.toUpperCase()] || 0) + 1; 
+                    }
+                });
+
+                const { data } = await supabaseClient.from('uld_accesorios').select('*').eq('station', estacionVista).maybeSingle();
+                redesIngresadasEnBodega = data && data.redes_por_tipo ? data.redes_por_tipo : {};
+                
+                historialAuditoria = data && data.historial_inventario ? data.historial_inventario : [];
+                dibujarHistorialAuditoria();
+
+                const friccion = data ? data.straps_friccion : 0; const presion = data ? data.straps_presion : 0;
+                document.getElementById('wgStrapFric').innerText = friccion; document.getElementById('wgStrapPres').innerText = presion;
+                document.getElementById('wgTotalStraps').innerText = friccion + presion;
+
+                const balanceContainer = document.getElementById('wgNetsBalanceContainer'); balanceContainer.innerHTML = '';
+                
+                let todosLosTiposDetectados = new Set([...Object.keys(conteoFisicoPorTipo), ...Object.keys(redesIngresadasEnBodega)]);
+
+                let tiposArray = Array.from(todosLosTiposDetectados).sort();
+                let mostrados = 0; // NEW variable to track
+
+                tiposArray.forEach(tipo => {
+                    const uldsFisicos = conteoFisicoPorTipo[tipo] || 0; 
+                    const redesBodega = parseInt(redesIngresadasEnBodega[tipo]) || 0;
+                    
+                    // LOGICA INYECTADA: Si no hay ULDs ni Redes, saltamos este tipo (no lo dibuja).
+                    if (uldsFisicos === 0 && redesBodega === 0) return;
+                    
+                    mostrados++;
+                    const balance = redesBodega - uldsFisicos;
+                    let itemClass = "balance-ok"; let mensajeTexto = `✅ Balance Perfecto (Net listo)`;
+
+                    if (balance < 0) { 
+                        itemClass = "balance-danger"; 
+                        mensajeTexto = `⚠️ Alerta: Faltan ${Math.abs(balance)} Redes`; 
+                    } 
+                    else if (balance > 0) { 
+                        itemClass = "balance-warning"; 
+                        mensajeTexto = `🟠 Excedente: Tienes ${balance} de más`; 
+                    } 
+
+                    balanceContainer.innerHTML += `
+                        <div class="balance-item ${itemClass}">
+                            <div style="font-weight:800; font-size:14px;">${tipo}</div>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <span>Rampa (ULDs): <b>${uldsFisicos}</b> | Bodega (Redes): <b>${redesBodega}</b></span>
+                                <span style="font-size:10px; font-weight:800; text-transform:uppercase;">${mensajeTexto}</span>
+                            </div>
+                        </div>`;
+                });
+                
+                if (mostrados === 0) {
+                    balanceContainer.innerHTML = '<p style="font-size:12px; color:#64748B; font-style:italic;">No hay unidades ni redes registradas para auditar.</p>';
+                }
+            } catch(e) {}
+        }
+
+        function abrirModalAccesoriosDinamico(tipoModal) {
+            const secNets = document.getElementById('secNetsModal');
+            const secStraps = document.getElementById('secStrapsModal');
+            
+            if (tipoModal === 'nets') {
+                secNets.style.display = 'block';
+                secStraps.style.display = 'none';
+                document.getElementById('modalAccesoriosTitle').innerText = 'Actualizar Bodega (Redes)';
+                
+                const container = document.getElementById('modalNetsDinamicoContainer'); container.innerHTML = '';
+                
+                let tiposActivos = new Set();
+                uldsEnRampa.forEach(u => { 
+                    if(u.uld_type && u.uld_type.trim() !== '') {
+                        tiposActivos.add(u.uld_type.toUpperCase());
+                    }
+                });
+                Object.keys(redesIngresadasEnBodega).forEach(t => {
+                    if (parseInt(redesIngresadasEnBodega[t]) > 0) { // Solo si hay redes registradas
+                        tiposActivos.add(t.toUpperCase());
+                    }
+                });
+
+                if(tiposActivos.size === 0) {
+                    container.innerHTML = '<p style="font-size:12px; color:var(--amerijet-red); margin-bottom:15px; font-weight:600;">⚠️ Registra al menos un ULD abajo o ingresa redes para activar los tipos.</p>';
+                } else {
+                    let htmlGrid = '<div class="modal-grid">';
+                    let tiposArray = Array.from(tiposActivos).sort();
+                    tiposArray.forEach(tipo => {
+                        const valorActual = redesIngresadasEnBodega[tipo] || 0;
+                        htmlGrid += `<div class="form-group-inline"><label>Redes para ${tipo}</label><input type="number" class="input-net-dinamico" data-tipo="${tipo}" value="${valorActual}" min="0"></div>`;
+                    });
+                    htmlGrid += '</div>'; container.innerHTML = htmlGrid;
+                }
+            } else {
+                secNets.style.display = 'none';
+                secStraps.style.display = 'block';
+                document.getElementById('modalAccesoriosTitle').innerText = 'Actualizar Bodega (Straps)';
+            }
+
+            document.getElementById('mod_strap_fric').value = document.getElementById('wgStrapFric').innerText;
+            document.getElementById('mod_strap_pres').value = document.getElementById('wgStrapPres').innerText;
+            document.getElementById('modalAccesorios').style.display = 'flex';
+        }
+
+        function cerrarModalAcc() { document.getElementById('modalAccesorios').style.display = 'none'; }
+
+        document.getElementById('formAccesorios').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let nuevoJsonRedes = {...redesIngresadasEnBodega}; 
+            
+            document.querySelectorAll('.input-net-dinamico').forEach(input => {
+                const tipo = input.getAttribute('data-tipo'); 
+                nuevoJsonRedes[tipo] = parseInt(input.value) || 0;
+            });
+            const now = new Date().toISOString();
+
+            let nuevoHistorial = [...historialAuditoria];
+            nuevoHistorial.push({ accion: "Bodega de Redes y Straps Actualizada", usuario: miNombre, fecha: now });
+            if (nuevoHistorial.length > 20) nuevoHistorial = nuevoHistorial.slice(-20);
+
+            const payload = {
+                station: estacionVista, 
+                redes_por_tipo: nuevoJsonRedes,
+                straps_friccion: parseInt(document.getElementById('mod_strap_fric').value) || 0,
+                straps_presion: parseInt(document.getElementById('mod_strap_pres').value) || 0,
+                updated_at: now,
+                historial_inventario: nuevoHistorial
+            };
+
+            try {
+                await supabaseClient.from('uld_accesorios').upsert([payload]);
+                cerrarModalAcc(); await cargarAccesoriosYCalcularBalance();
+                showCustomAlert("Inventario Guardado", "Los conteos de bodega se han actualizado correctamente.", "success");
+            } catch(e) { showCustomAlert("Error", "No se pudo guardar el inventario de accesorios.", "error"); }
+        });
+
+        // =====================================
+        // MÓDULO INBOUND (RECEPCIÓN Y RECHAZO)
+        // =====================================
+        function abrirModalInbound() {
+            const tbody = document.getElementById('inboundBody');
+            tbody.innerHTML = '';
+            uldsEnTransito.forEach(u => {
+                const d = u.updated_ontime ? new Date(u.updated_ontime) : new Date();
+                const fechaStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0;"><input type="checkbox" class="chk-inbound" value="${u.uld_number}"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0; font-weight: bold; color:var(--amerijet-blue-dark);">${u.uld_number}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0;"><span style="background:#F1F5F9; border:1px solid #CBD5E1; padding:2px 6px; border-radius:4px;">${u.uld_type || 'N/A'}</span></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0; color:#64748B;">${fechaStr}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('modalInbound').style.display = 'flex';
+        }
+
+        function cerrarModalInbound() { 
+            document.getElementById('modalInbound').style.display = 'none'; 
+            document.getElementById('divReturnStation').style.display = 'none';
+            document.getElementById('inboundMainButtons').style.display = 'flex';
+        }
+
+        function toggleAllInbound() {
+            const state = document.getElementById('chkAllInbound').checked;
+            document.querySelectorAll('.chk-inbound').forEach(cb => cb.checked = state);
+        }
+
+        async function recibirInbound() {
+            const seleccionados = Array.from(document.querySelectorAll('.chk-inbound:checked')).map(cb => cb.value);
+            if(seleccionados.length === 0) return showCustomAlert("Atención", "Selecciona al menos un ULD para recibir.", "info");
+
+            const now = new Date();
+            try {
+                await supabaseClient.from('uld_inventario').update({
+                    opp_status: 'ARRIVED',
+                    use_status: 'EMPTY',
+                    updated_ontime: now.toISOString(),
+                    received_on: now.toISOString().split('T')[0]
+                }).in('uld_number', seleccionados);
+                cerrarModalInbound(); await refrescarPantalla();
+                showCustomAlert("Recibidos Correctamente", `Se ingresaron ${seleccionados.length} ULD(s) a tu rampa como EMPTY.`, "success");
+            } catch(e) { showCustomAlert("Error", e.message, "error"); }
+        }
+
+        function rechazarInbound() {
+            const seleccionados = Array.from(document.querySelectorAll('.chk-inbound:checked')).map(cb => cb.value);
+            if(seleccionados.length === 0) return showCustomAlert("Atención", "Selecciona al menos un ULD para devolver.", "info");
+
+            const sel = document.getElementById('selReturnStation'); sel.innerHTML = '';
+            todasLasEstacionesBD.forEach(est => {
+                if(est !== estacionVista) sel.innerHTML += `<option value="${est}">${est}</option>`;
+            });
+
+            document.getElementById('inboundMainButtons').style.display = 'none';
+            document.getElementById('divReturnStation').style.display = 'block';
+        }
+
+        function cancelarRechazoInbound() {
+            document.getElementById('divReturnStation').style.display = 'none';
+            document.getElementById('inboundMainButtons').style.display = 'flex';
+        }
+
+        async function confirmarRechazoInbound() {
+            const seleccionados = Array.from(document.querySelectorAll('.chk-inbound:checked')).map(cb => cb.value);
+            const target = document.getElementById('selReturnStation').value;
+            const now = new Date();
+            try {
+                await supabaseClient.from('uld_inventario').update({
+                    location: target,
+                    opp_status: 'IN TRANSIT', 
+                    updated_ontime: now.toISOString()
+                }).in('uld_number', seleccionados);
+                
+                cerrarModalInbound(); await refrescarPantalla();
+                showCustomAlert("Devueltos", `Se devolvieron ${seleccionados.length} ULDs a ${target}.`, "success");
+            } catch(e) { showCustomAlert("Error", e.message, "error"); }
+        }
+
+        // =====================================
+        // TRANSFERENCIA MÚLTIPLE (EN RAMPA) A OTRA ESTACIÓN 
+        // =====================================
+        function toggleAllCheckboxes() {
+            const state = document.getElementById('chkAll').checked;
+            document.querySelectorAll('.chk-transfer').forEach(cb => cb.checked = state);
+        }
+
+        function abrirModalTransferir() {
+            const seleccionados = document.querySelectorAll('.chk-transfer:checked');
+            if(seleccionados.length === 0) { showCustomAlert("Atención", "Selecciona las unidades (ULDs) que deseas despachar utilizando las casillas de la izquierda.", "info"); return; }
+            
+            const selDestino = document.getElementById('transfer_target'); selDestino.innerHTML = '';
+            todasLasEstacionesBD.forEach(est => { if(est !== estacionVista) selDestino.innerHTML += `<option value="${est}">${est}</option>`; });
+            document.getElementById('modalTransfer').style.display = 'flex';
+        }
+        function cerrarModalTransfer() { document.getElementById('modalTransfer').style.display = 'none'; }
+
+        async function ejecutarTransferencia() {
+            const destino = document.getElementById('transfer_target').value;
+            const cbx = document.querySelectorAll('.chk-transfer:checked');
+            const seleccionados = Array.from(cbx).map(cb => cb.value);
+            
+            // 1. Recopilar qué tipos de ULD estamos enviando
+            let tiposAEnviar = {};
+            cbx.forEach(cb => {
+                const fila = cb.closest('tr');
+                const tipoVal = fila.cells[7].innerText.trim().toUpperCase();
+                if(tipoVal && tipoVal !== 'OTROS') {
+                    if(!tiposAEnviar[tipoVal]) tiposAEnviar[tipoVal] = 0;
+                    tiposAEnviar[tipoVal]++;
+                }
+            });
+
+            const now = new Date();
+            try {
+                // 2. Transferir los ULDs (Status: IN TRANSIT)
+                await supabaseClient.from('uld_inventario').update({
+                    location: destino, 
+                    opp_status: 'IN TRANSIT', 
+                    updated_ontime: now.toISOString(), 
+                    received_on: now.toISOString().split('T')[0]
+                }).in('uld_number', seleccionados);
+                
+                // 3. Restar REDES en Bodega de la estación actual (estacionVista)
+                let historialNuevoLocal = [...historialAuditoria];
+                historialNuevoLocal.push({ accion: `Despacho de ${seleccionados.length} ULDs a ${destino} (Resta de Redes Automática)`, usuario: miNombre, fecha: now.toISOString() });
+                if (historialNuevoLocal.length > 20) historialNuevoLocal = historialNuevoLocal.slice(-20);
+                
+                let redesActuales = {...redesIngresadasEnBodega};
+                Object.keys(tiposAEnviar).forEach(tipo => {
+                    if(redesActuales[tipo] !== undefined) {
+                        redesActuales[tipo] = Math.max(0, redesActuales[tipo] - tiposAEnviar[tipo]);
+                    }
+                });
+
+                await supabaseClient.from('uld_accesorios').upsert([{ 
+                    station: estacionVista, 
+                    redes_por_tipo: redesActuales,
+                    historial_inventario: historialNuevoLocal,
+                    updated_at: now.toISOString()
+                }]);
+
+                // 4. SUMAR REDES en Bodega de la estación destino
+                const { data: accDestino } = await supabaseClient.from('uld_accesorios').select('*').eq('station', destino).maybeSingle();
+                
+                let redesDestino = accDestino && accDestino.redes_por_tipo ? accDestino.redes_por_tipo : {};
+                let historialDestino = accDestino && accDestino.historial_inventario ? accDestino.historial_inventario : [];
+                
+                Object.keys(tiposAEnviar).forEach(tipo => {
+                    redesDestino[tipo] = (parseInt(redesDestino[tipo]) || 0) + tiposAEnviar[tipo];
+                });
+
+                historialDestino.push({ accion: `Recepción de ${seleccionados.length} ULDs desde ${estacionVista} (Suma de Redes Automática)`, usuario: "Sistema Auto", fecha: now.toISOString() });
+                if (historialDestino.length > 20) historialDestino = historialDestino.slice(-20);
+
+                await supabaseClient.from('uld_accesorios').upsert([{ 
+                    station: destino, 
+                    redes_por_tipo: redesDestino,
+                    historial_inventario: historialDestino,
+                    updated_at: now.toISOString()
+                }]);
+
+                document.getElementById('chkAll').checked = false; 
+                cerrarModalTransfer(); 
+                await refrescarPantalla();
+                showCustomAlert("Despacho Exitoso", `Se transfirieron ${seleccionados.length} ULDs hacia ${destino}.<br><br><b>Automatización:</b> Se restaron las redes proporcionales a los ULDs de la bodega local y se sumaron al destino.`, "success");
+            } catch(e) { showCustomAlert("Error de Transferencia", "Ocurrió un error al procesar el lote y las redes.", "error"); }
+        }
+
+        // =====================================
+        // INGRESO MANUAL INTELIGENTE
+        // =====================================
+        document.getElementById('formAddUld').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmitUld'); btn.disabled = true; btn.innerText = "...";
+            const rawUld = document.getElementById('uld_number').value.trim().toUpperCase();
+            const uldStatus = document.getElementById('uld_condicion').value;
+            const damageReason = document.getElementById('damage_reason').value.trim();
+
+            if (uldStatus === 'DAMAGED' && damageReason === '') {
+                showCustomAlert("Atención", "Por favor ingresa un motivo para el estado DAMAGED.", "error");
+                btn.disabled = false; btn.innerText = "Registrar Manual"; return;
+            }
+
+            try {
+                const { data: existente } = await supabaseClient.from('uld_inventario').select('location').eq('uld_number', rawUld).maybeSingle();
+
+                if (existente) {
+                    if (existente.location === estacionVista) {
+                        const now = new Date().toISOString();
+                        await supabaseClient.from('uld_inventario').update({
+                            updated_ontime: now,
+                            use_status: document.getElementById('use_status').value,
+                            uld_status: uldStatus,
+                            opp_status: 'ARRIVED', 
+                            damage_reason: uldStatus === 'DAMAGED' ? damageReason : ''
+                        }).eq('uld_number', rawUld);
+                        
+                        document.getElementById('uld_number').value = ""; document.getElementById('damage_reason').value = "";
+                        await refrescarPantalla();
+                        showCustomAlert("Inventario Actualizado", `El ULD <strong style="color:var(--amerijet-blue);">${rawUld}</strong> ya estaba en tu rampa. Se ha validado su estado.`, "success");
+                    
+                    } else {
+                        showCustomConfirm("Búsqueda Inteligente", `El ULD <strong style="color:var(--amerijet-blue);">${rawUld}</strong> figura en [<strong>${existente.location}</strong>].<br><br>¿Confirmas que lo tienes frente a ti y deseas jalarlo a la rampa de ${estacionVista}?`, "Sí, Transferir", "var(--amerijet-blue)", 
+                            async () => {
+                                const now = new Date();
+                                await supabaseClient.from('uld_inventario').update({
+                                    location: estacionVista, 
+                                    use_status: document.getElementById('use_status').value,
+                                    uld_status: uldStatus,
+                                    damage_reason: uldStatus === 'DAMAGED' ? damageReason : '',
+                                    opp_status: 'ARRIVED', 
+                                    updated_ontime: now.toISOString(), 
+                                    received_on: now.toISOString().split('T')[0]
+                                }).eq('uld_number', rawUld);
+                                
+                                document.getElementById('uld_number').value = ""; document.getElementById('damage_reason').value = "";
+                                await refrescarPantalla();
+                                showCustomAlert("Éxito", "La unidad se transfirió y registró con éxito.", "success");
+                            }
+                        );
+                    }
+                } else {
+                    let uldType = rawUld.length >= 3 ? rawUld.substring(0, 3) : ""; let owner = rawUld.length > 5 ? rawUld.slice(-2) : "";
+                    let val = (rawUld.length >= 9 && rawUld.length <= 11) ? "VALIDO" : "ERROR"; const now = new Date();
+                    
+                    await supabaseClient.from('uld_inventario').insert([{
+                        uld_number: rawUld, 
+                        uld_status: uldStatus, 
+                        location: estacionVista,
+                        use_status: document.getElementById('use_status').value, 
+                        opp_status: 'ARRIVED',
+                        uld_type: uldType, owner: owner, validation_uld: val,
+                        damage_reason: uldStatus === 'DAMAGED' ? damageReason : '',
+                        updated_ontime: now.toISOString(), received_on: now.toISOString().split('T')[0]
+                    }]);
+                    
+                    document.getElementById('uld_number').value = ""; document.getElementById('damage_reason').value = "";
+                    await refrescarPantalla();
+                    showCustomAlert("Éxito", "Unidad ingresada al sistema con éxito.", "success");
+                }
+            } catch(err) { showCustomAlert("Error", err.message, "error"); } 
+            finally { btn.disabled = false; btn.innerText = "Registrar Manual"; }
+        });
+
+        function abrirModalEditUld(uldNumber, useStatus, uldStatus, damageReason) {
+            document.getElementById('lblEditUldNumber').innerText = uldNumber;
+            document.getElementById('edit_uld_number').value = uldNumber;
+            document.getElementById('edit_use_status').value = useStatus || 'EMPTY';
+            document.getElementById('edit_uld_condicion').value = uldStatus || 'SERVICEABLE';
+            document.getElementById('edit_damage_reason').value = damageReason || '';
+            
+            toggleEditDamageReason();
+            document.getElementById('modalEditUld').style.display = 'flex';
+        }
+
+        function cerrarModalEditUld() { document.getElementById('modalEditUld').style.display = 'none'; }
+
+        document.getElementById('formEditUld').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = e.submitter;
+            if(btn) { btn.disabled = true; btn.innerText = "Guardando..."; }
+            
+            const uldNumber = document.getElementById('edit_uld_number').value;
+            const useStatus = document.getElementById('edit_use_status').value;
+            const uldStatus = document.getElementById('edit_uld_condicion').value;
+            const damageReason = document.getElementById('edit_damage_reason').value.trim();
+            
+            if (uldStatus === 'DAMAGED' && damageReason === '') {
+                showCustomAlert("Atención", "Por favor ingresa un motivo para el estado DAMAGED.", "error");
+                if(btn) { btn.disabled = false; btn.innerText = "Guardar Cambios"; } return;
+            }
+            
+            try {
+                const now = new Date().toISOString();
+                const { error } = await supabaseClient.from('uld_inventario').update({
+                    use_status: useStatus,
+                    uld_status: uldStatus,
+                    damage_reason: uldStatus === 'DAMAGED' ? damageReason : '',
+                    updated_ontime: now
+                }).eq('uld_number', uldNumber);
+                
+                if (error) throw error;
+                
+                cerrarModalEditUld(); await refrescarPantalla();
+                showCustomAlert("Actualizado", `El ULD ${uldNumber} se actualizó correctamente.`, "success");
+            } catch(err) { showCustomAlert("Error", err.message, "error"); } 
+            finally { if(btn) { btn.disabled = false; btn.innerText = "Guardar Cambios"; } }
+        });
+
+        function borrarUld(uldNumber) {
+            showCustomConfirm("Eliminar ULD", `¿Estás seguro de querer borrar permanentemente el ULD <strong style="color:var(--amerijet-red);">${uldNumber}</strong> de la red global?`, "Sí, Eliminar", "var(--amerijet-red)",
+                async () => {
+                    try {
+                        await supabaseClient.from('uld_inventario').delete().eq('uld_number', uldNumber); await refrescarPantalla();
+                        showCustomAlert("Eliminado", "La unidad fue borrada del sistema de forma permanente.", "success");
+                    } catch(e) { showCustomAlert("Error", e.message, "error"); }
+                }
+            );
+        }
+
+        function dibujarHistorialAuditoria() {
+            if(!historialAuditoria || historialAuditoria.length === 0) {
+                document.getElementById('lblLastAuditUser').innerText = "N/A"; document.getElementById('lblLastAuditTime').innerText = "Sin registros"; return;
+            }
+            const lastLog = historialAuditoria[historialAuditoria.length - 1];
+            const d = new Date(lastLog.fecha); const fechaStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+            let hr = d.getHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12; const horaStr = `${hr}:${String(d.getMinutes()).padStart(2,'0')} ${ampm}`;
+            document.getElementById('lblLastAuditUser').innerText = `👤 ${lastLog.usuario}`; document.getElementById('lblLastAuditTime').innerText = `(${fechaStr} a las ${horaStr})`;
+        }
+
+        function abrirModalHistorialLog() {
+            const container = document.getElementById('logContainerModal'); container.innerHTML = '';
+            if(!historialAuditoria || historialAuditoria.length === 0) {
+                container.innerHTML = '<p style="font-size:13px; color:#64748B;">No hay historial registrado en esta estación.</p>'; document.getElementById('modalHistorialLog').style.display = 'flex'; return;
+            }
+            const ultimosLogs = [...historialAuditoria].reverse(); let html = '';
+            ultimosLogs.forEach(log => {
+                const d = new Date(log.fecha); const fechaStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`;
+                let hr = d.getHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12; const horaStr = `${hr}:${String(d.getMinutes()).padStart(2,'0')} ${ampm}`;
+                html += `
+                    <div style="padding:10px; border-bottom:1px dashed #E2E8F0; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-size:13px; color:#1E293B; font-weight:800;">👤 ${log.usuario}</div>
+                            <div style="font-size:11px; color:#64748B; font-weight:600; margin-top:3px;">${log.accion}</div>
+                        </div>
+                        <div style="font-size:11px; color:#94A3B8; font-weight:700;">${fechaStr} ${horaStr}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html; document.getElementById('modalHistorialLog').style.display = 'flex';
+        }
+        function cerrarModalHistorialLog() { document.getElementById('modalHistorialLog').style.display = 'none'; }
+
+        function guardarInventarioGlobal() {
+            if(uldsEnRampa.length === 0) { showCustomAlert("Atención", "No hay ULDs en rampa para validar.", "info"); return; }
+            showCustomConfirm(
+                "Validar Inventario Físico",
+                `Se validará el estado de los <b>${uldsEnRampa.length} ULDs físicos</b> en ${estacionVista}.<br><br>¿Confirmas que el conteo en rampa es correcto?`,
+                "💾 Guardar y Actualizar",
+                "var(--amerijet-blue)",
+                async () => {
+                    const btn = document.getElementById('btnGuardarInv'); btn.disabled = true; btn.innerText = "...";
+                    try {
+                        const now = new Date().toISOString();
+                        await supabaseClient.from('uld_inventario').update({ updated_ontime: now })
+                                .eq('location', estacionVista).neq('opp_status', 'IN TRANSIT');
+
+                        let nuevoHistorial = [...historialAuditoria];
+                        nuevoHistorial.push({ accion: "Inventario Físico en Rampa Validado", usuario: miNombre, fecha: now });
+                        if (nuevoHistorial.length > 20) nuevoHistorial = nuevoHistorial.slice(-20); 
+
+                        await supabaseClient.from('uld_accesorios').upsert([{ station: estacionVista, historial_inventario: nuevoHistorial }]);
+
+                        await refrescarPantalla();
+                        showCustomAlert("Inventario Actualizado", "Los registros en rampa han sido validados exitosamente.", "success");
+                    } catch(e) { showCustomAlert("Error", "No se pudo actualizar el inventario.", "error"); }
+                    finally { btn.disabled = false; btn.innerText = "💾 Guardar Inventario Físico"; }
+                }
+            );
+        }
+
+        // =====================================
+        // TABLA GLOBAL PIVOT PARA MUNDO (TODA LA RED)
+        // =====================================
+        async function cargarPivotGlobal() {
+            try {
+                const { data: ulds, error: errUlds } = await supabaseClient.from('uld_inventario').select('*');
+                if (errUlds) throw new Error(errUlds.message);
+                
+                const { data: accesorios, error: errAcc } = await supabaseClient.from('uld_accesorios').select('station, redes_por_tipo');
+                if (errAcc) throw new Error(errAcc.message);
+                
+                pivotGlobalData = ulds || [];
+                
+                const accesoriosMap = {};
+                if (accesorios) {
+                    accesorios.forEach(a => { accesoriosMap[a.station] = a.redes_por_tipo || {}; });
+                }
+
+                const pivotMap = {}; 
+                const typesSet = new Set();
+                
+                pivotGlobalData.forEach(row => {
+                    const loc = row.location || 'UNKNOWN'; 
+                    const literalType = row.uld_type ? row.uld_type.toUpperCase() : 'N/A'; 
+                    const dateStr = row.updated_ontime;
+                    
+                    if(!pivotMap[loc]) pivotMap[loc] = { total: 0, lastUpdate: null, types: {} };
+                    if(!pivotMap[loc].types[literalType]) pivotMap[loc].types[literalType] = 0;
+
+                    pivotMap[loc].types[literalType]++; 
+                    pivotMap[loc].total++; 
+                    typesSet.add(literalType);
+
+                    if(dateStr) { 
+                        const d = new Date(dateStr); 
+                        if(!pivotMap[loc].lastUpdate || d > pivotMap[loc].lastUpdate) pivotMap[loc].lastUpdate = d; 
+                    }
+                });
+
+                if (accesorios) {
+                    accesorios.forEach(a => {
+                        const st = a.station;
+                        if (!pivotMap[st]) pivotMap[st] = { total: 0, lastUpdate: null, types: {} };
+                        if (a.redes_por_tipo) {
+                            Object.keys(a.redes_por_tipo).forEach(t => {
+                                const typeUpper = t.toUpperCase();
+                                typesSet.add(typeUpper);
+                                if (!pivotMap[st].types[typeUpper]) pivotMap[st].types[typeUpper] = 0;
+                            });
+                        }
+                    });
+                }
+
+                const sortedTypes = Array.from(typesSet).sort(); 
+                const sortedStations = Object.keys(pivotMap).sort();
+                
+                document.getElementById('pivotTotalStations').innerText = sortedStations.length; 
+                document.getElementById('pivotTotalUlds').innerText = pivotGlobalData.length;
+
+                const trHead = document.getElementById('pivotHeadRow'); 
+                trHead.innerHTML = '<th class="col-station">STATION</th><th>LAST UPDATE</th>';
+                sortedTypes.forEach(t => { trHead.innerHTML += `<th>${t}</th>`; }); 
+                trHead.innerHTML += '<th class="col-total">TOTAL PALLETS</th>';
+
+                const tbody = document.getElementById('pivotBodyRow'); 
+                tbody.innerHTML = '';
+                
+                const sumsByType = {}; sortedTypes.forEach(t => sumsByType[t] = 0); 
+                let grandTotal = 0;
+
+                sortedStations.forEach(station => {
+                    const dataSt = pivotMap[station]; 
+                    let dateStr = "N/A";
+                    if(dataSt.lastUpdate) { 
+                        const d = dataSt.lastUpdate; 
+                        dateStr = `${d.getUTCMonth()+1}/${d.getUTCDate()}/${d.getUTCFullYear()}`; 
+                    }
+
+                    let rowHtml = `<tr><td class="col-station">${station}</td><td>${dateStr}</td>`;
+                    
+                    sortedTypes.forEach(t => { 
+                        const valFisicos = dataSt.types[t] || 0; 
+                        const redesBodega = (accesoriosMap[station] && accesoriosMap[station][t]) ? accesoriosMap[station][t] : 0;
+                        
+                        let netHtml = '';
+                        if (valFisicos > 0 || redesBodega > 0) {
+                            const balance = redesBodega - valFisicos;
+                            if (balance === 0) {
+                                netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
+                            } else if (balance < 0) {
+                                netHtml = `<div class="net-badge net-danger">⚠️ Faltan ${Math.abs(balance)}</div>`;
+                            } else {
+                                netHtml = `<div class="net-badge net-warn">🟠 Sobran ${balance}</div>`;
+                            }
+                        }
+
+                        rowHtml += `<td style="vertical-align: top; text-align: center; padding: 10px;">
+                            <div style="font-size: 15px; font-weight: 800; color: var(--amerijet-blue-dark);">${valFisicos > 0 ? valFisicos : '-'}</div>
+                            ${netHtml}
+                        </td>`;
+
+                        if(valFisicos > 0) sumsByType[t] += valFisicos; 
+                    });
+                    
+                    grandTotal += dataSt.total; 
+                    rowHtml += `<td class="col-total" style="vertical-align: middle;">${dataSt.total}</td></tr>`; 
+                    tbody.innerHTML += rowHtml;
+                });
+
+                if(sortedStations.length === 0) { 
+                    tbody.innerHTML = `<tr><td colspan="${sortedTypes.length + 3}" style="text-align: center; padding: 40px; color:#64748B;">No hay ULDs registrados en la red global.</td></tr>`; 
+                }
+
+                const tfoot = document.getElementById('pivotFootRow'); 
+                tfoot.innerHTML = '<th class="col-station">Total by Type</th><th></th>';
+                sortedTypes.forEach(t => { tfoot.innerHTML += `<th>${sumsByType[t]}</th>`; }); 
+                tfoot.innerHTML += `<th class="col-total" id="pivotGrandTotal">${grandTotal}</th>`;
+
+            } catch(e) { document.getElementById('pivotBodyRow').innerHTML = `<tr><td colspan="100%" style="text-align: center; padding: 40px; color:var(--amerijet-red);">Error cargando reporte global: ${e.message}</td></tr>`; }
+        }
+
+        // Exportar EXCEL del Cuadro Resumen Global
+        function exportarPivotExcel() {
+            if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos globales para exportar.", "info");
+            const pivotMap = {}; const typesSet = new Set();
+            pivotGlobalData.forEach(row => {
+                const loc = row.location || 'UNKNOWN'; const type = row.uld_type ? row.uld_type.toUpperCase() : 'N/A';
+                if(!pivotMap[loc]) pivotMap[loc] = { total: 0, lastUpdate: null, types: {} };
+                if(!pivotMap[loc].types[type]) pivotMap[loc].types[type] = 0;
+                pivotMap[loc].types[type]++; pivotMap[loc].total++; typesSet.add(type);
+                if(row.updated_ontime) { const d = new Date(row.updated_ontime); if(!pivotMap[loc].lastUpdate || d > pivotMap[loc].lastUpdate) pivotMap[loc].lastUpdate = d; }
+            });
+            const sortedTypes = Array.from(typesSet).sort(); const sortedStations = Object.keys(pivotMap).sort();
+            
+            let csv = "\uFEFFSTATION,LAST UPDATE,"; sortedTypes.forEach(t => csv += `${t},`); csv += "TOTAL PALLETS\n";
+            const sumsByType = {}; sortedTypes.forEach(t => sumsByType[t] = 0); let grandTotal = 0;
+
+            sortedStations.forEach(station => {
+                const dataSt = pivotMap[station]; let dateStr = "N/A";
+                if(dataSt.lastUpdate) { const d = dataSt.lastUpdate; dateStr = `${d.getUTCMonth()+1}/${d.getUTCDate()}/${d.getUTCFullYear()}`; }
+                csv += `"${station}","${dateStr}",`;
+                sortedTypes.forEach(t => { const val = dataSt.types[t] || 0; if(val > 0) sumsByType[t] += val; csv += `"${val > 0 ? val : ''}",`; });
+                grandTotal += dataSt.total; csv += `"${dataSt.total}"\n`;
+            });
+            csv += `"Total by Type","",`; sortedTypes.forEach(t => csv += `"${sumsByType[t]}",`); csv += `"${grandTotal}"\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Pivot_Global_${new Date().toISOString().slice(0,10)}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        // Exportar EXCEL de TODOS los ULDs del Mundo a detalle
+        function exportarTodoExcel() {
+            if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos para exportar en el mundo entero.", "info");
+            const blob = new Blob([construirCSV(pivotGlobalData)], { type: 'text/csv;charset=utf-8;' }); 
+            const link = document.createElement("a"); 
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Inventario_Global_Completo_${new Date().toISOString().slice(0,10)}.csv`); 
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        function construirCSV(arrayDeUlds) {
+            let csv = "\uFEFFULD Number,ULD Status,Damage Reason,Location,Updated On,Use Status,Opp Status,ULD Type,Owner,Received On,Updated OnTime,Validation ULD\n";
+            arrayDeUlds.forEach(u => {
+                let rxDate = "", updStr = "", updTimeStr = "";
+                if(u.received_on) { const [y,m,d] = u.received_on.split('-'); rxDate = `${m}/${d}/${y.slice(-2)}`; }
+                if(u.updated_ontime) {
+                    const d = new Date(u.updated_ontime); updStr = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                    let hr = d.getUTCHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12; updTimeStr = `${updStr} ${hr}:${String(d.getUTCMinutes()).padStart(2,'0')} ${ampm} UTC`;
+                }
+                const damageR = u.damage_reason ? u.damage_reason.replace(/,/g, ' ') : '';
+                csv += `"${u.uld_number}","${u.uld_status || 'SERVICEABLE'}","${damageR}","${u.location}","${updStr}","${u.use_status}","${u.opp_status}","${u.uld_type}","${u.owner}","${rxDate}","${updTimeStr}","${u.validation_uld}"\n`;
+            }); return csv;
+        }
+
+        function exportarExcelLocal() {
+            if (datosFiltrados.length === 0) return showCustomAlert("Atención", "No hay datos en la tabla actual para exportar.", "info");
+            const blob = new Blob([construirCSV(datosFiltrados)], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Inventario_Rampa_${estacionVista}_${new Date().toISOString().slice(0,10)}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        document.getElementById('btnLogout').addEventListener('click', async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; });
+
+        inicializar();
+    </script>
+</body>
+</html>

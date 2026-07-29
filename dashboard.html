@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Mando de Vuelos | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #0A2540; 
+            --amerijet-blue-dark: #051529; 
+            --amerijet-red: #E11D48; 
+            --bg-color: #F1F5F9; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+            --sidebar-width: 260px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        /* SCROLLBAR PERSONALIZADO TIPO APP NATIVA */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            display: flex; 
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* =========================================
+           NUEVO SIDEBAR OSCURO PROFESIONAL
+        ========================================= */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--amerijet-blue-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+
+        .sidebar-user {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-info-text { display: flex; flex-direction: column; }
+        .user-info-text strong { font-size: 14px; color: white; }
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .nav-link {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #94A3B8;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .btn-logout { 
+            background-color: transparent; 
+            color: #F87171; 
+            border: 1px solid rgba(248,113,113,0.3); 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            transition: 0.2s; 
+            font-size: 13px; 
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+
+        /* =========================================
+           TOP HEADER (ESTACIÓN Y MENÚ HAMBURGUESA)
+        ======================================== */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .top-header {
+            background: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            border-bottom: 1px solid #E2E8F0;
+            z-index: 900;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--amerijet-blue);
+        }
+
+        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); }
+
+        .station-module { display: flex; align-items: center; gap: 8px; background: #F1F5F9; padding: 8px 15px; border-radius: 8px; border: 1px solid #E2E8F0; }
+        .station-module span { font-size: 11px; color: #64748B; font-weight: 700; text-transform: uppercase; }
+        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 15px; outline: none; cursor: pointer; }
+        .station-static { color: #10B981; font-weight: 800; font-size: 15px; }
+
+        /* CONTENIDO PRINCIPAL Y SCROLLS INTERNOS */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 50px;
+        }
+
+        .dashboard-container { display: grid; grid-template-columns: 350px 1fr; gap: 30px; padding: 30px; max-width: 1600px; margin: 0 auto; align-items: start;}
+        
+        .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #E2E8F0; height: fit-content; position: sticky; top: 30px; }
+        .panel-form h2 { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 6px; letter-spacing: -0.5px; }
+        .panel-form p { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+        
+        .form-group { display: flex; flex-direction: column; margin-bottom: 18px; }
+        .form-group label { font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
+        .form-group input, .form-group select { padding: 11px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; color: var(--text-main); background-color: #F8FAFC; transition: all 0.2s; width: 100%; text-transform: uppercase; font-weight: 600;}
+        .form-group input:focus, .form-group select:focus { border-color: #3B82F6; background-color: white; outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        
+        .btn-crear { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 13px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 14px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); }
+        .btn-crear:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.3); }
+
+        .panel-vuelos { display: flex; flex-direction: column; max-height: calc(100vh - 120px); }
+        .panel-vuelos h2 { font-size: 20px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;}
+        
+        /* Grid de vuelos con su propio Scroll Interno */
+        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 20px; overflow-y: auto; padding-right: 10px; padding-bottom: 20px; align-content: start;}
+
+        .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
+        .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.06); border-color: #CBD5E1; }
+        
+        .vuelo-card-header { padding: 16px 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .header-left-side { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .vuelo-title { font-size: 20px; font-weight: 800; color: var(--amerijet-blue); letter-spacing: -0.5px; margin: 0;}
+        .vuelo-tail { background: #E2E8F0; color: #334155; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid #CBD5E1; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; }
+        .status-aperturado { background: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
+        .status-armando { background: #FFF7ED; color: #D97706; border: 1px solid #FFEDD5; }
+        .status-despachado { background: #EEF2FF; color: #4F46E5; border: 1px solid #E0E7FF; }
+        .status-importacion { background: #FAF5FF; color: #9333EA; border: 1px solid #F3E8FF; }
+
+        .card-controls { display: flex; gap: 6px; }
+        .ctrl-btn { background: white; border: 1px solid #E2E8F0; cursor: pointer; font-size: 12px; padding: 6px 10px; border-radius: 6px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .ctrl-btn:hover { background: #F1F5F9; border-color: #CBD5E1; }
+        
+        .vuelo-card-body { padding: 18px 20px; flex-grow: 1; }
+        .vuelo-meta-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 18px; background: #F8FAFC; padding: 10px 14px; border-radius: 8px; flex-wrap: wrap; gap: 5px; }
+        .vuelo-meta-info strong { color: var(--text-main); }
+
+        .toggle-btn { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; flex-grow: 1;}
+        .toggle-btn.active { background: #D1FAE5; color: #065F46; border: 1px solid #34D399; }
+        .toggle-btn.active:hover { background: #A7F3D0; }
+        .toggle-btn.inactive { background: #FEE2E2; color: #991B1B; border: 1px solid #F87171; text-decoration: line-through; opacity: 0.7;}
+        .toggle-btn.inactive:hover { opacity: 1; background: #FECACA;}
+
+        .op-section-title { font-size: 11px; font-weight: 700; color: #94A3B8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #F1F5F9; padding-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+        .actions-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        
+        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; }
+        .action-btn:hover { background: #F8FAFC; border-color: #CBD5E1; color: var(--amerijet-blue); transform: translateY(-0.5px); }
+        
+        .btn-start-armado { background: #FFF7ED; color: #C2410C; border-color: #FED7AA; font-weight: 700; grid-column: 1 / -1; margin-bottom: 15px; padding: 11px; }
+        .btn-start-armado:hover { background: #FFEDD5; }
+        .btn-inspect { border-color: #BAE6FD; color: #0369A1; }
+        .btn-inspect:hover { background: #F0F9FF; }
+        .btn-com { border-color: #A7F3D0; color: #047857; }
+        .btn-com:hover { background: #ECFDF5; }
+        .btn-gse { border-color: #CBD5E1; color: #475569; grid-column: 1 / -1;}
+
+        .btn-despachar-vuelo { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; grid-column: 1 / -1; font-weight: 700; font-size: 13px; border: none; padding: 12px; box-shadow: 0 4px 10px rgba(37,99,235,0.15); margin-bottom: 15px; border-radius: 8px; width: 100%; cursor: pointer;}
+        .btn-despachar-vuelo:hover { background: #1E40AF; box-shadow: 0 6px 14px rgba(37,99,235,0.25); color: white; }
+        
+        /* ESTILOS DE IMPORTACIÓN */
+        .import-time-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .time-input-group { display: flex; flex-direction: column; }
+        .time-input-group label { font-size: 10px; font-weight: 700; color: #64748B; margin-bottom: 4px; text-transform: uppercase; }
+        .time-controls-wrapper { display: flex; gap: 5px; }
+        .time-input-group input { padding: 8px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; color: var(--text-main); font-weight: 600; text-transform: none; flex: 1; }
+        .btn-ahora { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0 12px; cursor: pointer; font-size: 16px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .btn-ahora:hover { background: #E2E8F0; border-color: #94A3B8; }
+        
+        .btn-save-times { background: #E0E7FF; border: 1px solid #C7D2FE; border-radius: 6px; padding: 10px; font-size: 12px; font-weight: 700; color: #3730A3; cursor: pointer; transition: 0.2s; margin-top: 5px; width: 100%;}
+        .btn-save-times:hover { background: #C7D2FE; }
+
+        .btn-close-flight { background: #1E293B; color: white; grid-column: 1 / -1; font-weight: 700; font-size: 13px; border: none; padding: 12px; border-radius: 8px; margin-top: 5px; width: 100%; cursor: pointer;}
+        .btn-close-flight:hover { background: var(--amerijet-blue-dark); color: white; }
+
+        /* MODALES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-generic { text-align: center; max-width: 350px; }
+        
+        /* OVERLAY SIDEBAR MOBILE */
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) { 
+            .dashboard-container { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
+            .panel-form { position: static !important; } 
+            .panel-vuelos { max-height: none; }
+            .grid-vuelos { max-height: 65vh; } 
+            
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; }
+            .menu-toggle { display: block; }
+            .header-title { display: none; } 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ LATERAL (SIDEBAR) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo_3.png" alt="Logo">
+            <span>Cargo Inspect Pro</span>
+        </div>
+        
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info-text">
+                <strong id="lblUserName">Cargando...</strong>
+                <span id="lblUserRol" class="badge-rol">...</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link active">✈️ Centro de Vuelos</a>
+            <a href="uld_gestion.html" class="nav-link" id="btnUldMenu">📦 Inventario ULD</a>
+            <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">👑 Panel de Control</a>
+            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">🗄️ Historial de Vuelos</a>
+            <a href="estado_flota.html" class="nav-link">🛫 Estado de Flota</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" id="btnLogout">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <!-- CONTENEDOR PRINCIPAL DERECHO -->
+    <div class="main-wrapper">
+        
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="header-title">Tablero Principal</div>
+            
+            <div class="header-station">
+                <div class="station-module" id="divStationSelector" style="display: none;">
+                    <span>📍 ESTACIÓN:</span>
+                    <select id="estacionSelector" class="station-selector"></select>
+                </div>
+                <div class="station-module" id="divStationStatic" style="display: none;">
+                    <span>📍 ESTACIÓN:</span>
+                    <span id="lblUserEstacion" class="station-static">Cargando...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD CONTENT -->
+        <main class="main-content">
+            <div class="dashboard-container">
+                <div class="panel-form">
+                    <h2>➕ Aperturar Vuelo</h2>
+                    <p>Inicia el control de rampa. La matrícula es la base del reporte.</p>
+                    
+                    <form id="formCrearVuelo">
+                        <div class="form-group"><label>Número de Vuelo</label><input type="text" id="vuelo_id" placeholder="Ej: M6 740" required></div>
+                        <div class="form-group"><label>Matrícula (Tail)</label><select id="matricula_avion" required><option value="">Cargando flota...</option></select></div>
+                        <div class="form-group"><label>Ruta (Origen - Destino)</label><input type="text" id="ruta_input" placeholder="Ej: SAL - MIA" required></div>
+                        <div class="form-group"><label>Fecha Op.</label><input type="date" id="fecha" required></div>
+                        <button type="submit" class="btn-crear" id="btnSubmitCrear">Inicializar Tarjeta</button>
+                    </form>
+                </div>
+
+                <div class="panel-vuelos">
+                    <h2>🛫 Tablero de Control de Rampa (<span id="countVuelos">0</span>)</h2>
+                    <div class="grid-vuelos" id="vuelosGrid">
+                        <p style="color: #64748B; font-style: italic;">Sincronizando con rampa...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL EDICIÓN VUELO -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <h3 style="font-weight: 800; margin-bottom: 20px; color: var(--amerijet-blue);">✏️ Modificar Datos Clave</h3>
+            <form id="formEditVuelo">
+                <input type="hidden" id="edit_id">
+                <div class="form-group"><label>Número de Vuelo</label><input type="text" id="edit_vuelo_id" required></div>
+                <div class="form-group"><label>Matrícula (Tail)</label><select id="edit_matricula_avion" required></select></div>
+                <div class="form-group"><label>Ruta (Origen - Destino)</label><input type="text" id="edit_ruta" required></div>
+                <div class="form-group"><label>Fecha Op.</label><input type="date" id="edit_fecha" required></div>
+                
+                <button type="submit" id="btnModalSave" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; margin-top:10px;">Guardar Cambios</button>
+                <button type="button" class="btn-modal-cancel" onclick="cerrarModal()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:700;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODALES UNIVERSALES -->
+    <div class="modal-overlay" id="customAlertModal">
+        <div class="modal-content modal-generic">
+            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
+            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
+            <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customConfirmModal">
+        <div class="modal-content modal-generic">
+            <div id="confirmIcon" style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
+            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Confirmar</h3>
+            <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
+            <div style="display: flex; gap: 10px;">
+                <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Confirmar</button>
+                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="inactivityModal">
+        <div class="modal-content modal-generic">
+            <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
+            <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 22px;">Sesión en Pausa</h3>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por tu seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
+            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Sí, mantener sesión abierta</button>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario";
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function showCustomAlert(title, message, type = 'info') {
+            const modal = document.getElementById('customAlertModal'); const icon = document.getElementById('alertIcon');
+            const titleEl = document.getElementById('alertTitle'); const btn = document.getElementById('alertBtn');
+            titleEl.innerText = title; document.getElementById('alertMessage').innerHTML = message;
+            if(type === 'success') { icon.innerText = '✅'; titleEl.style.color = '#10B981'; btn.style.background = '#10B981'; } 
+            else if(type === 'error') { icon.innerText = '❌'; titleEl.style.color = 'var(--amerijet-red)'; btn.style.background = 'var(--amerijet-red)'; } 
+            else { icon.innerText = 'ℹ️'; titleEl.style.color = 'var(--amerijet-blue)'; btn.style.background = 'var(--amerijet-blue)'; }
+            modal.style.display = 'flex';
+        }
+        function closeCustomAlert() { document.getElementById('customAlertModal').style.display = 'none'; }
+
+        let currentConfirmCallback = null;
+        function showCustomConfirm(title, message, confirmBtnText, btnColor, callback) {
+            document.getElementById('confirmTitle').innerText = title; document.getElementById('confirmTitle').style.color = btnColor;
+            document.getElementById('confirmMessage').innerHTML = message;
+            const btn = document.getElementById('btnConfirmAction'); btn.innerText = confirmBtnText; btn.style.background = btnColor;
+            currentConfirmCallback = callback; document.getElementById('customConfirmModal').style.display = 'flex';
+        }
+        function closeCustomConfirm() { document.getElementById('customConfirmModal').style.display = 'none'; currentConfirmCallback = null; }
+        document.getElementById('btnConfirmAction').addEventListener('click', () => { if(currentConfirmCallback) currentConfirmCallback(); closeCustomConfirm(); });
+
+        let inactivityTimer; let warningTimer; const WARNING_TIME = 28 * 60 * 1000; const LOGOUT_TIME = 30 * 60 * 1000;
+        function resetInactivityTimers() {
+            clearTimeout(inactivityTimer); clearTimeout(warningTimer); document.getElementById('inactivityModal').style.display = 'none';
+            warningTimer = setTimeout(() => { document.getElementById('inactivityModal').style.display = 'flex'; }, WARNING_TIME);
+            inactivityTimer = setTimeout(async () => { await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }, LOGOUT_TIME);
+        }
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
+
+        async function inicializarDashboard() {
+            resetInactivityTimers();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            try {
+                const { data: perfil, error } = await supabaseClient.from('perfiles').select('estacion_base, rol, nombre').eq('id', session.user.id).single();
+                if (error) throw error;
+                if (perfil) {
+                    miNombre = perfil.nombre || "Usuario"; miRol = String(perfil.rol).toLowerCase();
+                    const estacionesStr = perfil.estacion_base || "SAL"; misEstaciones = estacionesStr.split(',').map(s => s.trim());
+                    document.getElementById('lblUserName').innerText = miNombre; document.getElementById('lblUserRol').innerText = miRol;
+                    
+                    if(miRol === 'admin' || miRol === 'supervisor') {
+                        document.getElementById('btnUldMenu').innerHTML = "🌍 Inventario Maestro ULD";
+                        document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                        if(miRol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+                    } else { 
+                        document.getElementById('btnUldMenu').innerHTML = "📍 Inventario Local ULD"; 
+                    }
+                    configurarSelectorEstacionInteligente();
+                }
+            } catch (err) {}
+            document.getElementById('fecha').valueAsDate = new Date();
+            await cargarFlotaAviones(); cargarVuelosActivos();
+        }
+
+        function configurarSelectorEstacionInteligente() {
+            const wrapperSelector = document.getElementById('divStationSelector'); const wrapperStatic = document.getElementById('divStationStatic');
+            const selector = document.getElementById('estacionSelector'); const lblStatic = document.getElementById('lblUserEstacion');
+            let savedStation = localStorage.getItem('cargo_current_station');
+            if (misEstaciones.length > 1 || miRol === 'admin' || miRol === 'supervisor') {
+                wrapperSelector.style.display = 'flex'; wrapperStatic.style.display = 'none'; selector.innerHTML = '';
+                if(miRol === 'admin' || miRol === 'supervisor') { selector.innerHTML += `<option value="ALL">MUNDO (TODAS)</option>`; }
+                misEstaciones.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+                if (savedStation && (misEstaciones.includes(savedStation) || savedStation === 'ALL')) { estacionActual = savedStation; } 
+                else { estacionActual = misEstaciones.includes('SAL') ? 'SAL' : misEstaciones[0]; localStorage.setItem('cargo_current_station', estacionActual); }
+                selector.value = estacionActual;
+                selector.addEventListener('change', (e) => { estacionActual = e.target.value; localStorage.setItem('cargo_current_station', estacionActual); actualizarRutaFormulario(); cargarVuelosActivos(); });
+            } else {
+                wrapperSelector.style.display = 'none'; wrapperStatic.style.display = 'flex'; estacionActual = misEstaciones[0];
+                lblStatic.innerText = estacionActual; localStorage.setItem('cargo_current_station', estacionActual);
+            }
+            actualizarRutaFormulario();
+        }
+
+        function actualizarRutaFormulario() { const estRuta = estacionActual === 'ALL' ? misEstaciones[0] : estacionActual; document.getElementById('ruta_input').value = `${estRuta} - `; }
+
+        async function cargarFlotaAviones() {
+            const select = document.getElementById('matricula_avion'); const selectEdit = document.getElementById('edit_matricula_avion');
+            try {
+                const { data: aviones } = await supabaseClient.from('aviones').select('matricula').order('matricula', { ascending: true });
+                if (aviones && aviones.length > 0) {
+                    let optionsHtml = '<option value="">-- Seleccionar Matrícula --</option>';
+                    aviones.forEach(a => { optionsHtml += `<option value="${a.matricula}">${a.matricula}</option>`; });
+                    select.innerHTML = optionsHtml; selectEdit.innerHTML = optionsHtml;
+                }
+            } catch (err) {}
+        }
+
+        document.getElementById('formCrearVuelo').addEventListener('submit', async function(e) {
+            e.preventDefault(); const btn = document.getElementById('btnSubmitCrear'); btn.disabled = true; btn.innerText = "Sincronizando...";
+            const estacionRegistro = estacionActual === 'ALL' ? misEstaciones[0] : estacionActual;
+            const payload = {
+                vuelo_id: document.getElementById('vuelo_id').value.trim().toUpperCase(), matricula_avion: document.getElementById('matricula_avion').value,
+                ruta: document.getElementById('ruta_input').value.trim().toUpperCase(), fecha: document.getElementById('fecha').value,
+                estacion_registro: estacionRegistro, estado: 'APERTURADO',
+                aplica_export: true, aplica_import: true
+            };
+            try {
+                const { error } = await supabaseClient.from('vuelos_operaciones').insert([payload]); if (error) throw error;
+                document.getElementById('vuelo_id').value = ""; document.getElementById('matricula_avion').value = "";
+                actualizarRutaFormulario(); cargarVuelosActivos(); showCustomAlert("Vuelo Creado", "La tarjeta se inicializó con éxito.", "success");
+            } catch (err) { showCustomAlert("Error al Crear", err.message, "error"); } finally { btn.disabled = false; btn.innerText = "Inicializar Tarjeta"; }
+        });
+
+        function obtenerFechaHoraActualISO() {
+            const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+            return (new Date(Date.now() - tzOffset)).toISOString().slice(0, 16);
+        }
+        function marcarTiempoAhora(inputId) { document.getElementById(inputId).value = obtenerFechaHoraActualISO(); }
+
+        function formatDateTimeLocal(isoString) {
+            if (!isoString) return "";
+            const d = new Date(isoString);
+            if (isNaN(d.getTime())) return "";
+            const tzOffset = d.getTimezoneOffset() * 60000;
+            return (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 16);
+        }
+
+        async function toggleOperacion(idVuelo, tipoOp, estadoActual) {
+            const columna = tipoOp === 'export' ? 'aplica_export' : 'aplica_import';
+            const nuevoEstado = !estadoActual;
+            try {
+                const { error } = await supabaseClient.from('vuelos_operaciones').update({ [columna]: nuevoEstado }).eq('id', idVuelo);
+                if (error) throw error;
+                cargarVuelosActivos();
+            } catch (e) {
+                showCustomAlert("Error", "No se pudo actualizar el tipo de operación.", "error");
+            }
+        }
+
+        async function cargarVuelosActivos() {
+            const grid = document.getElementById('vuelosGrid');
+            try {
+                let consulta = supabaseClient.from('vuelos_operaciones').select('*').order('fecha', { ascending: false });
+                if (estacionActual === 'ALL') consulta = consulta.in('estacion_registro', misEstaciones);
+                else consulta = consulta.eq('estacion_registro', estacionActual);
+
+                const { data: vuelos, error } = await consulta; if (error) throw error;
+                const vuelosActivos = (vuelos || []).filter(v => !v.estado || String(v.estado).toUpperCase() !== 'FINALIZADO');
+                document.getElementById('countVuelos').innerText = vuelosActivos.length;
+
+                if (vuelosActivos.length === 0) {
+                    grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 50px; background: white; border-radius: 12px; border: 1px dashed #CBD5E1; color: #64748B; font-size:14px;">No hay vuelos activos registrados para esta vista.</div>`;
+                    return;
+                }
+
+                grid.innerHTML = "";
+                vuelosActivos.forEach(v => {
+                    const currentStatus = v.estado || "APERTURADO";
+                    let statusClass = "status-aperturado";
+                    if (currentStatus === "ARMANDO CARGA") statusClass = "status-armando";
+                    if (currentStatus === "DESPACHADO") statusClass = "status-despachado";
+                    if (currentStatus === "EN IMPORTACION") statusClass = "status-importacion";
+
+                    const badgeEstacion = (estacionActual === 'ALL') ? `<span style="background: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 10px;">📍 ${v.estacion_registro}</span>` : '';
+                    
+                    const hInicio = formatDateTimeLocal(v.hora_inicio_lotificada);
+                    const hFin = formatDateTimeLocal(v.hora_fin_lotificada);
+
+                    const exportActivo = v.aplica_export !== false; 
+                    const importActivo = v.aplica_import !== false; 
+
+                    const displayExport = exportActivo ? 'block' : 'none';
+                    const displayImport = importActivo ? 'block' : 'none';
+                    const displayMsgExport = exportActivo ? 'none' : 'block';
+                    const displayMsgImport = importActivo ? 'none' : 'block';
+
+                    const card = document.createElement('div'); card.className = 'vuelo-card';
+                    card.innerHTML = `
+                        <div class="vuelo-card-header">
+                            <div class="header-left-side">
+                                <h3 class="vuelo-title">${v.vuelo_id}</h3>
+                                <span class="vuelo-tail">✈️ ${v.matricula_avion}</span>
+                                <span class="status-badge ${statusClass}">${currentStatus}</span>
+                                ${badgeEstacion}
+                            </div>
+                            <div class="card-controls">
+                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')">✏️</button>
+                                <button class="ctrl-btn ctrl-delete" style="color:var(--amerijet-red);" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')">✖️</button>
+                            </div>
+                        </div>
+                        <div class="vuelo-card-body">
+                            <div class="vuelo-meta-info">
+                                <div>Ruta: <strong>${v.ruta || "N/A"}</strong></div>
+                                <div>Fecha: <strong>${v.fecha}</strong></div>
+                                <div style="width: 100%; display: flex; gap: 8px; margin-top: 8px; border-top: 1px dashed #CBD5E1; padding-top: 10px;">
+                                    <span style="font-size: 11px; font-weight: 700; color: #64748B; display:flex; align-items:center;">TIPO OP:</span>
+                                    <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">📦 EXPORT: ${exportActivo ? 'SÍ' : 'NO'}</button>
+                                    <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">🛬 IMPORT: ${importActivo ? 'SÍ' : 'NO'}</button>
+                                </div>
+                            </div>
+                            
+                            <div class="op-section-title">1. Procesamiento Inicial</div>
+                            <div style="display: ${displayExport};">
+                                <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">🛠️ Iniciar Armado y Manifiesto ULD</button>
+                            </div>
+                            <div style="display: ${displayMsgExport}; font-size: 11px; color: #94A3B8; font-style: italic; margin-bottom: 15px; text-align:center;">Vuelo sin carga de exportación.</div>
+                            
+                            <div class="op-section-title">2. Inspecciones y GSE</div>
+                            <div class="actions-subgrid">
+                                <a href="inspeccion_avion.html?id=${v.id}" class="action-btn btn-inspect">🔍 Inspección Físc.</a>
+                                <a href="com106.html?id=${v.id}" class="action-btn btn-com">⏱️ Vista COM-106</a>
+                                <a href="gse_equipos.html?id=${v.id}" class="action-btn btn-gse" style="grid-column: 1 / -1;">🚜 Equipos GSE</a>
+                            </div>
+
+                            <div class="op-section-title">3. Salida de Aeronave</div>
+                            <button class="action-btn btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">🛫 Despachar Vuelo (Outbound Listo)</button>
+                            
+                            <div class="op-section-title">4. Proceso de Importación (Despaletizado)</div>
+                            <div style="display: ${displayImport};">
+                                <div class="import-time-box">
+                                    <div class="time-input-group"><label>Fecha/Hora de Inicio</label><div class="time-controls-wrapper">
+                                        <input type="datetime-local" id="t_inicio_${v.id}" value="${hInicio}">
+                                        <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_inicio_${v.id}')" title="Capturar Ahora">⏱️</button>
+                                    </div></div>
+                                    <div class="time-input-group"><label>Fecha/Hora de Fin</label><div class="time-controls-wrapper">
+                                        <input type="datetime-local" id="t_fin_${v.id}" value="${hFin}">
+                                        <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}')" title="Capturar Ahora">⏱️</button>
+                                    </div></div>
+                                    <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">💾 Guardar Tiempos de Importación</button>
+                                </div>
+                            </div>
+                            <div style="display: ${displayMsgImport}; font-size: 11px; color: #94A3B8; font-style: italic; margin-bottom: 15px; text-align:center;">Vuelo sin carga de importación.</div>
+
+                            <div class="op-section-title">5. Cierre de Operación</div>
+                            <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">🏁 Finalizar y Cerrar Vuelo Definitivamente</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (err) { grid.innerHTML = `<p style="color:red; font-weight:bold; padding:20px;">Error de sincronización.</p>`; }
+        }
+
+        async function irAlArmado(idVuelo) { try { await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); window.location.href = `tiempo_armado.html?id=${idVuelo}`; } catch(e) { showCustomAlert("Error", "No se pudo iniciar el armado: " + e.message, "error"); } }
+        
+        // ==========================================
+        // LÓGICA DE LIMPIEZA DE IMÁGENES Y TRANSFERENCIA ULD 
+        // ==========================================
+        async function limpiarFotosInspeccion(idVuelo, matriculaAvion) {
+            try {
+                // 1. Limpiar fotos de las INCIDENCIAS TEMPORALES del vuelo en 'avion_inspecciones'
+                const { data: logs } = await supabaseClient.from('avion_inspecciones')
+                    .select('id, notas_adicionales')
+                    .eq('vuelo_operacion_id', idVuelo)
+                    .order('id', { ascending: false })
+                    .limit(1);
+
+                if (logs && logs.length > 0) {
+                    const reg = logs[0];
+                    if (reg.notas_adicionales && reg.notas_adicionales.includes("||_JSON_||")) {
+                        const partes = reg.notas_adicionales.split("||_JSON_||");
+                        const textoBase = partes[0];
+                        let paquete = JSON.parse(partes[1]);
+                        
+                        // Vaciamos las fotos pesadas de las incidencias temporales
+                        if (paquete.incidencias) {
+                            paquete.incidencias.forEach(inc => {
+                                inc.fotos = [];
+                            });
+                        } else {
+                            paquete.fotos = {}; // Formato viejo
+                        }
+                        
+                        const nuevoNotas = textoBase + "||_JSON_||" + JSON.stringify(paquete);
+                        
+                        await supabaseClient.from('avion_inspecciones')
+                            .update({ notas_adicionales: nuevoNotas })
+                            .eq('id', reg.id);
+                    }
+                }
+
+                // 2. Limpiar fotos de los DAÑOS ESTRUCTURALES de la aeronave (Mantenemos la bitácora textual)
+                if (matriculaAvion) {
+                    const { data: danos } = await supabaseClient.from('avion_danos')
+                        .select('id, evidencia')
+                        .eq('matricula_avion', matriculaAvion)
+                        .eq('estado_actual', 'ABIERTO');
+                        
+                    if (danos && danos.length > 0) {
+                        for (let d of danos) {
+                            if (d.evidencia) {
+                                try {
+                                    let ev = JSON.parse(d.evidencia);
+                                    
+                                    // Vaciamos imágenes pesadas para ahorrar memoria en Supabase
+                                    ev.fotos = [];
+                                    ev.imgAvion = null;
+                                    ev.imgPaleta = null;
+                                    
+                                    await supabaseClient.from('avion_danos')
+                                        .update({ evidencia: JSON.stringify(ev) })
+                                        .eq('id', d.id);
+                                } catch (err) { console.warn("Evidencia no era JSON válido:", err); }
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Error limpiando fotos:", e);
+            }
+        }
+
+        async function transferirULDsAlDespachar(idVuelo, ruta) {
+            try {
+                const { data: armados, error: errArmados } = await supabaseClient
+                    .from('tiempos_armado')
+                    .select('ulds_armados, stacks_armados')
+                    .eq('vuelo_operacion_id', idVuelo);
+
+                if (errArmados || !armados || armados.length === 0) return;
+
+                let uldsPorDestino = {};
+                let destinoDefault = "";
+                if (ruta && ruta.includes('-')) {
+                    let partes = ruta.split('-');
+                    destinoDefault = partes[partes.length - 1].trim().toUpperCase();
+                }
+
+                armados.forEach(a => {
+                    if (a.ulds_armados && Array.isArray(a.ulds_armados)) {
+                        a.ulds_armados.forEach(item => {
+                            let uldNumber = item.uld || item; 
+                            let dest = item.destino ? item.destino.toUpperCase() : destinoDefault;
+                            
+                            if (!uldsPorDestino[dest]) uldsPorDestino[dest] = new Set();
+                            uldsPorDestino[dest].add(uldNumber);
+                        });
+                    }
+
+                    if (a.stacks_armados) {
+                        for (const [key, stackData] of Object.entries(a.stacks_armados)) {
+                            let dest = stackData.destino ? stackData.destino.toUpperCase() : destinoDefault;
+                            let uldsArray = stackData.ulds || stackData || []; 
+                            
+                            if (!uldsPorDestino[dest]) uldsPorDestino[dest] = new Set();
+                            uldsArray.forEach(u => uldsPorDestino[dest].add(u));
+                        }
+                    }
+                });
+
+                const now = new Date().toISOString();
+                const today = now.split('T')[0];
+
+                for (const [destino, uldsSet] of Object.entries(uldsPorDestino)) {
+                    const uldsArray = Array.from(uldsSet);
+                    if (uldsArray.length > 0 && destino) {
+                        const { error: errUpdate } = await supabaseClient
+                            .from('uld_inventario')
+                            .update({ 
+                                location: destino, 
+                                updated_ontime: now,
+                                received_on: today 
+                            })
+                            .in('uld_number', uldsArray);
+                            
+                        if (errUpdate) console.error(`Error transfiriendo ULDs a ${destino}:`, errUpdate);
+                    }
+                }
+            } catch (e) {
+                console.error("Error en transferirULDsAlDespachar:", e);
+            }
+        }
+
+        function confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
+            showCustomConfirm(
+                "🛫 Despachar Vuelo", 
+                `¿Confirmas que el vuelo <b>${numeroVuelo}</b> ha sido despachado (Outbound finalizado)?<br><br><i>Nota: Las fotos de inspección en Base de Datos se eliminarán (dejando solo el registro de texto en la bitácora) y <b>los ULDs armados serán transferidos a sus estaciones de destino respectivas</b> de forma automática.</i>`, 
+                "Sí, Despachar", 
+                "var(--amerijet-blue)",
+                async () => {
+                    try {
+                        await limpiarFotosInspeccion(idVuelo, matriculaAvion);
+                        await transferirULDsAlDespachar(idVuelo, ruta);
+
+                        const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'DESPACHADO' }).eq('id', idVuelo);
+                        if(error) throw error;
+                        
+                        cargarVuelosActivos();
+                        showCustomAlert("Despacho Exitoso", "El vuelo ha sido despachado, fotos liberadas y ULDs transferidos a sus destinos correspondientes.", "success");
+                    } catch(e) { showCustomAlert("Error", "No se pudo despachar: " + e.message, "error"); }
+                }
+            );
+        }
+        
+        async function guardarTiemposLotificada(idVuelo) { 
+            const hInicio = document.getElementById(`t_inicio_${idVuelo}`).value; 
+            const hFin = document.getElementById(`t_fin_${idVuelo}`).value; 
+            try { 
+                const { error } = await supabaseClient.from('vuelos_operaciones').update({ hora_inicio_lotificada: hInicio || null, hora_fin_lotificada: hFin || null, estado: 'EN IMPORTACION' }).eq('id', idVuelo); 
+                if(error) throw error;
+                cargarVuelosActivos(); 
+                showCustomAlert("¡Éxito!", "Los tiempos se guardaron correctamente en la base de datos.", "success");
+            } catch(e) { showCustomAlert("Error", "Error de base de datos: " + e.message, "error"); } 
+        }
+
+        function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion) { 
+            showCustomConfirm(
+                "🏁 Finalizar y Cerrar Operación", 
+                `¿Confirmas que deseas finalizar y cerrar definitivamente el vuelo <strong style="color:var(--amerijet-blue);">${numeroVuelo}</strong>?<br><br><span style="color:var(--amerijet-red); font-size:12px;">⚠️ <b>EFECTO:</b> Si no despachaste antes, se limpiará la memoria de fotos, se migrarán los ULDs a sus destinos y la tarjeta se removerá del tablero para guardarse en el Historial.</span>`, 
+                "🏁 Finalizar Vuelo", 
+                "var(--amerijet-red)",
+                async () => {
+                    try { 
+                        await limpiarFotosInspeccion(idVuelo, matriculaAvion);
+                        await transferirULDsAlDespachar(idVuelo, ruta);
+
+                        const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
+                        if (error) throw error;
+                        cargarVuelosActivos(); 
+                        showCustomAlert("Vuelo Cerrado", `El vuelo ${numeroVuelo} fue finalizado con éxito y removido del tablero activo.`, "success");
+                    } catch(e) { showCustomAlert("Error", e.message, "error"); }
+                }
+            );
+        }
+
+        function abrirModalEdit(id, vuelo, tail, ruta, fecha) { 
+            document.getElementById('edit_id').value = id; 
+            document.getElementById('edit_vuelo_id').value = vuelo; 
+            document.getElementById('edit_matricula_avion').value = tail; 
+            document.getElementById('edit_ruta').value = ruta; 
+            document.getElementById('edit_fecha').value = fecha;
+            document.getElementById('editModal').style.display = 'flex'; 
+        }
+        
+        function cerrarModal() { document.getElementById('editModal').style.display = 'none'; }
+        
+        document.getElementById('formEditVuelo').addEventListener('submit', async function(e) { 
+            e.preventDefault(); 
+            const btn = document.getElementById('btnModalSave'); btn.disabled = true; btn.innerText = "Guardando...";
+            try { 
+                const {error} = await supabaseClient.from('vuelos_operaciones').update({ 
+                    vuelo_id: document.getElementById('edit_vuelo_id').value.toUpperCase(), 
+                    matricula_avion: document.getElementById('edit_matricula_avion').value, 
+                    ruta: document.getElementById('edit_ruta').value.toUpperCase(),
+                    fecha: document.getElementById('edit_fecha').value
+                }).eq('id', document.getElementById('edit_id').value); 
+                
+                if(error) throw error; 
+                cerrarModal(); cargarVuelosActivos(); showCustomAlert("Actualizado", "Datos guardados.", "success");
+            } catch (err) { 
+                showCustomAlert("Error", err.message, "error"); 
+            } finally {
+                btn.disabled = false; btn.innerText = "Guardar Cambios";
+            }
+        });
+
+        function eliminarVuelo(id, vuelo_id) { 
+            showCustomConfirm("Eliminar Vuelo", `¿Seguro que deseas eliminar el vuelo <strong style="color:var(--amerijet-blue);">${vuelo_id}</strong>?`, "Sí, Eliminar", "var(--amerijet-red)",
+                async () => {
+                    try { 
+                        const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
+                        if(error) throw error;
+                        cargarVuelosActivos(); showCustomAlert("Eliminado", "Vuelo borrado del sistema.", "success");
+                    } catch(e) { showCustomAlert("Error", e.message, "error"); }
+                }
+            );
+        }
+
+        document.getElementById('btnLogout').addEventListener('click', async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; });
+
+        inicializarDashboard();
+    </script>
+</body>
+</html>

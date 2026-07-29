@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inspección Aeronave | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #1A365D; 
+            --amerijet-blue-dark: #0F172A; 
+            --amerijet-red: #E11D48; 
+            --bg-color: #F8FAFC; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+            --sidebar-width: 260px;
+            --success-green: #10B981; 
+            --warn-orange: #F59E0B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent;}
+        
+        /* SIDEBAR */
+        .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer;}
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+
+        .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-info-text { display: flex; flex-direction: column; }
+        .user-info-text strong { font-size: 14px; color: white; }
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
+
+        .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; border:none; background:transparent; cursor:pointer; text-align:left; font-family:inherit;}
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+
+        /* HEADER Y MAIN CONTENT */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; flex-shrink: 0; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        .header-title { font-weight: 900; font-size: 16px; color: var(--amerijet-blue); display: flex; flex-direction: column; line-height: 1.2;}
+        .header-title span { font-size: 11px; color: #38BDF8; font-weight: 700;}
+        .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor:pointer;}
+        .btn-volver-top:hover { background: #E2E8F0; }
+
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
+        
+        /* TARJETA SUPERIOR AZUL */
+        .info-card { background: var(--amerijet-blue); padding: 20px 25px; border-radius: 12px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(26,54,93,0.15); flex-wrap: wrap; gap: 15px;}
+        .info-card h1 { font-size: 28px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
+        .info-card select { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 700; outline: none; cursor: pointer;}
+        .info-card select option { color: #333; }
+
+        /* CAJAS BLANCAS */
+        .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
+        .card-header { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 18px; text-transform: uppercase; }
+
+        .comp-item { background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 18px; margin-bottom: 15px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
+        .comp-title { font-weight: 900; font-size: 14px; color: var(--amerijet-blue-dark); margin-bottom: 12px; display: block; }
+        
+        select, input[type="text"], textarea { width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);}
+        select:focus, input[type="text"]:focus, textarea:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);}
+        
+        /* ALERTAS HISTÓRICAS INTELIGENTES */
+        .hist-alert { background: #FFFBEB; border-left: 4px solid var(--warn-orange); padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #92400E; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.05); animation: fadeIn 0.4s ease-in-out;}
+        .hist-alert strong { color: #B45309; font-weight: 900; display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .hist-alert .hist-meta { font-size: 11px; opacity: 0.8; font-weight: 700; margin-top: 8px; display: block; border-top: 1px dashed rgba(245, 158, 11, 0.3); padding-top: 8px;}
+        
+        .new-alert { background: #FEF2F2; border-left: 4px solid var(--amerijet-red); padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #BE123C; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05); animation: fadeIn 0.3s ease-in-out;}
+        .new-alert strong { color: #E11D48; font-weight: 900; display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .new-alert .hist-meta { font-size: 11px; opacity: 0.8; font-weight: 700; margin-top: 8px; display: block; border-top: 1px dashed rgba(225, 29, 72, 0.3); padding-top: 8px;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hallazgo-panel { display: none; background: #FFF1F2; border: 1px dashed #FDA4AF; border-radius: 8px; padding: 18px; margin-top: 10px; }
+        .btn-camera { background: white; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-bottom: 12px; transition: 0.2s;}
+        .btn-camera:hover { background: #F1F5F9; border-color: #94A3B8;}
+        
+        .photo-gallery { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-top: 5px;}
+        .photo-thumb { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; border: 1px solid #CBD5E1; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+        .btn-add-matrix { background: var(--amerijet-red); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 800; font-size: 13px; width: 100%; display: flex; justify-content: center; margin-top: 12px; cursor: pointer; transition: 0.2s;}
+        .btn-add-matrix:hover { background: #BE123C; }
+
+        /* PLANOS DIGITALES B767 */
+        .digital-plane-container { background: #F1F5F9; padding: 25px 15px; border-radius: 10px; overflow-x: auto; margin-bottom: 15px; display: none; text-align: center; border: 1px solid #CBD5E1; }
+        
+        .plane-shape { display: flex; background-color: #CBD5E1; border-radius: 80px; padding: 10px 40px; height: 120px; align-items: stretch; gap: 4px; margin: 0 auto; min-width: 680px; border: 4px solid; position: relative; }
+        .border-A { border-color: #86efac !important; } .border-B { border-color: #d946ef !important; } .border-C { border-color: #fde047 !important; } .border-D { border-color: #7c3aed !important; } .border-E { border-color: #ef4444 !important; } .border-G { border-color: #f97316 !important; }
+
+        .p-cell { flex: 1; background: #E2E8F0; border: 1.5px solid #1E293B; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #0F172A; cursor: pointer; transition: 0.1s; }
+        .p-col { flex: 1; display: flex; flex-direction: column; gap: 0; }
+        .p-half { flex: 1; width: 100%; background: #E2E8F0; border: 1.5px solid #1E293B; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: #0F172A; cursor: pointer; transition: 0.1s; }
+        .p-wide { flex: 2; }
+        
+        .p-cell:hover, .p-half:hover { background: #CBD5E1; }
+        .p-cell.selected, .p-half.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
+
+        /* PALETA INTERACTIVA DE LOCKS */
+        .pallet-locks-container { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 10px; padding: 30px 10px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
+        .pallet-draw { position: relative; width: 400px; height: 220px; margin: 0 auto; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; }
+        .pallet-core-text { font-weight: 900; font-size: 40px; color: #0F172A; letter-spacing: 2px; }
+
+        .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; }
+        .hotspot:hover { background: #3B82F6; transform: scale(1.3); }
+        .hotspot.active { background: var(--amerijet-red); transform: scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
+
+        .lock-label { position: absolute; font-size: 9px; font-weight: 800; color: #1E293B; text-align: center; width: 80px; transform: translateX(-50%); pointer-events: none; }
+        .lock-label.red { color: #DC2626; }
+
+        /* Posiciones Hotspots */
+        .t-c-l { top: -7px; left: 15%; } .lbl-t-c-l { top: -30px; left: 15%; }
+        .t-nc-1 { top: -7px; left: 35%; } .t-nc-2 { top: -7px; left: 50%; } .lbl-t-nc { top: -30px; left: 50%; } .t-nc-3 { top: -7px; left: 65%; } 
+        .t-c-r { top: -7px; left: 85%; } .lbl-t-c-r { top: -30px; left: 85%; }
+        .b-c-l { bottom: -7px; left: 15%; } .lbl-b-c-l { bottom: -30px; left: 15%; }
+        .b-nc-1 { bottom: -7px; left: 35%; } .b-nc-2 { bottom: -7px; left: 50%; } .lbl-b-nc { bottom: -20px; left: 50%; width:120px;} .b-nc-3 { bottom: -7px; left: 65%; } 
+        .b-c-r { bottom: -7px; left: 85%; } .lbl-b-c-r { bottom: -30px; left: 85%; }
+        .l-c-t { top: 15%; left: -7px; } .lbl-l-c-t { top: 10%; left: -50px; text-align:right;}
+        .l-nc-1 { top: 40%; left: -7px; } .l-nc-2 { top: 60%; left: -7px; } .lbl-l-nc { top: 45%; left: -50px; text-align:right; width:60px;}
+        .l-c-b { top: 85%; left: -7px; } .lbl-l-c-b { top: 80%; left: -50px; text-align:right;}
+        .r-c-t { top: 15%; right: -7px; } .lbl-r-c-t { top: 10%; right: -125px; text-align:left;}
+        .r-nc-1 { top: 40%; right: -7px; } .r-nc-2 { top: 60%; right: -7px; } .lbl-r-nc { top: 45%; right: -135px; text-align:left; width:70px;}
+        .r-c-b { top: 85%; right: -7px; } .lbl-r-c-b { top: 80%; right: -125px; text-align:left;}
+
+        .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
+        .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 700; font-size: 12px; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
+        .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
+
+        /* MATRIZ DINÁMICA DE ABAJO */
+        .matrix-item { background: white; border: 1px solid #E2E8F0; border-left: 4px solid var(--amerijet-red); padding: 18px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .matrix-item.historical { border-left-color: var(--warn-orange); background: #FFFBEB; }
+        .matrix-item.resolved { border-left-color: var(--success-green); background: #ECFDF5; opacity: 0.8; }
+        
+        .badge-status { padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: 900; color: white; display: inline-block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .st-new { background: var(--amerijet-red); } .st-hist { background: var(--warn-orange); } .st-res { background: var(--success-green); }
+
+        .btn-update-matrix { background: var(--amerijet-blue); color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; margin-top: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; width: 100%;}
+        .btn-update-matrix:hover { background: var(--amerijet-blue-dark); }
+        .btn-del-matrix { position: absolute; top: 15px; right: 15px; background: #FEE2E2; border: 1px solid #FCA5A5; color: #DC2626; border-radius: 6px; padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s;}
+        .btn-del-matrix:hover { background: #FECACA; }
+        
+        /* BOTTOM BAR */
+        .bottom-bar { background: white; padding: 15px 25px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; border-top: 1px solid #E2E8F0; z-index: 100; flex-shrink: 0;}
+        .btn-panel { border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 13px; cursor: pointer; color: white; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; transition: 0.2s;}
+        .btn-save { background: var(--amerijet-blue); box-shadow: 0 4px 10px rgba(10,37,64,0.15); }
+        .btn-save:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px);}
+        .btn-pdf { background: #10B981; box-shadow: 0 4px 10px rgba(16,185,129,0.15); }
+        .btn-pdf:hover { background: #059669; transform: translateY(-1px);}
+
+        /* MODALES Y TOAST */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(2px); padding: 15px;}
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);}
+
+        #renderContainer { position: absolute; left: -9999px; top: 0; width: 800px; z-index: -100; background: white; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none; }
+        .toast { padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideUp 0.3s ease-out forwards; display: flex; align-items: center; gap: 8px;}
+        .toast.success { background: #10B981; color: white; border: 1px solid #059669;}
+        .toast.error { background: #EF4444; color: white; border: 1px solid #DC2626;}
+        .toast.info { background: #3B82F6; color: white; border: 1px solid #2563EB;}
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
+
+        @media (max-width: 1024px) { 
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; }
+            .menu-toggle { display: block; }
+            .container { padding: 15px; }
+            .bottom-bar { padding: 12px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ LATERAL -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo_3.png" alt="Logo" onclick="navegarA('dashboard.html')" style="cursor:pointer;">
+            <span>Cargo Inspect Pro</span>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info-text">
+                <strong id="lblUserName">Cargando...</strong>
+                <span id="lblUserRol">...</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-link" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
+            <button class="nav-link" onclick="navegarA('uld_gestion.html')">📦 Inventario ULD</button>
+            <button class="nav-link" id="btnAdminPanel" style="display: none;" onclick="navegarA('admin_panel.html')">👑 Panel de Control</button>
+            <button class="nav-link" id="btnReportesHistoricos" style="display: none;" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="logoutSeguro()">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="header-title">Inspección Aeronave<span>Reporte de Condición Estructural</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 12px; font-weight: 900; background: #EFF6FF; color: var(--amerijet-blue); padding: 6px 12px; border-radius: 6px; border: 1px solid #BFDBFE;" id="lblTailHead">---</div>
+                <button class="btn-volver-top" onclick="navegarA('dashboard.html')">⬅️ Vuelos</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                
+                <!-- TARJETA AZUL SUPERIOR -->
+                <div class="info-card">
+                    <div>
+                        <div style="font-size: 11px; opacity: 0.9; font-weight: 800; text-transform: uppercase;">Vuelo Operativo</div>
+                        <h1 id="lblVuelo">Cargando...</h1>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                        <span style="font-size: 10px; opacity: 0.9; font-weight: 800; margin-bottom:6px; text-transform: uppercase;">Inspector Encargado</span>
+                        <select id="selInspector" onchange="marcarCambios()">
+                            <option value="Jose Chavez">Jose Chavez</option>
+                            <option value="Reynaldo Zaldaña" selected>Reynaldo Zaldaña</option>
+                            <option value="Alexis Coreas">Alexis Coreas</option>
+                            <option value="Samuel Martinez">Samuel Martinez</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA -->
+                <div class="card">
+                    <div class="card-header">1. Inspección Estructural Básica</div>
+                    
+                    <div class="comp-item" id="c_lower_fwd">
+                        <span class="comp-title">Lower Forward Deck</span>
+                        <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠️ Reportar Nuevo Hallazgo</option>
+                        </select>
+                        <div id="hist_lower_fwd"></div>
+
+                        <div id="panel_lower_fwd" class="hallazgo-panel">
+                            <input type="text" id="desc_lower_fwd" placeholder="Describa el daño..." oninput="marcarCambios()">
+                            <label class="btn-camera">📸 Tomar Foto
+                                <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_fwd', 'lower_fwd')">
+                            </label>
+                            <div class="photo-gallery" id="gal_lower_fwd"></div>
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">📥 Pasar Hallazgo a Matriz</button>
+                        </div>
+                    </div>
+
+                    <div class="comp-item" id="c_lower_aft">
+                        <span class="comp-title">Lower Aft Deck</span>
+                        <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠️ Reportar Nuevo Hallazgo</option>
+                        </select>
+                        <div id="hist_lower_aft"></div>
+
+                        <div id="panel_lower_aft" class="hallazgo-panel">
+                            <input type="text" id="desc_lower_aft" placeholder="Describa el daño..." oninput="marcarCambios()">
+                            <label class="btn-camera">📸 Tomar Foto
+                                <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_aft', 'lower_aft')">
+                            </label>
+                            <div class="photo-gallery" id="gal_lower_aft"></div>
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">📥 Pasar Hallazgo a Matriz</button>
+                        </div>
+                    </div>
+
+                    <div class="comp-item" id="c_bulk">
+                        <span class="comp-title">Bulk Compartment</span>
+                        <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠️ Reportar Nuevo Hallazgo</option>
+                        </select>
+                        <div id="hist_bulk"></div>
+
+                        <div id="panel_bulk" class="hallazgo-panel">
+                            <input type="text" id="desc_bulk" placeholder="Describa el daño..." oninput="marcarCambios()">
+                            <label class="btn-camera">📸 Tomar Foto
+                                <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_bulk', 'bulk')">
+                            </label>
+                            <div class="photo-gallery" id="gal_bulk"></div>
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">📥 Pasar Hallazgo a Matriz</button>
+                        </div>
+                    </div>
+
+                    <div class="comp-item" style="border: 2px solid var(--amerijet-blue); background: white;">
+                        <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
+                        <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="FUSELAJE">⚠️ Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">⚠️ Mapear Daño en Seguros de Piso (CLS)</option>
+                        </select>
+                        
+                        <div id="hist_main_deck"></div>
+
+                        <div id="panel_md_fuselaje" class="hallazgo-panel">
+                            <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción (Ej: Marco Puerta L1)..." oninput="marcarCambios()">
+                            <label class="btn-camera">📸 Foto del Daño (MD)
+                                <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_md_fus', 'md_fuselaje')">
+                            </label>
+                            <div class="photo-gallery" id="gal_md_fus"></div>
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck - Estructura', 'md_fuselaje', 'sel_main_deck')">📥 Pasar Hallazgo a Matriz</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL MAPEO CLS B767 -->
+                <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">⚠️ Mapeo de Seguros (CLS)</div>
+                    
+                    <div class="config-tabs">
+                        <button type="button" class="tab-btn active" onclick="dibujarPlanoAvionCSS('A', this)">Conf A</button>
+                        <button type="button" class="tab-btn" onclick="dibujarPlanoAvionCSS('B', this)">Conf B</button>
+                        <button type="button" class="tab-btn" onclick="dibujarPlanoAvionCSS('C', this)">Conf C</button>
+                        <button type="button" class="tab-btn" onclick="dibujarPlanoAvionCSS('D', this)">Conf D</button>
+                        <button type="button" class="tab-btn" onclick="dibujarPlanoAvionCSS('E', this)">Conf E</button>
+                        <button type="button" class="tab-btn" onclick="dibujarPlanoAvionCSS('G', this)">Conf G</button>
+                    </div>
+
+                    <div id="wrapperPlanoAvion" class="digital-plane-container" style="display:block;">
+                        <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:10px; text-align:left;">1. Selecciona la(s) celda(s) (Múltiple):</div>
+                        <div id="capturePlanoHTML"></div>
+                    </div>
+
+                    <div id="wrapperPaletaLocks" class="pallet-locks-container" style="display:block;">
+                        <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:25px; text-align: left;">2. Selecciona el/los seguro(s) dañado(s) (Múltiple):</div>
+                        
+                        <div class="pallet-draw" id="palletBoxRenderHTML">
+                            <div class="pallet-core-text">A1R</div>
+                            
+                            <!-- Borde Superior -->
+                            <div class="hotspot t-c-l" onclick="toggleLock('Side Corner (Top Left)', this)"></div>
+                            <div class="lock-label lbl-t-c-l">Side<br>Corner</div>
+                            
+                            <div class="hotspot t-nc-1" onclick="toggleLock('Side Non-Corner (Top 1)', this)"></div>
+                            <div class="hotspot t-nc-2" onclick="toggleLock('Side Non-Corner (Top 2)', this)"></div>
+                            <div class="lock-label lbl-t-nc">Side<br>Non-Corner</div>
+                            <div class="hotspot t-nc-3" onclick="toggleLock('Side Non-Corner (Top 3)', this)"></div>
+                            
+                            <div class="hotspot t-c-r" onclick="toggleLock('Side Corner (Top Right)', this)"></div>
+                            <div class="lock-label lbl-t-c-r">Side<br>Corner</div>
+
+                            <!-- Borde Inferior -->
+                            <div class="hotspot b-c-l" onclick="toggleLock('Side Corner (Bot Left)', this)"></div>
+                            <div class="lock-label lbl-b-c-l">Side<br>Corner</div>
+                            
+                            <div class="hotspot b-nc-1" onclick="toggleLock('Centerline (Bot 1)', this)"></div>
+                            <div class="hotspot b-nc-2" onclick="toggleLock('Centerline (Bot 2)', this)"></div>
+                            <div class="lock-label lbl-b-nc red">Centerline locks</div>
+                            <div class="hotspot b-nc-3" onclick="toggleLock('Centerline (Bot 3)', this)"></div>
+                            
+                            <div class="hotspot b-c-r" onclick="toggleLock('Side Corner (Bot Right)', this)"></div>
+                            <div class="lock-label lbl-b-c-r">Side<br>Corner</div>
+
+                            <!-- Borde Izquierdo -->
+                            <div class="hotspot l-c-t" onclick="toggleLock('Fwd/Aft Corner (L Top)', this)"></div>
+                            <div class="lock-label lbl-l-c-t">Fwd/Aft<br>Corner</div>
+                            
+                            <div class="hotspot l-nc-1" onclick="toggleLock('Fwd/Aft Non-Corner (L 1)', this)"></div>
+                            <div class="hotspot l-nc-2" onclick="toggleLock('Fwd/Aft Non-Corner (L 2)', this)"></div>
+                            <div class="lock-label lbl-l-nc">Fwd/Aft<br>Non-Corner</div>
+                            
+                            <div class="hotspot l-c-b" onclick="toggleLock('Fwd/Aft Corner (L Bot)', this)"></div>
+                            <div class="lock-label lbl-l-c-b">Fwd/Aft<br>Corner</div>
+
+                            <!-- Borde Derecho -->
+                            <div class="hotspot r-c-t" onclick="toggleLock('Fwd/Aft Corner (R Top)', this)"></div>
+                            <div class="lock-label lbl-r-c-t">Fwd/Aft<br>Corner</div>
+                            
+                            <div class="hotspot r-nc-1" onclick="toggleLock('Fwd/Aft Non-Corner (R 1)', this)"></div>
+                            <div class="hotspot r-nc-2" onclick="toggleLock('Fwd/Aft Non-Corner (R 2)', this)"></div>
+                            <div class="lock-label lbl-r-nc">Fwd/Aft<br>Non-Corner</div>
+                            
+                            <div class="hotspot r-c-b" onclick="toggleLock('Fwd/Aft Corner (R Bot)', this)"></div>
+                            <div class="lock-label lbl-r-c-b">Fwd/Aft<br>Corner</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #F8FAFC; padding: 15px; border-radius: 8px; border: 1px solid #CBD5E1;">
+                        <div style="font-size:12px; font-weight:800; color:var(--amerijet-blue); margin-bottom:10px;">3. Detalles y Evidencia</div>
+                        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom: 12px;">
+                            <input type="text" id="inpUbicacion" placeholder="Celdas (Ej: A1, C2)" style="width:100%; font-weight:bold; background: #EFF6FF;" readonly>
+                            <input type="text" id="inpComponente" placeholder="Seguros (Ej: Side Corner, Centerline)" style="width:100%; font-weight:bold; background: #FFF1F2;" readonly>
+                        </div>
+                        <select id="selDanoSeveridad" onchange="marcarCambios()">
+                            <option value="">-- Naturaleza del Daño --</option>
+                            <option value="Golpe Directo Estructural">Golpe Directo Estructural</option>
+                            <option value="Fricción Profunda / Rayón">Fricción Profunda / Rayón</option>
+                            <option value="Falta Pieza / Pin Operativo">Falta Pieza</option>
+                            <option value="Pieza Dañada / Quebrada">Pieza Dañada / Quebrada</option>
+                        </select>
+                        
+                        <input type="text" id="inpComentariosCLS" placeholder="Añadir comentarios o detalles adicionales (Opcional)..." oninput="marcarCambios()" style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-top: 8px; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);">
+
+                        <label class="btn-camera" style="margin-top: 8px;">📸 Tomar Foto del Seguro
+                            <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_cls_map', 'cls_temp')">
+                        </label>
+                        <div class="photo-gallery" id="gal_cls_map"></div>
+
+                        <button type="button" class="btn-add-matrix" style="margin-top:10px;" onclick="agregarLockAMatriz()">
+                            ➕ Pasar Hallazgo a Matriz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ -->
+                <div class="card">
+                    <div class="card-header">2. Trazabilidad de Discrepancias</div>
+                    <div id="matrizDinamica">
+                        <div style="text-align: center; font-size: 13px; color: #94A3B8; font-style: italic; padding: 20px;">La matriz consolidará historial del avión y nuevos hallazgos.</div>
+                    </div>
+                </div>
+
+                <!-- NUEVA SECCIÓN: 3. INCIDENCIAS TEMPORALES DEL VUELO -->
+                <div class="card" style="margin-bottom: 20px; border: 2px solid var(--warn-orange);">
+                    <div class="card-header" style="color:var(--warn-orange);">3. Incidencias Temporales del Vuelo</div>
+                    <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
+                        Estos reportes aplican SOLO para la operación actual y no manchan el historial permanente del avión (No se guardan en la DB como daño).
+                    </p>
+                    <div class="comp-item" style="border-color: var(--warn-orange); margin-bottom: 5px;">
+                        <input type="text" id="desc_incidencia" placeholder="Descripción de la incidencia en rampa/vuelo..." oninput="marcarCambios()">
+                        <label class="btn-camera">📸 Tomar Foto (Opcional)
+                            <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_incidencias', 'temp_incidencia')">
+                        </label>
+                        <div class="photo-gallery" id="gal_incidencias"></div>
+                        <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">➕ Agregar Incidencia a este Vuelo</button>
+                    </div>
+                    <div id="listaIncidencias" style="margin-top: 15px;"></div>
+                </div>
+
+                <!-- SECCIÓN 4: CIERRE FINAL -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">4. Cierre y Comentarios Supervisor</div>
+                    <textarea id="txtNotasFinales" rows="4" placeholder="Anotaciones finales de validación..." oninput="marcarCambios()"></textarea>
+                </div>
+            </div>
+            
+            <div class="bottom-bar">
+                <button type="button" class="btn-panel btn-save" id="btnGuardarBD" onclick="guardarProgresoEnBD()">💾 Guardar Nube</button>
+                <button type="button" class="btn-panel btn-pdf" id="btnDescargarPDF" onclick="generarPDFCarta()">📄 Bajar PDF Oficial</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALES DE ACTUALIZACIÓN Y CONFIRMACIÓN -->
+    <div class="modal-overlay" id="modalActualizar">
+        <div class="modal-content">
+            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900;">✏️ Actualizar Daño</h3>
+            <p id="lblModalInfo" style="font-size: 13px; font-weight:bold; color: #475569; margin-bottom: 15px; border-left:3px solid var(--amerijet-red); padding-left:8px;"></p>
+            <input type="hidden" id="modalIndex">
+            
+            <select id="modalEstadoNuevo" style="margin-bottom: 12px; border:2px solid #CBD5E1; font-weight:800;" onchange="marcarCambios()">
+                <option value="ABIERTO">Sigue Igual (Abierto)</option>
+                <option value="REPARADO">Se Reparó el Daño (Cerrar)</option>
+            </select>
+            <input type="text" id="modalNotas" placeholder="Notas de la actualización..." style="margin-bottom: 12px;" oninput="marcarCambios()">
+            
+            <label class="btn-camera" style="margin-top: 10px;">📸 Foto de Evidencia
+                <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_update', 'modal_temp')">
+            </label>
+            <div class="photo-gallery" id="gal_modal_update"></div>
+
+            <div style="display:flex; gap:10px; margin-top: 20px;">
+                <button type="button" style="background:#F1F5F9; color:#475569; width:50%; border:none; padding:14px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="document.getElementById('modalActualizar').style.display='none'">Cancelar</button>
+                <button type="button" style="background:var(--success-green); border:none; width:50%; padding:14px; border-radius:8px; font-weight:900; color:white; cursor:pointer;" onclick="guardarActualizacion()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customConfirmModal">
+        <div class="modal-content modal-generic">
+            <div style="font-size: 45px; margin-bottom: 10px;">⚠️</div>
+            <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px;">Confirmar</h3>
+            <p id="confirmMessage" style="font-size: 14px; color: #475569; margin-bottom: 25px; line-height: 1.5;"></p>
+            <div style="display: flex; gap: 10px; flex-direction:column;">
+                <button id="btnConfirmAction" style="color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; transition: 0.2s;">Confirmar</button>
+                <button onclick="document.getElementById('customConfirmModal').style.display='none'" style="background:#F1F5F9; color:#475569; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; transition: 0.2s;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="renderContainer"></div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const operacionId = new URLSearchParams(window.location.search).get('id');
+        
+        let vueloData = { vuelo: '', tail: '', ruta: '' };
+        let matrizHallazgos = []; 
+        let fotosBanco = {}; 
+        let configActualGlobal = 'A';
+        
+        // --- ARRAY TEMPORAL DE INCIDENCIAS DE VUELO ---
+        let incidenciasVuelo = [];
+
+        // --- PROTECCIÓN DE CAMBIOS ---
+        let hayCambiosSinGuardar = false;
+        function marcarCambios() { hayCambiosSinGuardar = true; }
+        
+        function navegarA(url) {
+            if (hayCambiosSinGuardar) {
+                showCustomConfirm(
+                    "⚠️ Cambios sin guardar", 
+                    "Tienes cambios no guardados. Si sales ahora, perderás las fotos y textos que acabas de agregar.<br><br><b>¿Deseas salir y perder los cambios?</b>", 
+                    "Salir sin guardar", 
+                    "var(--amerijet-red)", 
+                    () => { window.location.href = url; }
+                );
+            } else { window.location.href = url; }
+        }
+
+        function logoutSeguro() {
+            if (hayCambiosSinGuardar) {
+                showCustomConfirm(
+                    "⚠️ Cambios sin guardar", 
+                    "Tienes cambios pendientes en la inspección. ¿Salir y perder los cambios?", 
+                    "Cerrar Sesión", 
+                    "var(--amerijet-red)", 
+                    async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }
+                );
+            } else {
+                localStorage.removeItem('cargo_current_station'); supabaseClient.auth.signOut().then(() => window.location.href = 'index.html');
+            }
+        }
+        window.addEventListener('beforeunload', (e) => { if (hayCambiosSinGuardar) { e.preventDefault(); e.returnValue = ''; } });
+
+        function showToast(mensaje, type = 'success') {
+            const container = document.getElementById('toast-container') || (function() { const c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); return c; })();
+            const toast = document.createElement('div');
+            let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            toast.className = `toast ${type}`; 
+            toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'fadeOutToast 0.3s ease-out forwards'; setTimeout(() => toast.remove(), 300); }, 2500);
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+
+        function showCustomConfirm(title, message, confirmBtnText, btnColor, callback) {
+            document.getElementById('confirmTitle').innerText = title; 
+            document.getElementById('confirmTitle').style.color = btnColor;
+            document.getElementById('confirmMessage').innerHTML = message;
+            const btn = document.getElementById('btnConfirmAction'); 
+            btn.innerText = confirmBtnText; btn.style.background = btnColor;
+            btn.onclick = () => { document.getElementById('customConfirmModal').style.display = 'none'; if(callback) callback(); };
+            document.getElementById('customConfirmModal').style.display = 'flex';
+        }
+
+        // --- INICIALIZACIÓN Y CONEXIÓN DB ---
+        async function inicializar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre').eq('id', session.user.id).single();
+            if (perfil) {
+                document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
+                document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
+            }
+
+            if(!operacionId) return;
+            try {
+                const { data: op } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, ruta').eq('id', operacionId).single();
+                if(op) {
+                    vueloData.vuelo = op.vuelo_id; 
+                    vueloData.tail = op.matricula_avion;
+                    vueloData.ruta = op.ruta || 'N/A';
+                    document.getElementById('lblVuelo').innerText = op.vuelo_id;
+                    document.getElementById('lblTailHead').innerText = op.matricula_avion;
+                }
+
+                // Cargar daños permanentes de la aeronave
+                const { data: danosBD } = await supabaseClient.from('avion_danos')
+                    .select('*')
+                    .eq('matricula_avion', vueloData.tail)
+                    .eq('estado_actual', 'ABIERTO');
+
+                if (danosBD && danosBD.length > 0) {
+                    danosBD.forEach(d => {
+                        let ev = {}; try { ev = JSON.parse(d.evidencia || "{}"); } catch(err){}
+                        let esHistorico = d.vuelo_origen !== vueloData.vuelo;
+
+                        matrizHallazgos.push({
+                            id_db: d.id, 
+                            idTracking: 'hist_' + d.id, 
+                            tipo: ev.tipo || 'COMPARTIMENTO', 
+                            area: d.area, 
+                            ubicacion: ev.ubicacion || 'General', 
+                            componente: d.componente,
+                            descripcion: d.descripcion, 
+                            consecuencia: d.consecuencia || 'N/A', 
+                            severidad: d.severidad || 'N/A', 
+                            estado_actual: d.estado_actual, 
+                            nota_solucion: d.nota_solucion || '', 
+                            fechaReporte: d.creado_at, 
+                            fechaActualizacion: d.actualizado_at,
+                            imgAvion: ev.imgAvion || null, 
+                            imgPaleta: ev.imgPaleta || null, 
+                            vuelo_origen: d.vuelo_origen, 
+                            esHistorico: esHistorico
+                        });
+                        fotosBanco['hist_' + d.id] = ev.fotos || [];
+                    });
+                }
+
+                // Cargar notas finales E incidencias temporales
+                const { data: logGuardado } = await supabaseClient.from('avion_inspecciones').select('notas_adicionales').eq('vuelo_operacion_id', operacionId).order('id', { ascending: false }).limit(1);
+                if(logGuardado && logGuardado.length > 0) { 
+                    const notasBD = logGuardado[0].notas_adicionales || '';
+                    if(notasBD.includes('||_JSON_||')) {
+                        const partes = notasBD.split('||_JSON_||');
+                        try {
+                            const paquete = JSON.parse(partes[1]);
+                            document.getElementById('txtNotasFinales').value = paquete.notas || '';
+                            incidenciasVuelo = paquete.incidencias || [];
+                            incidenciasVuelo.forEach(inc => {
+                                fotosBanco[inc.idTracking] = inc.fotos || [];
+                            });
+                        } catch(e) {}
+                    } else {
+                        document.getElementById('txtNotasFinales').value = notasBD; 
+                    }
+                }
+
+                dibujarPlanoAvionCSS('A');
+                renderizarMatrizDinamica();
+                renderizarHistorialEnCompartimentos();
+                renderizarIncidencias();
+            } catch(e) { console.error("Error de inicialización", e); }
+        }
+
+        function renderizarHistorialEnCompartimentos() {
+            document.getElementById('hist_lower_fwd').innerHTML = ''; document.getElementById('hist_lower_aft').innerHTML = '';
+            document.getElementById('hist_bulk').innerHTML = ''; document.getElementById('hist_main_deck').innerHTML = '';
+
+            matrizHallazgos.forEach((h) => {
+                if (h.estado_actual === 'ABIERTO') {
+                    let targetId = '';
+                    let areaUC = h.area.toUpperCase();
+                    if (areaUC.includes('LOWER FORWARD')) targetId = 'hist_lower_fwd';
+                    else if (areaUC.includes('LOWER AFT')) targetId = 'hist_lower_aft';
+                    else if (areaUC.includes('BULK')) targetId = 'hist_bulk';
+                    else if (areaUC.includes('MAIN DECK') || areaUC.includes('MD') || areaUC.includes('CLS')) targetId = 'hist_main_deck';
+
+                    if (targetId) {
+                        const contenedor = document.getElementById(targetId);
+                        const fRep = h.fechaReporte ? new Date(h.fechaReporte).toLocaleDateString() : 'N/A';
+                        
+                        const isHist = h.esHistorico;
+                        const bgClass = isHist ? "hist-alert" : "new-alert";
+                        const titleText = isHist ? "⏳ Daño Previo Reportado" : "⚠️ NUEVO DAÑO REPORTADO";
+                        const titleColor = isHist ? "#B45309" : "#E11D48";
+                        const btnEliminar = !isHist ? `<button type="button" onclick="eliminarHallazgoPorId('${h.idTracking}')" style="background:none; border:none; color:var(--amerijet-red); font-size:18px; font-weight:bold; cursor:pointer;" title="Eliminar hallazgo permanentemente">✖</button>` : '';
+
+                        contenedor.innerHTML += `
+                            <div class="${bgClass}">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+                                    <div style="display:flex; align-items:center; gap:6px;">
+                                        <strong style="color:${titleColor};">${titleText}</strong>
+                                        <span style="font-size:10px; color:${titleColor}; font-weight:800;">Rep: ${fRep}</span>
+                                    </div>
+                                    ${btnEliminar}
+                                </div>
+                                <div style="margin-bottom:6px; font-weight:600; color:${isHist ? '#92400E' : '#BE123C'};">${h.descripcion}</div>
+                                <span class="hist-meta">Comp: ${h.componente} | Pos: ${h.ubicacion}</span>
+                                <div style="margin-top: 10px; padding-top: 10px; display:flex;">
+                                    <button type="button" class="btn-update-matrix" style="margin-top:0; width:100%;" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Actualizar / Cerrar Daño</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+        }
+
+        function abrirModalActualizacionPorIdTracking(idTracking) { const index = matrizHallazgos.findIndex(h => h.idTracking === idTracking); if (index !== -1) abrirModalActualizacion(index); }
+        
+        // --- ELIMINACIÓN PERMANENTE DESDE LA BASE DE DATOS ---
+        function eliminarHallazgoPorId(idTracking) {
+            const h = matrizHallazgos.find(x => x.idTracking === idTracking);
+            if (!h) return;
+
+            showCustomConfirm(
+                "Borrar Daño", 
+                "¿Estás seguro de eliminar este registro permanentemente de la aeronave? Esta acción no se puede deshacer.", 
+                "Eliminar", 
+                "var(--amerijet-red)", 
+                async () => {
+                    if (h.id_db) {
+                        try {
+                            const { error } = await supabaseClient.from('avion_danos').delete().eq('id', h.id_db);
+                            if (error) throw error;
+                        } catch (e) {
+                            showToast("Error de conexión al eliminar.", "error"); return;
+                        }
+                    }
+                    matrizHallazgos = matrizHallazgos.filter(x => x.idTracking !== idTracking);
+                    delete fotosBanco[idTracking];
+                    marcarCambios();
+                    renderizarMatrizDinamica();
+                    renderizarHistorialEnCompartimentos();
+                    showToast("Registro eliminado de la base de datos.");
+                }
+            );
+        }
+
+        // --- SISTEMA DE INCIDENCIAS TEMPORALES DEL VUELO ---
+        function agregarIncidencia() {
+            const desc = document.getElementById('desc_incidencia').value.trim();
+            if(!desc) { showToast("Debe describir la incidencia.", "error"); return; }
+            
+            const idLocal = 'inc_' + Date.now();
+            incidenciasVuelo.push({
+                idTracking: idLocal,
+                descripcion: desc,
+                fecha: new Date().toISOString()
+            });
+
+            if(fotosBanco['temp_incidencia']) {
+                fotosBanco[idLocal] = [...fotosBanco['temp_incidencia']];
+                fotosBanco['temp_incidencia'] = [];
+            }
+
+            document.getElementById('desc_incidencia').value = "";
+            document.getElementById('gal_incidencias').innerHTML = "";
+            marcarCambios();
+            renderizarIncidencias();
+            showToast("Incidencia registrada. Se mostrará en el PDF.", "info");
+        }
+
+        function renderizarIncidencias() {
+            const cnt = document.getElementById('listaIncidencias');
+            cnt.innerHTML = "";
+            incidenciasVuelo.forEach(inc => {
+                let htmlF = "";
+                if(fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
+                    htmlF = `<div class="photo-gallery" style="margin-top:10px;">`;
+                    fotosBanco[inc.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`);
+                    htmlF += `</div>`;
+                }
+                cnt.innerHTML += `
+                    <div class="matrix-item" style="border-left-color: var(--warn-orange);">
+                        <div style="font-weight:bold; color:var(--amerijet-blue-dark);">${inc.descripcion}</div>
+                        ${htmlF}
+                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
+                    </div>
+                `;
+            });
+        }
+
+        function eliminarIncidencia(idTracking) {
+            incidenciasVuelo = incidenciasVuelo.filter(x => x.idTracking !== idTracking);
+            delete fotosBanco[idTracking];
+            marcarCambios();
+            renderizarIncidencias();
+        }
+
+        function togglePanelHallazgo(idCaja, sel) { document.getElementById('panel_' + idCaja).style.display = sel.value === 'HALLAZGO' ? 'block' : 'none'; }
+
+        function pasarAMatrizComp(nombreArea, idCaja, idSelect = null) {
+            const desc = document.getElementById('desc_' + idCaja).value.trim();
+            if(!desc) { showToast("Describe el daño antes de continuar.", "error"); return; }
+
+            const idLocalTemp = 'comp_' + Date.now();
+            matrizHallazgos.push({
+                id_db: null, 
+                idTracking: idLocalTemp, 
+                tipo: 'COMPARTIMENTO', 
+                area: nombreArea, 
+                ubicacion: 'General', 
+                componente: 'Estructura', 
+                descripcion: desc, 
+                consecuencia: 'N/A', 
+                severidad: 'N/A', 
+                estado_actual: 'ABIERTO', 
+                vuelo_origen: vueloData.vuelo, 
+                nota_solucion: '', 
+                esHistorico: false, 
+                creado_at: new Date().toISOString()
+            });
+
+            if(fotosBanco[idCaja]) { fotosBanco[idLocalTemp] = [...fotosBanco[idCaja]]; fotosBanco[idCaja] = []; }
+
+            document.getElementById('panel_' + idCaja).style.display = 'none'; 
+            
+            const targetSelect = document.getElementById(idSelect || ('sel_' + idCaja));
+            if(targetSelect) targetSelect.value = "OK";
+
+            document.getElementById('desc_' + idCaja).value = ""; 
+            document.getElementById('gal_' + idCaja).innerHTML = "";
+            
+            marcarCambios(); showToast("Daño agregado a la matriz. Recuerda Guardar en Nube.", "info");
+            renderizarMatrizDinamica(); renderizarHistorialEnCompartimentos();
+        }
+
+        function evaluarMainDeck(sel) {
+            const pFus = document.getElementById('panel_md_fuselaje'); const pLocks = document.getElementById('panelMapeoCLS');
+            pFus.style.display = sel.value === 'FUSELAJE' ? 'block' : 'none'; pLocks.style.display = sel.value === 'LOCKS' ? 'block' : 'none';
+        }
+
+        function dibujarPlanoAvionCSS(config, btnElem) {
+            if(btnElem) { document.querySelectorAll('.tab-btn').forEach(b => { b.style.background = 'white'; b.style.color = '#475569'; }); btnElem.style.background = 'var(--amerijet-blue)'; btnElem.style.color = 'white';}
+            configActualGlobal = config;
+            const cont = document.getElementById('capturePlanoHTML'); let html = `<div class="plane-shape border-${config}">`;
+            
+            if (config === 'A') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=12; i++) { html += `<div class="p-col"><div class="p-half" data-pos="A${i}R" onclick="toggleCeldaPlano(this)">A${i}R</div><div class="p-half" data-pos="A${i}L" onclick="toggleCeldaPlano(this)">A${i}L</div></div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'B') { html += `<div class="p-cell" data-pos="B1" onclick="toggleCeldaPlano(this)">B1</div>`; for(let i=2; i<=13; i++) { html += `<div class="p-col"><div class="p-half" data-pos="B${i}R" onclick="toggleCeldaPlano(this)">B${i}R</div><div class="p-half" data-pos="B${i}L" onclick="toggleCeldaPlano(this)">B${i}L</div></div>`; } html += `<div class="p-cell" data-pos="B14" onclick="toggleCeldaPlano(this)">B14</div>`; } 
+            else if (config === 'C') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=12; i++) { html += `<div class="p-cell" data-pos="C${i}" onclick="toggleCeldaPlano(this)">C${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'D') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=16; i++) { html += `<div class="p-cell" data-pos="D${i}" onclick="toggleCeldaPlano(this)">D${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'E') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=15; i++) { html += `<div class="p-cell" data-pos="E${i}" onclick="toggleCeldaPlano(this)">E${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'G') { html += `<div class="p-cell" style="flex: 1;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div><div class="p-cell" style="flex: 1;" data-pos="C2" onclick="toggleCeldaPlano(this)">C2</div><div class="p-cell p-wide" data-pos="G/P1" onclick="toggleCeldaPlano(this)">G/P1</div><div class="p-cell p-wide" data-pos="P2" onclick="toggleCeldaPlano(this)">P2</div><div class="p-cell p-wide" data-pos="P3" onclick="toggleCeldaPlano(this)">P3</div><div class="p-cell p-wide" data-pos="P4" onclick="toggleCeldaPlano(this)">P4</div><div class="p-cell p-wide" data-pos="P5" onclick="toggleCeldaPlano(this)">P5</div><div class="p-cell" style="flex: 1;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; }
+            html += `</div>`; cont.innerHTML = html;
+        }
+
+        function toggleCeldaPlano(element) {
+            element.classList.toggle('selected');
+            const sel = []; document.querySelectorAll('.p-cell.selected, .p-half.selected').forEach(el => sel.push(el.dataset.pos));
+            document.getElementById('inpUbicacion').value = sel.join(', ');
+            marcarCambios();
+        }
+
+        function toggleLock(nombreLock, elemento) {
+            elemento.classList.toggle('active');
+            const sel = []; 
+            document.querySelectorAll('.hotspot.active').forEach(el => {
+                const funcStr = el.getAttribute('onclick');
+                const lockName = funcStr.match(/'([^']+)'/)[1];
+                sel.push(lockName);
+            });
+            document.getElementById('inpComponente').value = sel.join(', ');
+            marcarCambios();
+        }
+
+        function capturarYComprimirFoto(input, galleryId, claveSeccion) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); reader.readAsDataURL(input.files[0]);
+                reader.onload = event => {
+                    const img = new Image(); img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas'); const scale = 500 / img.width; canvas.width = 500; canvas.height = img.height * scale;
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height); const dUrl = canvas.toDataURL('image/jpeg', 0.6);
+                        if(!fotosBanco[claveSeccion]) fotosBanco[claveSeccion] = [];
+                        fotosBanco[claveSeccion].push(dUrl);
+                        const th = document.createElement('img'); th.src = dUrl; th.className = 'photo-thumb';
+                        document.getElementById(galleryId).appendChild(th);
+                        marcarCambios();
+                    }
+                };
+            }
+        }
+
+        async function agregarLockAMatriz() {
+            const ubi = document.getElementById('inpUbicacion').value.trim(); 
+            const comp = document.getElementById('inpComponente').value.trim(); 
+            const dano = document.getElementById('selDanoSeveridad').value;
+            const notasAdd = document.getElementById('inpComentariosCLS').value.trim();
+
+            if(!ubi || !comp || !dano) { showToast("Faltan datos por llenar en la sección de Seguros.", "error"); return; }
+
+            const idT = 'cls_' + Date.now(); let iAvion = null; let iPaleta = null;
+            
+            const descripcionFinal = notasAdd ? `${dano} - Notas: ${notasAdd}` : dano;
+
+            try {
+                const rDiv = document.getElementById('renderContainer');
+                
+                rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${configActualGlobal}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
+                const cA = await html2canvas(rDiv, { scale: 1.5 }); iAvion = cA.toDataURL('image/jpeg', 0.8);
+                
+                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:450px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${comp}</div><div class="pallet-draw" style="display:block; margin: 0 auto; transform: scale(0.9);">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
+                const cP = await html2canvas(rDiv, { scale: 1.5 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
+                rDiv.innerHTML = "";
+
+                matrizHallazgos.push({
+                    id_db: null,
+                    idTracking: idT, 
+                    tipo: 'LOCKS', 
+                    area: 'Main Deck CLS', 
+                    ubicacion: ubi, 
+                    componente: comp, 
+                    descripcion: descripcionFinal, 
+                    consecuencia: 'N/A', 
+                    severidad: dano,
+                    estado_actual: 'ABIERTO', 
+                    vuelo_origen: vueloData.vuelo, 
+                    nota_solucion: '', 
+                    esHistorico: false, 
+                    imgAvion: iAvion, 
+                    imgPaleta: iPaleta, 
+                    creado_at: new Date().toISOString()
+                });
+
+                if(fotosBanco['cls_temp']) { fotosBanco[idT] = [...fotosBanco['cls_temp']]; fotosBanco['cls_temp'] = []; }
+                
+                document.getElementById('inpUbicacion').value = ""; 
+                document.getElementById('inpComponente').value = ""; 
+                document.getElementById('selDanoSeveridad').value = "";
+                document.getElementById('inpComentariosCLS').value = "";
+                document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected')); 
+                document.querySelectorAll('.hotspot').forEach(n => n.classList.remove('active'));
+                document.getElementById('gal_cls_map').innerHTML = "";
+                
+                document.getElementById('panelMapeoCLS').style.display = 'none';
+                document.getElementById('sel_main_deck').value = "OK";
+                
+                marcarCambios(); showToast("CLS agregado a la matriz. Recuerda Guardar en Nube.", "info");
+                renderizarMatrizDinamica(); renderizarHistorialEnCompartimentos();
+            } catch(e) { alert("Error al renderizar los mapas. Intenta nuevamente."); }
+        }
+
+        function renderizarMatrizDinamica() {
+            const cnt = document.getElementById('matrizDinamica');
+            if(matrizHallazgos.length === 0) { cnt.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">La matriz consolidará el historial del avión y los nuevos hallazgos.</div>`; return; }
+            
+            cnt.innerHTML = "";
+            matrizHallazgos.forEach((h, i) => {
+                const div = document.createElement('div');
+                div.className = `matrix-item ${h.esHistorico ? 'historical' : ''} ${h.estado_actual === 'REPARADO' ? 'resolved' : ''}`;
+                
+                let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
+                let htmlF = "";
+                if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
+                    htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
+                }
+
+                const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
+                const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : '-';
+
+                div.innerHTML = `
+                    ${b}
+                    <div style="color:var(--amerijet-blue); font-weight:900; font-size:14px;">📍 ${h.area} | Pos: ${h.ubicacion}</div>
+                    <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
+                    <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
+                    
+                    <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
+                        <span>📅 Rep: ${fRep}</span> <span>🔄 Upd: ${fUpd}</span>
+                    </div>
+
+                    ${htmlF}
+                    ${h.estado_actual === 'ABIERTO' ? `<button type="button" class="btn-update-matrix" onclick="abrirModalActualizacion(${i})">✏️ Reportar Actualización / Reparación</button>` : ''}
+                    <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
+                `;
+                cnt.appendChild(div);
+            });
+        }
+
+        function abrirModalActualizacion(idx) {
+            document.getElementById('modalIndex').value = idx;
+            document.getElementById('lblModalInfo').innerText = `${matrizHallazgos[idx].area} - ${matrizHallazgos[idx].descripcion}`;
+            document.getElementById('modalNotas').value = ""; document.getElementById('gal_modal_update').innerHTML = ""; fotosBanco['modal_temp'] = [];
+            document.getElementById('modalActualizar').style.display = 'flex';
+        }
+
+        function guardarActualizacion() {
+            const idx = document.getElementById('modalIndex').value;
+            matrizHallazgos[idx].estado_actual = document.getElementById('modalEstadoNuevo').value;
+            
+            const nuevasNotas = document.getElementById('modalNotas').value.trim();
+            if(nuevasNotas) matrizHallazgos[idx].nota_solucion = nuevasNotas;
+            
+            matrizHallazgos[idx].fechaActualizacion = new Date().toISOString();
+
+            if(fotosBanco['modal_temp'] && fotosBanco['modal_temp'].length > 0) {
+                if(!fotosBanco[matrizHallazgos[idx].idTracking]) fotosBanco[matrizHallazgos[idx].idTracking] = [];
+                fotosBanco[matrizHallazgos[idx].idTracking].push(...fotosBanco['modal_temp']);
+            }
+            document.getElementById('modalActualizar').style.display = 'none';
+            marcarCambios(); showToast("Estado actualizado. Recuerda Guardar en Nube.");
+            renderizarMatrizDinamica(); renderizarHistorialEnCompartimentos(); 
+        }
+
+        // =====================================
+        // GUARDADO A BASE DE DATOS Y ENCAPSULADO JSON
+        // =====================================
+        async function guardarProgresoEnBD() {
+            const btn = document.getElementById('btnGuardarBD');
+            btn.innerText = "⏳ Subiendo Nube..."; btn.disabled = true;
+
+            try {
+                // Guarda matriz oficial en avion_danos
+                for (let h of matrizHallazgos) {
+                    let ev = { 
+                        fotos: fotosBanco[h.idTracking] || [], 
+                        imgAvion: h.imgAvion, 
+                        imgPaleta: h.imgPaleta,
+                        tipo: h.tipo || 'COMPARTIMENTO',
+                        ubicacion: h.ubicacion || 'General'
+                    };
+                    
+                    let payloadDano = {
+                        matricula_avion: vueloData.tail,
+                        area: h.area,
+                        componente: h.componente,
+                        descripcion: h.descripcion,
+                        consecuencia: h.consecuencia || 'N/A',
+                        severidad: h.severidad || 'N/A',
+                        estado_actual: h.estado_actual,
+                        vuelo_origen: h.vuelo_origen,
+                        nota_solucion: h.nota_solucion || '',
+                        evidencia: JSON.stringify(ev), 
+                        actualizado_at: new Date().toISOString()
+                    };
+
+                    if (h.id_db) {
+                        const { error } = await supabaseClient.from('avion_danos').update(payloadDano).eq('id', h.id_db);
+                        if (error) throw error;
+                    } else {
+                        payloadDano.creado_at = h.creado_at || new Date().toISOString();
+                        const { data: newDano, error } = await supabaseClient.from('avion_danos').insert([payloadDano]).select('id').single();
+                        if (error) throw error; 
+                        if (newDano) h.id_db = newDano.id; 
+                    }
+                }
+
+                // Generar paquete para INCIDENCIAS TEMPORALES
+                const paqueteTemporales = {
+                    notas: document.getElementById('txtNotasFinales').value,
+                    incidencias: incidenciasVuelo.map(inc => ({
+                        idTracking: inc.idTracking,
+                        descripcion: inc.descripcion,
+                        fecha: inc.fecha,
+                        fotos: fotosBanco[inc.idTracking] || []
+                    }))
+                };
+                const notasEncapsuladas = "||_JSON_||" + JSON.stringify(paqueteTemporales);
+
+                const payloadVuelo = {
+                    vuelo_operacion_id: operacionId,
+                    inspector_nombre: document.getElementById('selInspector').value,
+                    notas_adicionales: notasEncapsuladas
+                };
+                
+                const { data: exist } = await supabaseClient.from('avion_inspecciones').select('id').eq('vuelo_operacion_id', operacionId).limit(1);
+                if (exist && exist.length > 0) {
+                    await supabaseClient.from('avion_inspecciones').update(payloadVuelo).eq('id', exist[0].id);
+                } else {
+                    await supabaseClient.from('avion_inspecciones').insert([payloadVuelo]);
+                }
+
+                hayCambiosSinGuardar = false;
+                showToast("✅ ¡Progreso Salvado en la Nube!"); 
+            } 
+            catch(e) { showCustomAlert("Error de Base de Datos", e.message, "error"); } 
+            finally { btn.innerText = "💾 Guardar Nube"; btn.disabled = false; }
+        }
+
+        // =====================================
+        // GENERADOR DE CONFIGURACIÓN INTELIGENTE (RE-DIBUJAR PDF)
+        // =====================================
+        function getConfigFromUbicacion(ubi) {
+            if (!ubi) return 'A';
+            const str = ubi.toUpperCase();
+            if (str.includes('P')) return 'G';
+            if (str.includes('E')) return 'E';
+            if (str.includes('D')) return 'D';
+            if (str.includes('C')) return 'C';
+            if (str.includes('B')) return 'B';
+            return 'A';
+        }
+
+        // =====================================
+        // RENDER PDF (INCLUYE RECONSTRUCCIÓN CLS)
+        // =====================================
+        async function generarPDFCarta() {
+            const btn = document.getElementById('btnDescargarPDF');
+            btn.innerText = "⏳ Creando PDF..."; btn.disabled = true;
+
+            try {
+                // 1. PRE-PROCESAR MAPAS CLS FALTANTES EN SEGUNDO PLANO
+                const rDiv = document.getElementById('renderContainer');
+                
+                for (let h of matrizHallazgos) {
+                    if (h.tipo === 'LOCKS' && (!h.imgAvion || !h.imgPaleta)) {
+                        const guessedConfig = getConfigFromUbicacion(h.ubicacion);
+                        dibujarPlanoAvionCSS(guessedConfig, null);
+                        
+                        const cells = (h.ubicacion || '').split(',').map(s => s.trim());
+                        cells.forEach(c => {
+                            const el = document.querySelector(`.p-cell[data-pos="${c}"], .p-half[data-pos="${c}"], .p-wide[data-pos="${c}"]`);
+                            if (el) el.classList.add('selected');
+                        });
+                        
+                        rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${guessedConfig}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
+                        const cA = await html2canvas(rDiv, { scale: 1.5 }); 
+                        h.imgAvion = cA.toDataURL('image/jpeg', 0.8);
+                        
+                        document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected'));
+
+                        const locks = (h.componente || '').split(',').map(s => s.trim());
+                        document.querySelectorAll('.hotspot').forEach(el => el.classList.remove('active'));
+                        document.querySelectorAll('.hotspot').forEach(el => {
+                            const funcStr = el.getAttribute('onclick') || '';
+                            locks.forEach(lockName => {
+                                if (funcStr.includes(`'${lockName}'`)) el.classList.add('active');
+                            });
+                        });
+                        
+                        const coreText = cells.length > 0 ? cells[0] : 'MD';
+                        const pct = document.querySelector('.pallet-core-text');
+                        if(pct) pct.innerText = coreText;
+
+                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:450px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div class="pallet-draw" style="display:block; margin: 0 auto; transform: scale(0.9);">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
+                        const cP = await html2canvas(rDiv, { scale: 1.5 }); 
+                        h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
+                        
+                        rDiv.innerHTML = "";
+                        document.querySelectorAll('.hotspot').forEach(n => n.classList.remove('active'));
+                    }
+                }
+                
+                // Restauramos el estado visual original en pantalla
+                dibujarPlanoAvionCSS(configActualGlobal, null); 
+
+                // 2. CREACIÓN DEL DOCUMENTO PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                const insp = document.getElementById('selInspector').value;
+                
+                // PORTADA
+                doc.setFillColor(10, 37, 64); doc.rect(0, 0, 215.9, 25, "F");
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(255, 255, 255);
+                doc.text("AMERIJET INTERNATIONAL AIRCRAFT AUDIT", 15, 12);
+                doc.setFontSize(10); doc.setFont("Helvetica", "normal");
+                doc.text("AIRCRAFT STRUCTURAL & OPERATIONAL CONDITION REPORT", 15, 18);
+
+                doc.setTextColor(33, 33, 33);
+                doc.setDrawColor(203, 213, 225); 
+                doc.setFillColor(248, 250, 252); 
+                doc.roundedRect(15, 30, 185.9, 28, 3, 3, "FD");
+
+                doc.setFont("Helvetica", "bold"); doc.text("FLIGHT DETAILS", 20, 37);
+                doc.setFont("Helvetica", "normal"); doc.text(`Flight: ${vueloData.vuelo}`, 20, 43);
+                doc.text(`Tail: ${vueloData.tail}`, 20, 48);
+                doc.text(`Route: ${vueloData.ruta || 'N/A'}`, 20, 53);
+
+                doc.setFont("Helvetica", "bold"); doc.text("INSPECTION DETAILS", 110, 37);
+                doc.setFont("Helvetica", "normal"); doc.text(`Date: ${new Date().toLocaleDateString()}`, 110, 43);
+                doc.text(`Inspector: ${insp}`, 110, 48);
+                doc.text(`Status: Official Record`, 110, 53);
+
+                let cy = 65;
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("1. DISCREPANCIES SUMMARY", 15, cy);
+                
+                if(matrizHallazgos.length > 0) {
+                    const tData = matrizHallazgos.map((h, i) => {
+                        const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
+                        return [ i+1, h.estado_actual, h.area, h.componente, h.descripcion, fRep ];
+                    });
+                    
+                    doc.autoTable({ 
+                        startY: cy + 4, 
+                        head: [['#', 'Status', 'Area', 'Component', 'Damage', 'Reported']], 
+                        body: tData, 
+                        theme: 'grid', 
+                        headStyles: { fillColor: [10, 37, 64] }, 
+                        styles: { fontSize: 8, cellPadding: 3 } 
+                    });
+                    cy = doc.lastAutoTable.finalY + 15;
+                } else { 
+                    cy += 8; doc.setFont("Helvetica", "italic"); doc.setFontSize(10);
+                    doc.text("No structure discrepancies reported for this aircraft.", 15, cy); 
+                    cy += 15; 
+                }
+
+                // FOTOS DE HALLAZGOS ESTRUCTURALES Y CLS
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("2. DETAILED FINDINGS & EVIDENCE", 15, cy);
+                cy += 8;
+
+                if(matrizHallazgos.length === 0) {
+                    doc.setFont("Helvetica", "italic"); doc.setFontSize(10);
+                    doc.text("No structural evidence required.", 15, cy); cy += 15;
+                }
+
+                for (let i = 0; i < matrizHallazgos.length; i++) {
+                    const h = matrizHallazgos[i];
+                    if(cy > 240) { doc.addPage(); cy = 20; }
+
+                    doc.setFillColor(226, 232, 240);
+                    doc.rect(15, cy, 185.9, 8, "F");
+                    doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.setFont("Helvetica", "bold");
+                    doc.text(`FINDING #${i+1}: [${h.area.toUpperCase()}] - ${h.componente.toUpperCase()}`, 18, cy + 5.5);
+                    cy += 12;
+
+                    doc.setTextColor(51, 65, 85); doc.setFontSize(10); doc.setFont("Helvetica", "normal");
+                    const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
+                    const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : 'N/A';
+
+                    doc.text(`Location: ${h.ubicacion}`, 15, cy);
+                    doc.text(`Status: ${h.estado_actual}`, 110, cy); cy += 6;
+                    doc.text(`Reported: ${fRep}  |  Last Update: ${fUpd}`, 15, cy); cy += 7;
+                    
+                    doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
+                    doc.setFont("Helvetica", "normal"); doc.text(`${h.descripcion}`, 33, cy); cy += 6;
+                    
+                    if(h.nota_solucion) {
+                        doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
+                        doc.setFont("Helvetica", "normal"); doc.text(`${h.nota_solucion}`, 28, cy); cy += 6;
+                    }
+                    cy += 2;
+
+                    if (h.tipo === 'LOCKS' && h.imgAvion && h.imgPaleta) {
+                        if(cy > 160) { doc.addPage(); cy = 20; }
+                        doc.setFont("Helvetica", "bold"); doc.text("CLS Maps Evidence:", 15, cy); cy += 4;
+                        doc.addImage(h.imgAvion, 'JPEG', 15, cy, 180, 25); cy += 28;
+                        doc.addImage(h.imgPaleta, 'JPEG', 45, cy, 110, 55); cy += 60;
+                    }
+
+                    if (fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
+                        doc.setFont("Helvetica", "bold"); doc.text("Photographic Evidence:", 15, cy); cy += 4;
+                        let fx = 15; let rowHeight = 0;
+                        
+                        fotosBanco[h.idTracking].forEach((b64) => {
+                            if (fx > 130) { fx = 15; cy += 65; } 
+                            if (cy > 210) { doc.addPage(); cy = 20; }
+                            doc.addImage(b64, 'JPEG', fx, cy, 85, 60); 
+                            fx += 90; rowHeight = 60;
+                        });
+                        cy += rowHeight + 10;
+                    } else { cy += 5; }
+                    
+                    doc.setDrawColor(226, 232, 240); doc.line(15, cy, 200.9, cy); cy += 8;
+                }
+
+                // SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO
+                if(incidenciasVuelo.length > 0) {
+                    if(cy > 240) { doc.addPage(); cy = 20; }
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(15, 23, 42);
+                    doc.text("3. FLIGHT OPERATION INCIDENTS (TEMPORARY)", 15, cy); cy += 8;
+
+                    for (let i = 0; i < incidenciasVuelo.length; i++) {
+                        const inc = incidenciasVuelo[i];
+                        if(cy > 250) { doc.addPage(); cy = 20; }
+                        
+                        doc.setFont("Helvetica", "bold"); doc.setFontSize(10);
+                        doc.text(`Incident #${i+1}:`, 15, cy);
+                        doc.setFont("Helvetica", "normal");
+                        doc.text(`${inc.descripcion}`, 35, cy); cy += 5;
+
+                        if (fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
+                            let fx = 15; let rowHeight = 0;
+                            fotosBanco[inc.idTracking].forEach((b64) => {
+                                if (fx > 130) { fx = 15; cy += 65; } 
+                                if (cy > 210) { doc.addPage(); cy = 20; }
+                                doc.addImage(b64, 'JPEG', fx, cy, 85, 60); 
+                                fx += 90; rowHeight = 60;
+                            });
+                            cy += rowHeight + 5;
+                        } else { cy += 2; }
+                    }
+                }
+
+                doc.save(`Aircraft_Report_${vueloData.tail}.pdf`); showToast("PDF generado exitosamente.");
+            } catch(e) { alert("Error PDF: " + e.message); console.error(e); }
+            finally { btn.innerText = "📄 Bajar PDF Oficial"; btn.disabled = false; }
+        }
+
+        inicializar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Equipos GSE | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #1A365D; 
+            --amerijet-blue-dark: #0F172A; 
+            --amerijet-red: #E11D48; 
+            --bg-color: #F8FAFC; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+            --sidebar-width: 260px;
+            --success-green: #10B981; 
+            --warn-orange: #F59E0B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent;}
+        
+        /* SIDEBAR */
+        .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer;}
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+
+        .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-info-text { display: flex; flex-direction: column; }
+        .user-info-text strong { font-size: 14px; color: white; }
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
+
+        .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; border:none; background:transparent; cursor:pointer; text-align:left; font-family:inherit;}
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+
+        /* HEADER Y MAIN CONTENT */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; flex-shrink: 0; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        .header-title { font-weight: 900; font-size: 16px; color: var(--amerijet-blue); display: flex; flex-direction: column; line-height: 1.2;}
+        .header-title span { font-size: 11px; color: #38BDF8; font-weight: 700;}
+        .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor:pointer;}
+        .btn-volver-top:hover { background: #E2E8F0; }
+
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 30px;}
+        .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 1000px; margin: 0 auto; width: 100%; flex: 1; }
+        
+        /* TARJETA SUPERIOR AZUL */
+        .info-card { background: var(--amerijet-blue); padding: 20px 25px; border-radius: 12px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(26,54,93,0.15); flex-wrap: wrap; gap: 15px;}
+        .info-card h1 { font-size: 28px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
+
+        /* GSE GRID SYSTEM */
+        .gse-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        
+        .gse-card { background: white; padding: 18px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 12px; transition: 0.2s; }
+        .gse-card:hover { border-color: #CBD5E1; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .gse-card-title { font-weight: 900; font-size: 14px; color: var(--amerijet-blue-dark); display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed #E2E8F0; padding-bottom: 8px; margin-bottom: 5px; }
+
+        .input-group { display: flex; flex-direction: column; gap: 5px; }
+        .input-group label { font-size: 10px; font-weight: 800; color: #64748B; text-transform: uppercase; }
+        .input-group input { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--text-main); outline: none; transition: 0.2s; width: 100%; }
+        .input-group input:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .input-group input[type="number"] { text-align: center; font-size: 16px; }
+
+        .gse-card-highlight { border: 2px solid var(--amerijet-blue); background: #F8FAFC; }
+        .gse-card-highlight .gse-card-title { color: var(--amerijet-blue); border-bottom-color: #CBD5E1; }
+
+        /* DINÁMICOS */
+        .gse-code-input { border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-weight: 700; width: 100%; text-transform: uppercase; color: var(--amerijet-blue-dark); outline:none; transition:0.2s;}
+        .gse-code-input:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+        /* BOTTOM BAR */
+        .bottom-bar { background: white; padding: 15px 25px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; border-top: 1px solid #E2E8F0; z-index: 100; flex-shrink: 0;}
+        .btn-panel { border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 13px; cursor: pointer; color: white; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; transition: 0.2s;}
+        .btn-save { background: var(--amerijet-blue); box-shadow: 0 4px 10px rgba(10,37,64,0.15); }
+        .btn-save:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px);}
+
+        /* MODALES Y TOAST */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(2px); padding: 15px;}
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); text-align: center;}
+
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none; }
+        .toast { padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideUp 0.3s ease-out forwards; display: flex; align-items: center; gap: 8px;}
+        .toast.success { background: #10B981; color: white; border: 1px solid #059669;}
+        .toast.error { background: #EF4444; color: white; border: 1px solid #DC2626;}
+        .toast.info { background: #3B82F6; color: white; border: 1px solid #2563EB;}
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
+
+        @media (max-width: 1024px) { 
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; }
+            .menu-toggle { display: block; }
+            .container { padding: 15px; }
+            .bottom-bar { padding: 12px 15px; flex-wrap: wrap; }
+            .btn-panel { width: 100%; flex: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ LATERAL -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo_3.png" alt="Logo" onclick="navegarA('dashboard.html')" style="cursor:pointer;">
+            <span>Cargo Inspect Pro</span>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info-text">
+                <strong id="lblUserName">Cargando...</strong>
+                <span id="lblUserRol">...</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-link" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
+            <button class="nav-link" onclick="navegarA('uld_gestion.html')">📦 Inventario ULD</button>
+            <button class="nav-link" id="btnAdminPanel" style="display: none;" onclick="navegarA('admin_panel.html')">👑 Panel de Control</button>
+            <button class="nav-link" id="btnReportesHistoricos" style="display: none;" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="logoutSeguro()">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <!-- DATALISTS PARA AUTOCOMPLETADO INTELIGENTE -->
+    <datalist id="dl_planta_elec"></datalist>
+    <datalist id="dl_planta_neu"></datalist>
+    <datalist id="dl_loader_md"></datalist>
+    <datalist id="dl_loader_ld"></datalist>
+    <datalist id="dl_faja"></datalist>
+    <datalist id="dl_montacargas"></datalist>
+    <datalist id="dl_pushback"></datalist>
+    <datalist id="dl_barra"></datalist>
+    <datalist id="dl_tractor"></datalist>
+    <datalist id="dl_escalera"></datalist>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="header-title">Equipos GSE<span>Reporte de Apoyo Terrestre</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 12px; font-weight: 900; background: #EFF6FF; color: var(--amerijet-blue); padding: 6px 12px; border-radius: 6px; border: 1px solid #BFDBFE;" id="lblTailHead">---</div>
+                <button class="btn-volver-top" onclick="navegarA('dashboard.html')">⬅️ Vuelos</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                
+                <div class="info-card">
+                    <div>
+                        <div style="font-size: 11px; opacity: 0.9; font-weight: 800; text-transform: uppercase;">Vuelo Operativo</div>
+                        <h1 id="lblVuelo">Cargando...</h1>
+                    </div>
+                </div>
+
+                <form id="formGSE" class="gse-grid">
+                    
+                    <!-- PLANTA ELÉCTRICA -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">⚡ Planta Eléctrica</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_planta_elec" min="0" value="0" oninput="ajustarCamposGSE('planta_elec', 'Ej: P-01')">
+                            </div>
+                            <div id="container_planta_elec" style="flex: 1; display:flex; flex-direction:column; gap:8px;">
+                                <!-- Contenido Dinámico JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PLANTA NEUMÁTICA -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">💨 Planta Neumática</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_planta_neu" min="0" value="0" oninput="ajustarCamposGSE('planta_neu', 'Ej: PN-05')">
+                            </div>
+                            <div id="container_planta_neu" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- LOADER MAIN DECK -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🏗️ Loader Main Deck</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_loader_md" min="0" value="0" oninput="ajustarCamposGSE('loader_md', 'Ej: L-07')">
+                            </div>
+                            <div id="container_loader_md" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- LOADER LOWER DECK -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🚜 Loader Lower Deck</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_loader_ld" min="0" value="0" oninput="ajustarCamposGSE('loader_ld', 'Ej: L-02')">
+                            </div>
+                            <div id="container_loader_ld" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- FAJA -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🎢 Faja / Belt Loader</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_faja" min="0" value="0" oninput="ajustarCamposGSE('faja', 'Ej: F-11')">
+                            </div>
+                            <div id="container_faja" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- MONTACARGAS -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🛗 Montacargas</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_montacargas" min="0" value="0" oninput="ajustarCamposGSE('montacargas', 'Ej: M-13')">
+                            </div>
+                            <div id="container_montacargas" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- PUSH BACK -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🛫 Remolcador (Push Back)</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_pushback" min="0" value="0" oninput="ajustarCamposGSE('pushback', 'Ej: R-02')">
+                            </div>
+                            <div id="container_pushback" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- BARRA -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🔗 Barra de Remolque</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_barra" min="0" value="0" oninput="ajustarCamposGSE('barra', 'Ej: MTO-586')">
+                            </div>
+                            <div id="container_barra" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- TRACTOR -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🚂 Tractor</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_tractor" min="0" value="0" oninput="ajustarCamposGSE('tractor', 'Ej: T-01')">
+                            </div>
+                            <div id="container_tractor" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- ESCALERA -->
+                    <div class="gse-card">
+                        <div class="gse-card-title">🪜 Escalera</div>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div class="input-group" style="width: 30%;">
+                                <label>Cant.</label>
+                                <input type="number" id="cant_escalera" min="0" value="0" oninput="ajustarCamposGSE('escalera', 'Ej: MTO-C 574')">
+                            </div>
+                            <div id="container_escalera" style="flex: 1; display:flex; flex-direction:column; gap:8px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- PERSONAL DE APOYO -->
+                    <div class="gse-card gse-card-highlight">
+                        <div class="gse-card-title">👥 Personal de Apoyo Terrestre</div>
+                        <div class="input-group">
+                            <label>Cantidad de Personas (Total)</label>
+                            <input type="number" id="personal_apoyo" min="0" value="0" oninput="marcarCambios()" style="font-size: 24px; padding: 15px;">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            
+            <div class="bottom-bar">
+                <button type="button" class="btn-panel btn-save" id="btnGuardarBD" onclick="guardarGSE()">💾 Guardar Progresivamente</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN -->
+    <div class="modal-overlay" id="customConfirmModal">
+        <div class="modal-content">
+            <div style="font-size: 45px; margin-bottom: 10px;">⚠️</div>
+            <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px;">Confirmar</h3>
+            <p id="confirmMessage" style="font-size: 14px; color: #475569; margin-bottom: 25px; line-height: 1.5;"></p>
+            <div style="display: flex; gap: 10px; flex-direction:column;">
+                <button id="btnConfirmAction" style="color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; transition: 0.2s;">Confirmar</button>
+                <button onclick="document.getElementById('customConfirmModal').style.display='none'" style="background:#F1F5F9; color:#475569; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; transition: 0.2s;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast-container"></div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        const operacionId = new URLSearchParams(window.location.search).get('id');
+        let miEstacion = "SAL";
+        let estacionVuelo = "SAL"; // FIX ENTERPRISE: Variable para detectar estación del vuelo
+        let existeRegistro = false;
+        let idRegistro = null;
+        let hayCambiosSinGuardar = false;
+
+        const placeholders = {
+            'planta_elec': 'Ej: P-01',
+            'planta_neu': 'Ej: PN-05',
+            'loader_md': 'Ej: L-07',
+            'loader_ld': 'Ej: L-02',
+            'faja': 'Ej: F-11',
+            'montacargas': 'Ej: M-13',
+            'pushback': 'Ej: R-02',
+            'barra': 'Ej: MTO-586',
+            'tractor': 'Ej: T-01',
+            'escalera': 'Ej: MTO-C 574'
+        };
+
+        const listaGSE = Object.keys(placeholders);
+
+        function marcarCambios() { hayCambiosSinGuardar = true; }
+        
+        function navegarA(url) {
+            if (hayCambiosSinGuardar) {
+                showCustomConfirm(
+                    "⚠️ Cambios sin guardar", 
+                    "No has guardado los equipos GSE. Si sales ahora, perderás los cambios.<br><br><b>¿Deseas salir y perder los cambios?</b>", 
+                    "Salir sin guardar", 
+                    "var(--amerijet-red)", 
+                    () => { window.location.href = url; }
+                );
+            } else { window.location.href = url; }
+        }
+
+        function logoutSeguro() {
+            if (hayCambiosSinGuardar) {
+                showCustomConfirm(
+                    "⚠️ Cambios sin guardar", 
+                    "Tienes cambios pendientes en el reporte GSE. ¿Salir y perder los cambios?", 
+                    "Cerrar Sesión", 
+                    "var(--amerijet-red)", 
+                    async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }
+                );
+            } else {
+                localStorage.removeItem('cargo_current_station'); supabaseClient.auth.signOut().then(() => window.location.href = 'index.html');
+            }
+        }
+        window.addEventListener('beforeunload', (e) => { if (hayCambiosSinGuardar) { e.preventDefault(); e.returnValue = ''; } });
+
+        function showToast(mensaje, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            toast.className = `toast ${type}`; 
+            toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'fadeOutToast 0.3s ease-out forwards'; setTimeout(() => toast.remove(), 300); }, 2500);
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+
+        function showCustomConfirm(title, message, confirmBtnText, btnColor, callback) {
+            document.getElementById('confirmTitle').innerText = title; 
+            document.getElementById('confirmTitle').style.color = btnColor;
+            document.getElementById('confirmMessage').innerHTML = message;
+            const btn = document.getElementById('btnConfirmAction'); 
+            btn.innerText = confirmBtnText; btn.style.background = btnColor;
+            btn.onclick = () => { document.getElementById('customConfirmModal').style.display = 'none'; if(callback) callback(); };
+            document.getElementById('customConfirmModal').style.display = 'flex';
+        }
+
+        // ==========================================
+        // CREADOR DINÁMICO DE CASILLAS
+        // ==========================================
+        window.ajustarCamposGSE = function(equipo, placeholder) {
+            marcarCambios();
+            const cant = parseInt(document.getElementById(`cant_${equipo}`).value) || 0;
+            const container = document.getElementById(`container_${equipo}`);
+
+            // Extraer valores existentes para no perderlos si el usuario aumenta la cantidad
+            const existingInputs = container.querySelectorAll('.gse-code-input');
+            let values = [];
+            existingInputs.forEach(inp => values.push(inp.value));
+
+            container.innerHTML = '';
+
+            if (cant <= 0) {
+                // Cantidad 0 = N/A visual estático
+                container.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:3px;">
+                        <label style="font-size:9px; font-weight:800; color:#64748B;">CÓDIGO(S)</label>
+                        <input type="text" value="N/A" readonly style="background:#F1F5F9; color:#94A3B8; text-align:center; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 12px; font-size:14px; font-weight:700; width:100%;">
+                    </div>`;
+                return;
+            }
+
+            // Crear dinámicamente las casillas según el número
+            for (let i = 0; i < cant; i++) {
+                let val = values[i] || '';
+                if (val === 'N/A') val = '';
+                
+                let labelText = cant > 1 ? `CÓDIGO ${i+1}` : `CÓDIGO(S)`;
+
+                container.innerHTML += `
+                    <div style="display:flex; flex-direction:column; gap:3px;">
+                        <label style="font-size:9px; font-weight:800; color:#64748B;">${labelText}</label>
+                        <input type="text" class="gse-code-input" id="cod_${equipo}_${i}" list="dl_${equipo}" autocomplete="off" value="${val}" placeholder="${placeholder}" oninput="marcarCambios()">
+                    </div>
+                `;
+            }
+            
+            // Si creció de 0 a X, hacer focus automáticamente en la primera casilla vacía
+            if(existingInputs.length === 0 && cant > 0) {
+                setTimeout(() => {
+                    const firstInput = document.getElementById(`cod_${equipo}_0`);
+                    if(firstInput) firstInput.focus();
+                }, 100);
+            }
+        }
+
+        async function inicializar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre, estacion_base').eq('id', session.user.id).single();
+            if (perfil) {
+                document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
+                document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
+                miEstacion = (perfil.estacion_base || "SAL").split(',')[0].trim();
+                
+                if(perfil.rol === 'admin' || perfil.rol === 'supervisor') {
+                    document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                    if(perfil.rol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+                }
+            }
+
+            if(!operacionId) { window.location.href='dashboard.html'; return; }
+
+            try {
+                // Info del Vuelo Y ESTACIÓN DEL VUELO
+                const { data: op } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, estacion_registro').eq('id', operacionId).single();
+                if(op) {
+                    document.getElementById('lblVuelo').innerText = op.vuelo_id;
+                    document.getElementById('lblTailHead').innerText = op.matricula_avion;
+                    // FIX ENTERPRISE: Detectar la estación real del vuelo, no la del usuario
+                    estacionVuelo = op.estacion_registro || miEstacion;
+                }
+
+                // Generar Listas Autocompletado (basadas en la estación del vuelo)
+                await poblarDatalists(estacionVuelo);
+
+                // Configuración Inicial por defecto de contenedores (N/A)
+                listaGSE.forEach(eq => {
+                    document.getElementById(`cant_${eq}`).value = 0;
+                    ajustarCamposGSE(eq, placeholders[eq]);
+                });
+
+                // Cargar datos GSE si existen para este vuelo
+                const { data: gse } = await supabaseClient.from('vuelos_gse').select('*').eq('vuelo_operacion_id', operacionId).maybeSingle();
+                if (gse) {
+                    existeRegistro = true;
+                    idRegistro = gse.id;
+
+                    listaGSE.forEach(eq => {
+                        const cant = gse[`${eq}_cant`] || 0;
+                        const cods = (gse[`${eq}_cod`] || '').split(',').map(s => s.trim());
+                        
+                        document.getElementById(`cant_${eq}`).value = cant;
+                        ajustarCamposGSE(eq, placeholders[eq]); 
+                        
+                        if (cant > 0) {
+                            for (let i = 0; i < cant; i++) {
+                                const inp = document.getElementById(`cod_${eq}_${i}`);
+                                if (inp && cods[i] && cods[i] !== 'N/A') inp.value = cods[i];
+                            }
+                        }
+                    });
+                    document.getElementById('personal_apoyo').value = gse.personal_apoyo || 0;
+                }
+                
+                setTimeout(() => hayCambiosSinGuardar = false, 300);
+            } catch(e) { console.error("Error de inicialización", e); }
+        }
+
+        async function poblarDatalists(estacion) {
+            try {
+                const { data: gses } = await supabaseClient.from('vuelos_gse').select('*').eq('estacion', estacion);
+                if(!gses || gses.length === 0) return;
+
+                const extractUnique = (campo) => {
+                    const set = new Set();
+                    gses.forEach(row => {
+                        if(row[campo] && row[campo] !== 'N/A' && row[campo] !== '') {
+                            // Separar por si están unidos por coma
+                            row[campo].split(',').forEach(code => set.add(code.trim().toUpperCase()));
+                        }
+                    });
+                    return Array.from(set).sort();
+                };
+
+                listaGSE.forEach(eq => {
+                    const arr = extractUnique(`${eq}_cod`);
+                    const dl = document.getElementById(`dl_${eq}`);
+                    dl.innerHTML = ''; 
+                    arr.forEach(val => {
+                        if(val) dl.innerHTML += `<option value="${val}">`;
+                    });
+                });
+            } catch(e) { console.error("Error al poblar listas de GSE", e); }
+        }
+
+        async function guardarGSE() {
+            const btn = document.getElementById('btnGuardarBD');
+            btn.innerText = "⏳ Guardando Nube..."; btn.disabled = true;
+
+            const payload = {
+                vuelo_operacion_id: operacionId,
+                estacion: estacionVuelo, // FIX ENTERPRISE: Se guarda en la estación del vuelo
+                updated_at: new Date().toISOString()
+            };
+
+            // Extracción inteligente de casillas dinámicas
+            listaGSE.forEach(eq => {
+                const cant = parseInt(document.getElementById(`cant_${eq}`).value) || 0;
+                payload[`${eq}_cant`] = cant;
+                
+                if (cant === 0) {
+                    payload[`${eq}_cod`] = 'N/A';
+                } else {
+                    let codes = [];
+                    for (let i = 0; i < cant; i++) {
+                        const inp = document.getElementById(`cod_${eq}_${i}`);
+                        if (inp && inp.value.trim() !== '') codes.push(inp.value.trim().toUpperCase());
+                    }
+                    payload[`${eq}_cod`] = codes.length > 0 ? codes.join(', ') : 'N/A';
+                }
+            });
+
+            payload.personal_apoyo = parseInt(document.getElementById('personal_apoyo').value) || 0;
+
+            try {
+                if(existeRegistro) {
+                    const { error } = await supabaseClient.from('vuelos_gse').update(payload).eq('id', idRegistro);
+                    if(error) throw error;
+                } else {
+                    const { data, error } = await supabaseClient.from('vuelos_gse').insert([payload]).select('id').single();
+                    if(error) throw error;
+                    if(data) { existeRegistro = true; idRegistro = data.id; }
+                }
+
+                hayCambiosSinGuardar = false;
+                showToast("✅ Progreso guardado correctamente.");
+                
+                // Aprender códigos nuevos y actualizar sugerencias basados en la estación del vuelo
+                await poblarDatalists(estacionVuelo);
+            } catch(e) {
+                showToast("Error al guardar: " + e.message, "error");
+            } finally {
+                btn.innerText = "💾 Guardar Progresivamente"; btn.disabled = false;
+            }
+        }
+
+        inicializar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Estado de Flota | Cargo Inspect Pro</title>
+    <link rel="icon" type="image/png" href="logo_3.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root { 
+            --amerijet-blue: #0A2540; 
+            --amerijet-blue-dark: #051529; 
+            --amerijet-red: #E11D48; 
+            --bg-color: #F1F5F9; 
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-radius: 12px;
+            --sidebar-width: 260px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent;}
+        
+        /* BANNER OFFLINE */
+        #offlineBanner {
+            position: fixed; top: 0; left: 0; width: 100%; background: var(--amerijet-red); color: white;
+            text-align: center; padding: 12px; font-weight: 800; font-size: 13px; z-index: 9999;
+            transform: translateY(-100%); transition: transform 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+        #offlineBanner.active { transform: translateY(0); }
+
+        /* SIDEBAR OSCURO */
+        .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer; }
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+
+        .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-info-text { display: flex; flex-direction: column; }
+        .user-info-text strong { font-size: 14px; color: white; }
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
+
+        .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; border:none; background:transparent; cursor:pointer; text-align:left;}
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+
+        /* TOP HEADER */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; flex-shrink:0;}
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px;}
+
+        /* CONTENIDO PRINCIPAL */
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
+        .container { padding: 30px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+        /* PANEL ANALÍTICO GLOBAL (KPI) */
+        .kpi-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .kpi-card { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 15px;}
+        .kpi-icon { font-size: 35px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px;}
+        .icon-blue { background: #EFF6FF; color: #2563EB; }
+        .icon-green { background: #ECFDF5; color: #10B981; }
+        .icon-red { background: #FEF2F2; color: #E11D48; }
+        
+        .kpi-data { display: flex; flex-direction: column; }
+        .kpi-data span { font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; margin-bottom: 2px;}
+        .kpi-data strong { font-size: 24px; font-weight: 900; color: var(--amerijet-blue-dark); }
+        .kpi-data small { font-size: 11px; color: #94A3B8; font-weight: 600; margin-top: 2px;}
+
+        /* GRID DE FLOTA */
+        .fleet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 25px; margin-top: 10px;}
+        
+        .fleet-card { background: white; border-radius: 16px; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;}
+        .fleet-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1;}
+        
+        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E2E8F0; }
+        .header-optimo { background: linear-gradient(135deg, #F0FDF4, #D1FAE5); }
+        .header-dano { background: linear-gradient(135deg, #FEF2F2, #FEE2E2); }
+        
+        .tail-number { font-size: 22px; font-weight: 900; color: var(--amerijet-blue-dark); display: flex; align-items: center; gap: 10px;}
+        
+        .status-badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .optimo { background: white; color: #059669; border: 1px solid #34D399; }
+        .dano { background: white; color: #DC2626; border: 1px solid #F87171; }
+
+        .card-body { padding: 20px; background: #F8FAFC; flex: 1; }
+        
+        .damage-list { display: flex; flex-direction: column; gap: 12px; }
+        .damage-item { background: white; padding: 15px; border-radius: 10px; border: 1px dashed #CBD5E1; border-left: 4px solid #EF4444; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+        
+        .damage-title { font-size: 13px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 6px;}
+        .damage-desc { font-size: 12px; color: #475569; line-height: 1.4; margin-bottom: 10px;}
+        
+        .damage-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 8px 10px; border-radius: 6px; border: 1px solid #E2E8F0;}
+        .damage-meta span { display: flex; align-items: center; gap: 4px; }
+        .damage-meta strong { color: #334155; }
+
+        .empty-state { text-align: center; padding: 30px 20px; color: #64748B; font-size: 13px; font-weight: 600;}
+        .empty-state span { font-size: 30px; display: block; margin-bottom: 10px;}
+
+        /* MODALES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
+
+        @media (max-width: 1024px) { 
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); z-index: 1001;}
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; z-index: 1000;}
+            .menu-toggle { display: block; }
+            .header-title { display: none; } 
+            .fleet-grid { grid-template-columns: 1fr; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BANNER DE CONEXIÓN (OFFLINE) -->
+    <div id="offlineBanner">⚠️ SIN CONEXIÓN A INTERNET. ESPERANDO RED...</div>
+
+    <!-- MODAL DE INACTIVIDAD -->
+    <div class="modal-overlay" id="inactivityModal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
+            <h3 style="font-weight: 900; margin-bottom: 10px; color: var(--amerijet-red); font-size: 20px; text-transform: uppercase;">Sesión en Pausa</h3>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;">Por protocolos de seguridad, cerraremos tu sesión por inactividad.</p>
+            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Continuar Trabajando</button>
+        </div>
+    </div>
+
+    <!-- MENÚ LATERAL -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo_3.png" alt="Logo" onclick="navegarA('dashboard.html')" style="cursor:pointer;">
+            <span>Cargo Inspect Pro</span>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info-text">
+                <strong id="lblUserName">Cargando...</strong>
+                <span id="lblUserRol" class="badge-rol">...</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-link" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
+            <button class="nav-link active" onclick="navegarA('estado_flota.html')">🛫 Estado de Flota</button>
+            <button class="nav-link" onclick="navegarA('uld_gestion.html')">📦 Inventario ULD</button>
+            <button class="nav-link" id="btnAdminPanel" style="display: none;" onclick="navegarA('admin_panel.html')">👑 Panel de Control</button>
+            <button class="nav-link" id="btnReportesHistoricos" style="display: none;" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="logoutSeguro()">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="header-title">Monitor de Salud de Flota (Aircraft Damage Report)</div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+
+                <!-- DASHBOARD ANALÍTICO -->
+                <div class="kpi-section">
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-blue">✈️</div>
+                        <div class="kpi-data">
+                            <span>Total Aeronaves</span>
+                            <strong id="kpiTotalAviones">0</strong>
+                            <small>En base de datos</small>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-green">✅</div>
+                        <div class="kpi-data">
+                            <span>Óptimas</span>
+                            <strong id="kpiSanos">0</strong>
+                            <small>Cero daños reportados</small>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-red">⚠️</div>
+                        <div class="kpi-data">
+                            <span>Con Reportes</span>
+                            <strong id="kpiDanos">0</strong>
+                            <small>Daños estructurales abiertos</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fleet-grid" id="fleetGrid">
+                    <!-- Inyectado por JS -->
+                    <div style="grid-column: 1/-1; text-align:center; padding: 40px; color:#64748B;">Sincronizando estado de flota... ⏳</div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modales Alertas -->
+    <div class="modal-overlay" id="customAlertModal" style="z-index: 3000;">
+        <div class="modal-content">
+            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
+            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
+            <button onclick="document.getElementById('customAlertModal').style.display='none'" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        function navegarA(url) { window.location.href = url; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+        async function logoutSeguro() { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }
+
+        // ==========================================
+        // DETECCIÓN DE RED EN VIVO
+        // ==========================================
+        const offlineBanner = document.getElementById('offlineBanner');
+        function updateNetworkStatus() {
+            if (navigator.onLine) { if (offlineBanner) offlineBanner.classList.remove('active'); } 
+            else { if (offlineBanner) offlineBanner.classList.add('active'); }
+        }
+        window.addEventListener('online', updateNetworkStatus); window.addEventListener('offline', updateNetworkStatus); updateNetworkStatus();
+
+        // ==========================================
+        // MÓDULO DE INACTIVIDAD BANCARIO
+        // ==========================================
+        let inactivityTimer; let warningTimer; const WARNING_TIME = 28 * 60 * 1000; const LOGOUT_TIME = 30 * 60 * 1000;
+        function resetInactivityTimers() {
+            clearTimeout(inactivityTimer); clearTimeout(warningTimer); document.getElementById('inactivityModal').style.display = 'none';
+            warningTimer = setTimeout(() => { document.getElementById('inactivityModal').style.display = 'flex'; }, WARNING_TIME);
+            inactivityTimer = setTimeout(async () => { await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }, LOGOUT_TIME);
+        }
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
+
+        function showCustomAlert(title, message, type = 'info') {
+            const modal = document.getElementById('customAlertModal');
+            document.getElementById('alertTitle').innerText = title; document.getElementById('alertMessage').innerHTML = message;
+            document.getElementById('alertIcon').innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            document.getElementById('alertTitle').style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            document.getElementById('alertBtn').style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            modal.style.display = 'flex';
+        }
+
+        async function inicializar() {
+            resetInactivityTimers();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre').eq('id', session.user.id).single();
+            if (perfil) {
+                document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
+                document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
+                if(perfil.rol === 'admin' || perfil.rol === 'supervisor') {
+                    document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                    if(perfil.rol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+                }
+            }
+
+            cargarEstadoFlota();
+        }
+
+        async function cargarEstadoFlota() {
+            const grid = document.getElementById('fleetGrid');
+            try {
+                // 1. Traer todos los aviones
+                const { data: aviones, error: errAviones } = await supabaseClient.from('aviones').select('*').order('matricula', { ascending: true });
+                if (errAviones) throw errAviones;
+
+                // 2. Traer todos los daños que estén ABIERTOS
+                const { data: danos, error: errDanos } = await supabaseClient.from('avion_danos')
+                    .select('*')
+                    .eq('estado_actual', 'ABIERTO')
+                    .order('creado_at', { ascending: false });
+                if (errDanos) throw errDanos;
+
+                // 3. Agrupar daños por avión
+                let mapaDanos = {};
+                if (aviones) aviones.forEach(a => mapaDanos[a.matricula] = []);
+                
+                if (danos) {
+                    danos.forEach(d => {
+                        // Si hay un daño de un avión que no está en catálogo (por error humano de escritura previa), lo agregamos al mapa
+                        if (!mapaDanos[d.matricula_avion]) mapaDanos[d.matricula_avion] = [];
+                        mapaDanos[d.matricula_avion].push(d);
+                    });
+                }
+
+                const matriculas = Object.keys(mapaDanos).sort();
+
+                let kpiSanos = 0;
+                let kpiDanosCount = 0;
+                
+                grid.innerHTML = '';
+
+                matriculas.forEach(tail => {
+                    const reportes = mapaDanos[tail];
+                    const estaSano = reportes.length === 0;
+
+                    if (estaSano) kpiSanos++; else kpiDanosCount++;
+
+                    const headerClass = estaSano ? 'header-optimo' : 'header-dano';
+                    const badge = estaSano 
+                        ? `<div class="status-badge optimo"><span>✅</span> Óptimo</div>` 
+                        : `<div class="status-badge dano"><span>⚠️</span> ${reportes.length} Daños</div>`;
+
+                    let reportesHTML = '';
+                    if (estaSano) {
+                        reportesHTML = `
+                            <div class="empty-state">
+                                <span>✨</span>
+                                Aeronave inspeccionada sin reportes estructurales abiertos. Lista para operar.
+                            </div>
+                        `;
+                    } else {
+                        reportesHTML = '<div class="damage-list">';
+                        reportes.forEach((r, idx) => {
+                            let ev = {}; try { ev = JSON.parse(r.evidencia || "{}"); } catch(e){}
+                            let severidad = r.severidad || 'N/A';
+                            let fRep = r.creado_at ? new Date(r.creado_at).toLocaleDateString() : 'Desconocida';
+                            
+                            reportesHTML += `
+                                <div class="damage-item">
+                                    <div class="damage-title">${idx + 1}. [${(r.area || '').toUpperCase()}] - ${r.componente}</div>
+                                    <div class="damage-desc">${r.descripcion}</div>
+                                    <div class="damage-meta">
+                                        <span>📍 Loc: <strong>${ev.ubicacion || 'General'}</strong></span>
+                                        <span>📊 Sev: <strong>${severidad}</strong></span>
+                                        <span>🗓️ Rep: <strong>${fRep}</strong></span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        reportesHTML += '</div>';
+                    }
+
+                    const cardHTML = `
+                        <div class="fleet-card">
+                            <div class="card-header ${headerClass}">
+                                <div class="tail-number">✈️ ${tail}</div>
+                                ${badge}
+                            </div>
+                            <div class="card-body">
+                                ${reportesHTML}
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += cardHTML;
+                });
+
+                // Actualizar KPIs
+                document.getElementById('kpiTotalAviones').innerText = matriculas.length;
+                document.getElementById('kpiSanos').innerText = kpiSanos;
+                document.getElementById('kpiDanos').innerText = kpiDanosCount;
+
+            } catch (e) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color:var(--amerijet-red); font-weight:bold;">Error de conexión con la base de datos: ${e.message}</div>`;
+            }
+        }
+
+        inicializar();
+    </script>
+</body>
+</html>
