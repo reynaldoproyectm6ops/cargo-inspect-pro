@@ -64,7 +64,8 @@
         .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor:pointer;}
         .btn-volver-top:hover { background: #E2E8F0; }
 
-        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} /* AJUSTE PADDING PARA MOVIL */
+        /* Padding bottom extra para que la Bottom Bar no tape el final en celulares */
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
         
         /* TARJETA SUPERIOR AZUL */
@@ -83,17 +84,6 @@
         select, input[type="text"], textarea { width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);}
         select:focus, input[type="text"]:focus, textarea:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);}
         
-        /* ALERTAS HISTÓRICAS INTELIGENTES */
-        .hist-alert { background: #FFFBEB; border-left: 4px solid var(--warn-orange); padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #92400E; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.05); animation: fadeIn 0.4s ease-in-out;}
-        .hist-alert strong { color: #B45309; font-weight: 900; display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .hist-alert .hist-meta { font-size: 11px; opacity: 0.8; font-weight: 700; margin-top: 8px; display: block; border-top: 1px dashed rgba(245, 158, 11, 0.3); padding-top: 8px;}
-        
-        .new-alert { background: #FEF2F2; border-left: 4px solid var(--amerijet-red); padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #BE123C; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05); animation: fadeIn 0.3s ease-in-out;}
-        .new-alert strong { color: #E11D48; font-weight: 900; display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .new-alert .hist-meta { font-size: 11px; opacity: 0.8; font-weight: 700; margin-top: 8px; display: block; border-top: 1px dashed rgba(225, 29, 72, 0.3); padding-top: 8px;}
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
         .hallazgo-panel { display: none; background: #FFF1F2; border: 1px dashed #FDA4AF; border-radius: 8px; padding: 18px; margin-top: 10px; }
         .btn-camera { background: white; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-bottom: 12px; transition: 0.2s;}
         .btn-camera:hover { background: #F1F5F9; border-color: #94A3B8;}
@@ -105,15 +95,12 @@
 
         /* PLANOS DIGITALES B767 */
         .digital-plane-container { background: #F1F5F9; padding: 25px 15px; border-radius: 10px; overflow-x: auto; margin-bottom: 15px; display: none; text-align: center; border: 1px solid #CBD5E1; }
-        
         .plane-shape { display: flex; background-color: #CBD5E1; border-radius: 80px; padding: 10px 40px; height: 120px; align-items: stretch; gap: 4px; margin: 0 auto; min-width: 680px; border: 4px solid; position: relative; }
         .border-A { border-color: #86efac !important; } .border-B { border-color: #d946ef !important; } .border-C { border-color: #fde047 !important; } .border-D { border-color: #7c3aed !important; } .border-E { border-color: #ef4444 !important; } .border-G { border-color: #f97316 !important; }
-
         .p-cell { flex: 1; background: #E2E8F0; border: 1.5px solid #1E293B; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #0F172A; cursor: pointer; transition: 0.1s; }
         .p-col { flex: 1; display: flex; flex-direction: column; gap: 0; }
         .p-half { flex: 1; width: 100%; background: #E2E8F0; border: 1.5px solid #1E293B; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: #0F172A; cursor: pointer; transition: 0.1s; }
         .p-wide { flex: 2; }
-        
         .p-cell:hover, .p-half:hover { background: #CBD5E1; }
         .p-cell.selected, .p-half.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
 
@@ -121,15 +108,12 @@
         .pallet-locks-container { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 10px; padding: 30px 10px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
         .pallet-draw { position: relative; width: 400px; height: 220px; margin: 0 auto; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; }
         .pallet-core-text { font-weight: 900; font-size: 40px; color: #0F172A; letter-spacing: 2px; }
-
         .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; }
         .hotspot:hover { background: #3B82F6; transform: scale(1.3); }
         .hotspot.active { background: var(--amerijet-red); transform: scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
-
         .lock-label { position: absolute; font-size: 9px; font-weight: 800; color: #1E293B; text-align: center; width: 80px; transform: translateX(-50%); pointer-events: none; }
         .lock-label.red { color: #DC2626; }
-
-        /* Posiciones Hotspots */
+        
         .t-c-l { top: -7px; left: 15%; } .lbl-t-c-l { top: -30px; left: 15%; }
         .t-nc-1 { top: -7px; left: 35%; } .t-nc-2 { top: -7px; left: 50%; } .lbl-t-nc { top: -30px; left: 50%; } .t-nc-3 { top: -7px; left: 65%; } 
         .t-c-r { top: -7px; left: 85%; } .lbl-t-c-r { top: -30px; left: 85%; }
@@ -147,8 +131,8 @@
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 700; font-size: 12px; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
-        /* MATRIZ DINÁMICA DE ABAJO Y SCROLL */
-        .matrix-container { max-height: 450px; overflow-y: auto; padding-right: 8px; margin-top: 15px; }
+        /* MATRIZ DINÁMICA DE ABAJO Y SCROLL MEJORADO */
+        .matrix-container { max-height: 400px; overflow-y: auto; padding-right: 8px; margin-top: 15px; }
         .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin: 20px 0 10px 0; border-bottom: 2px solid #E2E8F0; padding-bottom: 5px; text-transform: uppercase;}
         
         .matrix-item { background: white; border: 1px solid #E2E8F0; border-left: 4px solid var(--amerijet-red); padding: 18px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
@@ -256,20 +240,23 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA -->
+                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA Y REPORTES NUEVOS -->
                 <div class="card">
                     <div class="card-header">1. Inspección Estructural Básica</div>
-                    
+                    <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
+                        Utilice esta sección únicamente para reportar daños. Al guardar, el panel se limpiará y el hallazgo bajará a la Matriz de Trazabilidad.
+                    </p>
+
                     <div class="comp-item" id="c_lower_fwd">
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
                             <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Nuevo Hallazgo</option>
+                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
                         </select>
-                        <div id="hist_lower_fwd"></div>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
-                            <input type="text" id="desc_lower_fwd" placeholder="Describa el daño..." oninput="marcarCambios()">
+                            <input type="text" id="desc_lower_fwd" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_fwd', 'lower_fwd')">
                             </label>
@@ -282,12 +269,12 @@
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
                             <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Nuevo Hallazgo</option>
+                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
                         </select>
-                        <div id="hist_lower_aft"></div>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
-                            <input type="text" id="desc_lower_aft" placeholder="Describa el daño..." oninput="marcarCambios()">
+                            <input type="text" id="desc_lower_aft" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_aft', 'lower_aft')">
                             </label>
@@ -300,12 +287,12 @@
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
                             <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Nuevo Hallazgo</option>
+                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
                         </select>
-                        <div id="hist_bulk"></div>
 
                         <div id="panel_bulk" class="hallazgo-panel">
-                            <input type="text" id="desc_bulk" placeholder="Describa el daño..." oninput="marcarCambios()">
+                            <input type="text" id="desc_bulk" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_bulk', 'bulk')">
                             </label>
@@ -320,22 +307,22 @@
                             <option value="OK">✓ Sin Novedad</option>
                             <option value="FUSELAJE">⚠️ Reportar Daño Estructura / Puerta MD</option>
                             <option value="LOCKS">⚠️ Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos dañados, guías, faltantes, etc.)</option>
                         </select>
-                        
-                        <div id="hist_main_deck"></div>
 
+                        <!-- Panel Simple para Estructura / Otros en el MD -->
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
-                            <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción (Ej: Marco Puerta L1)..." oninput="marcarCambios()">
+                            <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Foto del Daño (MD)
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_md_fus', 'md_fuselaje')">
                             </label>
                             <div class="photo-gallery" id="gal_md_fus"></div>
-                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck - Estructura', 'md_fuselaje', 'sel_main_deck')">📥 Pasar Hallazgo a Matriz</button>
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">📥 Pasar Hallazgo a Matriz</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- PANEL MAPEO CLS B767 -->
+                <!-- PANEL MAPEO CLS B767 (Sólo se abre si elige Mapear CLS en MD) -->
                 <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                     <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">⚠️ Mapeo de Seguros (CLS)</div>
                     
@@ -434,11 +421,11 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ (AGRUPADA Y CON SCROLL) -->
+                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ (CENTRALIZADA Y CON SCROLL) -->
                 <div class="card">
                     <div class="card-header">2. Trazabilidad de Discrepancias</div>
                     <div id="matrizDinamica" class="matrix-container">
-                        <div style="text-align: center; font-size: 13px; color: #94A3B8; font-style: italic; padding: 20px;">La matriz consolidará historial del avión y nuevos hallazgos.</div>
+                        <div style="text-align: center; font-size: 13px; color: #94A3B8; font-style: italic; padding: 20px;">Cargando historial del avión...</div>
                     </div>
                 </div>
 
@@ -548,6 +535,16 @@
         // --- ARRAY TEMPORAL DE INCIDENCIAS DE VUELO ---
         let incidenciasVuelo = [];
 
+        // --- ORDEN ESTRICTO PARA VISTA Y PDF ---
+        function getSortWeight(areaStr) {
+            const a = (areaStr || '').toUpperCase();
+            if(a.includes("MAIN DECK") || a.includes("MD")) return 1;
+            if(a.includes("LOWER FORWARD")) return 2;
+            if(a.includes("LOWER AFT")) return 3;
+            if(a.includes("BULK")) return 4;
+            return 5;
+        }
+
         // --- PROTECCIÓN DE CAMBIOS ---
         let hayCambiosSinGuardar = false;
         function marcarCambios() { hayCambiosSinGuardar = true; }
@@ -623,7 +620,6 @@
                     document.getElementById('lblTailHead').innerText = op.matricula_avion;
                 }
 
-                // Cargar daños permanentes de la aeronave
                 const { data: danosBD } = await supabaseClient.from('avion_danos')
                     .select('*')
                     .eq('matricula_avion', vueloData.tail)
@@ -657,7 +653,6 @@
                     });
                 }
 
-                // Cargar notas finales E incidencias temporales
                 const { data: logGuardado } = await supabaseClient.from('avion_inspecciones').select('notas_adicionales').eq('vuelo_operacion_id', operacionId).order('id', { ascending: false }).limit(1);
                 if(logGuardado && logGuardado.length > 0) { 
                     const notasBD = logGuardado[0].notas_adicionales || '';
@@ -678,53 +673,8 @@
 
                 dibujarPlanoAvionCSS('A');
                 renderizarMatrizDinamica();
-                renderizarHistorialEnCompartimentos();
                 renderizarIncidencias();
             } catch(e) { console.error("Error de inicialización", e); }
-        }
-
-        function renderizarHistorialEnCompartimentos() {
-            document.getElementById('hist_lower_fwd').innerHTML = ''; document.getElementById('hist_lower_aft').innerHTML = '';
-            document.getElementById('hist_bulk').innerHTML = ''; document.getElementById('hist_main_deck').innerHTML = '';
-
-            matrizHallazgos.forEach((h) => {
-                if (h.estado_actual === 'ABIERTO') {
-                    let targetId = '';
-                    let areaUC = h.area.toUpperCase();
-                    if (areaUC.includes('LOWER FORWARD')) targetId = 'hist_lower_fwd';
-                    else if (areaUC.includes('LOWER AFT')) targetId = 'hist_lower_aft';
-                    else if (areaUC.includes('BULK')) targetId = 'hist_bulk';
-                    else if (areaUC.includes('MAIN DECK') || areaUC.includes('MD') || areaUC.includes('CLS')) targetId = 'hist_main_deck';
-
-                    if (targetId) {
-                        const contenedor = document.getElementById(targetId);
-                        const fRep = h.fechaReporte ? new Date(h.fechaReporte).toLocaleDateString() : 'N/A';
-                        
-                        const isHist = h.esHistorico;
-                        const bgClass = isHist ? "hist-alert" : "new-alert";
-                        const titleText = isHist ? "⏳ Daño Previo Reportado" : "⚠️ NUEVO DAÑO REPORTADO";
-                        const titleColor = isHist ? "#B45309" : "#E11D48";
-                        const btnEliminar = !isHist ? `<button type="button" onclick="eliminarHallazgoPorId('${h.idTracking}')" style="background:none; border:none; color:var(--amerijet-red); font-size:18px; font-weight:bold; cursor:pointer;" title="Eliminar hallazgo permanentemente">✖</button>` : '';
-
-                        contenedor.innerHTML += `
-                            <div class="${bgClass}">
-                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
-                                    <div style="display:flex; align-items:center; gap:6px;">
-                                        <strong style="color:${titleColor};">${titleText}</strong>
-                                        <span style="font-size:10px; color:${titleColor}; font-weight:800;">Rep: ${fRep}</span>
-                                    </div>
-                                    ${btnEliminar}
-                                </div>
-                                <div style="margin-bottom:6px; font-weight:600; color:${isHist ? '#92400E' : '#BE123C'};">${h.descripcion}</div>
-                                <span class="hist-meta">Comp: ${h.componente} | Pos: ${h.ubicacion}</span>
-                                <div style="margin-top: 10px; padding-top: 10px; display:flex;">
-                                    <button type="button" class="btn-update-matrix" style="margin-top:0; width:100%;" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                }
-            });
         }
 
         // --- SISTEMA DE INCIDENCIAS TEMPORALES DEL VUELO ---
@@ -751,7 +701,7 @@
             document.getElementById('sel_incidencia_area').value = "General";
             marcarCambios();
             renderizarIncidencias();
-            showToast("Incidencia registrada. Se mostrará agrupada en el PDF.", "info");
+            showToast("Incidencia registrada. Se mostrará al final en el PDF.", "info");
         }
 
         function renderizarIncidencias() {
@@ -782,11 +732,21 @@
             renderizarIncidencias();
         }
 
-        function togglePanelHallazgo(idCaja, sel) { document.getElementById('panel_' + idCaja).style.display = sel.value === 'HALLAZGO' ? 'block' : 'none'; }
+        function togglePanelHallazgo(idCaja, sel) { 
+            document.getElementById('panel_' + idCaja).style.display = (sel.value === 'HALLAZGO' || sel.value === 'OTROS') ? 'block' : 'none'; 
+            if(sel.value === 'OTROS') {
+                document.getElementById('desc_' + idCaja).placeholder = "Especifique (Ej: Rodo quebrado, falta pin, etc.)...";
+            } else {
+                document.getElementById('desc_' + idCaja).placeholder = "Describa el daño en estructura...";
+            }
+        }
 
         function pasarAMatrizComp(nombreArea, idCaja, idSelect = null) {
             const desc = document.getElementById('desc_' + idCaja).value.trim();
             if(!desc) { showToast("Describe el daño antes de continuar.", "error"); return; }
+
+            const targetSelect = document.getElementById(idSelect || ('sel_' + idCaja));
+            const tipoComp = (targetSelect && targetSelect.value === 'OTROS') ? 'Otros Componentes' : 'Estructura';
 
             const idLocalTemp = 'comp_' + Date.now();
             matrizHallazgos.push({
@@ -795,7 +755,7 @@
                 tipo: 'COMPARTIMENTO', 
                 area: nombreArea, 
                 ubicacion: 'General', 
-                componente: 'Estructura', 
+                componente: tipoComp, 
                 descripcion: desc, 
                 consecuencia: 'N/A', 
                 severidad: 'N/A', 
@@ -809,20 +769,29 @@
             if(fotosBanco[idCaja]) { fotosBanco[idLocalTemp] = [...fotosBanco[idCaja]]; fotosBanco[idCaja] = []; }
 
             document.getElementById('panel_' + idCaja).style.display = 'none'; 
-            
-            const targetSelect = document.getElementById(idSelect || ('sel_' + idCaja));
             if(targetSelect) targetSelect.value = "OK";
-
             document.getElementById('desc_' + idCaja).value = ""; 
             document.getElementById('gal_' + idCaja).innerHTML = "";
             
-            marcarCambios(); showToast("Daño agregado a la matriz. Recuerda Guardar en Nube.", "info");
-            renderizarMatrizDinamica(); renderizarHistorialEnCompartimentos();
+            marcarCambios(); showToast("Daño agregado a la matriz. Área limpia para continuar.", "info");
+            renderizarMatrizDinamica();
         }
 
         function evaluarMainDeck(sel) {
-            const pFus = document.getElementById('panel_md_fuselaje'); const pLocks = document.getElementById('panelMapeoCLS');
-            pFus.style.display = sel.value === 'FUSELAJE' ? 'block' : 'none'; pLocks.style.display = sel.value === 'LOCKS' ? 'block' : 'none';
+            const pFus = document.getElementById('panel_md_fuselaje'); 
+            const pLocks = document.getElementById('panelMapeoCLS');
+            
+            if (sel.value === 'FUSELAJE' || sel.value === 'OTROS') {
+                pFus.style.display = 'block';
+                pLocks.style.display = 'none';
+                document.getElementById('desc_md_fuselaje').placeholder = sel.value === 'FUSELAJE' ? "Ubicación y descripción (Ej: Marco Puerta L1)..." : "Describa el daño (Ej: Rodo quebrado, falta pin, etc.)...";
+            } else if (sel.value === 'LOCKS') {
+                pFus.style.display = 'none';
+                pLocks.style.display = 'block';
+            } else {
+                pFus.style.display = 'none';
+                pLocks.style.display = 'none';
+            }
         }
 
         function dibujarPlanoAvionCSS(config, btnElem) {
@@ -929,24 +898,24 @@
                 document.getElementById('panelMapeoCLS').style.display = 'none';
                 document.getElementById('sel_main_deck').value = "OK";
                 
-                marcarCambios(); showToast("CLS agregado a la matriz. Recuerda Guardar en Nube.", "info");
-                renderizarMatrizDinamica(); renderizarHistorialEnCompartimentos();
+                marcarCambios(); showToast("CLS agregado a la matriz. Área limpia para continuar.", "info");
+                renderizarMatrizDinamica(); 
             } catch(e) { alert("Error al renderizar los mapas. Intenta nuevamente."); }
         }
 
         // =====================================
-        // MATRIZ DINÁMICA AGRUPADA POR ÁREAS
+        // MATRIZ DINÁMICA AGRUPADA Y ORDENADA
         // =====================================
         function renderizarMatrizDinamica() {
             const cnt = document.getElementById('matrizDinamica');
             if(matrizHallazgos.length === 0) { 
-                cnt.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">La matriz consolidará el historial del avión y los nuevos hallazgos.</div>`; 
+                cnt.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">No hay daños registrados actualmente. Utiliza la sección superior para añadir nuevos hallazgos.</div>`; 
                 return; 
             }
             
             cnt.innerHTML = "";
             
-            // Agrupar los hallazgos por área para mostrarlos ordenados
+            // Agrupar los hallazgos por área y ordenarlos estratégicamente
             const gruposArea = {};
             matrizHallazgos.forEach((h) => {
                 let areaGrp = (h.area || 'GENERAL').toUpperCase();
@@ -954,14 +923,12 @@
                 gruposArea[areaGrp].push(h);
             });
 
-            // Ordenar las áreas alfabéticamente
-            const areasOrdenadas = Object.keys(gruposArea).sort();
+            // Ordenamiento inteligente 
+            const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
 
             areasOrdenadas.forEach(area => {
-                // Título de Sección
                 cnt.innerHTML += `<div class="group-header">📍 ${area}</div>`;
                 
-                // Elementos de esa área
                 gruposArea[area].forEach(h => {
                     const div = document.createElement('div');
                     div.className = `matrix-item ${h.esHistorico ? 'historical' : ''} ${h.estado_actual === 'REPARADO' ? 'resolved' : ''}`;
@@ -1031,7 +998,6 @@
                     delete fotosBanco[idTracking];
                     marcarCambios();
                     renderizarMatrizDinamica();
-                    renderizarHistorialEnCompartimentos();
                     showToast("Registro eliminado de la base de datos.");
                 }
             );
@@ -1057,7 +1023,7 @@
             }
             document.getElementById('modalActualizar').style.display = 'none';
             marcarCambios(); showToast("Estado actualizado. Recuerda Guardar en Nube.");
-            renderizarMatrizDinamica(); renderizarHistorialEnCompartimentos(); 
+            renderizarMatrizDinamica();
         }
 
         // =====================================
@@ -1148,7 +1114,7 @@
         }
 
         // =====================================
-        // RENDER PDF (PERFECT ASPECT RATIO & WORD WRAP)
+        // RENDER PDF (ORDENADO + ANTI-DESBORDE + ASPECT RATIO)
         // =====================================
         async function generarPDFCarta() {
             const btn = document.getElementById('btnDescargarPDF');
@@ -1230,7 +1196,7 @@
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("1. DISCREPANCIES SUMMARY", 15, cy);
                 
                 if(matrizHallazgos.length > 0) {
-                    const sortedMatriz = [...matrizHallazgos].sort((a, b) => (a.area||'').localeCompare(b.area||''));
+                    const sortedMatriz = [...matrizHallazgos].sort((a, b) => getSortWeight(a.area) - getSortWeight(b.area));
                     const tData = sortedMatriz.map((h, i) => {
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                         return [ i+1, h.estado_actual, h.area, h.componente, h.descripcion, fRep ];
@@ -1251,7 +1217,7 @@
                     cy += 15; 
                 }
 
-                // FOTOS DE HALLAZGOS ESTRUCTURALES Y CLS (AGRUPADOS POR ÁREA)
+                // FOTOS DE HALLAZGOS ESTRUCTURALES Y CLS (AGRUPADOS POR ÁREA ORDENADA)
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("2. DETAILED FINDINGS & EVIDENCE", 15, cy);
                 cy += 8;
 
@@ -1267,7 +1233,10 @@
                     gruposPDF[areaGrp].push(h);
                 });
 
-                for(const [area, items] of Object.entries(gruposPDF)) {
+                const areasPDF = Object.keys(gruposPDF).sort((a, b) => getSortWeight(a) - getSortWeight(b));
+
+                for(const area of areasPDF) {
+                    const items = gruposPDF[area];
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     
                     // HEADER DE ÁREA
@@ -1295,15 +1264,15 @@
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
                         
-                        // TEXT WRAPPING (Evita que el texto se salga de la hoja)
-                        const splitDesc = doc.splitTextToSize(`${h.descripcion}`, 150);
+                        // TEXT WRAPPING (Reducido a 130mm para que NO se salga del margen derecho)
+                        const splitDesc = doc.splitTextToSize(String(h.descripcion), 130);
                         doc.text(splitDesc, 33, cy); 
                         cy += (splitDesc.length * 4.5) + 2; 
                         
                         if(h.nota_solucion) {
                             doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
                             doc.setFont("Helvetica", "normal"); 
-                            const splitNotes = doc.splitTextToSize(`${h.nota_solucion}`, 155);
+                            const splitNotes = doc.splitTextToSize(String(h.nota_solucion), 130);
                             doc.text(splitNotes, 28, cy); 
                             cy += (splitNotes.length * 4.5) + 2;
                         }
@@ -1344,7 +1313,7 @@
                     }
                 }
 
-                // SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO (AGRUPADAS)
+                // SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO (AGRUPADAS Y AL FINAL DEL PDF)
                 if(incidenciasVuelo.length > 0) {
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(15, 23, 42);
@@ -1372,7 +1341,8 @@
                             doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
                             doc.text(`Incident:`, 15, cy);
                             doc.setFont("Helvetica", "normal");
-                            const splitInc = doc.splitTextToSize(`${inc.descripcion}`, 155);
+                            // Word-wrap para el texto temporal ajustado
+                            const splitInc = doc.splitTextToSize(String(inc.descripcion), 130);
                             doc.text(splitInc, 32, cy); 
                             cy += (splitInc.length * 4.5) + 2;
 
@@ -1400,7 +1370,7 @@
                     }
                 }
 
-                doc.save(`Inspection_${vueloData.tail}_${vueloData.vuelo}.pdf`); showCustomAlert("Éxito", "PDF generado exitosamente.", "success");
+                doc.save(`Inspection_${vueloData.tail}_${vueloData.vuelo}.pdf`); showToast("PDF generado exitosamente.");
             } catch(e) { showCustomAlert("Error PDF", e.message, "error"); console.error(e); }
             finally { btn.innerText = "📄 Bajar PDF Oficial"; btn.disabled = false; }
         }
