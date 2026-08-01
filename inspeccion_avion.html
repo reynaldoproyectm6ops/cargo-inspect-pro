@@ -488,7 +488,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN PROFUNDA (AHORA PERMITE EDITAR LA DESCRIPCIÓN DEL DAÑO) -->
+    <!-- MODAL EDICIÓN PROFUNDA DAÑOS -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
             <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900;">✏️ Editar / Actualizar Daño</h3>
@@ -529,6 +529,38 @@
         </div>
     </div>
 
+    <!-- MODAL EDICIÓN INCIDENCIA TEMPORAL -->
+    <div class="modal-overlay" id="modalActualizarIncidencia">
+        <div class="modal-content">
+            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900;">✏️ Editar Incidencia</h3>
+            <input type="hidden" id="modalIncIndex">
+            
+            <label style="font-size:10px; font-weight:800; color:#475569; text-transform:uppercase;">Área de Incidencia</label>
+            <select id="modalIncArea" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:6px; font-weight:700; margin-bottom: 12px;" onchange="marcarCambios()">
+                <option value="General">General</option>
+                <option value="Lower Forward">Lower Forward Deck</option>
+                <option value="Lower Aft">Lower Aft Deck</option>
+                <option value="Bulk">Bulk Compartment</option>
+                <option value="Main Deck">Main Deck</option>
+            </select>
+
+            <div style="text-align: left; margin-bottom: 12px;">
+                <label style="font-size:10px; font-weight:800; color:#475569; text-transform:uppercase;">Descripción de la Incidencia</label>
+                <textarea id="modalIncDescripcion" rows="3" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:6px; font-weight:700;" oninput="marcarCambios()"></textarea>
+            </div>
+            
+            <label class="btn-camera" style="margin-top: 5px; border-color: var(--warn-orange); color: var(--warn-orange);">📸 Añadir Evidencia Adicional
+                <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_inc', 'modal_inc_temp')">
+            </label>
+            <div class="photo-gallery" id="gal_modal_inc"></div>
+
+            <div style="display:flex; gap:10px; margin-top: 20px;">
+                <button type="button" style="background:#F1F5F9; color:#475569; width:50%; border:none; padding:14px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="document.getElementById('modalActualizarIncidencia').style.display='none'">Cancelar</button>
+                <button type="button" style="background:var(--warn-orange); border:none; width:50%; padding:14px; border-radius:8px; font-weight:900; color:white; cursor:pointer;" onclick="guardarActualizacionIncidencia()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CONFIRMACIÓN UNIVERSAL -->
     <div class="modal-overlay" id="customConfirmModal">
         <div class="modal-content modal-generic">
@@ -565,7 +597,7 @@
             if(u.includes('LOWER FORWARD') || u.includes('FWD')) return 'LOWER FORWARD';
             if(u.includes('LOWER AFT') || u.includes('AFT')) return 'LOWER AFT';
             if(u.includes('BULK')) return 'BULK';
-            return 'OTROS';
+            return 'OTROS COMPARTIMIENTOS';
         }
 
         function getSortWeight(areaStr) {
@@ -757,10 +789,52 @@
                         <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px;">📍 Área: ${inc.area || 'General'}</div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark);">${inc.descripcion}</div>
                         ${htmlF}
+                        <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); margin-top:10px;" onclick="abrirModalIncidencia('${inc.idTracking}')">✏️ Editar Incidencia</button>
                         <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
                     </div>
                 `;
             });
+        }
+
+        function abrirModalIncidencia(idTracking) { 
+            const idx = incidenciasVuelo.findIndex(i => i.idTracking === idTracking); 
+            if (idx !== -1) {
+                document.getElementById('modalIncIndex').value = idTracking;
+                
+                const selectArea = document.getElementById('modalIncArea');
+                let found = false;
+                for (let i = 0; i < selectArea.options.length; i++) {
+                    if (selectArea.options[i].value === incidenciasVuelo[idx].area) {
+                        selectArea.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) selectArea.value = "General";
+
+                document.getElementById('modalIncDescripcion').value = incidenciasVuelo[idx].descripcion;
+                document.getElementById('gal_modal_inc').innerHTML = ""; 
+                fotosBanco['modal_inc_temp'] = [];
+                document.getElementById('modalActualizarIncidencia').style.display = 'flex';
+            }
+        }
+
+        function guardarActualizacionIncidencia() {
+            const idTracking = document.getElementById('modalIncIndex').value;
+            const idx = incidenciasVuelo.findIndex(x => x.idTracking === idTracking);
+            if(idx === -1) return;
+
+            incidenciasVuelo[idx].area = document.getElementById('modalIncArea').value;
+            incidenciasVuelo[idx].descripcion = document.getElementById('modalIncDescripcion').value.trim() || incidenciasVuelo[idx].descripcion;
+
+            if(fotosBanco['modal_inc_temp'] && fotosBanco['modal_inc_temp'].length > 0) {
+                if(!fotosBanco[idTracking]) fotosBanco[idTracking] = [];
+                fotosBanco[idTracking].push(...fotosBanco['modal_inc_temp']);
+            }
+            document.getElementById('modalActualizarIncidencia').style.display = 'none';
+            marcarCambios(); 
+            showToast("Incidencia actualizada correctamente.", "success");
+            renderizarIncidencias();
         }
 
         function eliminarIncidencia(idTracking) {
@@ -867,14 +941,21 @@
             marcarCambios();
         }
 
+        // --- COMPRESIÓN DE FOTO (CALIDAD MEJORADA PARA PDF) ---
         function capturarYComprimirFoto(input, galleryId, claveSeccion) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader(); reader.readAsDataURL(input.files[0]);
                 reader.onload = event => {
                     const img = new Image(); img.src = event.target.result;
                     img.onload = () => {
-                        const canvas = document.createElement('canvas'); const scale = 500 / img.width; canvas.width = 500; canvas.height = img.height * scale;
-                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height); const dUrl = canvas.toDataURL('image/jpeg', 0.6);
+                        const canvas = document.createElement('canvas'); 
+                        // Se aumentó la escala a 800px para mayor nitidez en el PDF
+                        const scale = 800 / img.width; 
+                        canvas.width = 800; 
+                        canvas.height = img.height * scale;
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height); 
+                        // Se aumentó la calidad a 0.85
+                        const dUrl = canvas.toDataURL('image/jpeg', 0.85); 
                         if(!fotosBanco[claveSeccion]) fotosBanco[claveSeccion] = [];
                         fotosBanco[claveSeccion].push(dUrl);
                         const th = document.createElement('img'); th.src = dUrl; th.className = 'photo-thumb';
@@ -964,16 +1045,15 @@
                 'LOWER FORWARD': [],
                 'LOWER AFT': [],
                 'BULK': [],
-                'OTROS': []
+                'OTROS COMPARTIMIENTOS': []
             };
 
+            let totalAbiertos = 0;
+
             matrizHallazgos.forEach((h) => {
+                if(h.estado_actual === 'ABIERTO') totalAbiertos++;
                 let standardName = getStandardGroup(h.area);
-                if(gruposArea[standardName]) {
-                    gruposArea[standardName].push(h);
-                } else {
-                    gruposArea['OTROS'].push(h);
-                }
+                gruposArea[standardName].push(h);
             });
 
             // Renderizar Contadores
@@ -982,17 +1062,17 @@
             if(gruposArea['LOWER FORWARD'].length > 0) countersHTML += `<div class="counter-badge">FWD: ${gruposArea['LOWER FORWARD'].length}</div>`;
             if(gruposArea['LOWER AFT'].length > 0) countersHTML += `<div class="counter-badge">AFT: ${gruposArea['LOWER AFT'].length}</div>`;
             if(gruposArea['BULK'].length > 0) countersHTML += `<div class="counter-badge">BULK: ${gruposArea['BULK'].length}</div>`;
-            if(gruposArea['OTROS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS'].length}</div>`;
+            if(gruposArea['OTROS COMPARTIMIENTOS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS COMPARTIMIENTOS'].length}</div>`;
             
             cntCounters.innerHTML = countersHTML;
 
             // 2. Renderizar Grupos con Scroll Independiente
-            const areasOrdenadas = ['MAIN DECK', 'LOWER FORWARD', 'LOWER AFT', 'BULK', 'OTROS'];
+            const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
 
             areasOrdenadas.forEach(area => {
                 if(gruposArea[area].length === 0) return; // Si no hay daños, no mostrar la caja
                 
-                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
+                let areaHTML = `<div class="group-header">📍 ${area}</div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
@@ -1282,29 +1362,17 @@
                     doc.text("No structural evidence required.", 15, cy); cy += 15;
                 }
 
-                const gruposPDF = {
-                    'MAIN DECK': [],
-                    'LOWER FORWARD': [],
-                    'LOWER AFT': [],
-                    'BULK': [],
-                    'OTROS': []
-                };
-
+                const gruposPDF = {};
                 matrizHallazgos.forEach((h) => {
                     let areaGrp = getStandardGroup(h.area);
-                    if(gruposPDF[areaGrp]) {
-                        gruposPDF[areaGrp].push(h);
-                    } else {
-                        gruposPDF['OTROS'].push(h);
-                    }
+                    if(!gruposPDF[areaGrp]) gruposPDF[areaGrp] = [];
+                    gruposPDF[areaGrp].push(h);
                 });
 
-                const areasPDF = ['MAIN DECK', 'LOWER FORWARD', 'LOWER AFT', 'BULK', 'OTROS'];
+                const areasPDF = Object.keys(gruposPDF).sort((a, b) => getSortWeight(a) - getSortWeight(b));
 
                 for(const area of areasPDF) {
                     const items = gruposPDF[area];
-                    if(items.length === 0) continue;
-
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     
                     // HEADER DE ÁREA
@@ -1332,7 +1400,6 @@
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
                         
-                        // TEXT WRAPPING (Reducido a 130mm para que NO se salga del margen derecho)
                         const splitDesc = doc.splitTextToSize(String(h.descripcion), 130);
                         doc.text(splitDesc, 33, cy); 
                         cy += (splitDesc.length * 4.5) + 2; 
@@ -1361,7 +1428,6 @@
                                 if (fx > 130) { fx = 15; cy += 65; } 
                                 if (cy > 210) { doc.addPage(); cy = 20; fx = 15; }
                                 
-                                // ASPECT RATIO MATEMÁTICO (Evita distorsión de imágenes)
                                 const props = doc.getImageProperties(b64);
                                 const maxW = 85; const maxH = 60;
                                 const ratio = Math.min(maxW / props.width, maxH / props.height);
