@@ -784,12 +784,18 @@
                     fotosBanco[inc.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`);
                     htmlF += `</div>`;
                 }
+                
+                // INYECCIÓN DEL BOTÓN EDITAR EN CADA INCIDENCIA CON SEPARADOR CLARO
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
                         <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px;">📍 Área: ${inc.area || 'General'}</div>
-                        <div style="font-weight:bold; color:var(--amerijet-blue-dark);">${inc.descripcion}</div>
+                        <div style="font-weight:bold; color:var(--amerijet-blue-dark); margin-bottom: 8px;">${inc.descripcion}</div>
                         ${htmlF}
-                        <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); margin-top:10px;" onclick="abrirModalIncidencia('${inc.idTracking}')">✏️ Editar Incidencia</button>
+                        
+                        <div style="margin-top: 15px; border-top: 1px dashed #FDE68A; padding-top: 15px;">
+                            <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); color:white; width:100%; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="abrirModalIncidencia('${inc.idTracking}')">✏️ Editar Incidencia</button>
+                        </div>
+                        
                         <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
                     </div>
                 `;
@@ -949,12 +955,11 @@
                     const img = new Image(); img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas'); 
-                        // Se aumentó la escala a 800px para mayor nitidez en el PDF
-                        const scale = 800 / img.width; 
-                        canvas.width = 800; 
+                        // MÁS RESOLUCIÓN: 900px y calidad 0.85 para impresiones nítidas
+                        const scale = 900 / img.width; 
+                        canvas.width = 900; 
                         canvas.height = img.height * scale;
                         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height); 
-                        // Se aumentó la calidad a 0.85
                         const dUrl = canvas.toDataURL('image/jpeg', 0.85); 
                         if(!fotosBanco[claveSeccion]) fotosBanco[claveSeccion] = [];
                         fotosBanco[claveSeccion].push(dUrl);
@@ -1400,6 +1405,7 @@
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
                         
+                        // TEXT WRAPPING (Reducido a 130mm para que NO se salga del margen derecho)
                         const splitDesc = doc.splitTextToSize(String(h.descripcion), 130);
                         doc.text(splitDesc, 33, cy); 
                         cy += (splitDesc.length * 4.5) + 2; 
@@ -1428,6 +1434,7 @@
                                 if (fx > 130) { fx = 15; cy += 65; } 
                                 if (cy > 210) { doc.addPage(); cy = 20; fx = 15; }
                                 
+                                // ASPECT RATIO MATEMÁTICO (Evita distorsión de imágenes)
                                 const props = doc.getImageProperties(b64);
                                 const maxW = 85; const maxH = 60;
                                 const ratio = Math.min(maxW / props.width, maxH / props.height);
