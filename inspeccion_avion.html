@@ -136,9 +136,12 @@
         .counter-badge { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E3A8A; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 8px; margin-right: 6px; }
         .counter-badge.total { background: #1E3A8A; color: white; border-color: #1E3A8A; }
 
-        /* MATRIZ DINÁMICA SECCIONADA CON SCROLL INDIVIDUAL */
-        .compartment-scroll { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 20px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px 15px 5px 15px; }
-        .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #CBD5E1; text-transform: uppercase;}
+        /* MATRIZ DINÁMICA: SIN SCROLL GLOBAL */
+        .matrix-container { margin-top: 15px; }
+        
+        /* CADA ÁREA TIENE SU PROPIO SCROLL */
+        .compartment-scroll { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 25px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px 15px 5px 15px; }
+        .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #CBD5E1; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;}
         
         .matrix-item { background: white; border: 1px solid #E2E8F0; border-left: 4px solid var(--amerijet-red); padding: 18px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .matrix-item.historical { border-left-color: var(--warn-orange); background: #FFFBEB; }
@@ -437,7 +440,7 @@
                         <div style="font-size:12px; color:#64748B; font-weight: 600;">Cargando historial...</div>
                     </div>
 
-                    <div id="matrizDinamica">
+                    <div id="matrizDinamica" class="matrix-container">
                         <!-- Aquí se inyectarán las áreas con su propio scroll -->
                     </div>
                 </div>
@@ -562,7 +565,7 @@
             if(u.includes('LOWER FORWARD') || u.includes('FWD')) return 'LOWER FORWARD';
             if(u.includes('LOWER AFT') || u.includes('AFT')) return 'LOWER AFT';
             if(u.includes('BULK')) return 'BULK';
-            return 'OTROS COMPARTIMIENTOS';
+            return 'OTROS';
         }
 
         function getSortWeight(areaStr) {
@@ -961,15 +964,16 @@
                 'LOWER FORWARD': [],
                 'LOWER AFT': [],
                 'BULK': [],
-                'OTROS COMPARTIMIENTOS': []
+                'OTROS': []
             };
 
-            let totalAbiertos = 0;
-
             matrizHallazgos.forEach((h) => {
-                if(h.estado_actual === 'ABIERTO') totalAbiertos++;
                 let standardName = getStandardGroup(h.area);
-                gruposArea[standardName].push(h);
+                if(gruposArea[standardName]) {
+                    gruposArea[standardName].push(h);
+                } else {
+                    gruposArea['OTROS'].push(h);
+                }
             });
 
             // Renderizar Contadores
@@ -978,17 +982,17 @@
             if(gruposArea['LOWER FORWARD'].length > 0) countersHTML += `<div class="counter-badge">FWD: ${gruposArea['LOWER FORWARD'].length}</div>`;
             if(gruposArea['LOWER AFT'].length > 0) countersHTML += `<div class="counter-badge">AFT: ${gruposArea['LOWER AFT'].length}</div>`;
             if(gruposArea['BULK'].length > 0) countersHTML += `<div class="counter-badge">BULK: ${gruposArea['BULK'].length}</div>`;
-            if(gruposArea['OTROS COMPARTIMIENTOS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS COMPARTIMIENTOS'].length}</div>`;
+            if(gruposArea['OTROS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS'].length}</div>`;
             
             cntCounters.innerHTML = countersHTML;
 
             // 2. Renderizar Grupos con Scroll Independiente
-            const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
+            const areasOrdenadas = ['MAIN DECK', 'LOWER FORWARD', 'LOWER AFT', 'BULK', 'OTROS'];
 
             areasOrdenadas.forEach(area => {
                 if(gruposArea[area].length === 0) return; // Si no hay daños, no mostrar la caja
                 
-                let areaHTML = `<div class="group-header">📍 ${area}</div>`;
+                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
@@ -1278,17 +1282,29 @@
                     doc.text("No structural evidence required.", 15, cy); cy += 15;
                 }
 
-                const gruposPDF = {};
+                const gruposPDF = {
+                    'MAIN DECK': [],
+                    'LOWER FORWARD': [],
+                    'LOWER AFT': [],
+                    'BULK': [],
+                    'OTROS': []
+                };
+
                 matrizHallazgos.forEach((h) => {
                     let areaGrp = getStandardGroup(h.area);
-                    if(!gruposPDF[areaGrp]) gruposPDF[areaGrp] = [];
-                    gruposPDF[areaGrp].push(h);
+                    if(gruposPDF[areaGrp]) {
+                        gruposPDF[areaGrp].push(h);
+                    } else {
+                        gruposPDF['OTROS'].push(h);
+                    }
                 });
 
-                const areasPDF = Object.keys(gruposPDF).sort((a, b) => getSortWeight(a) - getSortWeight(b));
+                const areasPDF = ['MAIN DECK', 'LOWER FORWARD', 'LOWER AFT', 'BULK', 'OTROS'];
 
                 for(const area of areasPDF) {
                     const items = gruposPDF[area];
+                    if(items.length === 0) continue;
+
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     
                     // HEADER DE ÁREA
@@ -1316,6 +1332,7 @@
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
                         
+                        // TEXT WRAPPING (Reducido a 130mm para que NO se salga del margen derecho)
                         const splitDesc = doc.splitTextToSize(String(h.descripcion), 130);
                         doc.text(splitDesc, 33, cy); 
                         cy += (splitDesc.length * 4.5) + 2; 
@@ -1344,6 +1361,7 @@
                                 if (fx > 130) { fx = 15; cy += 65; } 
                                 if (cy > 210) { doc.addPage(); cy = 20; fx = 15; }
                                 
+                                // ASPECT RATIO MATEMÁTICO (Evita distorsión de imágenes)
                                 const props = doc.getImageProperties(b64);
                                 const maxW = 85; const maxH = 60;
                                 const ratio = Math.min(maxW / props.width, maxH / props.height);
