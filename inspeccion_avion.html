@@ -64,7 +64,7 @@
         .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor:pointer;}
         .btn-volver-top:hover { background: #E2E8F0; }
 
-        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} /* AJUSTE PADDING PARA MOVIL */
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
         
         /* TARJETA SUPERIOR AZUL */
@@ -147,7 +147,10 @@
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 700; font-size: 12px; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
-        /* MATRIZ DINÁMICA DE ABAJO */
+        /* MATRIZ DINÁMICA DE ABAJO Y SCROLL */
+        .matrix-container { max-height: 450px; overflow-y: auto; padding-right: 8px; margin-top: 15px; }
+        .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin: 20px 0 10px 0; border-bottom: 2px solid #E2E8F0; padding-bottom: 5px; text-transform: uppercase;}
+        
         .matrix-item { background: white; border: 1px solid #E2E8F0; border-left: 4px solid var(--amerijet-red); padding: 18px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .matrix-item.historical { border-left-color: var(--warn-orange); background: #FFFBEB; }
         .matrix-item.resolved { border-left-color: var(--success-green); background: #ECFDF5; opacity: 0.8; }
@@ -161,7 +164,7 @@
         .btn-del-matrix:hover { background: #FECACA; }
         
         /* BOTTOM BAR */
-        .bottom-bar { background: white; padding: 15px 25px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; border-top: 1px solid #E2E8F0; z-index: 100; flex-shrink: 0;}
+        .bottom-bar { background: white; padding: 15px 25px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; border-top: 1px solid #E2E8F0; z-index: 100; flex-shrink: 0; position: fixed; bottom: 0; left: var(--sidebar-width); right: 0; transition: left 0.3s;}
         .btn-panel { border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 13px; cursor: pointer; color: white; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; transition: 0.2s;}
         .btn-save { background: var(--amerijet-blue); box-shadow: 0 4px 10px rgba(10,37,64,0.15); }
         .btn-save:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px);}
@@ -189,7 +192,7 @@
             .sidebar-overlay.active { display: block; }
             .menu-toggle { display: block; }
             .container { padding: 15px; }
-            .bottom-bar { padding: 12px 15px; }
+            .bottom-bar { left: 0; padding: 12px 15px; }
         }
     </style>
 </head>
@@ -431,22 +434,32 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ -->
+                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ (AGRUPADA Y CON SCROLL) -->
                 <div class="card">
                     <div class="card-header">2. Trazabilidad de Discrepancias</div>
-                    <div id="matrizDinamica">
+                    <div id="matrizDinamica" class="matrix-container">
                         <div style="text-align: center; font-size: 13px; color: #94A3B8; font-style: italic; padding: 20px;">La matriz consolidará historial del avión y nuevos hallazgos.</div>
                     </div>
                 </div>
 
-                <!-- NUEVA SECCIÓN: 3. INCIDENCIAS TEMPORALES DEL VUELO -->
+                <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO CON SELECTOR DE ÁREA -->
                 <div class="card" style="margin-bottom: 20px; border: 2px solid var(--warn-orange);">
                     <div class="card-header" style="color:var(--warn-orange);">3. Incidencias Temporales del Vuelo</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
                         Estos reportes aplican SOLO para la operación actual y no manchan el historial permanente del avión (No se guardan en la DB como daño).
                     </p>
                     <div class="comp-item" style="border-color: var(--warn-orange); margin-bottom: 5px;">
+                        
+                        <select id="sel_incidencia_area" style="margin-bottom: 8px; border-color:#FED7AA; color:#92400E; font-weight:800;">
+                            <option value="General">-- Ubicación de la Incidencia (General) --</option>
+                            <option value="Lower Forward">Lower Forward Deck</option>
+                            <option value="Lower Aft">Lower Aft Deck</option>
+                            <option value="Bulk">Bulk Compartment</option>
+                            <option value="Main Deck">Main Deck</option>
+                        </select>
+
                         <input type="text" id="desc_incidencia" placeholder="Descripción de la incidencia en rampa/vuelo..." oninput="marcarCambios()">
+                        
                         <label class="btn-camera">📸 Tomar Foto (Opcional)
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_incidencias', 'temp_incidencia')">
                         </label>
@@ -462,28 +475,39 @@
                     <textarea id="txtNotasFinales" rows="4" placeholder="Anotaciones finales de validación..." oninput="marcarCambios()"></textarea>
                 </div>
             </div>
-            
-            <div class="bottom-bar">
-                <button type="button" class="btn-panel btn-save" id="btnGuardarBD" onclick="guardarProgresoEnBD()">💾 Guardar Nube</button>
-                <button type="button" class="btn-panel btn-pdf" id="btnDescargarPDF" onclick="generarPDFCarta()">📄 Bajar PDF Oficial</button>
-            </div>
         </main>
+        
+        <div class="bottom-bar">
+            <button type="button" class="btn-panel btn-save" id="btnGuardarBD" onclick="guardarProgresoEnBD()">💾 Guardar Nube</button>
+            <button type="button" class="btn-panel btn-pdf" id="btnDescargarPDF" onclick="generarPDFCarta()">📄 Bajar PDF Oficial</button>
+        </div>
     </div>
 
-    <!-- MODALES DE ACTUALIZACIÓN Y CONFIRMACIÓN -->
+    <!-- MODAL EDICIÓN PROFUNDA -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
             <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900;">✏️ Actualizar Daño</h3>
             <p id="lblModalInfo" style="font-size: 13px; font-weight:bold; color: #475569; margin-bottom: 15px; border-left:3px solid var(--amerijet-red); padding-left:8px;"></p>
             <input type="hidden" id="modalIndex">
             
+            <div style="display:flex; gap:10px; margin-bottom: 12px; text-align: left;">
+                <div style="flex:1;">
+                    <label style="font-size:10px; font-weight:800; color:#475569; text-transform:uppercase;">Área</label>
+                    <input type="text" id="modalArea" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:6px; font-weight:700;" oninput="marcarCambios()">
+                </div>
+                <div style="flex:1;">
+                    <label style="font-size:10px; font-weight:800; color:#475569; text-transform:uppercase;">Componente</label>
+                    <input type="text" id="modalComponente" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:6px; font-weight:700;" oninput="marcarCambios()">
+                </div>
+            </div>
+
             <select id="modalEstadoNuevo" style="margin-bottom: 12px; border:2px solid #CBD5E1; font-weight:800;" onchange="marcarCambios()">
                 <option value="ABIERTO">Sigue Igual (Abierto)</option>
                 <option value="REPARADO">Se Reparó el Daño (Cerrar)</option>
             </select>
-            <input type="text" id="modalNotas" placeholder="Notas de la actualización..." style="margin-bottom: 12px;" oninput="marcarCambios()">
+            <input type="text" id="modalNotas" placeholder="Notas de la actualización / reparación..." style="margin-bottom: 12px; padding: 10px;" oninput="marcarCambios()">
             
-            <label class="btn-camera" style="margin-top: 10px;">📸 Foto de Evidencia
+            <label class="btn-camera" style="margin-top: 5px;">📸 Foto de Evidencia
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_update', 'modal_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_update"></div>
@@ -495,6 +519,7 @@
         </div>
     </div>
 
+    <!-- MODAL CONFIRMACIÓN UNIVERSAL -->
     <div class="modal-overlay" id="customConfirmModal">
         <div class="modal-content modal-generic">
             <div style="font-size: 45px; margin-bottom: 10px;">⚠️</div>
@@ -693,7 +718,7 @@
                                 <div style="margin-bottom:6px; font-weight:600; color:${isHist ? '#92400E' : '#BE123C'};">${h.descripcion}</div>
                                 <span class="hist-meta">Comp: ${h.componente} | Pos: ${h.ubicacion}</span>
                                 <div style="margin-top: 10px; padding-top: 10px; display:flex;">
-                                    <button type="button" class="btn-update-matrix" style="margin-top:0; width:100%;" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Actualizar / Cerrar Daño</button>
+                                    <button type="button" class="btn-update-matrix" style="margin-top:0; width:100%;" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>
                                 </div>
                             </div>
                         `;
@@ -702,45 +727,16 @@
             });
         }
 
-        function abrirModalActualizacionPorIdTracking(idTracking) { const index = matrizHallazgos.findIndex(h => h.idTracking === idTracking); if (index !== -1) abrirModalActualizacion(index); }
-        
-        // --- ELIMINACIÓN PERMANENTE DESDE LA BASE DE DATOS ---
-        function eliminarHallazgoPorId(idTracking) {
-            const h = matrizHallazgos.find(x => x.idTracking === idTracking);
-            if (!h) return;
-
-            showCustomConfirm(
-                "Borrar Daño", 
-                "¿Estás seguro de eliminar este registro permanentemente de la aeronave? Esta acción no se puede deshacer.", 
-                "Eliminar", 
-                "var(--amerijet-red)", 
-                async () => {
-                    if (h.id_db) {
-                        try {
-                            const { error } = await supabaseClient.from('avion_danos').delete().eq('id', h.id_db);
-                            if (error) throw error;
-                        } catch (e) {
-                            showToast("Error de conexión al eliminar.", "error"); return;
-                        }
-                    }
-                    matrizHallazgos = matrizHallazgos.filter(x => x.idTracking !== idTracking);
-                    delete fotosBanco[idTracking];
-                    marcarCambios();
-                    renderizarMatrizDinamica();
-                    renderizarHistorialEnCompartimentos();
-                    showToast("Registro eliminado de la base de datos.");
-                }
-            );
-        }
-
         // --- SISTEMA DE INCIDENCIAS TEMPORALES DEL VUELO ---
         function agregarIncidencia() {
+            const areaInc = document.getElementById('sel_incidencia_area').value;
             const desc = document.getElementById('desc_incidencia').value.trim();
             if(!desc) { showToast("Debe describir la incidencia.", "error"); return; }
             
             const idLocal = 'inc_' + Date.now();
             incidenciasVuelo.push({
                 idTracking: idLocal,
+                area: areaInc,
                 descripcion: desc,
                 fecha: new Date().toISOString()
             });
@@ -752,9 +748,10 @@
 
             document.getElementById('desc_incidencia').value = "";
             document.getElementById('gal_incidencias').innerHTML = "";
+            document.getElementById('sel_incidencia_area').value = "General";
             marcarCambios();
             renderizarIncidencias();
-            showToast("Incidencia registrada. Se mostrará en el PDF.", "info");
+            showToast("Incidencia registrada. Se mostrará agrupada en el PDF.", "info");
         }
 
         function renderizarIncidencias() {
@@ -769,6 +766,7 @@
                 }
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
+                        <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px;">📍 Área: ${inc.area || 'General'}</div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark);">${inc.descripcion}</div>
                         ${htmlF}
                         <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
@@ -887,7 +885,6 @@
             if(!ubi || !comp || !dano) { showToast("Faltan datos por llenar en la sección de Seguros.", "error"); return; }
 
             const idT = 'cls_' + Date.now(); let iAvion = null; let iPaleta = null;
-            
             const descripcionFinal = notasAdd ? `${dano} - Notas: ${notasAdd}` : dano;
 
             try {
@@ -937,52 +934,117 @@
             } catch(e) { alert("Error al renderizar los mapas. Intenta nuevamente."); }
         }
 
+        // =====================================
+        // MATRIZ DINÁMICA AGRUPADA POR ÁREAS
+        // =====================================
         function renderizarMatrizDinamica() {
             const cnt = document.getElementById('matrizDinamica');
-            if(matrizHallazgos.length === 0) { cnt.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">La matriz consolidará el historial del avión y los nuevos hallazgos.</div>`; return; }
+            if(matrizHallazgos.length === 0) { 
+                cnt.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">La matriz consolidará el historial del avión y los nuevos hallazgos.</div>`; 
+                return; 
+            }
             
             cnt.innerHTML = "";
-            matrizHallazgos.forEach((h, i) => {
-                const div = document.createElement('div');
-                div.className = `matrix-item ${h.esHistorico ? 'historical' : ''} ${h.estado_actual === 'REPARADO' ? 'resolved' : ''}`;
+            
+            // Agrupar los hallazgos por área para mostrarlos ordenados
+            const gruposArea = {};
+            matrizHallazgos.forEach((h) => {
+                let areaGrp = (h.area || 'GENERAL').toUpperCase();
+                if(!gruposArea[areaGrp]) gruposArea[areaGrp] = [];
+                gruposArea[areaGrp].push(h);
+            });
+
+            // Ordenar las áreas alfabéticamente
+            const areasOrdenadas = Object.keys(gruposArea).sort();
+
+            areasOrdenadas.forEach(area => {
+                // Título de Sección
+                cnt.innerHTML += `<div class="group-header">📍 ${area}</div>`;
                 
-                let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
-                let htmlF = "";
-                if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
-                    htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
-                }
-
-                const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
-                const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : '-';
-
-                div.innerHTML = `
-                    ${b}
-                    <div style="color:var(--amerijet-blue); font-weight:900; font-size:14px;">📍 ${h.area} | Pos: ${h.ubicacion}</div>
-                    <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
-                    <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
+                // Elementos de esa área
+                gruposArea[area].forEach(h => {
+                    const div = document.createElement('div');
+                    div.className = `matrix-item ${h.esHistorico ? 'historical' : ''} ${h.estado_actual === 'REPARADO' ? 'resolved' : ''}`;
                     
-                    <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
-                        <span>📅 Rep: ${fRep}</span> <span>🔄 Upd: ${fUpd}</span>
-                    </div>
+                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
+                    let htmlF = "";
+                    if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
+                        htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
+                    }
 
-                    ${htmlF}
-                    ${h.estado_actual === 'ABIERTO' ? `<button type="button" class="btn-update-matrix" onclick="abrirModalActualizacion(${i})">✏️ Reportar Actualización / Reparación</button>` : ''}
-                    <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
-                `;
-                cnt.appendChild(div);
+                    const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
+                    const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : '-';
+
+                    div.innerHTML = `
+                        ${b}
+                        <div style="color:var(--amerijet-blue); font-weight:900; font-size:14px;">Pos: ${h.ubicacion}</div>
+                        <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
+                        <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
+                        
+                        <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
+                            <span>📅 Rep: ${fRep}</span> <span>🔄 Upd: ${fUpd}</span>
+                        </div>
+
+                        ${htmlF}
+                        ${h.estado_actual === 'ABIERTO' ? `<button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>` : ''}
+                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
+                    `;
+                    cnt.appendChild(div);
+                });
             });
         }
 
-        function abrirModalActualizacion(idx) {
-            document.getElementById('modalIndex').value = idx;
-            document.getElementById('lblModalInfo').innerText = `${matrizHallazgos[idx].area} - ${matrizHallazgos[idx].descripcion}`;
-            document.getElementById('modalNotas').value = ""; document.getElementById('gal_modal_update').innerHTML = ""; fotosBanco['modal_temp'] = [];
-            document.getElementById('modalActualizar').style.display = 'flex';
+        function abrirModalActualizacionPorIdTracking(idTracking) { 
+            const idx = matrizHallazgos.findIndex(h => h.idTracking === idTracking); 
+            if (idx !== -1) {
+                document.getElementById('modalIndex').value = idTracking;
+                document.getElementById('lblModalInfo').innerText = `${matrizHallazgos[idx].descripcion}`;
+                document.getElementById('modalArea').value = matrizHallazgos[idx].area;
+                document.getElementById('modalComponente').value = matrizHallazgos[idx].componente;
+                document.getElementById('modalNotas').value = matrizHallazgos[idx].nota_solucion || ""; 
+                document.getElementById('gal_modal_update').innerHTML = ""; 
+                fotosBanco['modal_temp'] = [];
+                document.getElementById('modalActualizar').style.display = 'flex';
+            }
+        }
+
+        // --- ELIMINACIÓN PERMANENTE DESDE LA BASE DE DATOS ---
+        function eliminarHallazgoPorId(idTracking) {
+            const h = matrizHallazgos.find(x => x.idTracking === idTracking);
+            if (!h) return;
+
+            showCustomConfirm(
+                "Borrar Daño", 
+                "¿Estás seguro de eliminar este registro permanentemente de la aeronave? Esta acción no se puede deshacer.", 
+                "Eliminar", 
+                "var(--amerijet-red)", 
+                async () => {
+                    if (h.id_db) {
+                        try {
+                            const { error } = await supabaseClient.from('avion_danos').delete().eq('id', h.id_db);
+                            if (error) throw error;
+                        } catch (e) {
+                            showToast("Error de conexión al eliminar.", "error"); return;
+                        }
+                    }
+                    matrizHallazgos = matrizHallazgos.filter(x => x.idTracking !== idTracking);
+                    delete fotosBanco[idTracking];
+                    marcarCambios();
+                    renderizarMatrizDinamica();
+                    renderizarHistorialEnCompartimentos();
+                    showToast("Registro eliminado de la base de datos.");
+                }
+            );
         }
 
         function guardarActualizacion() {
-            const idx = document.getElementById('modalIndex').value;
+            const idTracking = document.getElementById('modalIndex').value;
+            const idx = matrizHallazgos.findIndex(x => x.idTracking === idTracking);
+            if(idx === -1) return;
+
             matrizHallazgos[idx].estado_actual = document.getElementById('modalEstadoNuevo').value;
+            matrizHallazgos[idx].area = document.getElementById('modalArea').value.trim() || matrizHallazgos[idx].area;
+            matrizHallazgos[idx].componente = document.getElementById('modalComponente').value.trim() || matrizHallazgos[idx].componente;
             
             const nuevasNotas = document.getElementById('modalNotas').value.trim();
             if(nuevasNotas) matrizHallazgos[idx].nota_solucion = nuevasNotas;
@@ -1046,6 +1108,7 @@
                     notas: document.getElementById('txtNotasFinales').value,
                     incidencias: incidenciasVuelo.map(inc => ({
                         idTracking: inc.idTracking,
+                        area: inc.area,
                         descripcion: inc.descripcion,
                         fecha: inc.fecha,
                         fotos: fotosBanco[inc.idTracking] || []
@@ -1073,9 +1136,6 @@
             finally { btn.innerText = "💾 Guardar Nube"; btn.disabled = false; }
         }
 
-        // =====================================
-        // GENERADOR DE CONFIGURACIÓN INTELIGENTE (RE-DIBUJAR PDF)
-        // =====================================
         function getConfigFromUbicacion(ubi) {
             if (!ubi) return 'A';
             const str = ubi.toUpperCase();
@@ -1088,7 +1148,7 @@
         }
 
         // =====================================
-        // RENDER PDF (INCLUYE RECONSTRUCCIÓN CLS)
+        // RENDER PDF (PERFECT ASPECT RATIO & WORD WRAP)
         // =====================================
         async function generarPDFCarta() {
             const btn = document.getElementById('btnDescargarPDF');
@@ -1137,7 +1197,6 @@
                     }
                 }
                 
-                // Restauramos el estado visual original en pantalla
                 dibujarPlanoAvionCSS(configActualGlobal, null); 
 
                 // 2. CREACIÓN DEL DOCUMENTO PDF
@@ -1171,7 +1230,8 @@
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("1. DISCREPANCIES SUMMARY", 15, cy);
                 
                 if(matrizHallazgos.length > 0) {
-                    const tData = matrizHallazgos.map((h, i) => {
+                    const sortedMatriz = [...matrizHallazgos].sort((a, b) => (a.area||'').localeCompare(b.area||''));
+                    const tData = sortedMatriz.map((h, i) => {
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                         return [ i+1, h.estado_actual, h.area, h.componente, h.descripcion, fRep ];
                     });
@@ -1191,7 +1251,7 @@
                     cy += 15; 
                 }
 
-                // FOTOS DE HALLAZGOS ESTRUCTURALES Y CLS
+                // FOTOS DE HALLAZGOS ESTRUCTURALES Y CLS (AGRUPADOS POR ÁREA)
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("2. DETAILED FINDINGS & EVIDENCE", 15, cy);
                 cy += 8;
 
@@ -1200,86 +1260,148 @@
                     doc.text("No structural evidence required.", 15, cy); cy += 15;
                 }
 
-                for (let i = 0; i < matrizHallazgos.length; i++) {
-                    const h = matrizHallazgos[i];
-                    if(cy > 240) { doc.addPage(); cy = 20; }
+                const gruposPDF = {};
+                matrizHallazgos.forEach((h) => {
+                    let areaGrp = (h.area || 'GENERAL').toUpperCase();
+                    if(!gruposPDF[areaGrp]) gruposPDF[areaGrp] = [];
+                    gruposPDF[areaGrp].push(h);
+                });
 
-                    doc.setFillColor(226, 232, 240);
+                for(const [area, items] of Object.entries(gruposPDF)) {
+                    if(cy > 240) { doc.addPage(); cy = 20; }
+                    
+                    // HEADER DE ÁREA
+                    doc.setFillColor(10, 37, 64);
                     doc.rect(15, cy, 185.9, 8, "F");
-                    doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.setFont("Helvetica", "bold");
-                    doc.text(`FINDING #${i+1}: [${h.area.toUpperCase()}] - ${h.componente.toUpperCase()}`, 18, cy + 5.5);
+                    doc.setFontSize(11); doc.setTextColor(255, 255, 255); doc.setFont("Helvetica", "bold");
+                    doc.text(`[ ${area} ]`, 18, cy + 5.5);
                     cy += 12;
 
-                    doc.setTextColor(51, 65, 85); doc.setFontSize(10); doc.setFont("Helvetica", "normal");
-                    const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
-                    const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : 'N/A';
-
-                    doc.text(`Location: ${h.ubicacion}`, 15, cy);
-                    doc.text(`Status: ${h.estado_actual}`, 110, cy); cy += 6;
-                    doc.text(`Reported: ${fRep}  |  Last Update: ${fUpd}`, 15, cy); cy += 7;
-                    
-                    doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
-                    doc.setFont("Helvetica", "normal"); doc.text(`${h.descripcion}`, 33, cy); cy += 6;
-                    
-                    if(h.nota_solucion) {
-                        doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
-                        doc.setFont("Helvetica", "normal"); doc.text(`${h.nota_solucion}`, 28, cy); cy += 6;
-                    }
-                    cy += 2;
-
-                    if (h.tipo === 'LOCKS' && h.imgAvion && h.imgPaleta) {
-                        if(cy > 160) { doc.addPage(); cy = 20; }
-                        doc.setFont("Helvetica", "bold"); doc.text("CLS Maps Evidence:", 15, cy); cy += 4;
-                        doc.addImage(h.imgAvion, 'JPEG', 15, cy, 180, 25); cy += 28;
-                        doc.addImage(h.imgPaleta, 'JPEG', 45, cy, 110, 55); cy += 60;
-                    }
-
-                    if (fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
-                        doc.setFont("Helvetica", "bold"); doc.text("Photographic Evidence:", 15, cy); cy += 4;
-                        let fx = 15; let rowHeight = 0;
+                    for(let i=0; i < items.length; i++){
+                        const h = items[i];
+                        if(cy > 240) { doc.addPage(); cy = 20; }
                         
-                        fotosBanco[h.idTracking].forEach((b64) => {
-                            if (fx > 130) { fx = 15; cy += 65; } 
-                            if (cy > 210) { doc.addPage(); cy = 20; }
-                            doc.addImage(b64, 'JPEG', fx, cy, 85, 60); 
-                            fx += 90; rowHeight = 60;
-                        });
-                        cy += rowHeight + 10;
-                    } else { cy += 5; }
-                    
-                    doc.setDrawColor(226, 232, 240); doc.line(15, cy, 200.9, cy); cy += 8;
+                        doc.setTextColor(51, 65, 85); doc.setFontSize(10); doc.setFont("Helvetica", "bold");
+                        doc.text(`FINDING: ${h.componente.toUpperCase()}`, 15, cy); cy += 5;
+                        
+                        doc.setFont("Helvetica", "normal");
+                        const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
+                        const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : 'N/A';
+                        
+                        doc.text(`Location: ${h.ubicacion}`, 15, cy);
+                        doc.text(`Status: ${h.estado_actual}`, 110, cy); cy += 5;
+                        doc.text(`Reported: ${fRep}  |  Last Update: ${fUpd}`, 15, cy); cy += 6;
+                        
+                        doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
+                        doc.setFont("Helvetica", "normal"); 
+                        
+                        // TEXT WRAPPING (Evita que el texto se salga de la hoja)
+                        const splitDesc = doc.splitTextToSize(`${h.descripcion}`, 150);
+                        doc.text(splitDesc, 33, cy); 
+                        cy += (splitDesc.length * 4.5) + 2; 
+                        
+                        if(h.nota_solucion) {
+                            doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
+                            doc.setFont("Helvetica", "normal"); 
+                            const splitNotes = doc.splitTextToSize(`${h.nota_solucion}`, 155);
+                            doc.text(splitNotes, 28, cy); 
+                            cy += (splitNotes.length * 4.5) + 2;
+                        }
+                        cy += 2;
+
+                        if (h.tipo === 'LOCKS' && h.imgAvion && h.imgPaleta) {
+                            if(cy > 160) { doc.addPage(); cy = 20; }
+                            doc.setFont("Helvetica", "bold"); doc.text("CLS Maps Evidence:", 15, cy); cy += 4;
+                            doc.addImage(h.imgAvion, 'JPEG', 15, cy, 180, 25); cy += 28;
+                            doc.addImage(h.imgPaleta, 'JPEG', 45, cy, 110, 55); cy += 60;
+                        }
+
+                        if (fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
+                            doc.setFont("Helvetica", "bold"); doc.text("Photographic Evidence:", 15, cy); cy += 4;
+                            let fx = 15; let rowHeight = 0;
+                            
+                            fotosBanco[h.idTracking].forEach((b64) => {
+                                if (fx > 130) { fx = 15; cy += 65; } 
+                                if (cy > 210) { doc.addPage(); cy = 20; fx = 15; }
+                                
+                                // ASPECT RATIO MATEMÁTICO (Evita distorsión de imágenes)
+                                const props = doc.getImageProperties(b64);
+                                const maxW = 85; const maxH = 60;
+                                const ratio = Math.min(maxW / props.width, maxH / props.height);
+                                const w = props.width * ratio;
+                                const h_img = props.height * ratio;
+
+                                const xOffset = fx + (maxW - w) / 2;
+                                const yOffset = cy + (maxH - h_img) / 2;
+
+                                doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); 
+                                fx += 90; rowHeight = 60;
+                            });
+                            cy += rowHeight + 10;
+                        } else { cy += 5; }
+                        
+                        doc.setDrawColor(226, 232, 240); doc.line(15, cy, 200.9, cy); cy += 8;
+                    }
                 }
 
-                // SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO
+                // SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO (AGRUPADAS)
                 if(incidenciasVuelo.length > 0) {
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(15, 23, 42);
                     doc.text("3. FLIGHT OPERATION INCIDENTS (TEMPORARY)", 15, cy); cy += 8;
 
-                    for (let i = 0; i < incidenciasVuelo.length; i++) {
-                        const inc = incidenciasVuelo[i];
-                        if(cy > 250) { doc.addPage(); cy = 20; }
-                        
-                        doc.setFont("Helvetica", "bold"); doc.setFontSize(10);
-                        doc.text(`Incident #${i+1}:`, 15, cy);
-                        doc.setFont("Helvetica", "normal");
-                        doc.text(`${inc.descripcion}`, 35, cy); cy += 5;
+                    const incGrupos = {};
+                    incidenciasVuelo.forEach((inc) => {
+                        let aGrp = (inc.area || 'GENERAL').toUpperCase();
+                        if(!incGrupos[aGrp]) incGrupos[aGrp] = [];
+                        incGrupos[aGrp].push(inc);
+                    });
 
-                        if (fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
-                            let fx = 15; let rowHeight = 0;
-                            fotosBanco[inc.idTracking].forEach((b64) => {
-                                if (fx > 130) { fx = 15; cy += 65; } 
-                                if (cy > 210) { doc.addPage(); cy = 20; }
-                                doc.addImage(b64, 'JPEG', fx, cy, 85, 60); 
-                                fx += 90; rowHeight = 60;
-                            });
-                            cy += rowHeight + 5;
-                        } else { cy += 2; }
+                    for(const [area, incidencias] of Object.entries(incGrupos)) {
+                        if(cy > 240) { doc.addPage(); cy = 20; }
+                        doc.setFillColor(254, 215, 170); // Naranja claro
+                        doc.rect(15, cy, 185.9, 6, "F");
+                        doc.setFontSize(10); doc.setTextColor(153, 27, 27); doc.setFont("Helvetica", "bold");
+                        doc.text(`AREA: ${area}`, 18, cy + 4);
+                        cy += 10;
+
+                        for (let i = 0; i < incidencias.length; i++) {
+                            const inc = incidencias[i];
+                            if(cy > 250) { doc.addPage(); cy = 20; }
+                            
+                            doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
+                            doc.text(`Incident:`, 15, cy);
+                            doc.setFont("Helvetica", "normal");
+                            const splitInc = doc.splitTextToSize(`${inc.descripcion}`, 155);
+                            doc.text(splitInc, 32, cy); 
+                            cy += (splitInc.length * 4.5) + 2;
+
+                            if (fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
+                                let fx = 15; let rowHeight = 0;
+                                fotosBanco[inc.idTracking].forEach((b64) => {
+                                    if (fx > 130) { fx = 15; cy += 65; } 
+                                    if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
+                                    
+                                    const props = doc.getImageProperties(b64);
+                                    const maxW = 85; const maxH = 60;
+                                    const ratio = Math.min(maxW / props.width, maxH / props.height);
+                                    const w = props.width * ratio;
+                                    const h_img = props.height * ratio;
+                                    const xOffset = fx + (maxW - w) / 2;
+                                    const yOffset = cy + (maxH - h_img) / 2;
+
+                                    doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); 
+                                    fx += 90; rowHeight = 60;
+                                });
+                                cy += rowHeight + 5;
+                            } else { cy += 2; }
+                        }
+                        cy += 4;
                     }
                 }
 
-                doc.save(`Aircraft_Report_${vueloData.tail}.pdf`); showToast("PDF generado exitosamente.");
-            } catch(e) { alert("Error PDF: " + e.message); console.error(e); }
+                doc.save(`Inspection_${vueloData.tail}_${vueloData.vuelo}.pdf`); showCustomAlert("Éxito", "PDF generado exitosamente.", "success");
+            } catch(e) { showCustomAlert("Error PDF", e.message, "error"); console.error(e); }
             finally { btn.innerText = "📄 Bajar PDF Oficial"; btn.disabled = false; }
         }
 
