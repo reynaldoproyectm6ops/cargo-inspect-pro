@@ -52,6 +52,7 @@
         .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
 
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
         .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
@@ -131,7 +132,7 @@
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 700; font-size: 12px; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
-        /* MATRIZ DINÁMICA DE ABAJO Y SCROLL MEJORADO */
+        /* MATRIZ DINÁMICA Y SCROLL DE INCIDENCIAS */
         .matrix-container { max-height: 400px; overflow-y: auto; padding-right: 8px; margin-top: 15px; }
         .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin: 20px 0 10px 0; border-bottom: 2px solid #E2E8F0; padding-bottom: 5px; text-transform: uppercase;}
         
@@ -203,6 +204,7 @@
             <button class="nav-link" id="btnReportesHistoricos" style="display: none;" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
         </nav>
         <div class="sidebar-footer">
+            <div class="version-badge">VERSION 0.0.1</div>
             <button class="btn-logout" onclick="logoutSeguro()">🚪 Cerrar Sesión</button>
         </div>
     </aside>
@@ -240,7 +242,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA Y REPORTES NUEVOS -->
+                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA (ZONA DE REPORTE TOTALMENTE LIMPIA) -->
                 <div class="card">
                     <div class="card-header">1. Inspección Estructural Básica</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
@@ -255,6 +257,7 @@
                             <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
                         </select>
 
+                        <!-- Panel de ingreso exclusivo (No muestra historial aquí) -->
                         <div id="panel_lower_fwd" class="hallazgo-panel">
                             <input type="text" id="desc_lower_fwd" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Tomar Foto
@@ -429,7 +432,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO CON SELECTOR DE ÁREA -->
+                <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO CON SELECTOR DE ÁREA Y SCROLL -->
                 <div class="card" style="margin-bottom: 20px; border: 2px solid var(--warn-orange);">
                     <div class="card-header" style="color:var(--warn-orange);">3. Incidencias Temporales del Vuelo</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
@@ -453,7 +456,9 @@
                         <div class="photo-gallery" id="gal_incidencias"></div>
                         <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">➕ Agregar Incidencia a este Vuelo</button>
                     </div>
-                    <div id="listaIncidencias" style="margin-top: 15px;"></div>
+                    
+                    <!-- Scroll Interno Exclusivo para Incidencias -->
+                    <div id="listaIncidencias" style="margin-top: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px;"></div>
                 </div>
 
                 <!-- SECCIÓN 4: CIERRE FINAL -->
@@ -620,6 +625,7 @@
                     document.getElementById('lblTailHead').innerText = op.matricula_avion;
                 }
 
+                // Carga del historial del avión
                 const { data: danosBD } = await supabaseClient.from('avion_danos')
                     .select('*')
                     .eq('matricula_avion', vueloData.tail)
@@ -653,6 +659,7 @@
                     });
                 }
 
+                // Carga de notas finales de este vuelo
                 const { data: logGuardado } = await supabaseClient.from('avion_inspecciones').select('notas_adicionales').eq('vuelo_operacion_id', operacionId).order('id', { ascending: false }).limit(1);
                 if(logGuardado && logGuardado.length > 0) { 
                     const notasBD = logGuardado[0].notas_adicionales || '';
@@ -672,6 +679,7 @@
                 }
 
                 dibujarPlanoAvionCSS('A');
+                // IMPORTANTE: Ya no llamamos a renderizarHistorialEnCompartimentos(). Se carga directo a la Matriz.
                 renderizarMatrizDinamica();
                 renderizarIncidencias();
             } catch(e) { console.error("Error de inicialización", e); }
@@ -732,6 +740,7 @@
             renderizarIncidencias();
         }
 
+        // --- SISTEMA DE PANELES DE INPUT (Limpios) ---
         function togglePanelHallazgo(idCaja, sel) { 
             document.getElementById('panel_' + idCaja).style.display = (sel.value === 'HALLAZGO' || sel.value === 'OTROS') ? 'block' : 'none'; 
             if(sel.value === 'OTROS') {
@@ -794,6 +803,7 @@
             }
         }
 
+        // --- DIBUJADO DE PLANOS ---
         function dibujarPlanoAvionCSS(config, btnElem) {
             if(btnElem) { document.querySelectorAll('.tab-btn').forEach(b => { b.style.background = 'white'; b.style.color = '#475569'; }); btnElem.style.background = 'var(--amerijet-blue)'; btnElem.style.color = 'white';}
             configActualGlobal = config;
@@ -915,7 +925,7 @@
             
             cnt.innerHTML = "";
             
-            // Agrupar los hallazgos por área y ordenarlos estratégicamente
+            // Agrupar los hallazgos por área
             const gruposArea = {};
             matrizHallazgos.forEach((h) => {
                 let areaGrp = (h.area || 'GENERAL').toUpperCase();
@@ -923,7 +933,7 @@
                 gruposArea[areaGrp].push(h);
             });
 
-            // Ordenamiento inteligente 
+            // Ordenamiento inteligente
             const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
 
             areasOrdenadas.forEach(area => {
@@ -1100,17 +1110,6 @@
             } 
             catch(e) { showCustomAlert("Error de Base de Datos", e.message, "error"); } 
             finally { btn.innerText = "💾 Guardar Nube"; btn.disabled = false; }
-        }
-
-        function getConfigFromUbicacion(ubi) {
-            if (!ubi) return 'A';
-            const str = ubi.toUpperCase();
-            if (str.includes('P')) return 'G';
-            if (str.includes('E')) return 'E';
-            if (str.includes('D')) return 'D';
-            if (str.includes('C')) return 'C';
-            if (str.includes('B')) return 'B';
-            return 'A';
         }
 
         // =====================================
@@ -1341,7 +1340,7 @@
                             doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
                             doc.text(`Incident:`, 15, cy);
                             doc.setFont("Helvetica", "normal");
-                            // Word-wrap para el texto temporal ajustado
+                            
                             const splitInc = doc.splitTextToSize(String(inc.descripcion), 130);
                             doc.text(splitInc, 32, cy); 
                             cy += (splitInc.length * 4.5) + 2;
