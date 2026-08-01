@@ -65,7 +65,7 @@
         .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor:pointer;}
         .btn-volver-top:hover { background: #E2E8F0; }
 
-        /* Padding bottom extra para que la Bottom Bar no tape el final en celulares */
+        /* Padding bottom extra para móviles */
         .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
         
@@ -77,7 +77,7 @@
 
         /* CAJAS BLANCAS */
         .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
-        .card-header { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 18px; text-transform: uppercase; }
+        .card-header { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 15px; text-transform: uppercase; }
 
         .comp-item { background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 18px; margin-bottom: 15px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
         .comp-title { font-weight: 900; font-size: 14px; color: var(--amerijet-blue-dark); margin-bottom: 12px; display: block; }
@@ -132,9 +132,13 @@
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 700; font-size: 12px; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
-        /* MATRIZ DINÁMICA Y SCROLL DE INCIDENCIAS */
-        .matrix-container { max-height: 400px; overflow-y: auto; padding-right: 8px; margin-top: 15px; }
-        .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin: 20px 0 10px 0; border-bottom: 2px solid #E2E8F0; padding-bottom: 5px; text-transform: uppercase;}
+        /* CONTADORES Y BADGES */
+        .counter-badge { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E3A8A; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 8px; margin-right: 6px; }
+        .counter-badge.total { background: #1E3A8A; color: white; border-color: #1E3A8A; }
+
+        /* MATRIZ DINÁMICA SECCIONADA CON SCROLL INDIVIDUAL */
+        .compartment-scroll { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 20px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px 15px 5px 15px; }
+        .group-header { font-size: 14px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #CBD5E1; text-transform: uppercase;}
         
         .matrix-item { background: white; border: 1px solid #E2E8F0; border-left: 4px solid var(--amerijet-red); padding: 18px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .matrix-item.historical { border-left-color: var(--warn-orange); background: #FFFBEB; }
@@ -158,7 +162,7 @@
 
         /* MODALES Y TOAST */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(2px); padding: 15px;}
-        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);}
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;}
 
         #renderContainer { position: absolute; left: -9999px; top: 0; width: 800px; z-index: -100; background: white; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
@@ -424,11 +428,17 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ (CENTRALIZADA Y CON SCROLL) -->
+                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ (SECCIONADA CON MÚLTIPLES SCROLLS) -->
                 <div class="card">
-                    <div class="card-header">2. Trazabilidad de Discrepancias</div>
-                    <div id="matrizDinamica" class="matrix-container">
-                        <div style="text-align: center; font-size: 13px; color: #94A3B8; font-style: italic; padding: 20px;">Cargando historial del avión...</div>
+                    <div class="card-header" style="margin-bottom: 5px;">2. Trazabilidad de Discrepancias</div>
+                    
+                    <!-- CONTEO DE REPORTES -->
+                    <div id="matrixCounters" style="margin-bottom: 20px;">
+                        <div style="font-size:12px; color:#64748B; font-weight: 600;">Cargando historial...</div>
+                    </div>
+
+                    <div id="matrizDinamica">
+                        <!-- Aquí se inyectarán las áreas con su propio scroll -->
                     </div>
                 </div>
 
@@ -475,14 +485,13 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN PROFUNDA -->
+    <!-- MODAL EDICIÓN PROFUNDA (AHORA PERMITE EDITAR LA DESCRIPCIÓN DEL DAÑO) -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
-            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900;">✏️ Actualizar Daño</h3>
-            <p id="lblModalInfo" style="font-size: 13px; font-weight:bold; color: #475569; margin-bottom: 15px; border-left:3px solid var(--amerijet-red); padding-left:8px;"></p>
+            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900;">✏️ Editar / Actualizar Daño</h3>
             <input type="hidden" id="modalIndex">
             
-            <div style="display:flex; gap:10px; margin-bottom: 12px; text-align: left;">
+            <div style="display:flex; gap:10px; margin-bottom: 10px; text-align: left;">
                 <div style="flex:1;">
                     <label style="font-size:10px; font-weight:800; color:#475569; text-transform:uppercase;">Área</label>
                     <input type="text" id="modalArea" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:6px; font-weight:700;" oninput="marcarCambios()">
@@ -493,13 +502,19 @@
                 </div>
             </div>
 
+            <div style="text-align: left; margin-bottom: 12px;">
+                <label style="font-size:10px; font-weight:800; color:#475569; text-transform:uppercase;">Descripción del Daño</label>
+                <textarea id="modalDescripcion" rows="2" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:6px; font-weight:700;" oninput="marcarCambios()"></textarea>
+            </div>
+
             <select id="modalEstadoNuevo" style="margin-bottom: 12px; border:2px solid #CBD5E1; font-weight:800;" onchange="marcarCambios()">
                 <option value="ABIERTO">Sigue Igual (Abierto)</option>
                 <option value="REPARADO">Se Reparó el Daño (Cerrar)</option>
             </select>
-            <input type="text" id="modalNotas" placeholder="Notas de la actualización / reparación..." style="margin-bottom: 12px; padding: 10px;" oninput="marcarCambios()">
             
-            <label class="btn-camera" style="margin-top: 5px;">📸 Foto de Evidencia
+            <input type="text" id="modalNotas" placeholder="Notas adicionales de la actualización / reparación..." style="margin-bottom: 12px; padding: 10px;" oninput="marcarCambios()">
+            
+            <label class="btn-camera" style="margin-top: 5px;">📸 Foto de Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_update', 'modal_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_update"></div>
@@ -540,13 +555,22 @@
         // --- ARRAY TEMPORAL DE INCIDENCIAS DE VUELO ---
         let incidenciasVuelo = [];
 
-        // --- ORDEN ESTRICTO PARA VISTA Y PDF ---
+        // --- ORDEN ESTRICTO Y CATEGORIZADOR ---
+        function getStandardGroup(areaName) {
+            let u = (areaName || '').toUpperCase();
+            if(u.includes('MAIN DECK') || u.includes('MD') || u.includes('CLS')) return 'MAIN DECK';
+            if(u.includes('LOWER FORWARD') || u.includes('FWD')) return 'LOWER FORWARD';
+            if(u.includes('LOWER AFT') || u.includes('AFT')) return 'LOWER AFT';
+            if(u.includes('BULK')) return 'BULK';
+            return 'OTROS COMPARTIMIENTOS';
+        }
+
         function getSortWeight(areaStr) {
-            const a = (areaStr || '').toUpperCase();
-            if(a.includes("MAIN DECK") || a.includes("MD")) return 1;
-            if(a.includes("LOWER FORWARD")) return 2;
-            if(a.includes("LOWER AFT")) return 3;
-            if(a.includes("BULK")) return 4;
+            const a = getStandardGroup(areaStr);
+            if(a === 'MAIN DECK') return 1;
+            if(a === 'LOWER FORWARD') return 2;
+            if(a === 'LOWER AFT') return 3;
+            if(a === 'BULK') return 4;
             return 5;
         }
 
@@ -612,6 +636,10 @@
             if (perfil) {
                 document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
                 document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
+                if(perfil.rol === 'admin' || perfil.rol === 'superadmin') {
+                    document.getElementById('btnAdminPanel').style.display = 'flex';
+                    document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                }
             }
 
             if(!operacionId) return;
@@ -679,7 +707,6 @@
                 }
 
                 dibujarPlanoAvionCSS('A');
-                // IMPORTANTE: Ya no llamamos a renderizarHistorialEnCompartimentos(). Se carga directo a la Matriz.
                 renderizarMatrizDinamica();
                 renderizarIncidencias();
             } catch(e) { console.error("Error de inicialización", e); }
@@ -914,35 +941,57 @@
         }
 
         // =====================================
-        // MATRIZ DINÁMICA AGRUPADA Y ORDENADA
+        // MATRIZ DINÁMICA SECCIONADA CON CONTADORES
         // =====================================
         function renderizarMatrizDinamica() {
-            const cnt = document.getElementById('matrizDinamica');
+            const cntDinamico = document.getElementById('matrizDinamica');
+            const cntCounters = document.getElementById('matrixCounters');
+            
             if(matrizHallazgos.length === 0) { 
-                cnt.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">No hay daños registrados actualmente. Utiliza la sección superior para añadir nuevos hallazgos.</div>`; 
+                cntCounters.innerHTML = '';
+                cntDinamico.innerHTML = `<div style="text-align:center; font-size:13px; color:#94A3B8; font-style:italic; padding:20px;">No hay daños registrados actualmente. Utiliza la sección superior para añadir nuevos hallazgos.</div>`; 
                 return; 
             }
             
-            cnt.innerHTML = "";
+            cntDinamico.innerHTML = "";
             
-            // Agrupar los hallazgos por área
-            const gruposArea = {};
+            // 1. Agrupar y Contar
+            const gruposArea = {
+                'MAIN DECK': [],
+                'LOWER FORWARD': [],
+                'LOWER AFT': [],
+                'BULK': [],
+                'OTROS COMPARTIMIENTOS': []
+            };
+
+            let totalAbiertos = 0;
+
             matrizHallazgos.forEach((h) => {
-                let areaGrp = (h.area || 'GENERAL').toUpperCase();
-                if(!gruposArea[areaGrp]) gruposArea[areaGrp] = [];
-                gruposArea[areaGrp].push(h);
+                if(h.estado_actual === 'ABIERTO') totalAbiertos++;
+                let standardName = getStandardGroup(h.area);
+                gruposArea[standardName].push(h);
             });
 
-            // Ordenamiento inteligente
+            // Renderizar Contadores
+            let countersHTML = `<div class="counter-badge total">Total Reportes: ${matrizHallazgos.length}</div>`;
+            if(gruposArea['MAIN DECK'].length > 0) countersHTML += `<div class="counter-badge">MD: ${gruposArea['MAIN DECK'].length}</div>`;
+            if(gruposArea['LOWER FORWARD'].length > 0) countersHTML += `<div class="counter-badge">FWD: ${gruposArea['LOWER FORWARD'].length}</div>`;
+            if(gruposArea['LOWER AFT'].length > 0) countersHTML += `<div class="counter-badge">AFT: ${gruposArea['LOWER AFT'].length}</div>`;
+            if(gruposArea['BULK'].length > 0) countersHTML += `<div class="counter-badge">BULK: ${gruposArea['BULK'].length}</div>`;
+            if(gruposArea['OTROS COMPARTIMIENTOS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS COMPARTIMIENTOS'].length}</div>`;
+            
+            cntCounters.innerHTML = countersHTML;
+
+            // 2. Renderizar Grupos con Scroll Independiente
             const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
 
             areasOrdenadas.forEach(area => {
-                cnt.innerHTML += `<div class="group-header">📍 ${area}</div>`;
+                if(gruposArea[area].length === 0) return; // Si no hay daños, no mostrar la caja
                 
+                let areaHTML = `<div class="group-header">📍 ${area}</div>`;
+                areaHTML += `<div class="compartment-scroll">`;
+
                 gruposArea[area].forEach(h => {
-                    const div = document.createElement('div');
-                    div.className = `matrix-item ${h.esHistorico ? 'historical' : ''} ${h.estado_actual === 'REPARADO' ? 'resolved' : ''}`;
-                    
                     let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
                     let htmlF = "";
                     if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
@@ -952,7 +1001,8 @@
                     const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                     const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : '-';
 
-                    div.innerHTML = `
+                    areaHTML += `
+                    <div class="matrix-item ${h.esHistorico ? 'historical' : ''} ${h.estado_actual === 'REPARADO' ? 'resolved' : ''}">
                         ${b}
                         <div style="color:var(--amerijet-blue); font-weight:900; font-size:14px;">Pos: ${h.ubicacion}</div>
                         <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
@@ -963,21 +1013,24 @@
                         </div>
 
                         ${htmlF}
-                        ${h.estado_actual === 'ABIERTO' ? `<button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>` : ''}
+                        <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>
                         <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
-                    `;
-                    cnt.appendChild(div);
+                    </div>`;
                 });
+                
+                areaHTML += `</div>`; // Cierre de compartment-scroll
+                cntDinamico.innerHTML += areaHTML;
             });
         }
 
+        // --- APERTURA DE MODAL CON EDICIÓN DE DAÑO ---
         function abrirModalActualizacionPorIdTracking(idTracking) { 
             const idx = matrizHallazgos.findIndex(h => h.idTracking === idTracking); 
             if (idx !== -1) {
                 document.getElementById('modalIndex').value = idTracking;
-                document.getElementById('lblModalInfo').innerText = `${matrizHallazgos[idx].descripcion}`;
                 document.getElementById('modalArea').value = matrizHallazgos[idx].area;
                 document.getElementById('modalComponente').value = matrizHallazgos[idx].componente;
+                document.getElementById('modalDescripcion').value = matrizHallazgos[idx].descripcion;
                 document.getElementById('modalNotas').value = matrizHallazgos[idx].nota_solucion || ""; 
                 document.getElementById('gal_modal_update').innerHTML = ""; 
                 fotosBanco['modal_temp'] = [];
@@ -985,7 +1038,7 @@
             }
         }
 
-        // --- ELIMINACIÓN PERMANENTE DESDE LA BASE DE DATOS ---
+        // --- ELIMINACIÓN PERMANENTE ---
         function eliminarHallazgoPorId(idTracking) {
             const h = matrizHallazgos.find(x => x.idTracking === idTracking);
             if (!h) return;
@@ -1013,6 +1066,7 @@
             );
         }
 
+        // --- GUARDAR ACTUALIZACIÓN DEL MODAL ---
         function guardarActualizacion() {
             const idTracking = document.getElementById('modalIndex').value;
             const idx = matrizHallazgos.findIndex(x => x.idTracking === idTracking);
@@ -1021,6 +1075,7 @@
             matrizHallazgos[idx].estado_actual = document.getElementById('modalEstadoNuevo').value;
             matrizHallazgos[idx].area = document.getElementById('modalArea').value.trim() || matrizHallazgos[idx].area;
             matrizHallazgos[idx].componente = document.getElementById('modalComponente').value.trim() || matrizHallazgos[idx].componente;
+            matrizHallazgos[idx].descripcion = document.getElementById('modalDescripcion').value.trim() || matrizHallazgos[idx].descripcion;
             
             const nuevasNotas = document.getElementById('modalNotas').value.trim();
             if(nuevasNotas) matrizHallazgos[idx].nota_solucion = nuevasNotas;
@@ -1044,7 +1099,6 @@
             btn.innerText = "⏳ Subiendo Nube..."; btn.disabled = true;
 
             try {
-                // Guarda matriz oficial en avion_danos
                 for (let h of matrizHallazgos) {
                     let ev = { 
                         fotos: fotosBanco[h.idTracking] || [], 
@@ -1079,7 +1133,6 @@
                     }
                 }
 
-                // Generar paquete para INCIDENCIAS TEMPORALES
                 const paqueteTemporales = {
                     notas: document.getElementById('txtNotasFinales').value,
                     incidencias: incidenciasVuelo.map(inc => ({
@@ -1227,7 +1280,7 @@
 
                 const gruposPDF = {};
                 matrizHallazgos.forEach((h) => {
-                    let areaGrp = (h.area || 'GENERAL').toUpperCase();
+                    let areaGrp = getStandardGroup(h.area);
                     if(!gruposPDF[areaGrp]) gruposPDF[areaGrp] = [];
                     gruposPDF[areaGrp].push(h);
                 });
@@ -1263,7 +1316,6 @@
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
                         
-                        // TEXT WRAPPING (Reducido a 130mm para que NO se salga del margen derecho)
                         const splitDesc = doc.splitTextToSize(String(h.descripcion), 130);
                         doc.text(splitDesc, 33, cy); 
                         cy += (splitDesc.length * 4.5) + 2; 
@@ -1292,7 +1344,6 @@
                                 if (fx > 130) { fx = 15; cy += 65; } 
                                 if (cy > 210) { doc.addPage(); cy = 20; fx = 15; }
                                 
-                                // ASPECT RATIO MATEMÁTICO (Evita distorsión de imágenes)
                                 const props = doc.getImageProperties(b64);
                                 const maxW = 85; const maxH = 60;
                                 const ratio = Math.min(maxW / props.width, maxH / props.height);
