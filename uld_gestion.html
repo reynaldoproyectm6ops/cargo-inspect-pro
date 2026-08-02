@@ -82,7 +82,7 @@
         .station-static { color: #10B981; font-weight: 800; font-size: 15px; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; padding-bottom: 60px; }
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
         .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
         /* BANNER INBOUND (ULDs EN TRÁNSITO) */
@@ -137,6 +137,9 @@
         .form-group-inline input, .form-group-inline select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; text-transform: uppercase; font-weight: 600; width: 100%;}
         .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap;}
         
+        .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; gap: 6px;}
+        .btn-masivo:hover { background: #7C3AED; }
+
         /* Historial Minimalista */
         .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-bottom: 5px; }
         .btn-ver-historial { background: white; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;}
@@ -225,7 +228,7 @@
             .top-panel { flex-direction: column; align-items: stretch; }
             .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
             .form-group-inline { width: 100%; }
-            .btn-crear { width: 100%; margin-top: 5px; }
+            .btn-crear, .btn-masivo { width: 100%; margin-top: 5px; justify-content: center;}
             
             .table-toolbar { flex-direction: column; align-items: stretch; }
             .table-actions { width: 100%; }
@@ -314,7 +317,7 @@
                 <div class="stock-banner" id="stockBanner">
                     <div class="stock-header" onclick="toggleStockList()">
                         <span id="stockHeaderText">📊 CONTROL DE STOCK</span>
-                        <span style="font-size: 18px;"></span>
+                        <span style="font-size: 18px;">🔽</span>
                     </div>
                     <div class="stock-list" id="stockList"></div>
                 </div>
@@ -322,7 +325,7 @@
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
                         <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Sugerencia: Evaluar despacho.</span>
-                        <span style="font-size: 18px;"></span>
+                        <span style="font-size: 18px;">🔽</span>
                     </div>
                     <div class="aging-list" id="agingList"></div>
                 </div>
@@ -354,7 +357,7 @@
                     </div>
                 </div>
 
-                <!-- FORMULARIO DE INGRESO DIRECTO -->
+                <!-- FORMULARIO DE INGRESO DIRECTO / MASIVO -->
                 <div class="top-panel">
                     <form id="formAddUld" class="form-add-uld">
                         <h2>📥 <span id="lblFormStation"></span></h2>
@@ -380,7 +383,12 @@
                             <label style="color: var(--amerijet-red);">Motivo del Daño</label>
                             <input type="text" id="damage_reason" placeholder="Ej: Esquina doblada..." style="border-color: var(--amerijet-red);">
                         </div>
-                        <button type="submit" class="btn-crear" id="btnSubmitUld">Registrar Manual</button>
+                        
+                        <!-- BOTONES DE REGISTRO -->
+                        <div style="display:flex; gap:10px; width:100%; margin-top:5px; justify-content: flex-end;">
+                            <button type="submit" class="btn-crear" id="btnSubmitUld">Registrar Manual</button>
+                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">📥 Carga Masiva (Excel)</button>
+                        </div>
                     </form>
                 </div>
 
@@ -562,6 +570,21 @@
         </div>
     </div>
 
+    <!-- MODAL IMPORTACIÓN MASIVA (COPY-PASTE EXCEL) -->
+    <div class="modal-overlay" id="modalImportMasivo">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-title" style="margin-bottom: 10px;">📥 Importación Masiva (Excel)</div>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Copia la columna entera de ULDs desde tu archivo Excel y pégala en este cuadro. El sistema los registrará automáticamente en tu estación como <strong style="color:#10B981;">EMPTY</strong> y <strong style="color:#0A2540;">SERVICEABLE</strong>.</p>
+            
+            <textarea id="txtImportMasivo" rows="12" placeholder="Ejemplo:&#10;PMC01376M6&#10;PMC05044M6&#10;PAG10006M6..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 14px; text-transform: uppercase; resize: vertical; outline: none; margin-bottom: 5px;" oninput="actualizarContadorMasivo()"></textarea>
+            
+            <div style="font-size: 11px; color: #64748B; text-align: right; margin-bottom: 15px; font-weight: bold;" id="lblContadorMasivo">Líneas detectadas: 0</div>
+            
+            <button id="btnProcesarMasivo" onclick="procesarImportacionMasiva()" style="width:100%; background:#8B5CF6; color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:14px; transition:0.2s;">⚡ Procesar Importación</button>
+            <button onclick="cerrarModalImportarMasivo()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px; font-size:14px;">Cancelar</button>
+        </div>
+    </div>
+
     <!-- MODAL HISTORIAL LOG COMPLETO -->
     <div class="modal-overlay" id="modalHistorialLog">
         <div class="modal-content" style="max-width: 500px;">
@@ -582,12 +605,12 @@
             <form id="formAccesorios">
                 
                 <div id="secNetsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE REDES DISPONIBLES</h4>
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🕸️ CONTEO DE REDES DISPONIBLES</h4>
                     <div id="modalNetsDinamicoContainer" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
                 </div>
                 
                 <div id="secStrapsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE CINCHAS (STRAPS)</h4>
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🔗 CONTEO DE CINCHAS (STRAPS)</h4>
                     <div class="modal-grid">
                         <div class="form-group-inline"><label>Straps Fricción</label><input type="number" id="mod_strap_fric" min="0"></div>
                         <div class="form-group-inline"><label>Straps Presión</label><input type="number" id="mod_strap_pres" min="0"></div>
@@ -658,6 +681,9 @@
         let paginaActual = 1;
         const itemsPorPagina = 50;
         let pivotGlobalData = [];
+
+        // Expresión Regular ESTRICTA IATA: 3 Letras, 4 o 5 Números, 2 Letras/Números. (Ej: PMC12345M6)
+        const uldRegex = /^[A-Z]{3}[0-9]{4,5}[A-Z0-9]{2}$/;
 
         function clasificarTipoULD(tipoStr) {
             if(!tipoStr) return 'OTROS';
@@ -807,7 +833,6 @@
                 if (error) throw new Error(error.message);
                 
                 datosVistaActual = ulds || []; 
-                // CORRECCIÓN INBOUND: Aseguramos ignorar mayúsculas/minúsculas para el tránsito.
                 uldsEnTransito = datosVistaActual.filter(u => u.opp_status && u.opp_status.toUpperCase() === 'IN TRANSIT');
                 uldsEnRampa = datosVistaActual.filter(u => !u.opp_status || u.opp_status.toUpperCase() !== 'IN TRANSIT');
 
@@ -1012,18 +1037,16 @@
                 let tiposArray = Array.from(todosLosTiposDetectados).sort();
                 let mostrados = 0; 
                 
-                const contenedoresCerrados = ['AAX', 'AAY', 'DQF', 'DPN']; // No usan redes
+                const contenedoresCerrados = ['AAX', 'AAY', 'DQF', 'DPN']; 
 
                 tiposArray.forEach(tipo => {
                     const uldsFisicos = conteoFisicoPorTipo[tipo] || 0; 
                     const redesBodega = parseInt(redesIngresadasEnBodega[tipo]) || 0;
                     
-                    // Si no hay ULDs ni Redes, saltamos este tipo (no lo dibuja).
                     if (uldsFisicos === 0 && redesBodega === 0) return;
                     
                     mostrados++;
                     
-                    // CORRECCIÓN REDES: Contenedores cerrados.
                     let esCerrado = contenedoresCerrados.some(prefix => tipo.startsWith(prefix));
                     if (esCerrado) {
                         balanceContainer.innerHTML += `
@@ -1034,10 +1057,9 @@
                                     <span style="font-size:10px; font-weight:800; text-transform:uppercase;">✅ Contenedor Completo (Sin Red)</span>
                                 </div>
                             </div>`;
-                        return; // Salta la evaluación de redes para los cerrados
+                        return; 
                     }
 
-                    // Evaluación normal para ULDs de tipo abierto
                     const balance = redesBodega - uldsFisicos;
                     let itemClass = "balance-ok"; let mensajeTexto = `✅ Balance Perfecto (Net listo)`;
 
@@ -1084,7 +1106,7 @@
                     }
                 });
                 Object.keys(redesIngresadasEnBodega).forEach(t => {
-                    if (parseInt(redesIngresadasEnBodega[t]) > 0) { // Solo si hay redes registradas
+                    if (parseInt(redesIngresadasEnBodega[t]) > 0) { 
                         tiposActivos.add(t.toUpperCase());
                     }
                 });
@@ -1144,6 +1166,111 @@
         });
 
         // =====================================
+        // MÓDULO IMPORTACIÓN MASIVA
+        // =====================================
+        function abrirModalImportarMasivo() {
+            document.getElementById('txtImportMasivo').value = '';
+            document.getElementById('lblContadorMasivo').innerText = 'Líneas detectadas: 0';
+            document.getElementById('modalImportMasivo').style.display = 'flex';
+        }
+
+        function cerrarModalImportarMasivo() {
+            document.getElementById('modalImportMasivo').style.display = 'none';
+        }
+
+        function actualizarContadorMasivo() {
+            const txtArea = document.getElementById('txtImportMasivo');
+            const txtVal = txtArea.value;
+            // Filtra líneas vacías
+            const lineas = txtVal.split('\n').map(l => l.trim()).filter(l => l !== '');
+            document.getElementById('lblContadorMasivo').innerText = `Líneas detectadas: ${lineas.length}`;
+        }
+
+        async function procesarImportacionMasiva() {
+            const txtArea = document.getElementById('txtImportMasivo');
+            const txtVal = txtArea.value;
+            const lineasRaw = txtVal.split('\n').map(l => l.trim().toUpperCase()).filter(l => l !== '');
+            
+            if (lineasRaw.length === 0) {
+                showCustomAlert("Atención", "No has pegado ningún ULD en el cuadro de texto.", "error");
+                return;
+            }
+
+            // LIMPIEZA DE DUPLICADOS EN LA LISTA PEGADA
+            const lineasUnicas = [...new Set(lineasRaw)];
+
+            const btn = document.getElementById('btnProcesarMasivo');
+            btn.disabled = true;
+            btn.innerText = "Procesando...";
+
+            const validosParaSubir = [];
+            const invalidosReporte = [];
+
+            lineasUnicas.forEach(rawUld => {
+                // VALIDACIÓN ESTRICTA
+                // Si el ULD pasa la prueba de la expresión regular
+                if (uldRegex.test(rawUld)) {
+                    let uldType = rawUld.substring(0, 3);
+                    let owner = rawUld.slice(-2);
+                    const now = new Date();
+
+                    validosParaSubir.push({
+                        uld_number: rawUld,
+                        uld_status: 'SERVICEABLE',
+                        location: estacionVista,
+                        use_status: 'EMPTY',
+                        opp_status: 'ARRIVED',
+                        uld_type: uldType,
+                        owner: owner,
+                        validation_uld: "VALIDO",
+                        damage_reason: '',
+                        updated_ontime: now.toISOString(),
+                        received_on: now.toISOString().split('T')[0]
+                    });
+                } else {
+                    // Si no pasa, lo mandamos a la lista negra
+                    invalidosReporte.push(rawUld);
+                }
+            });
+
+            try {
+                if (validosParaSubir.length > 0) {
+                    const { error } = await supabaseClient
+                        .from('uld_inventario')
+                        .upsert(validosParaSubir, { onConflict: 'uld_number' });
+
+                    if (error) throw error;
+                }
+
+                cerrarModalImportarMasivo();
+                await refrescarPantalla();
+                
+                // CONSTRUIR EL REPORTE FINAL
+                let htmlReporte = `<div style="text-align: left; font-size: 13px; line-height: 1.6;">`;
+                htmlReporte += `✅ <b>${validosParaSubir.length}</b> ULDs se procesaron correctamente.<br>`;
+                
+                if (invalidosReporte.length > 0) {
+                    htmlReporte += `<br><span style="color:var(--amerijet-red);">❌ <b>${invalidosReporte.length}</b> ULDs fueron rechazados por formato incorrecto:</span><br>`;
+                    htmlReporte += `<ul style="margin-top: 5px; padding-left: 20px; color: #64748B;">`;
+                    invalidosReporte.forEach(inv => {
+                        htmlReporte += `<li>${inv}</li>`;
+                    });
+                    htmlReporte += `</ul>`;
+                    htmlReporte += `<i>Nota: El formato IATA requiere 3 letras, 4 o 5 números, y 2 caracteres finales.</i>`;
+                }
+                htmlReporte += `</div>`;
+
+                showCustomAlert("Resumen de Carga Masiva", htmlReporte, validosParaSubir.length > 0 ? "success" : "error");
+
+            } catch (err) {
+                showCustomAlert("Error de Importación", err.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "⚡ Procesar Importación";
+            }
+        }
+
+        // =====================================
         // MÓDULO INBOUND (RECEPCIÓN Y RECHAZO)
         // =====================================
         function abrirModalInbound() {
@@ -1189,9 +1316,9 @@
                     received_on: now.toISOString().split('T')[0]
                 }).in('uld_number', seleccionados);
                 
-                document.getElementById('chkAllInbound').checked = false; // Reset de seguridad
+                document.getElementById('chkAllInbound').checked = false; 
                 cerrarModalInbound(); 
-                await cargarInventario(); // Refresca solo el inventario activo
+                await cargarInventario(); 
                 showCustomAlert("Recibidos Correctamente", `Se ingresaron ${seleccionados.length} ULD(s) a tu rampa como EMPTY.`, "success");
             } catch(e) { showCustomAlert("Error", e.message, "error"); }
         }
@@ -1225,7 +1352,7 @@
                     updated_ontime: now.toISOString()
                 }).in('uld_number', seleccionados);
                 
-                document.getElementById('chkAllInbound').checked = false; // Reset de seguridad
+                document.getElementById('chkAllInbound').checked = false; 
                 cerrarModalInbound(); 
                 await cargarInventario();
                 showCustomAlert("Devueltos", `Se devolvieron ${seleccionados.length} ULDs a ${target}.`, "success");
@@ -1255,7 +1382,6 @@
             const cbx = document.querySelectorAll('.chk-transfer:checked');
             const seleccionados = Array.from(cbx).map(cb => cb.value);
             
-            // 1. Recopilar qué tipos de ULD estamos enviando
             let tiposAEnviar = {};
             cbx.forEach(cb => {
                 const fila = cb.closest('tr');
@@ -1268,7 +1394,6 @@
 
             const now = new Date();
             try {
-                // 2. Transferir los ULDs (Status: IN TRANSIT)
                 await supabaseClient.from('uld_inventario').update({
                     location: destino, 
                     opp_status: 'IN TRANSIT', 
@@ -1276,7 +1401,6 @@
                     received_on: now.toISOString().split('T')[0]
                 }).in('uld_number', seleccionados);
                 
-                // 3. Restar REDES en Bodega de la estación actual (estacionVista)
                 let historialNuevoLocal = [...historialAuditoria];
                 historialNuevoLocal.push({ accion: `Despacho de ${seleccionados.length} ULDs a ${destino} (Resta de Redes Automática)`, usuario: miNombre, fecha: now.toISOString() });
                 if (historialNuevoLocal.length > 20) historialNuevoLocal = historialNuevoLocal.slice(-20);
@@ -1295,7 +1419,6 @@
                     updated_at: now.toISOString()
                 }]);
 
-                // 4. SUMAR REDES en Bodega de la estación destino
                 const { data: accDestino } = await supabaseClient.from('uld_accesorios').select('*').eq('station', destino).maybeSingle();
                 
                 let redesDestino = accDestino && accDestino.redes_por_tipo ? accDestino.redes_por_tipo : {};
@@ -1323,7 +1446,7 @@
         }
 
         // =====================================
-        // INGRESO MANUAL INTELIGENTE
+        // INGRESO MANUAL INTELIGENTE (TOMA LA REGEX TAMBIÉN)
         // =====================================
         document.getElementById('formAddUld').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1334,6 +1457,12 @@
 
             if (uldStatus === 'DAMAGED' && damageReason === '') {
                 showCustomAlert("Atención", "Por favor ingresa un motivo para el estado DAMAGED.", "error");
+                btn.disabled = false; btn.innerText = "Registrar Manual"; return;
+            }
+
+            // APLICAMOS LA MISMA REGLA ESTRICTA AL MANUAL
+            if (!uldRegex.test(rawUld)) {
+                showCustomAlert("Formato IATA Inválido", "El ULD debe tener 3 letras, seguido de 4 o 5 números, y terminar con 2 caracteres. Ej: <b>PMC12345M6</b>", "error");
                 btn.disabled = false; btn.innerText = "Registrar Manual"; return;
             }
 
@@ -1376,8 +1505,10 @@
                         );
                     }
                 } else {
-                    let uldType = rawUld.length >= 3 ? rawUld.substring(0, 3) : ""; let owner = rawUld.length > 5 ? rawUld.slice(-2) : "";
-                    let val = (rawUld.length >= 9 && rawUld.length <= 11) ? "VALIDO" : "ERROR"; const now = new Date();
+                    let uldType = rawUld.substring(0, 3); 
+                    let owner = rawUld.slice(-2);
+                    let val = "VALIDO"; // Ya pasó el Regex, es valido siempre.
+                    const now = new Date();
                     
                     await supabaseClient.from('uld_inventario').insert([{
                         uld_number: rawUld, 
@@ -1606,15 +1737,15 @@
                             
                             let esCerrado = contenedoresCerradosPivot.some(prefix => t.startsWith(prefix));
                             if(esCerrado) {
-                                netHtml = `<div class="net-badge net-ok">✅ Nets Completas</div>`;
+                                netHtml = `<div class="net-badge net-ok">✅ Completo</div>`;
                             } else {
                                 const balance = redesBodega - valFisicos;
                                 if (balance === 0) {
-                                    netHtml = `<div class="net-badge net-ok">✅ Nets </div>`;
+                                    netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
                                 } else if (balance < 0) {
-                                    netHtml = `<div class="net-badge net-danger">⚠️ Faltan Nets ${Math.abs(balance)}</div>`;
+                                    netHtml = `<div class="net-badge net-danger">⚠️ Faltan ${Math.abs(balance)}</div>`;
                                 } else {
-                                    netHtml = `<div class="net-badge net-warn">🟠 Sobran Nets ${balance}</div>`;
+                                    netHtml = `<div class="net-badge net-warn">🟠 Sobran ${balance}</div>`;
                                 }
                             }
                         }
