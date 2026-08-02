@@ -82,7 +82,7 @@
         .station-static { color: #10B981; font-weight: 800; font-size: 15px; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 60px; }
         .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
         /* BANNER INBOUND (ULDs EN TRÁNSITO) */
@@ -143,7 +143,7 @@
         .btn-ver-historial:hover { background: #E2E8F0; }
 
         /* TABLA EXCEL, TOOLBAR Y PAGINACIÓN */
-        .table-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; }
+        .table-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; margin-bottom: 30px; }
         .table-toolbar { padding: 15px 20px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .table-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-transfer { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
@@ -212,6 +212,9 @@
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .main-content { padding-bottom: 150px; } /* Ajuste profundo para móviles */
+        }
         @media (max-width: 1024px) { 
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
@@ -253,7 +256,7 @@
             <div class="user-avatar">👤</div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
-                <span id="lblUserRol">...</span>
+                <span id="lblUserRol" class="badge-rol">...</span>
             </div>
         </div>
 
@@ -804,8 +807,9 @@
                 if (error) throw new Error(error.message);
                 
                 datosVistaActual = ulds || []; 
-                uldsEnTransito = datosVistaActual.filter(u => u.opp_status === 'IN TRANSIT');
-                uldsEnRampa = datosVistaActual.filter(u => u.opp_status !== 'IN TRANSIT');
+                // CORRECCIÓN INBOUND: Aseguramos ignorar mayúsculas/minúsculas para el tránsito.
+                uldsEnTransito = datosVistaActual.filter(u => u.opp_status && u.opp_status.toUpperCase() === 'IN TRANSIT');
+                uldsEnRampa = datosVistaActual.filter(u => !u.opp_status || u.opp_status.toUpperCase() !== 'IN TRANSIT');
 
                 document.getElementById('wgTotalUld').innerText = uldsEnRampa.length;
 
@@ -1005,18 +1009,35 @@
                 const balanceContainer = document.getElementById('wgNetsBalanceContainer'); balanceContainer.innerHTML = '';
                 
                 let todosLosTiposDetectados = new Set([...Object.keys(conteoFisicoPorTipo), ...Object.keys(redesIngresadasEnBodega)]);
-
                 let tiposArray = Array.from(todosLosTiposDetectados).sort();
-                let mostrados = 0; // NEW variable to track
+                let mostrados = 0; 
+                
+                const contenedoresCerrados = ['AAX', 'AAY', 'DQF', 'DPN']; // No usan redes
 
                 tiposArray.forEach(tipo => {
                     const uldsFisicos = conteoFisicoPorTipo[tipo] || 0; 
                     const redesBodega = parseInt(redesIngresadasEnBodega[tipo]) || 0;
                     
-                    // LOGICA INYECTADA: Si no hay ULDs ni Redes, saltamos este tipo (no lo dibuja).
+                    // Si no hay ULDs ni Redes, saltamos este tipo (no lo dibuja).
                     if (uldsFisicos === 0 && redesBodega === 0) return;
                     
                     mostrados++;
+                    
+                    // CORRECCIÓN REDES: Contenedores cerrados.
+                    let esCerrado = contenedoresCerrados.some(prefix => tipo.startsWith(prefix));
+                    if (esCerrado) {
+                        balanceContainer.innerHTML += `
+                            <div class="balance-item balance-ok">
+                                <div style="font-weight:800; font-size:14px;">${tipo}</div>
+                                <div style="display:flex; flex-direction:column; gap:2px;">
+                                    <span>Rampa (Físicos): <b>${uldsFisicos}</b></span>
+                                    <span style="font-size:10px; font-weight:800; text-transform:uppercase;">✅ Contenedor Completo (Sin Red)</span>
+                                </div>
+                            </div>`;
+                        return; // Salta la evaluación de redes para los cerrados
+                    }
+
+                    // Evaluación normal para ULDs de tipo abierto
                     const balance = redesBodega - uldsFisicos;
                     let itemClass = "balance-ok"; let mensajeTexto = `✅ Balance Perfecto (Net listo)`;
 
@@ -1167,7 +1188,10 @@
                     updated_ontime: now.toISOString(),
                     received_on: now.toISOString().split('T')[0]
                 }).in('uld_number', seleccionados);
-                cerrarModalInbound(); await refrescarPantalla();
+                
+                document.getElementById('chkAllInbound').checked = false; // Reset de seguridad
+                cerrarModalInbound(); 
+                await cargarInventario(); // Refresca solo el inventario activo
                 showCustomAlert("Recibidos Correctamente", `Se ingresaron ${seleccionados.length} ULD(s) a tu rampa como EMPTY.`, "success");
             } catch(e) { showCustomAlert("Error", e.message, "error"); }
         }
@@ -1201,7 +1225,9 @@
                     updated_ontime: now.toISOString()
                 }).in('uld_number', seleccionados);
                 
-                cerrarModalInbound(); await refrescarPantalla();
+                document.getElementById('chkAllInbound').checked = false; // Reset de seguridad
+                cerrarModalInbound(); 
+                await cargarInventario();
                 showCustomAlert("Devueltos", `Se devolvieron ${seleccionados.length} ULDs a ${target}.`, "success");
             } catch(e) { showCustomAlert("Error", e.message, "error"); }
         }
@@ -1558,6 +1584,8 @@
                 
                 const sumsByType = {}; sortedTypes.forEach(t => sumsByType[t] = 0); 
                 let grandTotal = 0;
+                
+                const contenedoresCerradosPivot = ['AAX', 'AAY', 'DQF', 'DPN'];
 
                 sortedStations.forEach(station => {
                     const dataSt = pivotMap[station]; 
@@ -1575,13 +1603,19 @@
                         
                         let netHtml = '';
                         if (valFisicos > 0 || redesBodega > 0) {
-                            const balance = redesBodega - valFisicos;
-                            if (balance === 0) {
-                                netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
-                            } else if (balance < 0) {
-                                netHtml = `<div class="net-badge net-danger">⚠️ Faltan ${Math.abs(balance)}</div>`;
+                            
+                            let esCerrado = contenedoresCerradosPivot.some(prefix => t.startsWith(prefix));
+                            if(esCerrado) {
+                                netHtml = `<div class="net-badge net-ok">✅ Completo</div>`;
                             } else {
-                                netHtml = `<div class="net-badge net-warn">🟠 Sobran ${balance}</div>`;
+                                const balance = redesBodega - valFisicos;
+                                if (balance === 0) {
+                                    netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
+                                } else if (balance < 0) {
+                                    netHtml = `<div class="net-badge net-danger">⚠️ Faltan ${Math.abs(balance)}</div>`;
+                                } else {
+                                    netHtml = `<div class="net-badge net-warn">🟠 Sobran ${balance}</div>`;
+                                }
                             }
                         }
 
