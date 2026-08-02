@@ -748,7 +748,7 @@
 
                             <!-- PASO 5 -->
                             <div style="margin-top: 20px;">
-                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Finalizar y Cerrar Vuelo Definitivamente</button>
+                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Vuelo Definitivamente</button>
                             </div>
                         </div>
                     `;
@@ -794,30 +794,9 @@
                     }
                 }
 
-                // 2. Limpiar fotos de los DAÑOS ESTRUCTURALES de la aeronave
-                if (matriculaAvion) {
-                    const { data: danos } = await supabaseClient.from('avion_danos')
-                        .select('id, evidencia')
-                        .eq('matricula_avion', matriculaAvion)
-                        .eq('estado_actual', 'ABIERTO');
-                        
-                    if (danos && danos.length > 0) {
-                        for (let d of danos) {
-                            if (d.evidencia) {
-                                try {
-                                    let ev = JSON.parse(d.evidencia);
-                                    ev.fotos = [];
-                                    ev.imgAvion = null;
-                                    ev.imgPaleta = null;
-                                    
-                                    await supabaseClient.from('avion_danos')
-                                        .update({ evidencia: JSON.stringify(ev) })
-                                        .eq('id', d.id);
-                                } catch (err) { console.warn("Evidencia no era JSON válido:", err); }
-                            }
-                        }
-                    }
-                }
+                // (NOTA DE ARQUITECTURA: Aquí NO limpiamos las fotos de avion_danos. 
+                // Esos daños le pertenecen a la matrícula permanentemente).
+
             } catch (e) {
                 console.error("Error limpiando fotos:", e);
             }
@@ -867,12 +846,15 @@
                 for (const [destino, uldsSet] of Object.entries(uldsPorDestino)) {
                     const uldsArray = Array.from(uldsSet);
                     if (uldsArray.length > 0 && destino) {
+                        // AQUÍ ES DONDE PASA LA MAGIA AL DESPACHAR: use_status = 'EMPTY', opp_status = 'IN TRANSIT'
                         const { error: errUpdate } = await supabaseClient
                             .from('uld_inventario')
                             .update({ 
                                 location: destino, 
                                 updated_ontime: now,
-                                received_on: today 
+                                received_on: today,
+                                use_status: 'EMPTY',
+                                opp_status: 'IN TRANSIT'
                             })
                             .in('uld_number', uldsArray);
                             
@@ -887,7 +869,7 @@
         function confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
             showCustomConfirm(
                 "🛫 Despachar Vuelo", 
-                `¿Confirmas que el vuelo <b>${numeroVuelo}</b> ha sido despachado (Outbound finalizado)?<br><br><i>Nota: Las fotos de inspección en Base de Datos se eliminarán (dejando solo el registro de texto en la bitácora) y <b>los ULDs armados serán transferidos a sus estaciones de destino respectivas</b> de forma automática.</i>`, 
+                `¿Confirmas que el vuelo <b>${numeroVuelo}</b> ha sido despachado (Outbound finalizado)?<br><br><i>Nota: Las fotos temporales de rampa se limpiarán del sistema y <b>los ULDs armados serán transferidos a sus estaciones de destino respectivas en estado EMPTY e IN TRANSIT</b> de forma automática.</i>`, 
                 "Sí, Despachar", 
                 "var(--amerijet-blue)",
                 async () => {
@@ -899,7 +881,7 @@
                         if(error) throw error;
                         
                         cargarVuelosActivos();
-                        showCustomAlert("Despacho Exitoso", "El vuelo ha sido despachado, fotos liberadas y ULDs transferidos a sus destinos correspondientes.", "success");
+                        showCustomAlert("Despacho Exitoso", "El vuelo ha sido despachado, fotos liberadas y ULDs enviados a destino en estado EMPTY (IN TRANSIT).", "success");
                     } catch(e) { showCustomAlert("Error", "No se pudo despachar: " + e.message, "error"); }
                 }
             );
@@ -916,21 +898,77 @@
             } catch(e) { showCustomAlert("Error", "Error de base de datos: " + e.message, "error"); } 
         }
 
-        function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion) { 
+        function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) { 
             showCustomConfirm(
                 "Finalizar y Cerrar Operación", 
-                `¿Confirmas que deseas finalizar y cerrar definitivamente el vuelo <strong style="color:var(--amerijet-blue);">${numeroVuelo}</strong>?<br><br><span style="color:var(--amerijet-red); font-size:12px;">⚠️ <b>EFECTO:</b> Si no despachaste antes, se limpiará la memoria de fotos, se migrarán los ULDs a sus destinos y la tarjeta se removerá del tablero para guardarse en el Historial.</span>`, 
+                `¿Confirmas que deseas finalizar y cerrar definitivamente el vuelo <strong style="color:var(--amerijet-blue);">${numeroVuelo}</strong>?<br><br><span style="color:var(--amerijet-red); font-size:12px;">⚠️ <b>EFECTO:</b> Si no despachaste antes, se migrarán los ULDs a sus destinos y la tarjeta se removerá del tablero para guardarse en el Historial.</span>`, 
                 "Finalizar Vuelo", 
                 "var(--amerijet-red)",
                 async () => {
                     try { 
-                        await limpiarFotosInspeccion(idVuelo, matriculaAvion);
-                        await transferirULDsAlDespachar(idVuelo, ruta);
+                        // REGLA INTELIGENTE: Si no se despachó previamente, ejecutamos el despacho oculto para no perder el ciclo.
+                        if (estadoActual !== 'DESPACHADO') {
+                            await limpiarFotosInspeccion(idVuelo, matriculaAvion);
+                            await transferirULDsAlDespachar(idVuelo, ruta);
+                        }
 
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
                         if (error) throw error;
                         cargarVuelosActivos(); 
                         showCustomAlert("Vuelo Cerrado", `El vuelo ${numeroVuelo} fue finalizado con éxito y removido del tablero activo.`, "success");
+                    } catch(e) { showCustomAlert("Error", e.message, "error"); }
+                }
+            );
+        }
+
+        // ==========================================
+        // LA LÓGICA DE LIMPIEZA CLÍNICA AL ELIMINAR ✖️ 
+        // ==========================================
+        function eliminarVuelo(id, vuelo_id) { 
+            showCustomConfirm(
+                "Eliminar Tarjeta de Vuelo", 
+                `¿Seguro que deseas eliminar la tarjeta de operación del vuelo <strong style="color:var(--amerijet-red);">${vuelo_id}</strong>?<br><br><i><b>NOTA IMPORTANTE:</b> Al eliminar, los ULDs asociados a este vuelo serán liberados (pasarán a EMPTY) para que puedan ser usados nuevamente. Los daños estructurales de la aeronave se mantendrán intactos en la bitácora histórica.</i>`, 
+                "Sí, Eliminar Vuelo", 
+                "var(--amerijet-red)",
+                async () => {
+                    try { 
+                        // 1. Extraemos los ULDs que estaban atados a este vuelo para liberarlos
+                        const { data: armados } = await supabaseClient.from('tiempos_armado').select('ulds_armados, stacks_armados').eq('vuelo_operacion_id', id);
+                        let uldsToFree = [];
+                        if (armados) {
+                            armados.forEach(a => {
+                                if (a.ulds_armados) {
+                                    a.ulds_armados.forEach(item => {
+                                        let uldStr = item.uld || item;
+                                        if(uldStr && typeof uldStr === 'string') uldsToFree.push(uldStr);
+                                    });
+                                }
+                                if (a.stacks_armados) {
+                                    Object.values(a.stacks_armados).forEach(stack => {
+                                        let arr = stack.ulds || stack || [];
+                                        uldsToFree.push(...arr);
+                                    });
+                                }
+                            });
+                        }
+                        
+                        // 2. Le devolvemos el estado EMPTY a los ULDs huérfanos
+                        if (uldsToFree.length > 0) {
+                            await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', uldsToFree);
+                        }
+
+                        // 3. Borramos dependencias de tablas (Garantiza limpieza profunda)
+                        await supabaseClient.from('tiempos_armado').delete().eq('vuelo_operacion_id', id);
+                        await supabaseClient.from('com106_formularios').delete().eq('vuelo_operacion_id', id);
+                        await supabaseClient.from('vuelos_gse').delete().eq('vuelo_operacion_id', id);
+                        await supabaseClient.from('avion_inspecciones').delete().eq('vuelo_operacion_id', id);
+
+                        // 4. Borramos el vuelo en sí (Los daños de avion_danos NO SE TOCAN)
+                        const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
+                        if(error) throw error;
+                        
+                        cargarVuelosActivos(); 
+                        showCustomAlert("Vuelo Eliminado", `El vuelo ${vuelo_id} fue borrado y sus ULDs fueron liberados con éxito.`, "success");
                     } catch(e) { showCustomAlert("Error", e.message, "error"); }
                 }
             );
@@ -966,18 +1004,6 @@
                 btn.disabled = false; btn.innerText = "Guardar Cambios";
             }
         });
-
-        function eliminarVuelo(id, vuelo_id) { 
-            showCustomConfirm("Eliminar Vuelo", `¿Seguro que deseas eliminar el vuelo <strong style="color:var(--amerijet-blue);">${vuelo_id}</strong>?`, "Sí, Eliminar", "var(--amerijet-red)",
-                async () => {
-                    try { 
-                        const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
-                        if(error) throw error;
-                        cargarVuelosActivos(); showCustomAlert("Eliminado", "Vuelo borrado del sistema.", "success");
-                    } catch(e) { showCustomAlert("Error", e.message, "error"); }
-                }
-            );
-        }
 
         document.getElementById('btnLogout').addEventListener('click', async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; });
 
