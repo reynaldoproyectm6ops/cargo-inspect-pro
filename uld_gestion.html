@@ -393,7 +393,7 @@
                         <!-- BOTONES DE REGISTRO -->
                         <div class="form-buttons-wrapper">
                             <button type="submit" class="btn-crear" id="btnSubmitUld">Registrar Manual</button>
-                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">📥 Carga Masiva (Excel)</button>
+                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">Carga Masiva</button>
                         </div>
                     </form>
                 </div>
@@ -409,8 +409,8 @@
                     
                     <div class="table-toolbar">
                         <div class="table-actions">
-                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">🚚 Transferir Selección</button>
-                            <button class="btn-excel" onclick="exportarExcelLocal()">⬇️ Excel (Vista Actual)</button>
+                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">Transferir Selección</button>
+                            <button class="btn-excel" onclick="exportarExcelLocal()">Descargar Excel</button>
                         </div>
                         <div class="search-box">
                             <span>🔍 </span>
@@ -459,7 +459,7 @@
             <!-- VISTA 2: GLOBAL (TABLA DINÁMICA DE TODAS LAS ESTACIONES) -->
             <div id="vistaGlobal" class="pivot-wrapper">
                 <div class="pivot-header">
-                    <h2>🌍 ULD PALLET CONTROL - BY STATION</h2>
+                    <h2>ULD PALLET CONTROL - BY STATION</h2>
                     <div class="pivot-stats">
                         <div class="pivot-stat-box">
                             <span>Total Estaciones</span>
@@ -611,12 +611,12 @@
             <form id="formAccesorios">
                 
                 <div id="secNetsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🕸️ CONTEO DE REDES DISPONIBLES</h4>
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE REDES DISPONIBLES</h4>
                     <div id="modalNetsDinamicoContainer" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
                 </div>
                 
                 <div id="secStrapsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🔗 CONTEO DE CINCHAS (STRAPS)</h4>
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE CINCHAS (STRAPS)</h4>
                     <div class="modal-grid">
                         <div class="form-group-inline"><label>Straps Fricción</label><input type="number" id="mod_strap_fric" min="0"></div>
                         <div class="form-group-inline"><label>Straps Presión</label><input type="number" id="mod_strap_pres" min="0"></div>
