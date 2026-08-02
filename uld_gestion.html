@@ -314,7 +314,7 @@
                 <div class="stock-banner" id="stockBanner">
                     <div class="stock-header" onclick="toggleStockList()">
                         <span id="stockHeaderText">📊 CONTROL DE STOCK</span>
-                        <span style="font-size: 18px;">🔽</span>
+                        <span style="font-size: 18px;"></span>
                     </div>
                     <div class="stock-list" id="stockList"></div>
                 </div>
@@ -322,7 +322,7 @@
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
                         <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Sugerencia: Evaluar despacho.</span>
-                        <span style="font-size: 18px;">🔽</span>
+                        <span style="font-size: 18px;"></span>
                     </div>
                     <div class="aging-list" id="agingList"></div>
                 </div>
@@ -582,12 +582,12 @@
             <form id="formAccesorios">
                 
                 <div id="secNetsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🕸️ CONTEO DE REDES DISPONIBLES</h4>
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE REDES DISPONIBLES</h4>
                     <div id="modalNetsDinamicoContainer" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
                 </div>
                 
                 <div id="secStrapsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">🔗 CONTEO DE CINCHAS (STRAPS)</h4>
+                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE CINCHAS (STRAPS)</h4>
                     <div class="modal-grid">
                         <div class="form-group-inline"><label>Straps Fricción</label><input type="number" id="mod_strap_fric" min="0"></div>
                         <div class="form-group-inline"><label>Straps Presión</label><input type="number" id="mod_strap_pres" min="0"></div>
@@ -1606,15 +1606,15 @@
                             
                             let esCerrado = contenedoresCerradosPivot.some(prefix => t.startsWith(prefix));
                             if(esCerrado) {
-                                netHtml = `<div class="net-badge net-ok">✅ Completo</div>`;
+                                netHtml = `<div class="net-badge net-ok">✅ Nets Completas</div>`;
                             } else {
                                 const balance = redesBodega - valFisicos;
                                 if (balance === 0) {
-                                    netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
+                                    netHtml = `<div class="net-badge net-ok">✅ Nets </div>`;
                                 } else if (balance < 0) {
-                                    netHtml = `<div class="net-badge net-danger">⚠️ Faltan ${Math.abs(balance)}</div>`;
+                                    netHtml = `<div class="net-badge net-danger">⚠️ Faltan Nets ${Math.abs(balance)}</div>`;
                                 } else {
-                                    netHtml = `<div class="net-badge net-warn">🟠 Sobran ${balance}</div>`;
+                                    netHtml = `<div class="net-badge net-warn">🟠 Sobran Nets ${balance}</div>`;
                                 }
                             }
                         }
