@@ -135,9 +135,12 @@
         .form-group-inline { display: flex; flex-direction: column; flex-grow: 1; min-width: 150px;}
         .form-group-inline label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
         .form-group-inline input, .form-group-inline select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; text-transform: uppercase; font-weight: 600; width: 100%;}
-        .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap;}
         
-        .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; gap: 6px;}
+        /* Contenedor flexible para alinear los botones en PC y apilarlos en Móvil */
+        .form-buttons-wrapper { display: flex; gap: 10px; width: 100%; margin-top: 5px; justify-content: flex-end; align-items: center;}
+        
+        .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap;}
+        .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px;}
         .btn-masivo:hover { background: #7C3AED; }
 
         /* Historial Minimalista */
@@ -216,7 +219,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .main-content { padding-bottom: 150px; } /* Ajuste profundo para móviles */
+            .main-content { padding-bottom: 150px; } 
         }
         @media (max-width: 1024px) { 
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
@@ -228,6 +231,9 @@
             .top-panel { flex-direction: column; align-items: stretch; }
             .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
             .form-group-inline { width: 100%; }
+            
+            /* Ajuste de Botones en Celular */
+            .form-buttons-wrapper { flex-direction: column; }
             .btn-crear, .btn-masivo { width: 100%; margin-top: 5px; justify-content: center;}
             
             .table-toolbar { flex-direction: column; align-items: stretch; }
@@ -317,7 +323,7 @@
                 <div class="stock-banner" id="stockBanner">
                     <div class="stock-header" onclick="toggleStockList()">
                         <span id="stockHeaderText">📊 CONTROL DE STOCK</span>
-                        <span style="font-size: 18px;"></span>
+                        <span style="font-size: 18px;">🔽</span>
                     </div>
                     <div class="stock-list" id="stockList"></div>
                 </div>
@@ -325,7 +331,7 @@
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
                         <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Sugerencia: Evaluar despacho.</span>
-                        <span style="font-size: 18px;"></span>
+                        <span style="font-size: 18px;">🔽</span>
                     </div>
                     <div class="aging-list" id="agingList"></div>
                 </div>
@@ -385,7 +391,7 @@
                         </div>
                         
                         <!-- BOTONES DE REGISTRO -->
-                        <div style="display:flex; gap:10px; width:100%; margin-top:5px; justify-content: flex-end;">
+                        <div class="form-buttons-wrapper">
                             <button type="submit" class="btn-crear" id="btnSubmitUld">Registrar Manual</button>
                             <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">📥 Carga Masiva (Excel)</button>
                         </div>
@@ -659,6 +665,15 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="inactivityModal">
+        <div class="modal-content modal-generic">
+            <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
+            <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 22px;">Sesión en Pausa</h3>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por tu seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
+            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Sí, mantener sesión abierta</button>
+        </div>
+    </div>
+
     <script>
         const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
         const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
@@ -679,7 +694,8 @@
         let historialAuditoria = [];
         
         let paginaActual = 1;
-        const itemsPorPagina = 50;
+        // Paginación ajustada a 100 items por página
+        const itemsPorPagina = 100;
         let pivotGlobalData = [];
 
         // Expresión Regular ESTRICTA IATA: 3 Letras, 4 o 5 Números, 2 Letras/Números. (Ej: PMC12345M6)
@@ -924,25 +940,40 @@
             
             if (hayExceso) {
                 banner.className = 'stock-banner danger';
-                headerText.innerHTML = '<span>⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.</span><span style="font-size: 18px;">🔽</span>';
+                headerText.innerHTML = '⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.';
             } else {
                 banner.className = 'stock-banner success';
-                headerText.innerHTML = '<span>✅ CONTROL DE STOCK: Tu estación está dentro de los límites.</span><span style="font-size: 18px;">🔽</span>';
+                headerText.innerHTML = '✅ CONTROL DE STOCK: Tu estación está dentro de los límites.';
             }
             banner.style.display = 'flex';
         }
 
         function filtrarYPaginar() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            if(searchTerm === '') { datosFiltrados = [...uldsEnRampa]; } 
-            else {
+            if(searchTerm === '') { 
+                datosFiltrados = [...uldsEnRampa]; 
+            } else {
                 datosFiltrados = uldsEnRampa.filter(u => 
                     (u.uld_number && u.uld_number.toLowerCase().includes(searchTerm)) ||
                     (u.location && u.location.toLowerCase().includes(searchTerm)) ||
                     (u.uld_type && u.uld_type.toLowerCase().includes(searchTerm))
                 );
             }
-            paginaActual = 1; dibujarTablaPaginada();
+            
+            // ORDENAMIENTO INTELIGENTE: Por Tipo y luego por Número de ULD
+            datosFiltrados.sort((a, b) => {
+                const typeA = (a.uld_type || 'ZZZ').toUpperCase();
+                const typeB = (b.uld_type || 'ZZZ').toUpperCase();
+                if (typeA < typeB) return -1;
+                if (typeA > typeB) return 1;
+
+                const numA = (a.uld_number || '').toUpperCase();
+                const numB = (b.uld_number || '').toUpperCase();
+                return numA.localeCompare(numB);
+            });
+
+            paginaActual = 1; 
+            dibujarTablaPaginada();
         }
 
         function dibujarTablaPaginada() {
@@ -1208,7 +1239,6 @@
 
             lineasUnicas.forEach(rawUld => {
                 // VALIDACIÓN ESTRICTA
-                // Si el ULD pasa la prueba de la expresión regular
                 if (uldRegex.test(rawUld)) {
                     let uldType = rawUld.substring(0, 3);
                     let owner = rawUld.slice(-2);
@@ -1228,7 +1258,6 @@
                         received_on: now.toISOString().split('T')[0]
                     });
                 } else {
-                    // Si no pasa, lo mandamos a la lista negra
                     invalidosReporte.push(rawUld);
                 }
             });
@@ -1507,7 +1536,7 @@
                 } else {
                     let uldType = rawUld.substring(0, 3); 
                     let owner = rawUld.slice(-2);
-                    let val = "VALIDO"; // Ya pasó el Regex, es valido siempre.
+                    let val = "VALIDO"; 
                     const now = new Date();
                     
                     await supabaseClient.from('uld_inventario').insert([{
