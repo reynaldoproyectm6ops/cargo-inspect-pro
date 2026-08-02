@@ -139,7 +139,7 @@
 
         .master-body { padding: 25px; flex: 1; overflow-y: auto; text-align: left; }
         .data-card { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); margin-bottom: 20px;}
-        .data-card-title { font-size: 13px; font-weight: 900; color: var(--amerijet-blue-dark); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #F1F5F9; padding-bottom: 8px;}
+        .data-card-title { font-size: 13px; font-weight: 900; color: var(--amerijet-blue-dark); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #F1F5F9; padding-bottom: 8px; display:flex; justify-content:space-between; align-items:center;}
         .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
         .data-box { display: flex; flex-direction: column; gap: 4px; background: #F8FAFC; padding: 12px; border-radius: 8px; border: 1px dashed #CBD5E1;}
         .data-box label { font-size: 10px; font-weight: 800; color: #64748B; text-transform: uppercase;}
@@ -153,6 +153,10 @@
         .btn-pdf-gen:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(16,185,129,0.2);}
         .btn-excel-gen { background: #3B82F6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.2s;}
         .btn-excel-gen:hover { background: #2563EB; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(59,130,246,0.2);}
+
+        /* SELECTOR DE INSPECTOR DINAMICO EN VISTA REPORTE */
+        .dynamic-inspector-select { padding: 6px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; font-weight: 700; color: var(--amerijet-blue); background: #F8FAFC; outline: none; cursor: pointer; max-width: 200px;}
+        .dynamic-inspector-select:focus { border-color: #3B82F6; }
 
         /* ========================================================= */
         /* PLANTILLA OFICIAL PARA EL PDF (PROPORCIÓN CARTA PERFECTA) */
@@ -556,7 +560,6 @@
                     <p>I certify the aircraft main deck, lower cargo compartments, and bulk hold have been physically checked, inspected, and verified after offloading was completed and/or before loading started. I certify the aircraft has been loaded in accordance with the loading instructions report. I certify and confirm all locks have been fully engaged and ULDs/cargo secured as per Amerijet aircraft loading procedures and safety standards.</p>
                 </div>
             </div>
-            
             <div>
                 <!-- FIRMAS -->
                 <div class="pdf-sign-container">
@@ -609,6 +612,9 @@
         let datosVistaActual = [];
         let vueloActivoObj = null; 
         
+        // --- GUARDAMOS TODO EL PERSONAL GLOBALMENTE ---
+        let personalTotalDB = []; 
+        
         let paginaActual = 1;
         const itemsPorPagina = 50;
         let groundTimeChart = null; 
@@ -648,6 +654,10 @@
             document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
             document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
             if(String(perfil.rol).toLowerCase() === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+
+            // --- CARGAMOS TODO EL PERSONAL UNA SOLA VEZ PARA OPTIMIZAR ---
+            const { data: staff } = await supabaseClient.from('perfiles').select('nombre, estacion_base');
+            if(staff) personalTotalDB = staff;
 
             misEstaciones = (perfil.estacion_base || "SAL").split(',').map(s => s.trim());
             const selector = document.getElementById('filtro_estacion');
@@ -1028,8 +1038,37 @@
                     .eq('matricula_avion', v.matricula_avion)
                     .eq('estado_actual', 'ABIERTO');
 
-                let html = `<div class="data-card"><div class="data-card-title">🔍 Inspección Estructural (${v.matricula_avion})</div>`;
-                html += `<div class="info-text" style="margin-bottom:15px;"><b>Inspector:</b> ${insp ? insp.inspector_nombre : 'No definido'}</div>`;
+                // --- LOGICA DE INSPECTOR DINAMICO POR ESTACION ---
+                let inspectorGuardado = insp ? insp.inspector_nombre : '';
+                
+                // Filtramos personal de la estación en la que se operó el vuelo
+                const personalEstacion = personalTotalDB.filter(p => p.estacion_base && p.estacion_base.includes(v.estacion_registro));
+                
+                let selectHTML = `<select id="modalInspectorSelect" class="dynamic-inspector-select">`;
+                
+                // Si el inspector guardado NO está en la lista de la estación (caso raro), lo agregamos forzadamente para no perder data.
+                let inspectorEnLista = personalEstacion.some(p => p.nombre === inspectorGuardado);
+                if(inspectorGuardado && !inspectorEnLista) {
+                    selectHTML += `<option value="${inspectorGuardado}" selected>${inspectorGuardado}</option>`;
+                }
+                
+                personalEstacion.forEach(p => {
+                    let sel = (p.nombre === inspectorGuardado) ? 'selected' : '';
+                    selectHTML += `<option value="${p.nombre}" ${sel}>${p.nombre}</option>`;
+                });
+                selectHTML += `</select>`;
+                // ---------------------------------------------------
+
+                let html = `<div class="data-card">
+                                <div class="data-card-title">🔍 Inspección Estructural (${v.matricula_avion})</div>`;
+                
+                html += `
+                    <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:8px; margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+                        <b style="color:var(--amerijet-blue); font-size:12px; text-transform:uppercase;">Inspector Responsable:</b>
+                        ${selectHTML}
+                        <span style="font-size:11px; color:#64748B;">(Se usará en el PDF)</span>
+                    </div>
+                `;
                 
                 if(danosBD && danosBD.length > 0) {
                     html += `<div class="data-card-title" style="font-size:11px; color:#B45309; margin-bottom:10px;">Daños Activos en Récord</div>`;
@@ -1182,7 +1221,15 @@
 
                 const { data: inspArray } = await supabaseClient.from('avion_inspecciones').select('*').eq('vuelo_operacion_id', v.id).maybeSingle();
                 const i = inspArray;
-                const inspName = i ? i.inspector_nombre : 'N/A';
+                
+                // TOMAMOS EL INSPECTOR DIRECTAMENTE DEL SELECTOR DINÁMICO QUE ACABAMOS DE AGREGAR
+                const selectorElem = document.getElementById('modalInspectorSelect');
+                let inspName = 'N/A';
+                if (selectorElem && selectorElem.value) {
+                    inspName = selectorElem.value;
+                } else {
+                    inspName = i ? i.inspector_nombre : 'N/A';
+                }
 
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
