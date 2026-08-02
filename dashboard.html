@@ -37,7 +37,7 @@
         }
         
         /* =========================================
-           NUEVO SIDEBAR OSCURO PROFESIONAL
+           SIDEBAR OSCURO PROFESIONAL
         ========================================= */
         .sidebar {
             width: var(--sidebar-width);
@@ -101,6 +101,8 @@
             padding: 20px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
+        
+        .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 
         .btn-logout { 
             background-color: transparent; 
@@ -121,7 +123,7 @@
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
-           TOP HEADER (ESTACIÓN Y MENÚ HAMBURGUESA)
+           TOP HEADER 
         ======================================== */
         .main-wrapper {
             flex: 1;
@@ -157,7 +159,7 @@
         .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 15px; outline: none; cursor: pointer; }
         .station-static { color: #10B981; font-weight: 800; font-size: 15px; }
 
-        /* CONTENIDO PRINCIPAL Y SCROLLS INTERNOS */
+        /* CONTENIDO PRINCIPAL */
         .main-content {
             flex: 1;
             overflow-y: auto;
@@ -166,7 +168,7 @@
 
         .dashboard-container { display: grid; grid-template-columns: 350px 1fr; gap: 30px; padding: 30px; max-width: 1600px; margin: 0 auto; align-items: start;}
         
-        .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #E2E8F0; height: fit-content; position: sticky; top: 30px; }
+        .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #E2E8F0; height: fit-content; position: sticky; top: 30px; }
         .panel-form h2 { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 6px; letter-spacing: -0.5px; }
         .panel-form p { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
         
@@ -182,67 +184,80 @@
         .panel-vuelos h2 { font-size: 20px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;}
         
         /* Grid de vuelos con su propio Scroll Interno */
-        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 20px; overflow-y: auto; padding-right: 10px; padding-bottom: 20px; align-content: start;}
+        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 25px; overflow-y: auto; padding-right: 10px; padding-bottom: 20px; align-content: start;}
 
-        .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
-        .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.06); border-color: #CBD5E1; }
+        /* DISEÑO MODERNO DE TARJETA DE VUELO */
+        .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
+        .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1; }
         
-        .vuelo-card-header { padding: 16px 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .header-left-side { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .vuelo-title { font-size: 20px; font-weight: 800; color: var(--amerijet-blue); letter-spacing: -0.5px; margin: 0;}
-        .vuelo-tail { background: #E2E8F0; color: #334155; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid #CBD5E1; }
+        .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .header-left-side { display: flex; flex-direction: column; gap: 8px; }
+        .vuelo-title { font-size: 22px; font-weight: 900; color: white; letter-spacing: -0.5px; margin: 0; display: flex; align-items: center; gap: 8px;}
+        .vuelo-tail { background: rgba(255,255,255,0.15); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); }
         
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; }
-        .status-aperturado { background: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
-        .status-armando { background: #FFF7ED; color: #D97706; border: 1px solid #FFEDD5; }
-        .status-despachado { background: #EEF2FF; color: #4F46E5; border: 1px solid #E0E7FF; }
-        .status-importacion { background: #FAF5FF; color: #9333EA; border: 1px solid #F3E8FF; }
+        .status-aperturado { background: #38BDF8; color: #0F172A; }
+        .status-armando { background: #F59E0B; color: white; }
+        .status-despachado { background: #8B5CF6; color: white; }
+        .status-importacion { background: #EC4899; color: white; }
 
         .card-controls { display: flex; gap: 6px; }
-        .ctrl-btn { background: white; border: 1px solid #E2E8F0; cursor: pointer; font-size: 12px; padding: 6px 10px; border-radius: 6px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .ctrl-btn:hover { background: #F1F5F9; border-color: #CBD5E1; }
+        .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; font-size: 12px; padding: 6px 10px; border-radius: 6px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .ctrl-btn:hover { background: white; color: var(--amerijet-blue-dark); border-color: white; }
+        .ctrl-btn.ctrl-delete:hover { background: #E11D48; color: white; border-color: #E11D48; }
         
-        .vuelo-card-body { padding: 18px 20px; flex-grow: 1; }
-        .vuelo-meta-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 18px; background: #F8FAFC; padding: 10px 14px; border-radius: 8px; flex-wrap: wrap; gap: 5px; }
-        .vuelo-meta-info strong { color: var(--text-main); }
+        .vuelo-card-body { padding: 20px; flex-grow: 1; background: white; }
+        .vuelo-meta-info { display: flex; justify-content: space-between; font-size: 12px; color: #64748B; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .vuelo-meta-info div { display: flex; flex-direction: column; gap: 2px;}
+        .vuelo-meta-info strong { color: var(--amerijet-blue-dark); font-size: 14px; font-weight: 800;}
 
-        .toggle-btn { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; flex-grow: 1;}
-        .toggle-btn.active { background: #D1FAE5; color: #065F46; border: 1px solid #34D399; }
-        .toggle-btn.active:hover { background: #A7F3D0; }
-        .toggle-btn.inactive { background: #FEE2E2; color: #991B1B; border: 1px solid #F87171; text-decoration: line-through; opacity: 0.7;}
-        .toggle-btn.inactive:hover { opacity: 1; background: #FECACA;}
+        /* TOGGLES MEJORADOS */
+        .toggle-group { display: flex; gap: 10px; margin-bottom: 20px; border-top: 1px solid #E2E8F0; padding-top: 15px;}
+        .toggle-btn { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; flex-grow: 1; display: flex; justify-content: center; align-items: center; gap: 5px;}
+        .toggle-btn.active { background: #ECFDF5; color: #059669; border: 1px solid #6EE7B7; }
+        .toggle-btn.active:hover { background: #D1FAE5; }
+        .toggle-btn.inactive { background: #F8FAFC; color: #94A3B8; border: 1px dashed #CBD5E1; text-decoration: line-through;}
+        .toggle-btn.inactive:hover { background: #F1F5F9; color: #475569;}
 
-        .op-section-title { font-size: 11px; font-weight: 700; color: #94A3B8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #F1F5F9; padding-bottom: 4px; display: flex; align-items: center; gap: 5px; }
-        .actions-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        /* DISEÑO DE PASOS ESTRUCTURADOS */
+        .step-container { background: white; border: 1px solid #E2E8F0; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.01);}
+        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .step-number { background: var(--amerijet-blue); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 11px; font-weight: 900; }
+        .step-title { font-size: 12px; font-weight: 800; color: var(--amerijet-blue-dark); text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; }
-        .action-btn:hover { background: #F8FAFC; border-color: #CBD5E1; color: var(--amerijet-blue); transform: translateY(-0.5px); }
+        .empty-state-box { background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 12px; text-align: center; color: #64748B; font-size: 11px; font-weight: 600; font-style: italic;}
+
+        .actions-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        .btn-start-armado { background: #FFF7ED; color: #C2410C; border-color: #FED7AA; font-weight: 700; grid-column: 1 / -1; margin-bottom: 15px; padding: 11px; }
-        .btn-start-armado:hover { background: #FFEDD5; }
+        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
+        .action-btn:hover { background: #F8FAFC; border-color: #CBD5E1; color: var(--amerijet-blue); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.04);}
+        
+        .btn-start-armado { background: #FFFBEB; color: #D97706; border-color: #FDE68A; grid-column: 1 / -1;}
+        .btn-start-armado:hover { background: #FEF3C7; border-color: #FCD34D;}
         .btn-inspect { border-color: #BAE6FD; color: #0369A1; }
         .btn-inspect:hover { background: #F0F9FF; }
         .btn-com { border-color: #A7F3D0; color: #047857; }
         .btn-com:hover { background: #ECFDF5; }
         .btn-gse { border-color: #CBD5E1; color: #475569; grid-column: 1 / -1;}
 
-        .btn-despachar-vuelo { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; grid-column: 1 / -1; font-weight: 700; font-size: 13px; border: none; padding: 12px; box-shadow: 0 4px 10px rgba(37,99,235,0.15); margin-bottom: 15px; border-radius: 8px; width: 100%; cursor: pointer;}
-        .btn-despachar-vuelo:hover { background: #1E40AF; box-shadow: 0 6px 14px rgba(37,99,235,0.25); color: white; }
+        .btn-despachar-vuelo { background: var(--amerijet-blue); color: white; font-weight: 800; font-size: 13px; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(10,37,64,0.15);}
+        .btn-despachar-vuelo:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(10,37,64,0.25); }
         
         /* ESTILOS DE IMPORTACIÓN */
-        .import-time-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .import-time-box { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .time-input-group { display: flex; flex-direction: column; }
-        .time-input-group label { font-size: 10px; font-weight: 700; color: #64748B; margin-bottom: 4px; text-transform: uppercase; }
+        .time-input-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 4px; text-transform: uppercase; }
         .time-controls-wrapper { display: flex; gap: 5px; }
-        .time-input-group input { padding: 8px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; color: var(--text-main); font-weight: 600; text-transform: none; flex: 1; }
-        .btn-ahora { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0 12px; cursor: pointer; font-size: 16px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .time-input-group input { padding: 9px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; color: var(--text-main); font-weight: 700; flex: 1; outline: none; transition: 0.2s;}
+        .time-input-group input:focus { border-color: var(--amerijet-blue); }
+        .btn-ahora { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0 12px; cursor: pointer; font-size: 14px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-ahora:hover { background: #E2E8F0; border-color: #94A3B8; }
         
-        .btn-save-times { background: #E0E7FF; border: 1px solid #C7D2FE; border-radius: 6px; padding: 10px; font-size: 12px; font-weight: 700; color: #3730A3; cursor: pointer; transition: 0.2s; margin-top: 5px; width: 100%;}
-        .btn-save-times:hover { background: #C7D2FE; }
+        .btn-save-times { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 10px; font-size: 12px; font-weight: 800; color: #1D4ED8; cursor: pointer; transition: 0.2s; width: 100%;}
+        .btn-save-times:hover { background: #DBEAFE; }
 
-        .btn-close-flight { background: #1E293B; color: white; grid-column: 1 / -1; font-weight: 700; font-size: 13px; border: none; padding: 12px; border-radius: 8px; margin-top: 5px; width: 100%; cursor: pointer;}
-        .btn-close-flight:hover { background: var(--amerijet-blue-dark); color: white; }
+        .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 13px; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s;}
+        .btn-close-flight:hover { background: #FFF1F2; transform: translateY(-1px); }
 
         /* MODALES */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
@@ -294,6 +309,7 @@
         </nav>
 
         <div class="sidebar-footer">
+            <div class="version-badge">VERSION 0.0.1</div>
             <button class="btn-logout" id="btnLogout">🚪 Cerrar Sesión</button>
         </div>
     </aside>
@@ -304,7 +320,7 @@
         <!-- TOP HEADER -->
         <header class="top-header">
             <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <div class="header-title">Tablero Principal</div>
+            <div class="header-title">Tablero de Operaciones</div>
             
             <div class="header-station">
                 <div class="station-module" id="divStationSelector" style="display: none;">
@@ -335,9 +351,9 @@
                 </div>
 
                 <div class="panel-vuelos">
-                    <h2>🛫 Tablero de Control de Rampa (<span id="countVuelos">0</span>)</h2>
+                    <h2>🛫 Tablero Activo de Rampa (<span id="countVuelos">0</span>)</h2>
                     <div class="grid-vuelos" id="vuelosGrid">
-                        <p style="color: #64748B; font-style: italic;">Sincronizando con rampa...</p>
+                        <p style="color: #64748B; font-style: italic; font-weight:600;">Sincronizando con base de datos...</p>
                     </div>
                 </div>
             </div>
@@ -559,7 +575,7 @@
                     if (currentStatus === "DESPACHADO") statusClass = "status-despachado";
                     if (currentStatus === "EN IMPORTACION") statusClass = "status-importacion";
 
-                    const badgeEstacion = (estacionActual === 'ALL') ? `<span style="background: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 10px;">📍 ${v.estacion_registro}</span>` : '';
+                    const badgeEstacion = (estacionActual === 'ALL') ? `<span style="background: rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: auto;">📍 ${v.estacion_registro}</span>` : '';
                     
                     const hInicio = formatDateTimeLocal(v.hora_inicio_lotificada);
                     const hFin = formatDateTimeLocal(v.hora_fin_lotificada);
@@ -576,61 +592,92 @@
                     card.innerHTML = `
                         <div class="vuelo-card-header">
                             <div class="header-left-side">
-                                <h3 class="vuelo-title">${v.vuelo_id}</h3>
-                                <span class="vuelo-tail">✈️ ${v.matricula_avion}</span>
-                                <span class="status-badge ${statusClass}">${currentStatus}</span>
-                                ${badgeEstacion}
+                                <h3 class="vuelo-title">${v.vuelo_id} ${badgeEstacion}</h3>
+                                <div>
+                                    <span class="vuelo-tail">✈️ ${v.matricula_avion}</span>
+                                    <span class="status-badge ${statusClass}" style="margin-left: 5px;">${currentStatus}</span>
+                                </div>
                             </div>
                             <div class="card-controls">
                                 <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')">✏️</button>
-                                <button class="ctrl-btn ctrl-delete" style="color:var(--amerijet-red);" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')">✖️</button>
+                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')">✖️</button>
                             </div>
                         </div>
                         <div class="vuelo-card-body">
                             <div class="vuelo-meta-info">
-                                <div>Ruta: <strong>${v.ruta || "N/A"}</strong></div>
-                                <div>Fecha: <strong>${v.fecha}</strong></div>
-                                <div style="width: 100%; display: flex; gap: 8px; margin-top: 8px; border-top: 1px dashed #CBD5E1; padding-top: 10px;">
-                                    <span style="font-size: 11px; font-weight: 700; color: #64748B; display:flex; align-items:center;">TIPO OP:</span>
-                                    <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">📦 EXPORT: ${exportActivo ? 'SÍ' : 'NO'}</button>
-                                    <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">🛬 IMPORT: ${importActivo ? 'SÍ' : 'NO'}</button>
+                                <div><span>Ruta Op:</span><strong>${v.ruta || "N/A"}</strong></div>
+                                <div><span>Fecha Op:</span><strong>${v.fecha}</strong></div>
+                            </div>
+
+                            <div class="toggle-group">
+                                <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">📦 EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
+                                <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">🛬 IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
+                            </div>
+
+                            <!-- PASO 1 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Procesamiento Inicial</div>
+                                </div>
+                                <div style="display: ${displayExport};">
+                                    <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">🛠️ Iniciar Armado y Manifiesto ULD</button>
+                                </div>
+                                <div style="display: ${displayMsgExport};">
+                                    <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
                                 </div>
                             </div>
                             
-                            <div class="op-section-title">1. Procesamiento Inicial</div>
-                            <div style="display: ${displayExport};">
-                                <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">🛠️ Iniciar Armado y Manifiesto ULD</button>
-                            </div>
-                            <div style="display: ${displayMsgExport}; font-size: 11px; color: #94A3B8; font-style: italic; margin-bottom: 15px; text-align:center;">Vuelo sin carga de exportación.</div>
-                            
-                            <div class="op-section-title">2. Inspecciones y GSE</div>
-                            <div class="actions-subgrid">
-                                <a href="inspeccion_avion.html?id=${v.id}" class="action-btn btn-inspect">🔍 Inspección Físc.</a>
-                                <a href="com106.html?id=${v.id}" class="action-btn btn-com">⏱️ Vista COM-106</a>
-                                <a href="gse_equipos.html?id=${v.id}" class="action-btn btn-gse" style="grid-column: 1 / -1;">🚜 Equipos GSE</a>
-                            </div>
-
-                            <div class="op-section-title">3. Salida de Aeronave</div>
-                            <button class="action-btn btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">🛫 Despachar Vuelo (Outbound Listo)</button>
-                            
-                            <div class="op-section-title">4. Proceso de Importación (Despaletizado)</div>
-                            <div style="display: ${displayImport};">
-                                <div class="import-time-box">
-                                    <div class="time-input-group"><label>Fecha/Hora de Inicio</label><div class="time-controls-wrapper">
-                                        <input type="datetime-local" id="t_inicio_${v.id}" value="${hInicio}">
-                                        <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_inicio_${v.id}')" title="Capturar Ahora">⏱️</button>
-                                    </div></div>
-                                    <div class="time-input-group"><label>Fecha/Hora de Fin</label><div class="time-controls-wrapper">
-                                        <input type="datetime-local" id="t_fin_${v.id}" value="${hFin}">
-                                        <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}')" title="Capturar Ahora">⏱️</button>
-                                    </div></div>
-                                    <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">💾 Guardar Tiempos de Importación</button>
+                            <!-- PASO 2 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Inspecciones y Equipo</div>
+                                </div>
+                                <div class="actions-subgrid">
+                                    <a href="inspeccion_avion.html?id=${v.id}" class="action-btn btn-inspect">🔍 Inspección Físc.</a>
+                                    <a href="com106.html?id=${v.id}" class="action-btn btn-com">⏱️ Vista COM-106</a>
+                                    <a href="gse_equipos.html?id=${v.id}" class="action-btn btn-gse">🚜 Equipos GSE</a>
                                 </div>
                             </div>
-                            <div style="display: ${displayMsgImport}; font-size: 11px; color: #94A3B8; font-style: italic; margin-bottom: 15px; text-align:center;">Vuelo sin carga de importación.</div>
 
-                            <div class="op-section-title">5. Cierre de Operación</div>
-                            <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">🏁 Finalizar y Cerrar Vuelo Definitivamente</button>
+                            <!-- PASO 3 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">Salida de Aeronave</div>
+                                </div>
+                                <button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">🛫 Despachar Vuelo (Outbound Listo)</button>
+                            </div>
+
+                            <!-- PASO 4 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">4</div>
+                                    <div class="step-title">Despaletizado (Import)</div>
+                                </div>
+                                <div style="display: ${displayImport};">
+                                    <div class="import-time-box">
+                                        <div class="time-input-group"><label>Inicio de Operación</label><div class="time-controls-wrapper">
+                                            <input type="datetime-local" id="t_inicio_${v.id}" value="${hInicio}">
+                                            <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_inicio_${v.id}')" title="Capturar Ahora">⏱️</button>
+                                        </div></div>
+                                        <div class="time-input-group"><label>Fin de Operación</label><div class="time-controls-wrapper">
+                                            <input type="datetime-local" id="t_fin_${v.id}" value="${hFin}">
+                                            <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}')" title="Capturar Ahora">⏱️</button>
+                                        </div></div>
+                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">💾 Guardar Tiempos</button>
+                                    </div>
+                                </div>
+                                <div style="display: ${displayMsgImport};">
+                                    <div class="empty-state-box">Vuelo sin carga de importación planificada.</div>
+                                </div>
+                            </div>
+
+                            <!-- PASO 5 -->
+                            <div style="margin-top: 20px;">
+                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Finalizar y Cerrar Vuelo Definitivamente</button>
+                            </div>
                         </div>
                     `;
                     grid.appendChild(card);
@@ -659,7 +706,6 @@
                         const textoBase = partes[0];
                         let paquete = JSON.parse(partes[1]);
                         
-                        // Vaciamos las fotos pesadas de las incidencias temporales
                         if (paquete.incidencias) {
                             paquete.incidencias.forEach(inc => {
                                 inc.fotos = [];
@@ -676,7 +722,7 @@
                     }
                 }
 
-                // 2. Limpiar fotos de los DAÑOS ESTRUCTURALES de la aeronave (Mantenemos la bitácora textual)
+                // 2. Limpiar fotos de los DAÑOS ESTRUCTURALES de la aeronave
                 if (matriculaAvion) {
                     const { data: danos } = await supabaseClient.from('avion_danos')
                         .select('id, evidencia')
@@ -688,8 +734,6 @@
                             if (d.evidencia) {
                                 try {
                                     let ev = JSON.parse(d.evidencia);
-                                    
-                                    // Vaciamos imágenes pesadas para ahorrar memoria en Supabase
                                     ev.fotos = [];
                                     ev.imgAvion = null;
                                     ev.imgPaleta = null;
@@ -802,9 +846,9 @@
 
         function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion) { 
             showCustomConfirm(
-                "🏁 Finalizar y Cerrar Operación", 
+                "Finalizar y Cerrar Operación", 
                 `¿Confirmas que deseas finalizar y cerrar definitivamente el vuelo <strong style="color:var(--amerijet-blue);">${numeroVuelo}</strong>?<br><br><span style="color:var(--amerijet-red); font-size:12px;">⚠️ <b>EFECTO:</b> Si no despachaste antes, se limpiará la memoria de fotos, se migrarán los ULDs a sus destinos y la tarjeta se removerá del tablero para guardarse en el Historial.</span>`, 
-                "🏁 Finalizar Vuelo", 
+                "Finalizar Vuelo", 
                 "var(--amerijet-red)",
                 async () => {
                     try { 
