@@ -261,7 +261,7 @@
                             <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
                         </select>
 
-                        <!-- Panel de ingreso exclusivo -->
+                        <!-- Panel de ingreso exclusivo (No muestra historial aquí) -->
                         <div id="panel_lower_fwd" class="hallazgo-panel">
                             <input type="text" id="desc_lower_fwd" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Tomar Foto
@@ -685,9 +685,9 @@
                     document.getElementById('lblTailHead').innerText = op.matricula_avion;
                 }
 
-                // --- LOGICA DEL SELECTOR DINÁMICO DE INSPECTOR ---
+                // --- LÓGICA DEL SELECTOR DINÁMICO DE INSPECTOR ---
                 const selInspector = document.getElementById('selInspector');
-                selInspector.innerHTML = ''; 
+                selInspector.innerHTML = '<option value="">Seleccione Inspector...</option>'; 
                 
                 // 1. Buscamos todos los perfiles en la base de datos
                 const { data: personal } = await supabaseClient.from('perfiles').select('nombre, estacion_base');
@@ -726,13 +726,13 @@
 
                 // 4. Asignamos el valor correcto al Select
                 if (savedInspector) {
-                    // Si el inspector guardado por alguna razón no está en la lista de la estación (se mudó, etc), lo agregamos para no perder la data
+                    // Si el inspector guardado no está en la lista de la estación (por alguna razón), lo agregamos
                     if (!personalEstacion.some(p => p.nombre === savedInspector)) {
                         selInspector.innerHTML += `<option value="${savedInspector}">${savedInspector}</option>`;
                     }
                     selInspector.value = savedInspector;
                 } else if (currentUser) {
-                    // Si es nuevo, intentamos poner al usuario logueado
+                    // Si es nuevo, intentamos preseleccionar al usuario logueado
                     if (!personalEstacion.some(p => p.nombre === currentUser)) {
                         selInspector.innerHTML += `<option value="${currentUser}">${currentUser}</option>`;
                     }
@@ -985,7 +985,7 @@
             const dano = document.getElementById('selDanoSeveridad').value;
             const notasAdd = document.getElementById('inpComentariosCLS').value.trim();
 
-            if(!ubi || !comp || !dano) { showToast("Faltan datos por llenar.", "error"); return; }
+            if(!ubi || !comp || !dano) { showToast("Faltan datos por llenar en la sección de Seguros.", "error"); return; }
 
             const idT = 'cls_' + Date.now(); let iAvion = null; let iPaleta = null;
             const descripcionFinal = notasAdd ? `${dano} - Notas: ${notasAdd}` : dano;
