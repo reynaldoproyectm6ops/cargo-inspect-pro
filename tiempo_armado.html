@@ -56,7 +56,7 @@
         .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 12px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer;}
         .btn-volver-top:hover { background: #E2E8F0; }
         
-        /* Ajuste de margen inferior para evitar que los botones se escondan */
+        /* Ajuste de margen inferior para los botones fijos */
         .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; }
         .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
         
@@ -144,26 +144,31 @@
         .check-container label { margin-bottom: 0; cursor: pointer; font-size: 13px; font-weight: 800; color: var(--amerijet-blue); }
         .boleta-detalles { display: none; background: #F8FAFC; padding: 20px; border-radius: 8px; border: 1px dashed #94A3B8; margin-top: 10px; }
         
-        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .btn-guardar { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 14px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 13px; text-transform: uppercase; transition: 0.2s; letter-spacing: 0.5px;}
-        .btn-guardar:hover { background: #E2E8F0; border-color: #94A3B8;}
-        .btn-finalizar { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 13px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); letter-spacing: 0.5px;}
-        .btn-finalizar:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.3); }
         .btn-reabrir { background: #1E293B; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 13px; text-transform: uppercase; width: 100%; margin-top: 25px; display: none; letter-spacing: 0.5px;}
 
         /* BLOQUEO FORMULARIO */
         .form-locked input, .form-locked select { background-color: #F1F5F9; color: #94A3B8; cursor: not-allowed; pointer-events: none; }
         .form-locked .check-container { pointer-events: none; opacity: 0.7; }
         .form-locked .btn-capture, .form-locked .tag-delete-btn, .form-locked .tag-update-btn, .form-locked .btn-update-stack, .form-locked .btn-add-multiple { pointer-events: none; opacity: 0.5; }
-        .form-locked .action-buttons { display: none; }
-        .form-locked .btn-reabrir { display: block; }
         .form-locked .uld-checklist { opacity: 0.5; pointer-events: none; }
+        .form-locked .btn-reabrir { display: block; }
+        .form-locked #bottomActionsBar { display: none !important; }
 
         .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-top: 30px; }
         .btn-ver-historial { background: white; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;}
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
-        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        /* BOTTOM BAR NATIVA */
+        .bottom-bar { background: white; padding: 15px 25px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; border-top: 1px solid #E2E8F0; z-index: 100; flex-shrink: 0; position: fixed; bottom: 0; left: var(--sidebar-width); right: 0; transition: left 0.3s;}
+        .btn-panel { border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 13px; cursor: pointer; color: white; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; transition: 0.2s;}
+        .btn-panel.btn-guardar { background: var(--amerijet-blue); box-shadow: 0 4px 10px rgba(10,37,64,0.15); }
+        .btn-panel.btn-guardar:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px);}
+        .btn-panel.btn-finalizar { background: #10B981; box-shadow: 0 4px 10px rgba(16,185,129,0.15); }
+        .btn-panel.btn-finalizar:hover { background: #059669; transform: translateY(-1px);}
+
+        /* MODALES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-generic { text-align: center; max-width: 350px; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* SISTEMA DE NOTIFICACIONES TOAST */
@@ -176,11 +181,9 @@
         @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
 
         @media (max-width: 768px) { 
-            .main-content { padding-bottom: 150px; }
-            .container { padding: 15px; padding-bottom: 60px;}
-            .form-card { padding: 20px; margin-bottom: 30px;}
             .row-grid { grid-template-columns: 1fr; } 
-            .action-buttons { grid-template-columns: 1fr; gap: 10px;} 
+            .form-card { padding: 20px; }
+            .container { padding: 15px; }
             .tag-main-box { flex-direction: column; align-items: stretch; }
             .tag-main-right { justify-content: space-between; width: 100%; }
             .stack-dest-wrapper { width: 100%; justify-content: space-between; }
@@ -193,6 +196,7 @@
             .sidebar-overlay.active { display: block; }
             .menu-toggle { display: block; }
             .header-title { display: none; } 
+            .bottom-bar { left: 0; padding: 12px 15px; }
         }
     </style>
 </head>
@@ -213,7 +217,7 @@
             </div>
         </div>
         <nav class="sidebar-nav">
-            <button class="nav-link active" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
+            <button class="nav-link" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
             <button class="nav-link" onclick="navegarA('uld_gestion.html')">📦 Inventario ULD</button>
             <button class="nav-link" id="btnAdminPanel" style="display: none;" onclick="navegarA('admin_panel.html')">👑 Panel de Control</button>
             <button class="nav-link" id="btnReportesHistoricos" style="display: none;" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
@@ -362,10 +366,6 @@
                             </div>
                         </div>
 
-                        <div class="action-buttons">
-                            <button type="button" class="btn-guardar" onclick="guardarDatos(false)">💾 Guardar Progreso</button>
-                            <button type="button" class="btn-finalizar" onclick="guardarDatos(true)">🏁 Finalizar y Congelar</button>
-                        </div>
                         <button type="button" class="btn-reabrir" onclick="reabrirRegistro()">🔓 Reabrir Registro (Corrección)</button>
                     </form>
 
@@ -377,6 +377,11 @@
                 </div>
             </div>
         </main>
+        
+        <div class="bottom-bar" id="bottomActionsBar">
+            <button type="button" class="btn-panel btn-guardar" onclick="guardarDatos(false)">💾 Guardar Progreso</button>
+            <button type="button" class="btn-panel btn-finalizar" onclick="guardarDatos(true)">🏁 Finalizar y Congelar</button>
+        </div>
     </div>
 
     <!-- MODALES -->
@@ -547,7 +552,6 @@
                     miNombre = perfil.nombre || "Usuario"; miRol = String(perfil.rol).toLowerCase();
                     document.getElementById('lblUserName').innerText = miNombre; document.getElementById('lblUserRol').innerText = miRol.toUpperCase();
                     
-                    // Asignamos el nombre al panel de resumen
                     const lblActiveUser = document.getElementById('lblActiveUser');
                     if(lblActiveUser) lblActiveUser.innerText = miNombre;
 
@@ -629,7 +633,7 @@
                 const isInStacks = Object.values(uldsStacks).flat().includes(u.uld_number);
                 
                 if(!isInMain && !isInStacks) {
-                    // FIX: Ocultar ULDs que están en uso en otras tarjetas
+                    // SE OCULTAN LOS ULDs QUE ESTÉN EN USO POR OTROS VUELOS EN LA BASE DE DATOS
                     if (u.use_status === 'IN USE') return; 
 
                     htmlOptions += `
@@ -895,8 +899,17 @@
             setTimeout(() => { hayCambiosSinGuardar = false; }, 100); 
         }
 
-        function bloquearFormulario() { document.getElementById('formWrapper').classList.add('form-locked'); const badge = document.getElementById('badgeEstado'); badge.className = 'badge-estado badge-finalizado'; badge.innerText = "FINALIZADO 🔒"; }
-        function desbloquearFormulario() { document.getElementById('formWrapper').classList.remove('form-locked'); const badge = document.getElementById('badgeEstado'); badge.className = 'badge-estado badge-borrador'; badge.innerText = "EN PROGRESO ✏️"; }
+        function bloquearFormulario() { 
+            document.getElementById('formWrapper').classList.add('form-locked'); 
+            const badge = document.getElementById('badgeEstado'); badge.className = 'badge-estado badge-finalizado'; badge.innerText = "FINALIZADO 🔒"; 
+            document.getElementById('bottomActionsBar').style.display = 'none';
+        }
+        function desbloquearFormulario() { 
+            document.getElementById('formWrapper').classList.remove('form-locked'); 
+            const badge = document.getElementById('badgeEstado'); badge.className = 'badge-estado badge-borrador'; badge.innerText = "EN PROGRESO ✏️"; 
+            document.getElementById('bottomActionsBar').style.display = 'flex';
+        }
+
         function capturarAhora(inputId) { const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); document.getElementById(inputId).value = now.toISOString().slice(0, 16); marcarCambios(); }
         function formatoFechaInput(isoString) { if(!isoString) return ''; const d = new Date(isoString); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
 
@@ -948,11 +961,40 @@
             };
 
             try {
-                if(armadoId) { await supabaseClient.from('tiempos_armado').update(payload).eq('id', armadoId); } else { await supabaseClient.from('tiempos_armado').insert([payload]); }
-                if (esFinalizar) { const allSelectedUlds = [...uldsMain, ...Object.values(uldsStacks).flat()]; if (allSelectedUlds.length > 0) { await supabaseClient.from('uld_inventario').update({ use_status: 'IN USE' }).in('uld_number', allSelectedUlds); } }
+                // --- LÓGICA DE BLOQUEO DE ULDs EN DB AL GUARDAR ---
+                const allSelectedUlds = [...uldsMain, ...Object.values(uldsStacks).flat()];
+                let uldsPrevios = [];
                 
+                if(armadoId) { 
+                    const { data: oldData } = await supabaseClient.from('tiempos_armado').select('ulds_armados, stacks_armados').eq('id', armadoId).single();
+                    if(oldData) {
+                        if(oldData.ulds_armados) oldData.ulds_armados.forEach(item => uldsPrevios.push(item.uld || item));
+                        if(oldData.stacks_armados) Object.values(oldData.stacks_armados).forEach(stack => {
+                            let arr = stack.ulds || stack || [];
+                            uldsPrevios.push(...arr);
+                        });
+                    }
+                    await supabaseClient.from('tiempos_armado').update(payload).eq('id', armadoId); 
+                } else { 
+                    await supabaseClient.from('tiempos_armado').insert([payload]); 
+                }
+                
+                // Liberar ULDs que fueron removidos
+                const uldsLiberar = uldsPrevios.filter(u => !allSelectedUlds.includes(u));
+                if(uldsLiberar.length > 0) {
+                    await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', uldsLiberar);
+                }
+                
+                // Bloquear todos los ULDs actuales (incluso si solo se guarda el borrador)
+                if (allSelectedUlds.length > 0) { 
+                    await supabaseClient.from('uld_inventario').update({ use_status: 'IN USE' }).in('uld_number', allSelectedUlds); 
+                }
+                // -----------------------------------------------------
+
                 hayCambiosSinGuardar = false; 
-                showCustomAlert("¡Guardado Exitoso!", esFinalizar ? "El armado se cerró y congeló." : "El progreso ha sido guardado.", "success"); await recargarListaArmados(); 
+                showCustomAlert("¡Guardado Exitoso!", esFinalizar ? "El armado se cerró y congeló." : "El progreso ha sido guardado y los ULDs reservados.", "success"); 
+                await cargarInventarioEstacion(); 
+                await recargarListaArmados(); 
             } catch(e) { showCustomAlert("Error de guardado", e.message, "error"); }
         }
 
@@ -963,8 +1005,6 @@
                 if (nuevoHistorial.length > 20) { nuevoHistorial = nuevoHistorial.slice(-20); }
                 try {
                     await supabaseClient.from('tiempos_armado').update({ estado: 'BORRADOR', historial_cambios: nuevoHistorial }).eq('id', armadoId);
-                    const allSelectedUlds = [...uldsMain, ...Object.values(uldsStacks).flat()];
-                    if (allSelectedUlds.length > 0) { await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', allSelectedUlds); }
                     await recargarListaArmados(); showCustomAlert("Registro Abierto", "El registro está en modo borrador y puede ser editado.", "success");
                 } catch(e) { showCustomAlert("Error", e.message, "error"); }
             });
