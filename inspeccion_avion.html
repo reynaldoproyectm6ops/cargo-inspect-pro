@@ -179,9 +179,9 @@
         @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-10px); } }
 
         @media (max-width: 1024px) { 
-            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); z-index: 1001;}
             .sidebar.active { transform: translateX(0); }
-            .sidebar-overlay.active { display: block; }
+            .sidebar-overlay.active { display: block; z-index: 1000;}
             .menu-toggle { display: block; }
             .container { padding: 15px; }
             .bottom-bar { left: 0; padding: 12px 15px; }
@@ -232,7 +232,7 @@
         <main class="main-content">
             <div class="container">
                 
-                <!-- TARJETA AZUL SUPERIOR -->
+                <!-- TARJETA AZUL SUPERIOR CON SELECTOR DINÁMICO -->
                 <div class="info-card">
                     <div>
                         <div style="font-size: 11px; opacity: 0.9; font-weight: 800; text-transform: uppercase;">Vuelo Operativo</div>
@@ -240,16 +240,16 @@
                     </div>
                     <div style="display:flex; flex-direction:column; align-items:flex-end;">
                         <span style="font-size: 10px; opacity: 0.9; font-weight: 800; margin-bottom:6px; text-transform: uppercase;">Inspector Encargado</span>
+                        
+                        <!-- ESTE ES EL SELECTOR QUE AHORA ES DINÁMICO -->
                         <select id="selInspector" onchange="marcarCambios()">
-                            <option value="Jose Chavez">Jose Chavez</option>
-                            <option value="Reynaldo Zaldaña" selected>Reynaldo Zaldaña</option>
-                            <option value="Alexis Coreas">Alexis Coreas</option>
-                            <option value="Samuel Martinez">Samuel Martinez</option>
+                            <option value="">Cargando inspectores...</option>
                         </select>
+                        
                     </div>
                 </div>
 
-                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA (ZONA DE REPORTE TOTALMENTE LIMPIA) -->
+                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA -->
                 <div class="card">
                     <div class="card-header">1. Inspección Estructural Básica</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
@@ -264,7 +264,6 @@
                             <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
                         </select>
 
-                        <!-- Panel de ingreso exclusivo (No muestra historial aquí) -->
                         <div id="panel_lower_fwd" class="hallazgo-panel">
                             <input type="text" id="desc_lower_fwd" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Tomar Foto
@@ -320,7 +319,6 @@
                             <option value="OTROS">⚠️ OTROS (Rodos dañados, guías, faltantes, etc.)</option>
                         </select>
 
-                        <!-- Panel Simple para Estructura / Otros en el MD -->
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
                             <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción..." oninput="marcarCambios()">
                             <label class="btn-camera">📸 Foto del Daño (MD)
@@ -332,7 +330,7 @@
                     </div>
                 </div>
 
-                <!-- PANEL MAPEO CLS B767 (Sólo se abre si elige Mapear CLS en MD) -->
+                <!-- PANEL MAPEO CLS B767 -->
                 <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                     <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">⚠️ Mapeo de Seguros (CLS)</div>
                     
@@ -356,7 +354,6 @@
                         <div class="pallet-draw" id="palletBoxRenderHTML">
                             <div class="pallet-core-text">A1R</div>
                             
-                            <!-- Borde Superior -->
                             <div class="hotspot t-c-l" onclick="toggleLock('Side Corner (Top Left)', this)"></div>
                             <div class="lock-label lbl-t-c-l">Side<br>Corner</div>
                             
@@ -368,7 +365,6 @@
                             <div class="hotspot t-c-r" onclick="toggleLock('Side Corner (Top Right)', this)"></div>
                             <div class="lock-label lbl-t-c-r">Side<br>Corner</div>
 
-                            <!-- Borde Inferior -->
                             <div class="hotspot b-c-l" onclick="toggleLock('Side Corner (Bot Left)', this)"></div>
                             <div class="lock-label lbl-b-c-l">Side<br>Corner</div>
                             
@@ -380,7 +376,6 @@
                             <div class="hotspot b-c-r" onclick="toggleLock('Side Corner (Bot Right)', this)"></div>
                             <div class="lock-label lbl-b-c-r">Side<br>Corner</div>
 
-                            <!-- Borde Izquierdo -->
                             <div class="hotspot l-c-t" onclick="toggleLock('Fwd/Aft Corner (L Top)', this)"></div>
                             <div class="lock-label lbl-l-c-t">Fwd/Aft<br>Corner</div>
                             
@@ -391,7 +386,6 @@
                             <div class="hotspot l-c-b" onclick="toggleLock('Fwd/Aft Corner (L Bot)', this)"></div>
                             <div class="lock-label lbl-l-c-b">Fwd/Aft<br>Corner</div>
 
-                            <!-- Borde Derecho -->
                             <div class="hotspot r-c-t" onclick="toggleLock('Fwd/Aft Corner (R Top)', this)"></div>
                             <div class="lock-label lbl-r-c-t">Fwd/Aft<br>Corner</div>
                             
@@ -431,25 +425,24 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ (SECCIONADA CON MÚLTIPLES SCROLLS) -->
+                <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ -->
                 <div class="card">
                     <div class="card-header" style="margin-bottom: 5px;">2. Trazabilidad de Discrepancias</div>
                     
-                    <!-- CONTEO DE REPORTES -->
                     <div id="matrixCounters" style="margin-bottom: 20px;">
                         <div style="font-size:12px; color:#64748B; font-weight: 600;">Cargando historial...</div>
                     </div>
 
                     <div id="matrizDinamica" class="matrix-container">
-                        <!-- Aquí se inyectarán las áreas con su propio scroll -->
+                        <!-- Cajas con scroll -->
                     </div>
                 </div>
 
-                <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO CON SELECTOR DE ÁREA Y SCROLL -->
+                <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO -->
                 <div class="card" style="margin-bottom: 20px; border: 2px solid var(--warn-orange);">
                     <div class="card-header" style="color:var(--warn-orange);">3. Incidencias Temporales del Vuelo</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
-                        Estos reportes aplican SOLO para la operación actual y no manchan el historial permanente del avión (No se guardan en la DB como daño).
+                        Estos reportes aplican SOLO para la operación actual y no manchan el historial permanente del avión.
                     </p>
                     <div class="comp-item" style="border-color: var(--warn-orange); margin-bottom: 5px;">
                         
@@ -470,7 +463,6 @@
                         <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">➕ Agregar Incidencia a este Vuelo</button>
                     </div>
                     
-                    <!-- Scroll Interno Exclusivo para Incidencias -->
                     <div id="listaIncidencias" style="margin-top: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px;"></div>
                 </div>
 
@@ -488,7 +480,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN PROFUNDA DAÑOS -->
+    <!-- MODALES DE EDICIÓN Y CONFIRMACIÓN -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
             <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900;">✏️ Editar / Actualizar Daño</h3>
@@ -529,7 +521,6 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN INCIDENCIA TEMPORAL -->
     <div class="modal-overlay" id="modalActualizarIncidencia">
         <div class="modal-content">
             <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900;">✏️ Editar Incidencia</h3>
@@ -561,7 +552,6 @@
         </div>
     </div>
 
-    <!-- MODAL CONFIRMACIÓN UNIVERSAL -->
     <div class="modal-overlay" id="customConfirmModal">
         <div class="modal-content modal-generic">
             <div style="font-size: 45px; margin-bottom: 10px;">⚠️</div>
@@ -582,15 +572,16 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         const operacionId = new URLSearchParams(window.location.search).get('id');
         
-        let vueloData = { vuelo: '', tail: '', ruta: '' };
+        let vueloData = { vuelo: '', tail: '', ruta: '', estacion: '' };
         let matrizHallazgos = []; 
         let fotosBanco = {}; 
         let configActualGlobal = 'A';
-        
-        // --- ARRAY TEMPORAL DE INCIDENCIAS DE VUELO ---
         let incidenciasVuelo = [];
+        
+        // Datos del usuario logueado
+        let currentUser = "";
+        let currentStation = "SAL";
 
-        // --- ORDEN ESTRICTO Y CATEGORIZADOR ---
         function getStandardGroup(areaName) {
             let u = (areaName || '').toUpperCase();
             if(u.includes('MAIN DECK') || u.includes('MD') || u.includes('CLS')) return 'MAIN DECK';
@@ -609,7 +600,6 @@
             return 5;
         }
 
-        // --- PROTECCIÓN DE CAMBIOS ---
         let hayCambiosSinGuardar = false;
         function marcarCambios() { hayCambiosSinGuardar = true; }
         
@@ -662,14 +652,16 @@
             document.getElementById('customConfirmModal').style.display = 'flex';
         }
 
-        // --- INICIALIZACIÓN Y CONEXIÓN DB ---
+        // --- INICIALIZACIÓN ---
         async function inicializar() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'index.html'; return; }
 
-            const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre').eq('id', session.user.id).single();
+            const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre, estacion_base').eq('id', session.user.id).single();
             if (perfil) {
-                document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
+                currentUser = perfil.nombre || "Usuario";
+                currentStation = perfil.estacion_base || "SAL";
+                document.getElementById('lblUserName').innerText = currentUser;
                 document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
                 if(perfil.rol === 'admin' || perfil.rol === 'superadmin') {
                     document.getElementById('btnAdminPanel').style.display = 'flex';
@@ -679,14 +671,82 @@
 
             if(!operacionId) return;
             try {
-                const { data: op } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, ruta').eq('id', operacionId).single();
+                // Obtenemos los datos del vuelo
+                const { data: op } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, ruta, estacion_registro').eq('id', operacionId).single();
                 if(op) {
                     vueloData.vuelo = op.vuelo_id; 
                     vueloData.tail = op.matricula_avion;
                     vueloData.ruta = op.ruta || 'N/A';
+                    vueloData.estacion = op.estacion_registro || currentStation.split(',')[0];
                     document.getElementById('lblVuelo').innerText = op.vuelo_id;
                     document.getElementById('lblTailHead').innerText = op.matricula_avion;
                 }
+
+                // --- LOGICA DEL SELECTOR DINÁMICO DE INSPECTOR ---
+                const selInspector = document.getElementById('selInspector');
+                selInspector.innerHTML = '<option value="">Cargando inspectores...</option>'; 
+                
+                // 1. Buscamos todos los perfiles en la base de datos
+                const { data: personal, error: errPerfiles } = await supabaseClient.from('perfiles').select('nombre, estacion_base');
+                let personalEstacion = [];
+                
+                if (personal && !errPerfiles) {
+                    // 2. Filtramos solo los que pertenecen a la estación del vuelo
+                    const estacionVuelo = (vueloData.estacion || "SAL").toUpperCase();
+                    personalEstacion = personal.filter(p => p.estacion_base && p.estacion_base.toUpperCase().includes(estacionVuelo));
+                    
+                    // Si nadie coincide, cargamos todos para que no se quede bloqueado
+                    if(personalEstacion.length === 0) {
+                        personalEstacion = personal;
+                    }
+                    
+                    selInspector.innerHTML = '<option value="">Seleccione Inspector...</option>';
+                    personalEstacion.forEach(p => {
+                        if(p.nombre) {
+                            selInspector.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
+                        }
+                    });
+                } else {
+                    selInspector.innerHTML = '<option value="">Error al cargar</option>';
+                }
+
+                // 3. Obtenemos si ya alguien había guardado esta inspección antes
+                const { data: logGuardado } = await supabaseClient.from('avion_inspecciones')
+                    .select('notas_adicionales, inspector_nombre')
+                    .eq('vuelo_operacion_id', operacionId)
+                    .order('id', { ascending: false }).limit(1);
+                
+                let savedInspector = null;
+                if(logGuardado && logGuardado.length > 0) { 
+                    savedInspector = logGuardado[0].inspector_nombre;
+                    const notasBD = logGuardado[0].notas_adicionales || '';
+                    if(notasBD.includes('||_JSON_||')) {
+                        try {
+                            const paquete = JSON.parse(notasBD.split('||_JSON_||')[1]);
+                            document.getElementById('txtNotasFinales').value = paquete.notas || '';
+                            incidenciasVuelo = paquete.incidencias || [];
+                            incidenciasVuelo.forEach(inc => { fotosBanco[inc.idTracking] = inc.fotos || []; });
+                        } catch(e) {}
+                    } else {
+                        document.getElementById('txtNotasFinales').value = notasBD; 
+                    }
+                }
+
+                // 4. Asignamos el valor correcto al Select
+                if (savedInspector) {
+                    // Si el inspector guardado por alguna razón no está en la lista (se mudó, etc), lo agregamos para no perder la data
+                    if (!personalEstacion.some(p => p.nombre === savedInspector)) {
+                        selInspector.innerHTML += `<option value="${savedInspector}">${savedInspector}</option>`;
+                    }
+                    selInspector.value = savedInspector;
+                } else if (currentUser) {
+                    // Si es nuevo, preseleccionamos al usuario logueado
+                    if (!personalEstacion.some(p => p.nombre === currentUser)) {
+                        selInspector.innerHTML += `<option value="${currentUser}">${currentUser}</option>`;
+                    }
+                    selInspector.value = currentUser;
+                }
+                // ---------------------------------------------------
 
                 // Carga del historial del avión
                 const { data: danosBD } = await supabaseClient.from('avion_danos')
@@ -722,32 +782,13 @@
                     });
                 }
 
-                // Carga de notas finales de este vuelo
-                const { data: logGuardado } = await supabaseClient.from('avion_inspecciones').select('notas_adicionales').eq('vuelo_operacion_id', operacionId).order('id', { ascending: false }).limit(1);
-                if(logGuardado && logGuardado.length > 0) { 
-                    const notasBD = logGuardado[0].notas_adicionales || '';
-                    if(notasBD.includes('||_JSON_||')) {
-                        const partes = notasBD.split('||_JSON_||');
-                        try {
-                            const paquete = JSON.parse(partes[1]);
-                            document.getElementById('txtNotasFinales').value = paquete.notas || '';
-                            incidenciasVuelo = paquete.incidencias || [];
-                            incidenciasVuelo.forEach(inc => {
-                                fotosBanco[inc.idTracking] = inc.fotos || [];
-                            });
-                        } catch(e) {}
-                    } else {
-                        document.getElementById('txtNotasFinales').value = notasBD; 
-                    }
-                }
-
                 dibujarPlanoAvionCSS('A');
                 renderizarMatrizDinamica();
                 renderizarIncidencias();
             } catch(e) { console.error("Error de inicialización", e); }
         }
 
-        // --- SISTEMA DE INCIDENCIAS TEMPORALES DEL VUELO ---
+        // --- SISTEMA DE INCIDENCIAS TEMPORALES ---
         function agregarIncidencia() {
             const areaInc = document.getElementById('sel_incidencia_area').value;
             const desc = document.getElementById('desc_incidencia').value.trim();
@@ -784,18 +825,14 @@
                     fotosBanco[inc.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`);
                     htmlF += `</div>`;
                 }
-                
-                // INYECCIÓN DEL BOTÓN EDITAR EN CADA INCIDENCIA CON SEPARADOR CLARO
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
                         <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px;">📍 Área: ${inc.area || 'General'}</div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark); margin-bottom: 8px;">${inc.descripcion}</div>
                         ${htmlF}
-                        
                         <div style="margin-top: 15px; border-top: 1px dashed #FDE68A; padding-top: 15px;">
                             <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); color:white; width:100%; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="abrirModalIncidencia('${inc.idTracking}')">✏️ Editar Incidencia</button>
                         </div>
-                        
                         <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
                     </div>
                 `;
@@ -806,14 +843,12 @@
             const idx = incidenciasVuelo.findIndex(i => i.idTracking === idTracking); 
             if (idx !== -1) {
                 document.getElementById('modalIncIndex').value = idTracking;
-                
                 const selectArea = document.getElementById('modalIncArea');
                 let found = false;
                 for (let i = 0; i < selectArea.options.length; i++) {
                     if (selectArea.options[i].value === incidenciasVuelo[idx].area) {
                         selectArea.selectedIndex = i;
-                        found = true;
-                        break;
+                        found = true; break;
                     }
                 }
                 if(!found) selectArea.value = "General";
@@ -838,19 +873,17 @@
                 fotosBanco[idTracking].push(...fotosBanco['modal_inc_temp']);
             }
             document.getElementById('modalActualizarIncidencia').style.display = 'none';
-            marcarCambios(); 
-            showToast("Incidencia actualizada correctamente.", "success");
+            marcarCambios(); showToast("Incidencia actualizada.", "success");
             renderizarIncidencias();
         }
 
         function eliminarIncidencia(idTracking) {
             incidenciasVuelo = incidenciasVuelo.filter(x => x.idTracking !== idTracking);
             delete fotosBanco[idTracking];
-            marcarCambios();
-            renderizarIncidencias();
+            marcarCambios(); renderizarIncidencias();
         }
 
-        // --- SISTEMA DE PANELES DE INPUT (Limpios) ---
+        // --- SISTEMA DE PANELES DE INPUT ---
         function togglePanelHallazgo(idCaja, sel) { 
             document.getElementById('panel_' + idCaja).style.display = (sel.value === 'HALLAZGO' || sel.value === 'OTROS') ? 'block' : 'none'; 
             if(sel.value === 'OTROS') {
@@ -869,20 +902,9 @@
 
             const idLocalTemp = 'comp_' + Date.now();
             matrizHallazgos.push({
-                id_db: null, 
-                idTracking: idLocalTemp, 
-                tipo: 'COMPARTIMENTO', 
-                area: nombreArea, 
-                ubicacion: 'General', 
-                componente: tipoComp, 
-                descripcion: desc, 
-                consecuencia: 'N/A', 
-                severidad: 'N/A', 
-                estado_actual: 'ABIERTO', 
-                vuelo_origen: vueloData.vuelo, 
-                nota_solucion: '', 
-                esHistorico: false, 
-                creado_at: new Date().toISOString()
+                id_db: null, idTracking: idLocalTemp, tipo: 'COMPARTIMENTO', area: nombreArea, ubicacion: 'General', 
+                componente: tipoComp, descripcion: desc, consecuencia: 'N/A', severidad: 'N/A', estado_actual: 'ABIERTO', 
+                vuelo_origen: vueloData.vuelo, nota_solucion: '', esHistorico: false, creado_at: new Date().toISOString()
             });
 
             if(fotosBanco[idCaja]) { fotosBanco[idLocalTemp] = [...fotosBanco[idCaja]]; fotosBanco[idCaja] = []; }
@@ -892,24 +914,20 @@
             document.getElementById('desc_' + idCaja).value = ""; 
             document.getElementById('gal_' + idCaja).innerHTML = "";
             
-            marcarCambios(); showToast("Daño agregado a la matriz. Área limpia para continuar.", "info");
+            marcarCambios(); showToast("Daño agregado a la matriz.", "info");
             renderizarMatrizDinamica();
         }
 
         function evaluarMainDeck(sel) {
             const pFus = document.getElementById('panel_md_fuselaje'); 
             const pLocks = document.getElementById('panelMapeoCLS');
-            
             if (sel.value === 'FUSELAJE' || sel.value === 'OTROS') {
-                pFus.style.display = 'block';
-                pLocks.style.display = 'none';
+                pFus.style.display = 'block'; pLocks.style.display = 'none';
                 document.getElementById('desc_md_fuselaje').placeholder = sel.value === 'FUSELAJE' ? "Ubicación y descripción (Ej: Marco Puerta L1)..." : "Describa el daño (Ej: Rodo quebrado, falta pin, etc.)...";
             } else if (sel.value === 'LOCKS') {
-                pFus.style.display = 'none';
-                pLocks.style.display = 'block';
+                pFus.style.display = 'none'; pLocks.style.display = 'block';
             } else {
-                pFus.style.display = 'none';
-                pLocks.style.display = 'none';
+                pFus.style.display = 'none'; pLocks.style.display = 'none';
             }
         }
 
@@ -947,7 +965,6 @@
             marcarCambios();
         }
 
-        // --- COMPRESIÓN DE FOTO (CALIDAD MEJORADA PARA PDF) ---
         function capturarYComprimirFoto(input, galleryId, claveSeccion) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader(); reader.readAsDataURL(input.files[0]);
@@ -955,7 +972,6 @@
                     const img = new Image(); img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas'); 
-                        // MÁS RESOLUCIÓN: 900px y calidad 0.85 para impresiones nítidas
                         const scale = 900 / img.width; 
                         canvas.width = 900; 
                         canvas.height = img.height * scale;
@@ -984,7 +1000,6 @@
 
             try {
                 const rDiv = document.getElementById('renderContainer');
-                
                 rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${configActualGlobal}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
                 const cA = await html2canvas(rDiv, { scale: 1.5 }); iAvion = cA.toDataURL('image/jpeg', 0.8);
                 
@@ -993,45 +1008,28 @@
                 rDiv.innerHTML = "";
 
                 matrizHallazgos.push({
-                    id_db: null,
-                    idTracking: idT, 
-                    tipo: 'LOCKS', 
-                    area: 'Main Deck CLS', 
-                    ubicacion: ubi, 
-                    componente: comp, 
-                    descripcion: descripcionFinal, 
-                    consecuencia: 'N/A', 
-                    severidad: dano,
-                    estado_actual: 'ABIERTO', 
-                    vuelo_origen: vueloData.vuelo, 
-                    nota_solucion: '', 
-                    esHistorico: false, 
-                    imgAvion: iAvion, 
-                    imgPaleta: iPaleta, 
-                    creado_at: new Date().toISOString()
+                    id_db: null, idTracking: idT, tipo: 'LOCKS', area: 'Main Deck CLS', ubicacion: ubi, 
+                    componente: comp, descripcion: descripcionFinal, consecuencia: 'N/A', severidad: dano,
+                    estado_actual: 'ABIERTO', vuelo_origen: vueloData.vuelo, nota_solucion: '', 
+                    esHistorico: false, imgAvion: iAvion, imgPaleta: iPaleta, creado_at: new Date().toISOString()
                 });
 
                 if(fotosBanco['cls_temp']) { fotosBanco[idT] = [...fotosBanco['cls_temp']]; fotosBanco['cls_temp'] = []; }
                 
-                document.getElementById('inpUbicacion').value = ""; 
-                document.getElementById('inpComponente').value = ""; 
-                document.getElementById('selDanoSeveridad').value = "";
-                document.getElementById('inpComentariosCLS').value = "";
+                document.getElementById('inpUbicacion').value = ""; document.getElementById('inpComponente').value = ""; 
+                document.getElementById('selDanoSeveridad').value = ""; document.getElementById('inpComentariosCLS').value = "";
                 document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected')); 
                 document.querySelectorAll('.hotspot').forEach(n => n.classList.remove('active'));
                 document.getElementById('gal_cls_map').innerHTML = "";
-                
                 document.getElementById('panelMapeoCLS').style.display = 'none';
                 document.getElementById('sel_main_deck').value = "OK";
                 
-                marcarCambios(); showToast("CLS agregado a la matriz. Área limpia para continuar.", "info");
+                marcarCambios(); showToast("CLS agregado a la matriz.", "info");
                 renderizarMatrizDinamica(); 
-            } catch(e) { alert("Error al renderizar los mapas. Intenta nuevamente."); }
+            } catch(e) { alert("Error renderizando mapas."); }
         }
 
-        // =====================================
-        // MATRIZ DINÁMICA SECCIONADA CON CONTADORES
-        // =====================================
+        // --- MATRIZ DINÁMICA ---
         function renderizarMatrizDinamica() {
             const cntDinamico = document.getElementById('matrizDinamica');
             const cntCounters = document.getElementById('matrixCounters');
@@ -1043,41 +1041,26 @@
             }
             
             cntDinamico.innerHTML = "";
-            
-            // 1. Agrupar y Contar
-            const gruposArea = {
-                'MAIN DECK': [],
-                'LOWER FORWARD': [],
-                'LOWER AFT': [],
-                'BULK': [],
-                'OTROS COMPARTIMIENTOS': []
-            };
-
-            let totalAbiertos = 0;
+            const gruposArea = { 'MAIN DECK': [], 'LOWER FORWARD': [], 'LOWER AFT': [], 'BULK': [], 'OTROS COMPARTIMIENTOS': [] };
 
             matrizHallazgos.forEach((h) => {
-                if(h.estado_actual === 'ABIERTO') totalAbiertos++;
                 let standardName = getStandardGroup(h.area);
                 gruposArea[standardName].push(h);
             });
 
-            // Renderizar Contadores
             let countersHTML = `<div class="counter-badge total">Total Reportes: ${matrizHallazgos.length}</div>`;
             if(gruposArea['MAIN DECK'].length > 0) countersHTML += `<div class="counter-badge">MD: ${gruposArea['MAIN DECK'].length}</div>`;
             if(gruposArea['LOWER FORWARD'].length > 0) countersHTML += `<div class="counter-badge">FWD: ${gruposArea['LOWER FORWARD'].length}</div>`;
             if(gruposArea['LOWER AFT'].length > 0) countersHTML += `<div class="counter-badge">AFT: ${gruposArea['LOWER AFT'].length}</div>`;
             if(gruposArea['BULK'].length > 0) countersHTML += `<div class="counter-badge">BULK: ${gruposArea['BULK'].length}</div>`;
             if(gruposArea['OTROS COMPARTIMIENTOS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS COMPARTIMIENTOS'].length}</div>`;
-            
             cntCounters.innerHTML = countersHTML;
 
-            // 2. Renderizar Grupos con Scroll Independiente
             const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
 
             areasOrdenadas.forEach(area => {
-                if(gruposArea[area].length === 0) return; // Si no hay daños, no mostrar la caja
-                
-                let areaHTML = `<div class="group-header">📍 ${area}</div>`;
+                if(gruposArea[area].length === 0) return; 
+                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
@@ -1096,23 +1079,20 @@
                         <div style="color:var(--amerijet-blue); font-weight:900; font-size:14px;">Pos: ${h.ubicacion}</div>
                         <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
                         <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
-                        
                         <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
                             <span>📅 Rep: ${fRep}</span> <span>🔄 Upd: ${fUpd}</span>
                         </div>
-
                         ${htmlF}
                         <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>
                         <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
                     </div>`;
                 });
                 
-                areaHTML += `</div>`; // Cierre de compartment-scroll
+                areaHTML += `</div>`;
                 cntDinamico.innerHTML += areaHTML;
             });
         }
 
-        // --- APERTURA DE MODAL CON EDICIÓN DE DAÑO ---
         function abrirModalActualizacionPorIdTracking(idTracking) { 
             const idx = matrizHallazgos.findIndex(h => h.idTracking === idTracking); 
             if (idx !== -1) {
@@ -1127,14 +1107,12 @@
             }
         }
 
-        // --- ELIMINACIÓN PERMANENTE ---
         function eliminarHallazgoPorId(idTracking) {
             const h = matrizHallazgos.find(x => x.idTracking === idTracking);
             if (!h) return;
-
             showCustomConfirm(
                 "Borrar Daño", 
-                "¿Estás seguro de eliminar este registro permanentemente de la aeronave? Esta acción no se puede deshacer.", 
+                "¿Estás seguro de eliminar este registro permanentemente de la aeronave?", 
                 "Eliminar", 
                 "var(--amerijet-red)", 
                 async () => {
@@ -1142,20 +1120,15 @@
                         try {
                             const { error } = await supabaseClient.from('avion_danos').delete().eq('id', h.id_db);
                             if (error) throw error;
-                        } catch (e) {
-                            showToast("Error de conexión al eliminar.", "error"); return;
-                        }
+                        } catch (e) { showToast("Error de conexión al eliminar.", "error"); return; }
                     }
                     matrizHallazgos = matrizHallazgos.filter(x => x.idTracking !== idTracking);
                     delete fotosBanco[idTracking];
-                    marcarCambios();
-                    renderizarMatrizDinamica();
-                    showToast("Registro eliminado de la base de datos.");
+                    marcarCambios(); renderizarMatrizDinamica(); showToast("Registro eliminado.");
                 }
             );
         }
 
-        // --- GUARDAR ACTUALIZACIÓN DEL MODAL ---
         function guardarActualizacion() {
             const idTracking = document.getElementById('modalIndex').value;
             const idx = matrizHallazgos.findIndex(x => x.idTracking === idTracking);
@@ -1168,7 +1141,6 @@
             
             const nuevasNotas = document.getElementById('modalNotas').value.trim();
             if(nuevasNotas) matrizHallazgos[idx].nota_solucion = nuevasNotas;
-            
             matrizHallazgos[idx].fechaActualizacion = new Date().toISOString();
 
             if(fotosBanco['modal_temp'] && fotosBanco['modal_temp'].length > 0) {
@@ -1176,39 +1148,20 @@
                 fotosBanco[matrizHallazgos[idx].idTracking].push(...fotosBanco['modal_temp']);
             }
             document.getElementById('modalActualizar').style.display = 'none';
-            marcarCambios(); showToast("Estado actualizado. Recuerda Guardar en Nube.");
-            renderizarMatrizDinamica();
+            marcarCambios(); showToast("Estado actualizado."); renderizarMatrizDinamica();
         }
 
-        // =====================================
-        // GUARDADO A BASE DE DATOS Y ENCAPSULADO JSON
-        // =====================================
         async function guardarProgresoEnBD() {
             const btn = document.getElementById('btnGuardarBD');
             btn.innerText = "⏳ Subiendo Nube..."; btn.disabled = true;
 
             try {
                 for (let h of matrizHallazgos) {
-                    let ev = { 
-                        fotos: fotosBanco[h.idTracking] || [], 
-                        imgAvion: h.imgAvion, 
-                        imgPaleta: h.imgPaleta,
-                        tipo: h.tipo || 'COMPARTIMENTO',
-                        ubicacion: h.ubicacion || 'General'
-                    };
-                    
+                    let ev = { fotos: fotosBanco[h.idTracking] || [], imgAvion: h.imgAvion, imgPaleta: h.imgPaleta, tipo: h.tipo || 'COMPARTIMENTO', ubicacion: h.ubicacion || 'General' };
                     let payloadDano = {
-                        matricula_avion: vueloData.tail,
-                        area: h.area,
-                        componente: h.componente,
-                        descripcion: h.descripcion,
-                        consecuencia: h.consecuencia || 'N/A',
-                        severidad: h.severidad || 'N/A',
-                        estado_actual: h.estado_actual,
-                        vuelo_origen: h.vuelo_origen,
-                        nota_solucion: h.nota_solucion || '',
-                        evidencia: JSON.stringify(ev), 
-                        actualizado_at: new Date().toISOString()
+                        matricula_avion: vueloData.tail, area: h.area, componente: h.componente, descripcion: h.descripcion,
+                        consecuencia: h.consecuencia || 'N/A', severidad: h.severidad || 'N/A', estado_actual: h.estado_actual,
+                        vuelo_origen: h.vuelo_origen, nota_solucion: h.nota_solucion || '', evidencia: JSON.stringify(ev), actualizado_at: new Date().toISOString()
                     };
 
                     if (h.id_db) {
@@ -1225,19 +1178,14 @@
                 const paqueteTemporales = {
                     notas: document.getElementById('txtNotasFinales').value,
                     incidencias: incidenciasVuelo.map(inc => ({
-                        idTracking: inc.idTracking,
-                        area: inc.area,
-                        descripcion: inc.descripcion,
-                        fecha: inc.fecha,
-                        fotos: fotosBanco[inc.idTracking] || []
+                        idTracking: inc.idTracking, area: inc.area, descripcion: inc.descripcion, fecha: inc.fecha, fotos: fotosBanco[inc.idTracking] || []
                     }))
                 };
-                const notasEncapsuladas = "||_JSON_||" + JSON.stringify(paqueteTemporales);
-
+                
                 const payloadVuelo = {
                     vuelo_operacion_id: operacionId,
                     inspector_nombre: document.getElementById('selInspector').value,
-                    notas_adicionales: notasEncapsuladas
+                    notas_adicionales: "||_JSON_||" + JSON.stringify(paqueteTemporales)
                 };
                 
                 const { data: exist } = await supabaseClient.from('avion_inspecciones').select('id').eq('vuelo_operacion_id', operacionId).limit(1);
@@ -1254,84 +1202,63 @@
             finally { btn.innerText = "💾 Guardar Nube"; btn.disabled = false; }
         }
 
-        // =====================================
-        // RENDER PDF (ORDENADO + ANTI-DESBORDE + ASPECT RATIO)
-        // =====================================
         async function generarPDFCarta() {
             const btn = document.getElementById('btnDescargarPDF');
             btn.innerText = "⏳ Creando PDF..."; btn.disabled = true;
 
             try {
-                // 1. PRE-PROCESAR MAPAS CLS FALTANTES EN SEGUNDO PLANO
                 const rDiv = document.getElementById('renderContainer');
-                
                 for (let h of matrizHallazgos) {
                     if (h.tipo === 'LOCKS' && (!h.imgAvion || !h.imgPaleta)) {
-                        const guessedConfig = getConfigFromUbicacion(h.ubicacion);
+                        const guessedConfig = h.ubicacion.includes('P') ? 'G' : 'A';
                         dibujarPlanoAvionCSS(guessedConfig, null);
-                        
                         const cells = (h.ubicacion || '').split(',').map(s => s.trim());
                         cells.forEach(c => {
                             const el = document.querySelector(`.p-cell[data-pos="${c}"], .p-half[data-pos="${c}"], .p-wide[data-pos="${c}"]`);
                             if (el) el.classList.add('selected');
                         });
-                        
                         rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${guessedConfig}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
                         const cA = await html2canvas(rDiv, { scale: 1.5 }); 
                         h.imgAvion = cA.toDataURL('image/jpeg', 0.8);
-                        
                         document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected'));
 
                         const locks = (h.componente || '').split(',').map(s => s.trim());
                         document.querySelectorAll('.hotspot').forEach(el => el.classList.remove('active'));
                         document.querySelectorAll('.hotspot').forEach(el => {
                             const funcStr = el.getAttribute('onclick') || '';
-                            locks.forEach(lockName => {
-                                if (funcStr.includes(`'${lockName}'`)) el.classList.add('active');
-                            });
+                            locks.forEach(lockName => { if (funcStr.includes(`'${lockName}'`)) el.classList.add('active'); });
                         });
-                        
-                        const coreText = cells.length > 0 ? cells[0] : 'MD';
                         const pct = document.querySelector('.pallet-core-text');
-                        if(pct) pct.innerText = coreText;
+                        if(pct) pct.innerText = cells.length > 0 ? cells[0] : 'MD';
 
                         rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:450px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div class="pallet-draw" style="display:block; margin: 0 auto; transform: scale(0.9);">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
                         const cP = await html2canvas(rDiv, { scale: 1.5 }); 
                         h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
-                        
-                        rDiv.innerHTML = "";
-                        document.querySelectorAll('.hotspot').forEach(n => n.classList.remove('active'));
+                        rDiv.innerHTML = ""; document.querySelectorAll('.hotspot').forEach(n => n.classList.remove('active'));
                     }
                 }
-                
                 dibujarPlanoAvionCSS(configActualGlobal, null); 
 
-                // 2. CREACIÓN DEL DOCUMENTO PDF
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
                 const insp = document.getElementById('selInspector').value;
                 
-                // PORTADA
                 doc.setFillColor(10, 37, 64); doc.rect(0, 0, 215.9, 25, "F");
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(255, 255, 255);
                 doc.text("AMERIJET INTERNATIONAL AIRCRAFT AUDIT", 15, 12);
                 doc.setFontSize(10); doc.setFont("Helvetica", "normal");
                 doc.text("AIRCRAFT STRUCTURAL & OPERATIONAL CONDITION REPORT", 15, 18);
 
-                doc.setTextColor(33, 33, 33);
-                doc.setDrawColor(203, 213, 225); 
-                doc.setFillColor(248, 250, 252); 
+                doc.setTextColor(33, 33, 33); doc.setDrawColor(203, 213, 225); doc.setFillColor(248, 250, 252); 
                 doc.roundedRect(15, 30, 185.9, 28, 3, 3, "FD");
 
                 doc.setFont("Helvetica", "bold"); doc.text("FLIGHT DETAILS", 20, 37);
                 doc.setFont("Helvetica", "normal"); doc.text(`Flight: ${vueloData.vuelo}`, 20, 43);
-                doc.text(`Tail: ${vueloData.tail}`, 20, 48);
-                doc.text(`Route: ${vueloData.ruta || 'N/A'}`, 20, 53);
+                doc.text(`Tail: ${vueloData.tail}`, 20, 48); doc.text(`Route: ${vueloData.ruta}`, 20, 53);
 
                 doc.setFont("Helvetica", "bold"); doc.text("INSPECTION DETAILS", 110, 37);
                 doc.setFont("Helvetica", "normal"); doc.text(`Date: ${new Date().toLocaleDateString()}`, 110, 43);
-                doc.text(`Inspector: ${insp}`, 110, 48);
-                doc.text(`Status: Official Record`, 110, 53);
+                doc.text(`Inspector: ${insp}`, 110, 48); doc.text(`Status: Official Record`, 110, 53);
 
                 let cy = 65;
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("1. DISCREPANCIES SUMMARY", 15, cy);
@@ -1342,30 +1269,13 @@
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                         return [ i+1, h.estado_actual, h.area, h.componente, h.descripcion, fRep ];
                     });
-                    
-                    doc.autoTable({ 
-                        startY: cy + 4, 
-                        head: [['#', 'Status', 'Area', 'Component', 'Damage', 'Reported']], 
-                        body: tData, 
-                        theme: 'grid', 
-                        headStyles: { fillColor: [10, 37, 64] }, 
-                        styles: { fontSize: 8, cellPadding: 3 } 
-                    });
+                    doc.autoTable({ startY: cy + 4, head: [['#', 'Status', 'Area', 'Component', 'Damage', 'Reported']], body: tData, theme: 'grid', headStyles: { fillColor: [10, 37, 64] }, styles: { fontSize: 8, cellPadding: 3 } });
                     cy = doc.lastAutoTable.finalY + 15;
                 } else { 
-                    cy += 8; doc.setFont("Helvetica", "italic"); doc.setFontSize(10);
-                    doc.text("No structure discrepancies reported for this aircraft.", 15, cy); 
-                    cy += 15; 
+                    cy += 8; doc.setFont("Helvetica", "italic"); doc.setFontSize(10); doc.text("No structure discrepancies reported for this aircraft.", 15, cy); cy += 15; 
                 }
 
-                // FOTOS DE HALLAZGOS ESTRUCTURALES Y CLS (AGRUPADOS POR ÁREA ORDENADA)
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("2. DETAILED FINDINGS & EVIDENCE", 15, cy);
-                cy += 8;
-
-                if(matrizHallazgos.length === 0) {
-                    doc.setFont("Helvetica", "italic"); doc.setFontSize(10);
-                    doc.text("No structural evidence required.", 15, cy); cy += 15;
-                }
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.text("2. DETAILED FINDINGS & EVIDENCE", 15, cy); cy += 8;
 
                 const gruposPDF = {};
                 matrizHallazgos.forEach((h) => {
@@ -1380,12 +1290,9 @@
                     const items = gruposPDF[area];
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     
-                    // HEADER DE ÁREA
-                    doc.setFillColor(10, 37, 64);
-                    doc.rect(15, cy, 185.9, 8, "F");
+                    doc.setFillColor(10, 37, 64); doc.rect(15, cy, 185.9, 8, "F");
                     doc.setFontSize(11); doc.setTextColor(255, 255, 255); doc.setFont("Helvetica", "bold");
-                    doc.text(`[ ${area} ]`, 18, cy + 5.5);
-                    cy += 12;
+                    doc.text(`[ ${area} ]`, 18, cy + 5.5); cy += 12;
 
                     for(let i=0; i < items.length; i++){
                         const h = items[i];
@@ -1398,24 +1305,16 @@
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                         const fUpd = h.fechaActualizacion || h.actualizado_at ? new Date(h.fechaActualizacion || h.actualizado_at).toLocaleDateString() : 'N/A';
                         
-                        doc.text(`Location: ${h.ubicacion}`, 15, cy);
-                        doc.text(`Status: ${h.estado_actual}`, 110, cy); cy += 5;
+                        doc.text(`Location: ${h.ubicacion}`, 15, cy); doc.text(`Status: ${h.estado_actual}`, 110, cy); cy += 5;
                         doc.text(`Reported: ${fRep}  |  Last Update: ${fUpd}`, 15, cy); cy += 6;
                         
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
-                        
-                        // TEXT WRAPPING (Reducido a 130mm para que NO se salga del margen derecho)
-                        const splitDesc = doc.splitTextToSize(String(h.descripcion), 130);
-                        doc.text(splitDesc, 33, cy); 
-                        cy += (splitDesc.length * 4.5) + 2; 
+                        const splitDesc = doc.splitTextToSize(String(h.descripcion), 130); doc.text(splitDesc, 33, cy); cy += (splitDesc.length * 4.5) + 2; 
                         
                         if(h.nota_solucion) {
                             doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
-                            doc.setFont("Helvetica", "normal"); 
-                            const splitNotes = doc.splitTextToSize(String(h.nota_solucion), 130);
-                            doc.text(splitNotes, 28, cy); 
-                            cy += (splitNotes.length * 4.5) + 2;
+                            doc.setFont("Helvetica", "normal"); const splitNotes = doc.splitTextToSize(String(h.nota_solucion), 130); doc.text(splitNotes, 28, cy); cy += (splitNotes.length * 4.5) + 2;
                         }
                         cy += 2;
 
@@ -1429,32 +1328,19 @@
                         if (fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
                             doc.setFont("Helvetica", "bold"); doc.text("Photographic Evidence:", 15, cy); cy += 4;
                             let fx = 15; let rowHeight = 0;
-                            
                             fotosBanco[h.idTracking].forEach((b64) => {
-                                if (fx > 130) { fx = 15; cy += 65; } 
-                                if (cy > 210) { doc.addPage(); cy = 20; fx = 15; }
-                                
-                                // ASPECT RATIO MATEMÁTICO (Evita distorsión de imágenes)
-                                const props = doc.getImageProperties(b64);
-                                const maxW = 85; const maxH = 60;
-                                const ratio = Math.min(maxW / props.width, maxH / props.height);
-                                const w = props.width * ratio;
-                                const h_img = props.height * ratio;
-
-                                const xOffset = fx + (maxW - w) / 2;
-                                const yOffset = cy + (maxH - h_img) / 2;
-
-                                doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); 
-                                fx += 90; rowHeight = 60;
+                                if (fx > 130) { fx = 15; cy += 65; } if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
+                                const props = doc.getImageProperties(b64); const maxW = 85; const maxH = 60;
+                                const ratio = Math.min(maxW / props.width, maxH / props.height); const w = props.width * ratio; const h_img = props.height * ratio;
+                                const xOffset = fx + (maxW - w) / 2; const yOffset = cy + (maxH - h_img) / 2;
+                                doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); fx += 90; rowHeight = 60;
                             });
                             cy += rowHeight + 10;
                         } else { cy += 5; }
-                        
                         doc.setDrawColor(226, 232, 240); doc.line(15, cy, 200.9, cy); cy += 8;
                     }
                 }
 
-                // SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO (AGRUPADAS Y AL FINAL DEL PDF)
                 if(incidenciasVuelo.length > 0) {
                     if(cy > 240) { doc.addPage(); cy = 20; }
                     doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(15, 23, 42);
@@ -1463,46 +1349,28 @@
                     const incGrupos = {};
                     incidenciasVuelo.forEach((inc) => {
                         let aGrp = (inc.area || 'GENERAL').toUpperCase();
-                        if(!incGrupos[aGrp]) incGrupos[aGrp] = [];
-                        incGrupos[aGrp].push(inc);
+                        if(!incGrupos[aGrp]) incGrupos[aGrp] = []; incGrupos[aGrp].push(inc);
                     });
 
                     for(const [area, incidencias] of Object.entries(incGrupos)) {
                         if(cy > 240) { doc.addPage(); cy = 20; }
-                        doc.setFillColor(254, 215, 170); // Naranja claro
-                        doc.rect(15, cy, 185.9, 6, "F");
-                        doc.setFontSize(10); doc.setTextColor(153, 27, 27); doc.setFont("Helvetica", "bold");
-                        doc.text(`AREA: ${area}`, 18, cy + 4);
-                        cy += 10;
+                        doc.setFillColor(254, 215, 170); doc.rect(15, cy, 185.9, 6, "F");
+                        doc.setFontSize(10); doc.setTextColor(153, 27, 27); doc.setFont("Helvetica", "bold"); doc.text(`AREA: ${area}`, 18, cy + 4); cy += 10;
 
                         for (let i = 0; i < incidencias.length; i++) {
                             const inc = incidencias[i];
                             if(cy > 250) { doc.addPage(); cy = 20; }
-                            
-                            doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
-                            doc.text(`Incident:`, 15, cy);
-                            doc.setFont("Helvetica", "normal");
-                            
-                            const splitInc = doc.splitTextToSize(String(inc.descripcion), 130);
-                            doc.text(splitInc, 32, cy); 
-                            cy += (splitInc.length * 4.5) + 2;
+                            doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.text(`Incident:`, 15, cy); doc.setFont("Helvetica", "normal");
+                            const splitInc = doc.splitTextToSize(String(inc.descripcion), 130); doc.text(splitInc, 32, cy); cy += (splitInc.length * 4.5) + 2;
 
                             if (fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
                                 let fx = 15; let rowHeight = 0;
                                 fotosBanco[inc.idTracking].forEach((b64) => {
-                                    if (fx > 130) { fx = 15; cy += 65; } 
-                                    if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
-                                    
-                                    const props = doc.getImageProperties(b64);
-                                    const maxW = 85; const maxH = 60;
-                                    const ratio = Math.min(maxW / props.width, maxH / props.height);
-                                    const w = props.width * ratio;
-                                    const h_img = props.height * ratio;
-                                    const xOffset = fx + (maxW - w) / 2;
-                                    const yOffset = cy + (maxH - h_img) / 2;
-
-                                    doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); 
-                                    fx += 90; rowHeight = 60;
+                                    if (fx > 130) { fx = 15; cy += 65; } if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
+                                    const props = doc.getImageProperties(b64); const maxW = 85; const maxH = 60;
+                                    const ratio = Math.min(maxW / props.width, maxH / props.height); const w = props.width * ratio; const h_img = props.height * ratio;
+                                    const xOffset = fx + (maxW - w) / 2; const yOffset = cy + (maxH - h_img) / 2;
+                                    doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); fx += 90; rowHeight = 60;
                                 });
                                 cy += rowHeight + 5;
                             } else { cy += 2; }
