@@ -996,7 +996,7 @@
                 let updTime = "N/A", updDate = "N/A";
                 if(u.updated_ontime) {
                     const d = new Date(u.updated_ontime);
-                    updDate = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                    updDate = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(0)}`;
                     let hr = d.getUTCHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12;
                     updTime = `${updDate} ${hr}:${String(d.getUTCMinutes()).padStart(2,'0')} ${ampm} UTC`;
                 }
