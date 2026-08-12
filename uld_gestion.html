@@ -52,21 +52,22 @@
 
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
-        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
 
         .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #051529; }
         .user-info-text { display: flex; flex-direction: column; }
         .user-info-text strong { font-size: 14px; color: white; }
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
 
         .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 13px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
         .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
 
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; }
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
@@ -75,19 +76,25 @@
         .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; }
         .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
-        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px;}
+        
+        .header-title-group { display: flex; align-items: center; gap: 15px; }
+        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; }
+        
+        /* ZULU CLOCK LIVE */
+        .live-zulu-clock { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-weight: 900; font-size: 14px; letter-spacing: 1px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+
         .station-module { display: flex; align-items: center; gap: 8px; background: #F1F5F9; padding: 8px 15px; border-radius: 8px; border: 1px solid #E2E8F0; }
         .station-module span { font-size: 11px; color: #64748B; font-weight: 700; text-transform: uppercase; }
-        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 15px; outline: none; cursor: pointer; }
-        .station-static { color: #10B981; font-weight: 800; font-size: 15px; }
+        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
+        .station-static { color: #10B981; font-weight: 800; font-size: 14px; text-transform: uppercase; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 60px; }
         .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
         /* BANNER INBOUND (ULDs EN TRÁNSITO) */
-        #inboundBanner { background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(16,185,129,0.2); flex-wrap: wrap; gap: 15px; display: none; }
-        .btn-inbound { background: white; color: #059669; font-weight: 800; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.2s;}
+        #inboundBanner { background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(16,185,129,0.2); flex-wrap: wrap; gap: 15px; display: none; margin: 25px 25px 0 25px; }
+        .btn-inbound { background: white; color: #059669; font-weight: 800; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; text-transform: uppercase; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.2s;}
         .btn-inbound:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
         /* WIDGETS RESUMEN */
@@ -102,18 +109,18 @@
         .balance-danger { background: #FEF2F2; color: #991B1B; border: 1px solid #FEE2E2; }
         .balance-warning { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
 
-        .widget-subdata { display: flex; justify-content: space-between; font-size: 13px; color: #475569; font-weight: 700; background: #F8FAFC; padding: 8px; border-radius: 6px; border: 1px dashed #CBD5E1; }
-        .btn-update-acc { position: absolute; top: 15px; right: 15px; background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .widget-subdata { display: flex; justify-content: space-between; font-size: 13px; color: #475569; font-weight: 700; background: #F8FAFC; padding: 8px; border-radius: 6px; border: 1px dashed #CBD5E1; text-transform: uppercase; }
+        .btn-update-acc { position: absolute; top: 15px; right: 15px; background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .btn-update-acc:hover { background: #DBEAFE; }
 
         /* ALERTAS DE ESTADÍA Y STOCK */
         .aging-banner { background: #FEF2F2; border-left: 4px solid #EF4444; padding: 12px 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1); display: none; margin-bottom: -5px; }
-        .aging-header { display: flex; justify-content: space-between; align-items: center; color: #991B1B; font-weight: 800; font-size: 13px; cursor: pointer; }
+        .aging-header { display: flex; justify-content: space-between; align-items: center; color: #991B1B; font-weight: 800; font-size: 13px; cursor: pointer; text-transform: uppercase;}
         .aging-list { margin-top: 10px; font-size: 12px; color: #7F1D1D; background: white; padding: 10px; border-radius: 6px; border: 1px solid #FCA5A5; max-height: 150px; overflow-y: auto; display: none;}
         .aging-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #FECACA; }
         .aging-item:last-child { border-bottom: none; }
 
-        .stock-banner { padding: 12px 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; display: none; }
+        .stock-banner { padding: 12px 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; display: none; text-transform: uppercase;}
         .stock-banner.danger { background: #FFFBEB; border-left: 4px solid #F59E0B; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1); }
         .stock-banner.success { background: #ECFDF5; border-left: 4px solid #10B981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1); }
         .stock-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 13px; cursor: pointer; }
@@ -130,7 +137,7 @@
         /* PANEL SUPERIOR DE REGISTRO */
         .top-panel { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
         .form-add-uld { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; width: 100%;}
-        .top-panel h2 { font-size: 16px; color: var(--amerijet-blue); margin-right: 15px; display: flex; align-items: center; gap: 8px;}
+        .top-panel h2 { font-size: 16px; color: var(--amerijet-blue); margin-right: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
         
         .form-group-inline { display: flex; flex-direction: column; flex-grow: 1; min-width: 150px;}
         .form-group-inline label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -139,54 +146,54 @@
         /* Contenedor flexible para alinear los botones en PC y apilarlos en Móvil */
         .form-buttons-wrapper { display: flex; gap: 10px; width: 100%; margin-top: 5px; justify-content: flex-end; align-items: center;}
         
-        .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap;}
-        .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px;}
+        .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
+        .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
         .btn-masivo:hover { background: #7C3AED; }
 
         /* Historial Minimalista */
-        .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-bottom: 5px; }
-        .btn-ver-historial { background: white; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;}
+        .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-bottom: 5px; text-transform: uppercase; }
+        .btn-ver-historial { background: white; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; text-transform: uppercase;}
         .btn-ver-historial:hover { background: #E2E8F0; }
 
         /* TABLA EXCEL, TOOLBAR Y PAGINACIÓN */
         .table-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; margin-bottom: 30px; }
         .table-toolbar { padding: 15px 20px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .table-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-transfer { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-transfer { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; padding: 8px 15px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; display: flex; align-items: center; gap: 5px; transition: 0.2s; text-transform: uppercase;}
         .btn-transfer:hover { background: #FEF3C7; }
-        .btn-excel { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-excel { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; padding: 8px 15px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; display: flex; align-items: center; gap: 5px; transition: 0.2s; text-transform: uppercase;}
         .btn-excel:hover { background: #D1FAE5; }
         .search-box { display: flex; align-items: center; background: white; border: 1px solid #CBD5E1; border-radius: 8px; padding: 6px 12px; width: 280px; max-width: 100%;}
         .search-box input { border: none; outline: none; width: 100%; font-size: 13px; font-weight: 600; color: var(--text-main); }
         
         .table-container { overflow-x: auto; max-height: 50vh; overflow-y: auto;}
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; white-space: nowrap; }
-        th { background-color: #0078D4; color: white; padding: 12px 10px; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.2); position: sticky; top: 0; z-index: 10;}
-        td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 500; }
+        th { background-color: #0078D4; color: white; padding: 12px 10px; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.2); position: sticky; top: 0; z-index: 10; text-transform: uppercase;}
+        td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 500; text-transform: uppercase;}
         tr:hover { background-color: #F8FAFC; }
 
         .val-valido { background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
         .val-error { background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
         
-        .btn-edit-uld { background: none; border: none; color: var(--amerijet-blue); cursor: pointer; font-size: 14px; margin-right: 8px; transition: 0.2s;}
-        .btn-edit-uld:hover { transform: scale(1.1); }
-        .btn-delete { background: none; border: none; color: var(--amerijet-red); cursor: pointer; font-size: 14px; transition: 0.2s;}
-        .btn-delete:hover { transform: scale(1.1); }
+        .btn-edit-uld { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 8px; transition: 0.2s;}
+        .btn-edit-uld:hover { background: #DBEAFE; }
+        .btn-delete { background: #FEF2F2; border: 1px solid #FECACA; color: #E11D48; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; transition: 0.2s;}
+        .btn-delete:hover { background: #FEE2E2; }
 
         .table-bottom-bar { padding: 15px 20px; background: white; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E2E8F0; flex-wrap: wrap; gap: 15px;}
-        .pagination-wrapper { display: flex; align-items: center; gap: 15px; font-size: 13px; font-weight: 600; color: #475569;}
+        .pagination-wrapper { display: flex; align-items: center; gap: 15px; font-size: 12px; font-weight: 600; color: #475569; text-transform: uppercase;}
         .pag-btns { display: flex; gap: 5px; }
-        .btn-pag { background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; color: var(--amerijet-blue); transition: 0.2s; }
+        .btn-pag { background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; color: var(--amerijet-blue); transition: 0.2s; text-transform: uppercase; font-size: 11px;}
         .btn-pag:hover:not(:disabled) { background: #E2E8F0; }
         .btn-pag:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-guardar-inv { background: #1E293B; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;}
+        .btn-guardar-inv { background: #1E293B; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;}
         .btn-guardar-inv:hover { background: #0F172A; transform: translateY(-1px); }
 
         /* ESTILOS VISTA GLOBAL (PIVOT TABLE) */
         .pivot-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; display: none; margin: 25px; }
         .pivot-header { background: var(--amerijet-blue-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .pivot-header h2 { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; margin: 0; }
+        .pivot-header h2 { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; margin: 0; text-transform: uppercase; }
         .pivot-stats { display: flex; gap: 20px; flex-wrap: wrap; }
         .pivot-stat-box { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); text-align: center; }
         .pivot-stat-box span { display: block; font-size: 10px; text-transform: uppercase; font-weight: 700; color: #94A3B8; margin-bottom: 2px;}
@@ -195,7 +202,7 @@
         .pivot-table-container { overflow-x: auto; max-height: 60vh; overflow-y: auto; }
         .pivot-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 12px; white-space: nowrap; }
         .pivot-table th { background-color: var(--amerijet-blue); color: white; padding: 12px 10px; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px;}
-        .pivot-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 600; vertical-align: top; }
+        .pivot-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 600; vertical-align: top; text-transform: uppercase;}
         .pivot-table tr:hover { background-color: #F8FAFC; }
         .pivot-table .col-station { font-weight: 800; text-align: left; background-color: #F8FAFC; position: sticky; left: 0; z-index: 1; border-right: 2px solid #CBD5E1; color: var(--amerijet-blue); vertical-align: middle;}
         .pivot-table .col-total { font-weight: 800; background-color: #EFF6FF; color: #1D4ED8; vertical-align: middle;}
@@ -203,23 +210,30 @@
         .pivot-table tfoot .col-total { background-color: #DBEAFE; color: #1E40AF; }
 
         /* Estilos Específicos para Indicadores de Net en Tabla Pivot */
-        .net-badge { font-size: 9px; padding: 3px 5px; border-radius: 4px; margin-top: 5px; font-weight: 800; white-space: nowrap; display: inline-block; }
+        .net-badge { font-size: 9px; padding: 4px 6px; border-radius: 4px; margin-top: 5px; font-weight: 800; white-space: nowrap; display: inline-block; text-transform: uppercase;}
         .net-ok { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
         .net-danger { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
         .net-warn { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
 
         /* MODALES */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto;}
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .modal-title { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; }
+        .modal-title { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
         .modal-generic { text-align: center; max-width: 350px; }
         
+        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
+        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
+        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
+
+        .btn-modal-action { color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-modal-cancel { background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .main-content { padding-bottom: 150px; } 
+            .main-content { padding-bottom: 150px; } /* Ajuste profundo para móviles */
         }
         @media (max-width: 1024px) { 
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
@@ -227,6 +241,7 @@
             .sidebar-overlay.active { display: block; }
             .menu-toggle { display: block; }
             .header-title { display: none; } 
+            .live-zulu-clock { font-size: 12px; padding: 5px 10px; }
             
             .top-panel { flex-direction: column; align-items: stretch; }
             .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
@@ -262,7 +277,7 @@
         </div>
         
         <div class="sidebar-user">
-            <div class="user-avatar">👤</div>
+            <div class="user-avatar">U</div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
                 <span id="lblUserRol" class="badge-rol">...</span>
@@ -270,14 +285,15 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link">✈️ Centro de Vuelos</a>
-            <a href="uld_gestion.html" class="nav-link active" id="btnUldMenu">📦 Inventario ULD</a>
-            <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">👑 Panel de Control</a>
-            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">🗄️ Historial de Vuelos</a>
+            <a href="dashboard.html" class="nav-link">Centro de Vuelos</a>
+            <a href="uld_gestion.html" class="nav-link active" id="btnUldMenu">Inventario ULD</a>
+            <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">Panel de Control</a>
+            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">Historial de Vuelos</a>
         </nav>
 
         <div class="sidebar-footer">
-            <button class="btn-logout" id="btnLogout">🚪 Cerrar Sesión</button>
+            <div class="version-badge">VERSION 0.0.1</div>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
         </div>
     </aside>
 
@@ -286,17 +302,24 @@
         
         <!-- TOP HEADER -->
         <header class="top-header">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <div class="header-title">Gestión de Inventario ULD</div>
+            <div class="header-title-group">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="header-title">Gestión de Inventario ULD</div>
+            </div>
             
-            <div class="header-station">
-                <div class="station-module" id="divStationSelector" style="display: none;">
-                    <span>📍 ESTACIÓN:</span>
-                    <select id="estacionSelector" class="station-selector"></select>
-                </div>
-                <div class="station-module" id="divStationStatic" style="display: none;">
-                    <span>📍 ESTACIÓN:</span>
-                    <span id="lblUserEstacion" class="station-static">Cargando...</span>
+            <div style="display:flex; align-items:center; gap: 15px;">
+                <!-- LIVE ZULU CLOCK -->
+                <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
+                
+                <div class="header-station">
+                    <div class="station-module" id="divStationSelector" style="display: none;">
+                        <span>ESTACIÓN:</span>
+                        <select id="estacionSelector" class="station-selector"></select>
+                    </div>
+                    <div class="station-module" id="divStationStatic" style="display: none;">
+                        <span>ESTACIÓN:</span>
+                        <span id="lblUserEstacion" class="station-static">Cargando...</span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -307,13 +330,13 @@
             <!-- BANNER NOTIFICACIÓN INBOUND (TRANSFERENCIAS ENTRANTES) -->
             <div id="inboundBanner" style="margin: 25px 25px 0 25px;">
                 <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="font-size:28px;">🛬</div>
+                    <div style="font-size:18px; font-weight:900; background:white; color:#059669; padding:8px 12px; border-radius:8px;">[ INBOUND ]</div>
                     <div>
-                        <h3 style="margin:0; font-size:16px; font-weight:800;">¡Transferencia Entrante!</h3>
-                        <p style="margin:0; font-size:13px; opacity:0.9;">Tienes <span id="inboundCount">0</span> ULD(s) enviados hacia tu estación pendientes de recepción.</p>
+                        <h3 style="margin:0; font-size:15px; font-weight:800; text-transform:uppercase;">Transferencia Entrante</h3>
+                        <p style="margin:0; font-size:12px; opacity:0.9; text-transform:uppercase;">Tienes <span id="inboundCount">0</span> ULD(s) pendientes de recepción.</p>
                     </div>
                 </div>
-                <button onclick="abrirModalInbound()" class="btn-inbound">Revisar y Recibir</button>
+                <button onclick="abrirModalInbound()" class="btn-inbound">REVISAR Y RECIBIR</button>
             </div>
 
             <!-- VISTA 1: ESTACIÓN ESPECÍFICA -->
@@ -322,16 +345,16 @@
                 <!-- Alertas de Stock y Estadía -->
                 <div class="stock-banner" id="stockBanner">
                     <div class="stock-header" onclick="toggleStockList()">
-                        <span id="stockHeaderText">📊 CONTROL DE STOCK</span>
-                        <span style="font-size: 18px;">🔽</span>
+                        <span id="stockHeaderText">CONTROL DE STOCK</span>
+                        <span style="font-size: 14px; color:#64748B;">▼</span>
                     </div>
                     <div class="stock-list" id="stockList"></div>
                 </div>
 
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
-                        <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Sugerencia: Evaluar despacho.</span>
-                        <span style="font-size: 18px;">🔽</span>
+                        <span>[ ALERTA ] Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Evaluar despacho.</span>
+                        <span style="font-size: 14px; color:#991B1B;">▼</span>
                     </div>
                     <div class="aging-list" id="agingList"></div>
                 </div>
@@ -339,21 +362,21 @@
                 <!-- WIDGETS RESUMEN -->
                 <div class="widgets-grid">
                     <div class="widget-card">
-                        <div class="widget-title" style="padding-right: 0;">📦 Total de ULD en Rampa</div>
+                        <div class="widget-title" style="padding-right: 0;">Total de ULD en Rampa</div>
                         <div class="widget-data" id="wgTotalUld">0</div>
-                        <div style="font-size:11px; color:#64748B; font-weight:700; margin-top:5px;">Unidades físicamente en la estación</div>
+                        <div style="font-size:10px; color:#64748B; font-weight:700; margin-top:5px; text-transform:uppercase;">Unidades físicamente en la estación</div>
                     </div>
                     
                     <div class="widget-card">
-                        <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('nets')" id="btnNetDinamico">✏️ Bodega Net</button>
+                        <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('nets')" id="btnNetDinamico">CONFIG. NETS</button>
                         <div class="widget-title">Balance de Redes vs ULDs</div>
                         <div class="nets-balance-list" id="wgNetsBalanceContainer">
-                            <p style="font-size:12px; color:#64748B; font-style:italic;">Esperando datos...</p>
+                            <p style="font-size:11px; color:#64748B; font-style:italic; text-transform:uppercase;">Esperando datos...</p>
                         </div>
                     </div>
                     
                     <div class="widget-card">
-                        <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('straps')" id="btnStrapDinamico">✏️ Bodega Strap</button>
+                        <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('straps')" id="btnStrapDinamico">CONFIG. STRAPS</button>
                         <div class="widget-title">Cinchas de Amarre</div>
                         <div class="widget-data" id="wgTotalStraps">0</div>
                         <div class="widget-subdata">
@@ -366,7 +389,7 @@
                 <!-- FORMULARIO DE INGRESO DIRECTO / MASIVO -->
                 <div class="top-panel">
                     <form id="formAddUld" class="form-add-uld">
-                        <h2>📥 <span id="lblFormStation"></span></h2>
+                        <h2><span id="lblFormStation"></span></h2>
                         <div class="form-group-inline">
                             <label>ULD Number</label>
                             <input type="text" id="uld_number" placeholder="EJ: PAG00781M6" required maxlength="10">
@@ -392,16 +415,16 @@
                         
                         <!-- BOTONES DE REGISTRO -->
                         <div class="form-buttons-wrapper">
-                            <button type="submit" class="btn-crear" id="btnSubmitUld">Registrar Manual</button>
-                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">Carga Masiva</button>
+                            <button type="submit" class="btn-crear" id="btnSubmitUld">REGISTRAR MANUAL</button>
+                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">IMPORTACIÓN MASIVA (EXCEL)</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Historial Minimalista -->
                 <div class="audit-compact" id="auditCompactView">
-                    <span>⏱️ Última actualización de inventario: <strong id="lblLastAuditUser">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:normal; font-size:11px;"></span></span>
-                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">Ver historial completo</button>
+                    <span>ÚLTIMA ACTUALIZACIÓN: <strong id="lblLastAuditUser">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:normal; font-size:10px;"></span></span>
+                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">VER HISTORIAL COMPLETO</button>
                 </div>
 
                 <!-- TABLA PRINCIPAL (INVENTARIO EN RAMPA) -->
@@ -409,12 +432,12 @@
                     
                     <div class="table-toolbar">
                         <div class="table-actions">
-                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">Transferir Selección</button>
-                            <button class="btn-excel" onclick="exportarExcelLocal()">Descargar Excel</button>
+                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">TRANSFERIR SELECCIÓN</button>
+                            <button class="btn-excel" onclick="exportarExcelLocal()">DESCARGAR EXCEL</button>
                         </div>
                         <div class="search-box">
-                            <span>🔍 </span>
-                            <input type="text" id="searchInput" onkeyup="filtrarYPaginar()" placeholder="Buscar ULD o Tipo..." style="margin-left: 8px;">
+                            <span style="color:#64748B; font-weight:800; font-size:12px;">BUSCAR: </span>
+                            <input type="text" id="searchInput" onkeyup="filtrarYPaginar()" placeholder="Uld o Tipo..." style="margin-left: 8px;">
                         </div>
                     </div>
 
@@ -432,13 +455,13 @@
                                     <th>ULD Type</th>
                                     <th>Owner</th>
                                     <th>Received On</th>
-                                    <th>Updated UTC</th>
+                                    <th>Updated (ZULU)</th>
                                     <th>Validation</th>
                                     <th id="thAccion">Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="uldBody">
-                                <tr><td colspan="13" style="text-align: center; padding: 40px; color:#64748B;">Cargando inventario...</td></tr>
+                                <tr><td colspan="13" style="text-align: center; padding: 40px; color:#64748B; font-weight:600; text-transform:uppercase;">Cargando inventario...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -447,11 +470,11 @@
                         <div class="pagination-wrapper">
                             <span id="pagInfo">Mostrando 0 de 0</span>
                             <div class="pag-btns">
-                                <button class="btn-pag" id="btnPrevPage" onclick="cambiarPagina(-1)">⬅️ Ant</button>
-                                <button class="btn-pag" id="btnNextPage" onclick="cambiarPagina(1)">Sig ➡️</button>
+                                <button class="btn-pag" id="btnPrevPage" onclick="cambiarPagina(-1)">ANTERIOR</button>
+                                <button class="btn-pag" id="btnNextPage" onclick="cambiarPagina(1)">SIGUIENTE</button>
                             </div>
                         </div>
-                        <button class="btn-guardar-inv" onclick="guardarInventarioGlobal()" id="btnGuardarInv">💾 Guardar Inventario Físico</button>
+                        <button class="btn-guardar-inv" onclick="guardarInventarioGlobal()" id="btnGuardarInv">GUARDAR INVENTARIO FÍSICO</button>
                     </div>
                 </div>
             </div>
@@ -471,8 +494,8 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn-excel" style="margin:0;" onclick="exportarTodoExcel()">⬇️ Detalle Global (Excel)</button>
-                        <button class="btn-excel" style="margin:0;" onclick="exportarPivotExcel()">⬇️ Cuadro Global</button>
+                        <button class="btn-excel" style="margin:0;" onclick="exportarTodoExcel()">DETALLE GLOBAL (EXCEL)</button>
+                        <button class="btn-excel" style="margin:0;" onclick="exportarPivotExcel()">CUADRO GLOBAL (EXCEL)</button>
                     </div>
                 </div>
                 
@@ -486,7 +509,7 @@
                             </tr>
                         </thead>
                         <tbody id="pivotBodyRow">
-                            <tr><td colspan="100%" style="text-align: center; padding: 40px;">Consolidando miles de registros... ⏳</td></tr>
+                            <tr><td colspan="100%" style="text-align: center; padding: 40px; text-transform:uppercase; font-weight:600; color:#64748B;">Consolidando registros globales...</td></tr>
                         </tbody>
                         <tfoot>
                             <tr id="pivotFootRow">
@@ -502,20 +525,20 @@
         </main>
     </div>
 
-    <!-- MODAL RECEPCIÓN INBOUND (INTERACTIVO Y MODERNO) -->
+    <!-- MODAL RECEPCIÓN INBOUND -->
     <div class="modal-overlay" id="modalInbound">
         <div class="modal-content" style="max-width: 650px;">
-            <h3 style="font-weight: 800; color: var(--amerijet-blue); margin-bottom: 10px;">📥 Recepción de ULDs (Inbound)</h3>
-            <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Confirma la recepción de las unidades. Las recibidas pasarán automáticamente a estado <strong style="color:var(--amerijet-blue);">EMPTY</strong> en tu rampa. Las no recibidas puedes devolverlas.</p>
+            <div class="modal-title">RECEPCIÓN DE ULDS (INBOUND)</div>
+            <p style="font-size: 12px; color: #475569; margin-bottom: 15px; text-transform:uppercase;">Confirma la recepción. Las unidades recibidas pasarán automáticamente a estado <strong style="color:var(--amerijet-blue);">EMPTY</strong> en tu rampa. Las unidades faltantes puedes devolverlas.</p>
             
             <div style="max-height: 250px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #E2E8F0; border-radius: 8px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align:left;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align:left; text-transform:uppercase;">
                     <thead style="background: #F8FAFC; position: sticky; top: 0; z-index: 5;">
                         <tr>
                             <th style="padding: 10px; border-bottom: 2px solid #CBD5E1;"><input type="checkbox" id="chkAllInbound" onclick="toggleAllInbound()"></th>
                             <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">ULD Number</th>
                             <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">Tipo</th>
-                            <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">Enviado El</th>
+                            <th style="padding: 10px; border-bottom: 2px solid #CBD5E1; color: var(--amerijet-blue);">Enviado El (ZULU)</th>
                         </tr>
                     </thead>
                     <tbody id="inboundBody">
@@ -525,30 +548,35 @@
             </div>
 
             <div style="display: flex; gap: 10px;" id="inboundMainButtons">
-                <button onclick="recibirInbound()" style="flex:1; background:#10B981; color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">✅ Recibir (EMPTY)</button>
-                <button onclick="rechazarInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">❌ Devolver</button>
+                <button onclick="recibirInbound()" style="flex:1; background:#10B981; color:white; padding:12px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">RECIBIR COMO EMPTY</button>
+                <button onclick="rechazarInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:12px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">DEVOLVER / RECHAZAR</button>
             </div>
 
             <div id="divReturnStation" style="display:none; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                <label style="font-size:11px; font-weight:800; color:var(--amerijet-red); margin-bottom:5px; display:block;">SELECCIONA ESTACIÓN PARA DEVOLVER LOS SELECCIONADOS:</label>
-                <select id="selReturnStation" style="width:100%; padding:10px; border-radius:6px; border:1px solid #CBD5E1; margin-bottom:10px; font-weight:600;"></select>
+                <label style="font-size:10px; font-weight:800; color:var(--amerijet-red); margin-bottom:5px; display:block; text-transform:uppercase;">SELECCIONA ESTACIÓN DESTINO PARA LA DEVOLUCIÓN:</label>
+                <select id="selReturnStation" style="width:100%; padding:10px; border-radius:6px; border:1px solid #CBD5E1; margin-bottom:10px; font-weight:600; text-transform:uppercase;"></select>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="confirmarRechazoInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Confirmar Devolución</button>
-                    <button onclick="cancelarRechazoInbound()" style="flex:1; background:#E2E8F0; color:#334155; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Cancelar</button>
+                    <button onclick="confirmarRechazoInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:10px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">CONFIRMAR DEVOLUCIÓN</button>
+                    <button onclick="cancelarRechazoInbound()" style="flex:1; background:#E2E8F0; color:#334155; padding:10px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">CANCELAR</button>
                 </div>
             </div>
 
-            <button onclick="cerrarModalInbound()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">Cerrar Pantalla</button>
+            <button onclick="cerrarModalInbound()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:800; cursor:pointer; margin-top:10px; text-transform:uppercase; font-size:11px;">CERRAR PANTALLA</button>
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN ULD RÁPIDA -->
+    <!-- MODAL EDICIÓN ULD RÁPIDA (CON CAMBIO DE NÚMERO) -->
     <div class="modal-overlay" id="modalEditUld">
         <div class="modal-content">
-            <div class="modal-title">✏️ Editar ULD <span id="lblEditUldNumber" style="color:var(--amerijet-blue);"></span></div>
+            <div class="modal-title">EDITAR ULD</div>
             <form id="formEditUld">
-                <input type="hidden" id="edit_uld_number">
+                <input type="hidden" id="edit_old_uld_number">
                 
+                <div class="form-group-inline" style="margin-bottom: 15px;">
+                    <label>Número ULD (IATA)</label>
+                    <input type="text" id="edit_new_uld_number" required maxlength="10" style="width: 100%; margin-top: 5px; text-transform: uppercase;">
+                </div>
+
                 <div class="form-group-inline" style="margin-bottom: 15px;">
                     <label>Use Status</label>
                     <select id="edit_use_status" style="width: 100%; margin-top: 5px;">
@@ -570,8 +598,8 @@
                     <input type="text" id="edit_damage_reason" placeholder="Ej: Esquina doblada..." style="border-color: var(--amerijet-red); width: 100%; margin-top: 5px;">
                 </div>
                 
-                <button type="submit" style="width:100%; background:var(--amerijet-blue); color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">Guardar Cambios</button>
-                <button type="button" onclick="cerrarModalEditUld()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px;">Cancelar</button>
+                <button type="submit" class="btn-modal-action" style="background:var(--amerijet-blue);">GUARDAR CAMBIOS</button>
+                <button type="button" class="btn-modal-cancel" onclick="cerrarModalEditUld()">CANCELAR</button>
             </form>
         </div>
     </div>
@@ -579,15 +607,15 @@
     <!-- MODAL IMPORTACIÓN MASIVA (COPY-PASTE EXCEL) -->
     <div class="modal-overlay" id="modalImportMasivo">
         <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-title" style="margin-bottom: 10px;">📥 Importación Masiva (Excel)</div>
-            <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Copia la columna entera de ULDs desde tu archivo Excel y pégala en este cuadro. El sistema los registrará automáticamente en tu estación como <strong style="color:#10B981;">EMPTY</strong> y <strong style="color:#0A2540;">SERVICEABLE</strong>.</p>
+            <div class="modal-title" style="margin-bottom: 10px;">IMPORTACIÓN MASIVA (EXCEL)</div>
+            <p style="font-size: 11px; color: #475569; margin-bottom: 15px; text-transform:uppercase;">Copia la columna entera de ULDs desde tu archivo Excel y pégala en este cuadro. El sistema los registrará en tu estación como <strong style="color:#10B981;">EMPTY</strong> y <strong style="color:#0A2540;">SERVICEABLE</strong>.</p>
             
             <textarea id="txtImportMasivo" rows="12" placeholder="Ejemplo:&#10;PMC01376M6&#10;PMC05044M6&#10;PAG10006M6..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 14px; text-transform: uppercase; resize: vertical; outline: none; margin-bottom: 5px;" oninput="actualizarContadorMasivo()"></textarea>
             
-            <div style="font-size: 11px; color: #64748B; text-align: right; margin-bottom: 15px; font-weight: bold;" id="lblContadorMasivo">Líneas detectadas: 0</div>
+            <div style="font-size: 10px; color: #64748B; text-align: right; margin-bottom: 15px; font-weight: 800; text-transform:uppercase;" id="lblContadorMasivo">Líneas detectadas: 0</div>
             
-            <button id="btnProcesarMasivo" onclick="procesarImportacionMasiva()" style="width:100%; background:#8B5CF6; color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; font-size:14px; transition:0.2s;">⚡ Procesar Importación</button>
-            <button onclick="cerrarModalImportarMasivo()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px; font-size:14px;">Cancelar</button>
+            <button id="btnProcesarMasivo" onclick="procesarImportacionMasiva()" class="btn-modal-action" style="background:#8B5CF6;">PROCESAR IMPORTACIÓN</button>
+            <button onclick="cerrarModalImportarMasivo()" class="btn-modal-cancel">CANCELAR</button>
         </div>
     </div>
 
@@ -595,11 +623,11 @@
     <div class="modal-overlay" id="modalHistorialLog">
         <div class="modal-content" style="max-width: 500px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px;">
-                <h3 style="font-weight: 800; color: var(--amerijet-blue); margin:0;">📋 Historial de Cambios</h3>
-                <button onclick="cerrarModalHistorialLog()" style="background:none; border:none; font-size:18px; color:#94A3B8; cursor:pointer;">✖</button>
+                <h3 style="font-weight: 800; color: var(--amerijet-blue); margin:0; text-transform:uppercase; font-size:16px;">HISTORIAL DE CAMBIOS</h3>
+                <button onclick="cerrarModalHistorialLog()" style="background:none; border:none; font-size:18px; color:#94A3B8; cursor:pointer; font-weight:800;">X</button>
             </div>
             <div id="logContainerModal" style="max-height: 300px; overflow-y: auto;">
-                <p style="font-size:12px; color:#64748B; font-style:italic;">Cargando historial...</p>
+                <p style="font-size:11px; color:#64748B; font-style:italic; text-transform:uppercase; text-align:center;">Cargando historial...</p>
             </div>
         </div>
     </div>
@@ -607,24 +635,24 @@
     <!-- MODAL ACCESORIOS (BODEGA NET) -->
     <div class="modal-overlay" id="modalAccesorios">
         <div class="modal-content">
-            <div class="modal-title" id="modalAccesoriosTitle">Actualizar Bodega</div>
+            <div class="modal-title" id="modalAccesoriosTitle">ACTUALIZAR BODEGA</div>
             <form id="formAccesorios">
                 
                 <div id="secNetsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE REDES DISPONIBLES</h4>
+                    <h4 style="font-size:10px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px; text-transform:uppercase;">CONTEO DE REDES DISPONIBLES</h4>
                     <div id="modalNetsDinamicoContainer" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
                 </div>
                 
                 <div id="secStrapsModal" style="display:none;">
-                    <h4 style="font-size:11px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px;">CONTEO DE CINCHAS (STRAPS)</h4>
+                    <h4 style="font-size:10px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px; text-transform:uppercase;">CONTEO DE CINCHAS (STRAPS)</h4>
                     <div class="modal-grid">
                         <div class="form-group-inline"><label>Straps Fricción</label><input type="number" id="mod_strap_fric" min="0"></div>
                         <div class="form-group-inline"><label>Straps Presión</label><input type="number" id="mod_strap_pres" min="0"></div>
                     </div>
                 </div>
 
-                <button type="submit" style="width:100%; background:var(--amerijet-blue); color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:15px;">Guardar Inventario de Bodega</button>
-                <button type="button" onclick="cerrarModalAcc()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px;">Cancelar</button>
+                <button type="submit" class="btn-modal-action" style="background:var(--amerijet-blue); margin-top:15px;">GUARDAR INVENTARIO</button>
+                <button type="button" onclick="cerrarModalAcc()" class="btn-modal-cancel">CANCELAR</button>
             </form>
         </div>
     </div>
@@ -632,45 +660,36 @@
     <!-- MODAL TRANSFERENCIA DE LOTE MANUAL -->
     <div class="modal-overlay" id="modalTransfer">
         <div class="modal-content">
-            <div class="modal-title">🚚 Transferir ULDs Seleccionados</div>
-            <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Selecciona la estación destino. Las unidades pasarán a estado <b>EN TRÁNSITO</b> y notificarán a la estación de destino.</p>
+            <div class="modal-title">TRANSFERIR ULDS SELECCIONADOS</div>
+            <p style="font-size: 11px; color: #475569; margin-bottom: 15px; text-transform:uppercase; line-height:1.4;">Selecciona la estación destino. Las unidades pasarán a estado <strong style="color:var(--amerijet-blue);">EN TRÁNSITO</strong> y notificarán a la estación receptora.</p>
             <div class="form-group-inline" style="margin-bottom: 20px;">
                 <label>Estación Destino</label>
                 <select id="transfer_target" required></select>
             </div>
-            <button onclick="ejecutarTransferencia()" style="width:100%; background:#D97706; color:white; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Confirmar Despacho</button>
-            <button type="button" onclick="cerrarModalTransfer()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:8px;">Cancelar</button>
+            <button onclick="ejecutarTransferencia()" class="btn-modal-action" style="background:#D97706;">CONFIRMAR DESPACHO</button>
+            <button type="button" onclick="cerrarModalTransfer()" class="btn-modal-cancel">CANCELAR</button>
         </div>
     </div>
 
     <!-- MODALES UNIVERSALES (ALERTAS Y CONFIRMACIONES) -->
     <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
-            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
-            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <div id="alertIcon" class="badge-modal-icon">[ INFO ]</div>
+            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
-            <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+            <button onclick="closeCustomAlert()" id="alertBtn" class="btn-modal-action">ACEPTAR</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
         <div class="modal-content modal-generic">
-            <div id="confirmIcon" style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
-            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Confirmar</h3>
+            <div id="confirmIcon" class="badge-modal-icon error">[ ALERTA ]</div>
+            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
-                <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Confirmar</button>
-                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Cancelar</button>
+                <button id="btnConfirmAction" class="btn-modal-action">CONFIRMAR</button>
+                <button onclick="closeCustomConfirm()" class="btn-modal-cancel" style="margin-top:0;">CANCELAR</button>
             </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="inactivityModal">
-        <div class="modal-content modal-generic">
-            <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
-            <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 22px;">Sesión en Pausa</h3>
-            <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por tu seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
-            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Sí, mantener sesión abierta</button>
         </div>
     </div>
 
@@ -698,8 +717,22 @@
         const itemsPorPagina = 100;
         let pivotGlobalData = [];
 
-        // Expresión Regular ESTRICTA IATA: 3 Letras, 4 o 5 Números, 2 Letras/Números. (Ej: PMC12345M6)
+        // Expresión Regular ESTRICTA IATA: 3 Letras, 4 o 5 Números, 2 Letras/Números.
         const uldRegex = /^[A-Z]{3}[0-9]{4,5}[A-Z0-9]{2}$/;
+
+        // ==========================================
+        // RELOJ ZULU (UTC) GLOBAL
+        // ==========================================
+        function updateZuluClock() {
+            const now = new Date();
+            const hr = String(now.getUTCHours()).padStart(2, '0');
+            const min = String(now.getUTCMinutes()).padStart(2, '0');
+            const sec = String(now.getUTCSeconds()).padStart(2, '0');
+            const clockEl = document.getElementById('liveZuluClock');
+            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} ZULU (UTC)`;
+        }
+        setInterval(updateZuluClock, 1000);
+        updateZuluClock();
 
         function clasificarTipoULD(tipoStr) {
             if(!tipoStr) return 'OTROS';
@@ -743,9 +776,12 @@
             const titleEl = document.getElementById('alertTitle');
             const btn = document.getElementById('alertBtn');
             titleEl.innerText = title; document.getElementById('alertMessage').innerHTML = message;
-            if(type === 'success') { icon.innerText = '✅'; titleEl.style.color = '#10B981'; btn.style.background = '#10B981'; } 
-            else if(type === 'error') { icon.innerText = '❌'; titleEl.style.color = 'var(--amerijet-red)'; btn.style.background = 'var(--amerijet-red)'; } 
-            else { icon.innerText = 'ℹ️'; titleEl.style.color = 'var(--amerijet-blue)'; btn.style.background = 'var(--amerijet-blue)'; }
+            
+            icon.innerText = type === 'success' ? '[ OK ]' : type === 'error' ? '[ ERROR ]' : '[ INFO ]';
+            icon.className = `badge-modal-icon ${type}`;
+
+            titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
             modal.style.display = 'flex';
         }
         function closeCustomAlert() { document.getElementById('customAlertModal').style.display = 'none'; }
@@ -833,7 +869,7 @@
             } else {
                 document.getElementById('vistaGlobal').style.display = 'none';
                 document.getElementById('vistaEstacion').style.display = 'flex';
-                document.getElementById('lblFormStation').innerText = `Ingresar a ${estacionVista}`;
+                document.getElementById('lblFormStation').innerText = `INVENTARIO: ${estacionVista}`;
                 await cargarInventario();
                 await cargarAccesoriosYCalcularBalance();
             }
@@ -888,7 +924,7 @@
 
                 filtrarYPaginar(); 
 
-            } catch(err) { tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; color:var(--amerijet-red); padding: 20px;">Error: ${err.message}</td></tr>`; }
+            } catch(err) { tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; color:var(--amerijet-red); padding: 20px; font-weight:bold;">Error: ${err.message}</td></tr>`; }
         }
 
         function calcularStockIdeal() {
@@ -930,9 +966,9 @@
 
                 if (actual > limite) {
                     hayExceso = true;
-                    alertas.push(`<div class="stock-item danger"><span>⚠️ <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Depurar: <b>${actual - limite}</b></span></div>`);
+                    alertas.push(`<div class="stock-item danger"><span>[ ALERTA ] <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Depurar: <b>${actual - limite}</b></span></div>`);
                 } else {
-                    alertas.push(`<div class="stock-item ok"><span>✅ <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Stock normal</span></div>`);
+                    alertas.push(`<div class="stock-item ok"><span>[ OK ] <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Stock normal</span></div>`);
                 }
             }
             
@@ -940,10 +976,10 @@
             
             if (hayExceso) {
                 banner.className = 'stock-banner danger';
-                headerText.innerHTML = '⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.';
+                headerText.innerHTML = '<span>[ ALERTA ] DE STOCK: Tienes ULDs en exceso, debes depurar.</span><span style="font-size: 14px; color:#B45309;">▼</span>';
             } else {
                 banner.className = 'stock-banner success';
-                headerText.innerHTML = '✅ CONTROL DE STOCK: Tu estación está dentro de los límites.';
+                headerText.innerHTML = '<span>[ OK ] CONTROL DE STOCK: Tu estación está dentro de los límites.</span><span style="font-size: 14px; color:#047857;">▼</span>';
             }
             banner.style.display = 'flex';
         }
@@ -960,7 +996,7 @@
                 );
             }
             
-            // ORDENAMIENTO INTELIGENTE: Por Tipo y luego por Número de ULD
+            // ORDENAMIENTO INTELIGENTE: Por Tipo y luego por Número de ULD (Alfanumérico)
             datosFiltrados.sort((a, b) => {
                 const typeA = (a.uld_type || 'ZZZ').toUpperCase();
                 const typeB = (b.uld_type || 'ZZZ').toUpperCase();
@@ -979,7 +1015,7 @@
         function dibujarTablaPaginada() {
             const tbody = document.getElementById('uldBody');
             if (datosFiltrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; color:#64748B; padding: 40px;">No se encontraron ULDs físicamente en rampa.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center; color:#64748B; padding: 40px; font-weight:bold; text-transform:uppercase;">No se encontraron ULDs en rampa.</td></tr>`;
                 document.getElementById('pagInfo').innerText = `Mostrando 0 de 0`;
                 document.getElementById('btnPrevPage').disabled = true; document.getElementById('btnNextPage').disabled = true;
                 return;
@@ -996,44 +1032,49 @@
                 let updTime = "N/A", updDate = "N/A";
                 if(u.updated_ontime) {
                     const d = new Date(u.updated_ontime);
-                    updDate = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(0)}`;
-                    let hr = d.getUTCHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12;
-                    updTime = `${updDate} ${hr}:${String(d.getUTCMinutes()).padStart(2,'0')} ${ampm} UTC`;
+                    // Force display as ZULU properly parsed
+                    updDate = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                    let hr = String(d.getUTCHours()).padStart(2,'0'); 
+                    let min = String(d.getUTCMinutes()).padStart(2,'0');
+                    updTime = `${updDate} ${hr}:${min} Z`;
                 }
                 
-                let statusBadge = `<span style="color:#10B981; font-weight:800;">SERVICEABLE</span>`;
+                let statusBadge = `<span style="color:#10B981; font-weight:800;">[ SERVICEABLE ]</span>`;
                 if(u.uld_status === 'DAMAGED') {
-                    statusBadge = `<span style="color:var(--amerijet-red); font-weight:800;">DAMAGED</span><br><span style="font-size:10px; color:var(--amerijet-red); line-height:1.2; display:block; margin-top:3px; max-width: 150px; white-space: normal;">${u.damage_reason || ''}</span>`;
+                    statusBadge = `<span style="color:var(--amerijet-red); font-weight:800;">[ DAMAGED ]</span><br><span style="font-size:10px; color:var(--amerijet-red); line-height:1.2; display:block; margin-top:3px; max-width: 150px; white-space: normal;">${u.damage_reason || ''}</span>`;
                 } else if(u.uld_status) {
-                    statusBadge = `<span style="font-weight:700;">${u.uld_status}</span>`;
+                    statusBadge = `<span style="font-weight:700;">[ ${u.uld_status} ]</span>`;
                 }
 
-                const displayDelBtn = (miRol === 'admin') ? `inline-block` : `none`;
+                // Permisos Supervisor Local y Admin para Modificar/Borrar
+                const canModify = (miRol === 'admin' || miRol === 'supervisor_local');
+                const displayBtns = canModify ? `inline-block` : `none`;
+                
                 const safeDamageR = (u.damage_reason || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
                 tbody.innerHTML += `
                     <tr>
                         <td><input type="checkbox" class="chk-transfer" value="${u.uld_number}"></td>
-                        <td style="font-weight:800;">${u.uld_number}</td>
+                        <td style="font-weight:900;">${u.uld_number}</td>
                         <td>${statusBadge}</td>
-                        <td style="font-weight:700; color:var(--amerijet-blue);">${u.location}</td>
+                        <td style="font-weight:800; color:var(--amerijet-blue);">${u.location}</td>
                         <td>${updDate}</td>
-                        <td>${u.use_status}</td>
+                        <td><span style="font-weight:800;">${u.use_status}</span></td>
                         <td>${u.opp_status || 'ARRIVED'}</td>
-                        <td><span style="background:#F1F5F9; border:1px solid #CBD5E1; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:700;">${u.uld_type || ''}</span></td>
+                        <td><span style="background:#F1F5F9; border:1px solid #CBD5E1; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:800;">${u.uld_type || ''}</span></td>
                         <td>${u.owner || ''}</td>
                         <td>${rxDate}</td>
-                        <td>${updTime}</td>
+                        <td style="color:#1D4ED8; font-weight:700;">${updTime}</td>
                         <td><span class="${valClass}">${u.validation_uld || 'N/A'}</span></td>
                         <td>
-                            <button class="btn-edit-uld" onclick="abrirModalEditUld('${u.uld_number}', '${u.use_status || 'EMPTY'}', '${u.uld_status || 'SERVICEABLE'}', '${safeDamageR}')" title="Editar">✏️</button>
-                            <button class="btn-delete" style="display:${displayDelBtn};" onclick="borrarUld('${u.uld_number}')" title="Borrar">🗑️</button>
+                            <button class="btn-edit-uld" style="display:${displayBtns};" onclick="abrirModalEditUld('${u.uld_number}', '${u.use_status || 'EMPTY'}', '${u.uld_status || 'SERVICEABLE'}', '${safeDamageR}')">EDITAR</button>
+                            <button class="btn-delete" style="display:${displayBtns};" onclick="borrarUld('${u.uld_number}')">BORRAR</button>
                         </td>
                     </tr>
                 `;
             });
 
-            document.getElementById('pagInfo').innerText = `Mostrando ${startIndex + 1} - ${endIndex} de ${datosFiltrados.length}`;
+            document.getElementById('pagInfo').innerText = `MOSTRANDO ${startIndex + 1} - ${endIndex} DE ${datosFiltrados.length}`;
             document.getElementById('btnPrevPage').disabled = (paginaActual === 1);
             document.getElementById('btnNextPage').disabled = (endIndex >= datosFiltrados.length);
         }
@@ -1082,30 +1123,30 @@
                     if (esCerrado) {
                         balanceContainer.innerHTML += `
                             <div class="balance-item balance-ok">
-                                <div style="font-weight:800; font-size:14px;">${tipo}</div>
+                                <div style="font-weight:900; font-size:14px;">${tipo}</div>
                                 <div style="display:flex; flex-direction:column; gap:2px;">
                                     <span>Rampa (Físicos): <b>${uldsFisicos}</b></span>
-                                    <span style="font-size:10px; font-weight:800; text-transform:uppercase;">✅ Completo </span>
+                                    <span style="font-size:10px; font-weight:800; text-transform:uppercase;">[ OK ] Contenedor Completo (Sin Red)</span>
                                 </div>
                             </div>`;
                         return; 
                     }
 
                     const balance = redesBodega - uldsFisicos;
-                    let itemClass = "balance-ok"; let mensajeTexto = `✅ Balance Perfecto (Net listo)`;
+                    let itemClass = "balance-ok"; let mensajeTexto = `[ OK ] BALANCE PERFECTO`;
 
                     if (balance < 0) { 
                         itemClass = "balance-danger"; 
-                        mensajeTexto = `⚠️ Alerta: Faltan ${Math.abs(balance)} Redes`; 
+                        mensajeTexto = `[ ALERTA ] Faltan ${Math.abs(balance)} Redes`; 
                     } 
                     else if (balance > 0) { 
                         itemClass = "balance-warning"; 
-                        mensajeTexto = `🟠 Excedente: Tienes ${balance} de más`; 
+                        mensajeTexto = `[ AVISO ] Excedente: ${balance} Redes extra`; 
                     } 
 
                     balanceContainer.innerHTML += `
                         <div class="balance-item ${itemClass}">
-                            <div style="font-weight:800; font-size:14px;">${tipo}</div>
+                            <div style="font-weight:900; font-size:14px;">${tipo}</div>
                             <div style="display:flex; flex-direction:column; gap:2px;">
                                 <span>Rampa (ULDs): <b>${uldsFisicos}</b> | Bodega (Redes): <b>${redesBodega}</b></span>
                                 <span style="font-size:10px; font-weight:800; text-transform:uppercase;">${mensajeTexto}</span>
@@ -1114,7 +1155,7 @@
                 });
                 
                 if (mostrados === 0) {
-                    balanceContainer.innerHTML = '<p style="font-size:12px; color:#64748B; font-style:italic;">No hay unidades ni redes registradas para auditar.</p>';
+                    balanceContainer.innerHTML = '<p style="font-size:11px; color:#64748B; font-weight:700; text-transform:uppercase;">No hay unidades ni redes registradas.</p>';
                 }
             } catch(e) {}
         }
@@ -1126,7 +1167,7 @@
             if (tipoModal === 'nets') {
                 secNets.style.display = 'block';
                 secStraps.style.display = 'none';
-                document.getElementById('modalAccesoriosTitle').innerText = 'Actualizar Bodega (Redes)';
+                document.getElementById('modalAccesoriosTitle').innerText = 'ACTUALIZAR BODEGA (REDES)';
                 
                 const container = document.getElementById('modalNetsDinamicoContainer'); container.innerHTML = '';
                 
@@ -1143,7 +1184,7 @@
                 });
 
                 if(tiposActivos.size === 0) {
-                    container.innerHTML = '<p style="font-size:12px; color:var(--amerijet-red); margin-bottom:15px; font-weight:600;">⚠️ Registra al menos un ULD abajo o ingresa redes para activar los tipos.</p>';
+                    container.innerHTML = '<p style="font-size:12px; color:var(--amerijet-red); margin-bottom:15px; font-weight:800; text-transform:uppercase;">[ INFO ] Registra un ULD primero.</p>';
                 } else {
                     let htmlGrid = '<div class="modal-grid">';
                     let tiposArray = Array.from(tiposActivos).sort();
@@ -1156,7 +1197,7 @@
             } else {
                 secNets.style.display = 'none';
                 secStraps.style.display = 'block';
-                document.getElementById('modalAccesoriosTitle').innerText = 'Actualizar Bodega (Straps)';
+                document.getElementById('modalAccesoriosTitle').innerText = 'ACTUALIZAR BODEGA (STRAPS)';
             }
 
             document.getElementById('mod_strap_fric').value = document.getElementById('wgStrapFric').innerText;
@@ -1212,7 +1253,6 @@
         function actualizarContadorMasivo() {
             const txtArea = document.getElementById('txtImportMasivo');
             const txtVal = txtArea.value;
-            // Filtra líneas vacías
             const lineas = txtVal.split('\n').map(l => l.trim()).filter(l => l !== '');
             document.getElementById('lblContadorMasivo').innerText = `Líneas detectadas: ${lineas.length}`;
         }
@@ -1232,13 +1272,13 @@
 
             const btn = document.getElementById('btnProcesarMasivo');
             btn.disabled = true;
-            btn.innerText = "Procesando...";
+            btn.innerText = "PROCESANDO...";
 
             const validosParaSubir = [];
             const invalidosReporte = [];
 
             lineasUnicas.forEach(rawUld => {
-                // VALIDACIÓN ESTRICTA
+                // VALIDACIÓN ESTRICTA IATA
                 if (uldRegex.test(rawUld)) {
                     let uldType = rawUld.substring(0, 3);
                     let owner = rawUld.slice(-2);
@@ -1276,16 +1316,16 @@
                 
                 // CONSTRUIR EL REPORTE FINAL
                 let htmlReporte = `<div style="text-align: left; font-size: 13px; line-height: 1.6;">`;
-                htmlReporte += `✅ <b>${validosParaSubir.length}</b> ULDs se procesaron correctamente.<br>`;
+                htmlReporte += `[ OK ] <b>${validosParaSubir.length}</b> ULDs se procesaron correctamente.<br>`;
                 
                 if (invalidosReporte.length > 0) {
-                    htmlReporte += `<br><span style="color:var(--amerijet-red);">❌ <b>${invalidosReporte.length}</b> ULDs fueron rechazados por formato incorrecto:</span><br>`;
+                    htmlReporte += `<br><span style="color:var(--amerijet-red); font-weight:bold;">[ ERROR ] <b>${invalidosReporte.length}</b> ULDs fueron rechazados por formato incorrecto:</span><br>`;
                     htmlReporte += `<ul style="margin-top: 5px; padding-left: 20px; color: #64748B;">`;
                     invalidosReporte.forEach(inv => {
                         htmlReporte += `<li>${inv}</li>`;
                     });
                     htmlReporte += `</ul>`;
-                    htmlReporte += `<i>Nota: El formato IATA requiere 3 letras, 4 o 5 números, y 2 caracteres finales.</i>`;
+                    htmlReporte += `<i style="font-size:11px;">Nota: El formato IATA requiere 3 letras, 4 o 5 números, y 2 caracteres finales.</i>`;
                 }
                 htmlReporte += `</div>`;
 
@@ -1295,7 +1335,7 @@
                 showCustomAlert("Error de Importación", err.message, "error");
             } finally {
                 btn.disabled = false;
-                btn.innerText = "⚡ Procesar Importación";
+                btn.innerText = "PROCESAR IMPORTACIÓN";
             }
         }
 
@@ -1307,14 +1347,16 @@
             tbody.innerHTML = '';
             uldsEnTransito.forEach(u => {
                 const d = u.updated_ontime ? new Date(u.updated_ontime) : new Date();
-                const fechaStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                let hr = String(d.getUTCHours()).padStart(2,'0'); 
+                let min = String(d.getUTCMinutes()).padStart(2,'0');
+                const fechaStr = `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')} ${hr}:${min} Z`;
 
                 tbody.innerHTML += `
                     <tr>
                         <td style="padding: 10px; border-bottom: 1px solid #E2E8F0;"><input type="checkbox" class="chk-inbound" value="${u.uld_number}"></td>
                         <td style="padding: 10px; border-bottom: 1px solid #E2E8F0; font-weight: bold; color:var(--amerijet-blue-dark);">${u.uld_number}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0;"><span style="background:#F1F5F9; border:1px solid #CBD5E1; padding:2px 6px; border-radius:4px;">${u.uld_type || 'N/A'}</span></td>
-                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0; color:#64748B;">${fechaStr}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0;"><span style="background:#F1F5F9; border:1px solid #CBD5E1; padding:2px 6px; border-radius:4px; font-weight:700;">${u.uld_type || 'N/A'}</span></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #E2E8F0; color:#1D4ED8; font-weight:800;">${fechaStr}</td>
                     </tr>
                 `;
             });
@@ -1348,7 +1390,7 @@
                 document.getElementById('chkAllInbound').checked = false; 
                 cerrarModalInbound(); 
                 await cargarInventario(); 
-                showCustomAlert("Recibidos Correctamente", `Se ingresaron ${seleccionados.length} ULD(s) a tu rampa como EMPTY.`, "success");
+                showCustomAlert("Recepción Exitosa", `Se ingresaron ${seleccionados.length} ULD(s) a tu rampa como EMPTY.`, "success");
             } catch(e) { showCustomAlert("Error", e.message, "error"); }
         }
 
@@ -1470,29 +1512,28 @@
                 document.getElementById('chkAll').checked = false; 
                 cerrarModalTransfer(); 
                 await refrescarPantalla();
-                showCustomAlert("Despacho Exitoso", `Se transfirieron ${seleccionados.length} ULDs hacia ${destino}.<br><br><b>Automatización:</b> Se restaron las redes proporcionales a los ULDs de la bodega local y se sumaron al destino.`, "success");
+                showCustomAlert("Despacho Exitoso", `Se transfirieron ${seleccionados.length} ULDs hacia ${destino}.<br><br><b>Automatización:</b> Se restaron las redes de bodega local y se sumaron al destino.`, "success");
             } catch(e) { showCustomAlert("Error de Transferencia", "Ocurrió un error al procesar el lote y las redes.", "error"); }
         }
 
         // =====================================
-        // INGRESO MANUAL INTELIGENTE (TOMA LA REGEX TAMBIÉN)
+        // INGRESO MANUAL INTELIGENTE Y EDICIÓN (MODIFICAR ULD)
         // =====================================
         document.getElementById('formAddUld').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btnSubmitUld'); btn.disabled = true; btn.innerText = "...";
+            const btn = document.getElementById('btnSubmitUld'); btn.disabled = true; btn.innerText = "PROCESANDO...";
             const rawUld = document.getElementById('uld_number').value.trim().toUpperCase();
             const uldStatus = document.getElementById('uld_condicion').value;
             const damageReason = document.getElementById('damage_reason').value.trim();
 
             if (uldStatus === 'DAMAGED' && damageReason === '') {
                 showCustomAlert("Atención", "Por favor ingresa un motivo para el estado DAMAGED.", "error");
-                btn.disabled = false; btn.innerText = "Registrar Manual"; return;
+                btn.disabled = false; btn.innerText = "REGISTRAR MANUAL"; return;
             }
 
-            // APLICAMOS LA MISMA REGLA ESTRICTA AL MANUAL
             if (!uldRegex.test(rawUld)) {
                 showCustomAlert("Formato IATA Inválido", "El ULD debe tener 3 letras, seguido de 4 o 5 números, y terminar con 2 caracteres. Ej: <b>PMC12345M6</b>", "error");
-                btn.disabled = false; btn.innerText = "Registrar Manual"; return;
+                btn.disabled = false; btn.innerText = "REGISTRAR MANUAL"; return;
             }
 
             try {
@@ -1514,7 +1555,7 @@
                         showCustomAlert("Inventario Actualizado", `El ULD <strong style="color:var(--amerijet-blue);">${rawUld}</strong> ya estaba en tu rampa. Se ha validado su estado.`, "success");
                     
                     } else {
-                        showCustomConfirm("Búsqueda Inteligente", `El ULD <strong style="color:var(--amerijet-blue);">${rawUld}</strong> figura en [<strong>${existente.location}</strong>].<br><br>¿Confirmas que lo tienes frente a ti y deseas jalarlo a la rampa de ${estacionVista}?`, "Sí, Transferir", "var(--amerijet-blue)", 
+                        showCustomConfirm("Búsqueda Inteligente", `El ULD <strong style="color:var(--amerijet-blue);">${rawUld}</strong> figura en [<strong>${existente.location}</strong>].<br><br>¿Confirmas que lo tienes frente a ti y deseas jalarlo a la rampa de ${estacionVista}?`, "SÍ, TRANSFERIR", "var(--amerijet-blue)", 
                             async () => {
                                 const now = new Date();
                                 await supabaseClient.from('uld_inventario').update({
@@ -1555,12 +1596,12 @@
                     showCustomAlert("Éxito", "Unidad ingresada al sistema con éxito.", "success");
                 }
             } catch(err) { showCustomAlert("Error", err.message, "error"); } 
-            finally { btn.disabled = false; btn.innerText = "Registrar Manual"; }
+            finally { btn.disabled = false; btn.innerText = "REGISTRAR MANUAL"; }
         });
 
         function abrirModalEditUld(uldNumber, useStatus, uldStatus, damageReason) {
-            document.getElementById('lblEditUldNumber').innerText = uldNumber;
-            document.getElementById('edit_uld_number').value = uldNumber;
+            document.getElementById('edit_old_uld_number').value = uldNumber;
+            document.getElementById('edit_new_uld_number').value = uldNumber;
             document.getElementById('edit_use_status').value = useStatus || 'EMPTY';
             document.getElementById('edit_uld_condicion').value = uldStatus || 'SERVICEABLE';
             document.getElementById('edit_damage_reason').value = damageReason || '';
@@ -1574,37 +1615,48 @@
         document.getElementById('formEditUld').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = e.submitter;
-            if(btn) { btn.disabled = true; btn.innerText = "Guardando..."; }
+            if(btn) { btn.disabled = true; btn.innerText = "GUARDANDO..."; }
             
-            const uldNumber = document.getElementById('edit_uld_number').value;
+            const oldUldNumber = document.getElementById('edit_old_uld_number').value;
+            const newUldNumber = document.getElementById('edit_new_uld_number').value.trim().toUpperCase();
             const useStatus = document.getElementById('edit_use_status').value;
             const uldStatus = document.getElementById('edit_uld_condicion').value;
             const damageReason = document.getElementById('edit_damage_reason').value.trim();
             
             if (uldStatus === 'DAMAGED' && damageReason === '') {
                 showCustomAlert("Atención", "Por favor ingresa un motivo para el estado DAMAGED.", "error");
-                if(btn) { btn.disabled = false; btn.innerText = "Guardar Cambios"; } return;
+                if(btn) { btn.disabled = false; btn.innerText = "GUARDAR CAMBIOS"; } return;
+            }
+
+            if (!uldRegex.test(newUldNumber)) {
+                showCustomAlert("Formato IATA Inválido", "El ULD debe tener 3 letras, 4 o 5 números y 2 caracteres finales.", "error");
+                if(btn) { btn.disabled = false; btn.innerText = "GUARDAR CAMBIOS"; } return;
             }
             
             try {
                 const now = new Date().toISOString();
+                
+                // Si cambiaron el número de ULD, hay que actualizar el campo PK
                 const { error } = await supabaseClient.from('uld_inventario').update({
+                    uld_number: newUldNumber,
+                    uld_type: newUldNumber.substring(0, 3),
+                    owner: newUldNumber.slice(-2),
                     use_status: useStatus,
                     uld_status: uldStatus,
                     damage_reason: uldStatus === 'DAMAGED' ? damageReason : '',
                     updated_ontime: now
-                }).eq('uld_number', uldNumber);
+                }).eq('uld_number', oldUldNumber);
                 
                 if (error) throw error;
                 
                 cerrarModalEditUld(); await refrescarPantalla();
-                showCustomAlert("Actualizado", `El ULD ${uldNumber} se actualizó correctamente.`, "success");
+                showCustomAlert("Actualizado", `El ULD ${newUldNumber} se actualizó correctamente.`, "success");
             } catch(err) { showCustomAlert("Error", err.message, "error"); } 
-            finally { if(btn) { btn.disabled = false; btn.innerText = "Guardar Cambios"; } }
+            finally { if(btn) { btn.disabled = false; btn.innerText = "GUARDAR CAMBIOS"; } }
         });
 
         function borrarUld(uldNumber) {
-            showCustomConfirm("Eliminar ULD", `¿Estás seguro de querer borrar permanentemente el ULD <strong style="color:var(--amerijet-red);">${uldNumber}</strong> de la red global?`, "Sí, Eliminar", "var(--amerijet-red)",
+            showCustomConfirm("Eliminar ULD", `¿Estás seguro de querer borrar permanentemente el ULD <strong style="color:var(--amerijet-red);">${uldNumber}</strong> de la red global?`, "SÍ, ELIMINAR", "var(--amerijet-red)",
                 async () => {
                     try {
                         await supabaseClient.from('uld_inventario').delete().eq('uld_number', uldNumber); await refrescarPantalla();
@@ -1616,30 +1668,36 @@
 
         function dibujarHistorialAuditoria() {
             if(!historialAuditoria || historialAuditoria.length === 0) {
-                document.getElementById('lblLastAuditUser').innerText = "N/A"; document.getElementById('lblLastAuditTime').innerText = "Sin registros"; return;
+                document.getElementById('lblLastAuditUser').innerText = "N/A"; document.getElementById('lblLastAuditTime').innerText = "SIN REGISTROS"; return;
             }
             const lastLog = historialAuditoria[historialAuditoria.length - 1];
-            const d = new Date(lastLog.fecha); const fechaStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
-            let hr = d.getHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12; const horaStr = `${hr}:${String(d.getMinutes()).padStart(2,'0')} ${ampm}`;
-            document.getElementById('lblLastAuditUser').innerText = `👤 ${lastLog.usuario}`; document.getElementById('lblLastAuditTime').innerText = `(${fechaStr} a las ${horaStr})`;
+            const d = new Date(lastLog.fecha); 
+            let hr = String(d.getUTCHours()).padStart(2,'0'); 
+            let min = String(d.getUTCMinutes()).padStart(2,'0');
+            const fechaStr = `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}`;
+            document.getElementById('lblLastAuditUser').innerText = `${lastLog.usuario}`; 
+            document.getElementById('lblLastAuditTime').innerText = `(${fechaStr} ${hr}:${min} ZULU)`;
         }
 
         function abrirModalHistorialLog() {
             const container = document.getElementById('logContainerModal'); container.innerHTML = '';
             if(!historialAuditoria || historialAuditoria.length === 0) {
-                container.innerHTML = '<p style="font-size:13px; color:#64748B;">No hay historial registrado en esta estación.</p>'; document.getElementById('modalHistorialLog').style.display = 'flex'; return;
+                container.innerHTML = '<p style="font-size:11px; color:#64748B; font-style:italic; text-transform:uppercase; text-align:center;">No hay historial registrado en esta estación.</p>'; 
+                document.getElementById('modalHistorialLog').style.display = 'flex'; return;
             }
             const ultimosLogs = [...historialAuditoria].reverse(); let html = '';
             ultimosLogs.forEach(log => {
-                const d = new Date(log.fecha); const fechaStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`;
-                let hr = d.getHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12; const horaStr = `${hr}:${String(d.getMinutes()).padStart(2,'0')} ${ampm}`;
+                const d = new Date(log.fecha); 
+                const fechaStr = `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                let hr = String(d.getUTCHours()).padStart(2,'0'); 
+                let min = String(d.getUTCMinutes()).padStart(2,'0');
                 html += `
-                    <div style="padding:10px; border-bottom:1px dashed #E2E8F0; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="padding:10px; border-bottom:1px dashed #E2E8F0; display:flex; justify-content:space-between; align-items:center; text-transform:uppercase;">
                         <div>
-                            <div style="font-size:13px; color:#1E293B; font-weight:800;">👤 ${log.usuario}</div>
-                            <div style="font-size:11px; color:#64748B; font-weight:600; margin-top:3px;">${log.accion}</div>
+                            <div style="font-size:12px; color:#1E293B; font-weight:800;">USUARIO: ${log.usuario}</div>
+                            <div style="font-size:10px; color:#64748B; font-weight:700; margin-top:3px;">${log.accion}</div>
                         </div>
-                        <div style="font-size:11px; color:#94A3B8; font-weight:700;">${fechaStr} ${horaStr}</div>
+                        <div style="font-size:10px; color:#1D4ED8; font-weight:800;">${fechaStr} ${hr}:${min} Z</div>
                     </div>
                 `;
             });
@@ -1652,10 +1710,10 @@
             showCustomConfirm(
                 "Validar Inventario Físico",
                 `Se validará el estado de los <b>${uldsEnRampa.length} ULDs físicos</b> en ${estacionVista}.<br><br>¿Confirmas que el conteo en rampa es correcto?`,
-                "💾 Guardar y Actualizar",
+                "GUARDAR Y ACTUALIZAR",
                 "var(--amerijet-blue)",
                 async () => {
-                    const btn = document.getElementById('btnGuardarInv'); btn.disabled = true; btn.innerText = "...";
+                    const btn = document.getElementById('btnGuardarInv'); btn.disabled = true; btn.innerText = "Sincronizando...";
                     try {
                         const now = new Date().toISOString();
                         await supabaseClient.from('uld_inventario').update({ updated_ontime: now })
@@ -1670,7 +1728,7 @@
                         await refrescarPantalla();
                         showCustomAlert("Inventario Actualizado", "Los registros en rampa han sido validados exitosamente.", "success");
                     } catch(e) { showCustomAlert("Error", "No se pudo actualizar el inventario.", "error"); }
-                    finally { btn.disabled = false; btn.innerText = "💾 Guardar Inventario Físico"; }
+                    finally { btn.disabled = false; btn.innerText = "GUARDAR INVENTARIO FÍSICO"; }
                 }
             );
         }
@@ -1735,7 +1793,7 @@
                 document.getElementById('pivotTotalUlds').innerText = pivotGlobalData.length;
 
                 const trHead = document.getElementById('pivotHeadRow'); 
-                trHead.innerHTML = '<th class="col-station">STATION</th><th>LAST UPDATE</th>';
+                trHead.innerHTML = '<th class="col-station">STATION</th><th>LAST UPDATE (ZULU)</th>';
                 sortedTypes.forEach(t => { trHead.innerHTML += `<th>${t}</th>`; }); 
                 trHead.innerHTML += '<th class="col-total">TOTAL PALLETS</th>';
 
@@ -1752,10 +1810,12 @@
                     let dateStr = "N/A";
                     if(dataSt.lastUpdate) { 
                         const d = dataSt.lastUpdate; 
-                        dateStr = `${d.getUTCMonth()+1}/${d.getUTCDate()}/${d.getUTCFullYear()}`; 
+                        let hr = String(d.getUTCHours()).padStart(2,'0'); 
+                        let min = String(d.getUTCMinutes()).padStart(2,'0');
+                        dateStr = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)} ${hr}:${min} Z`; 
                     }
 
-                    let rowHtml = `<tr><td class="col-station">${station}</td><td>${dateStr}</td>`;
+                    let rowHtml = `<tr><td class="col-station">${station}</td><td style="color:#1D4ED8; font-weight:800;">${dateStr}</td>`;
                     
                     sortedTypes.forEach(t => { 
                         const valFisicos = dataSt.types[t] || 0; 
@@ -1766,15 +1826,15 @@
                             
                             let esCerrado = contenedoresCerradosPivot.some(prefix => t.startsWith(prefix));
                             if(esCerrado) {
-                                netHtml = `<div class="net-badge net-ok">✅ Completo</div>`;
+                                netHtml = `<div class="net-badge net-ok">[ OK ] Completo</div>`;
                             } else {
                                 const balance = redesBodega - valFisicos;
                                 if (balance === 0) {
-                                    netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
+                                    netHtml = `<div class="net-badge net-ok">[ OK ] Nets</div>`;
                                 } else if (balance < 0) {
-                                    netHtml = `<div class="net-badge net-danger">⚠️ Faltan ${Math.abs(balance)}</div>`;
+                                    netHtml = `<div class="net-badge net-danger">[ ALERTA ] Faltan ${Math.abs(balance)}</div>`;
                                 } else {
-                                    netHtml = `<div class="net-badge net-warn">🟠 Sobran ${balance}</div>`;
+                                    netHtml = `<div class="net-badge net-warn">[ AVISO ] Sobran ${balance}</div>`;
                                 }
                             }
                         }
@@ -1844,13 +1904,16 @@
         }
 
         function construirCSV(arrayDeUlds) {
-            let csv = "\uFEFFULD Number,ULD Status,Damage Reason,Location,Updated On,Use Status,Opp Status,ULD Type,Owner,Received On,Updated OnTime,Validation ULD\n";
+            let csv = "\uFEFFULD Number,ULD Status,Damage Reason,Location,Updated On,Use Status,Opp Status,ULD Type,Owner,Received On,Updated OnTime (ZULU),Validation ULD\n";
             arrayDeUlds.forEach(u => {
                 let rxDate = "", updStr = "", updTimeStr = "";
                 if(u.received_on) { const [y,m,d] = u.received_on.split('-'); rxDate = `${m}/${d}/${y.slice(-2)}`; }
                 if(u.updated_ontime) {
-                    const d = new Date(u.updated_ontime); updStr = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
-                    let hr = d.getUTCHours(); const ampm = hr >= 12 ? 'PM' : 'AM'; hr = hr % 12 || 12; updTimeStr = `${updStr} ${hr}:${String(d.getUTCMinutes()).padStart(2,'0')} ${ampm} UTC`;
+                    const d = new Date(u.updated_ontime); 
+                    updStr = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
+                    let hr = String(d.getUTCHours()).padStart(2,'0'); 
+                    let min = String(d.getUTCMinutes()).padStart(2,'0'); 
+                    updTimeStr = `${updStr} ${hr}:${min} Z`;
                 }
                 const damageR = u.damage_reason ? u.damage_reason.replace(/,/g, ' ') : '';
                 csv += `"${u.uld_number}","${u.uld_status || 'SERVICEABLE'}","${damageR}","${u.location}","${updStr}","${u.use_status}","${u.opp_status}","${u.uld_type}","${u.owner}","${rxDate}","${updTimeStr}","${u.validation_uld}"\n`;
