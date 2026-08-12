@@ -123,10 +123,10 @@
             gap: 8px;
             text-transform: uppercase;
         }
-        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
+        .btn-logout:hover { background: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
-           TOP HEADER 
+           TOP HEADER DINÁMICO Y MODERNO
         ======================================== */
         .main-wrapper {
             flex: 1;
@@ -136,12 +136,13 @@
         }
 
         .top-header {
-            background: white;
+            background: linear-gradient(to right, #ffffff, #F8FAFC);
             height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
             border-bottom: 1px solid #E2E8F0;
             z-index: 900;
         }
@@ -156,26 +157,27 @@
         }
 
         .header-title-group { display: flex; align-items: center; gap: 15px; }
-        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; }
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px;}
         
-        /* ZULU CLOCK LIVE */
+        /* ZULU CLOCK LIVE - ESTILO CÁPSULA LED */
         .live-zulu-clock {
-            background: #EFF6FF;
-            color: #1D4ED8;
-            border: 1px solid #BFDBFE;
-            padding: 6px 12px;
-            border-radius: 6px;
+            background: var(--amerijet-blue-dark);
+            color: #38BDF8;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
             font-family: monospace;
-            font-weight: 900;
-            font-size: 14px;
-            letter-spacing: 1px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap; /* Evita que se rompa en 2 líneas */
         }
 
-        .station-module { display: flex; align-items: center; gap: 8px; background: #F1F5F9; padding: 8px 15px; border-radius: 8px; border: 1px solid #E2E8F0; }
-        .station-module span { font-size: 11px; color: #64748B; font-weight: 700; text-transform: uppercase; }
-        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
-        .station-static { color: #10B981; font-weight: 800; font-size: 14px; text-transform: uppercase; }
+        .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; }
+        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
+        .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
         /* CONTENIDO PRINCIPAL */
         .main-content {
@@ -184,7 +186,6 @@
             padding-bottom: 50px;
         }
 
-        /* DISEÑO DE UNA SOLA COLUMNA LIMPIA */
         .dashboard-container { 
             display: flex; 
             flex-direction: column; 
@@ -326,14 +327,10 @@
         .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px;}
         .btn-close-flight:hover { background: #FFF1F2; transform: translateY(-1px); }
 
-        /* MODALES */
+        /* MODALES ALERTA CON ICONOS RESTAURADOS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
-        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; }
         .modal-generic { text-align: center; max-width: 350px; }
-        
-        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
-        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
-        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
 
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
@@ -347,7 +344,10 @@
             .sidebar-overlay.active { display: block; }
             .menu-toggle { display: block; }
             .header-title { display: none; } 
-            .live-zulu-clock { font-size: 12px; padding: 5px 10px; }
+            
+            .top-header { padding: 0 15px; }
+            .live-zulu-clock { font-size: 11px; padding: 4px 10px; }
+            .station-selector { font-size: 12px; }
         }
     </style>
 </head>
@@ -392,7 +392,7 @@
                 <div class="header-title">Tablero de Operaciones</div>
             </div>
             
-            <div style="display:flex; align-items:center; gap: 15px;">
+            <div style="display:flex; align-items:center; gap: 10px;">
                 <!-- LIVE ZULU CLOCK -->
                 <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
                 
@@ -449,10 +449,10 @@
             <h3 style="font-weight: 800; margin-bottom: 20px; color: var(--amerijet-blue); text-transform: uppercase;">Modificar Datos Clave</h3>
             <form id="formEditVuelo">
                 <input type="hidden" id="edit_id">
-                <div class="form-group" style="margin-bottom:12px;"><label>Número de Vuelo</label><input type="text" id="edit_vuelo_id" required></div>
-                <div class="form-group" style="margin-bottom:12px;"><label>Matrícula (Tail)</label><select id="edit_matricula_avion" required></select></div>
-                <div class="form-group" style="margin-bottom:12px;"><label>Ruta (Origen - Destino)</label><input type="text" id="edit_ruta" required></div>
-                <div class="form-group" style="margin-bottom:15px;"><label>Fecha Op.</label><input type="date" id="edit_fecha" required></div>
+                <div class="form-group" style="margin-bottom:12px; text-align:left;"><label>Número de Vuelo</label><input type="text" id="edit_vuelo_id" required></div>
+                <div class="form-group" style="margin-bottom:12px; text-align:left;"><label>Matrícula (Tail)</label><select id="edit_matricula_avion" required></select></div>
+                <div class="form-group" style="margin-bottom:12px; text-align:left;"><label>Ruta (Origen - Destino)</label><input type="text" id="edit_ruta" required></div>
+                <div class="form-group" style="margin-bottom:15px; text-align:left;"><label>Fecha Op.</label><input type="date" id="edit_fecha" required></div>
                 
                 <button type="submit" id="btnModalSave" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; text-transform:uppercase; margin-top:10px;">Guardar Cambios</button>
                 <button type="button" class="btn-modal-cancel" onclick="cerrarModal()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform:uppercase;">Cancelar</button>
@@ -460,10 +460,10 @@
         </div>
     </div>
 
-    <!-- MODALES UNIVERSALES -->
+    <!-- MODALES UNIVERSALES CON EMOJIS RESTAURADOS -->
     <div class="modal-overlay" id="customAlertModal">
         <div class="modal-content modal-generic">
-            <div id="alertIcon" class="badge-modal-icon">[ INFO ]</div>
+            <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1;">ℹ️</div>
             <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform:uppercase; transition: 0.2s;">Aceptar</button>
@@ -472,7 +472,7 @@
 
     <div class="modal-overlay" id="customConfirmModal">
         <div class="modal-content modal-generic">
-            <div id="confirmIcon" class="badge-modal-icon error">[ ALERTA ]</div>
+            <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1;">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
@@ -484,7 +484,7 @@
 
     <div class="modal-overlay" id="inactivityModal">
         <div class="modal-content modal-generic">
-            <div class="badge-modal-icon error">[ PAUSA ]</div>
+            <div style="font-size: 50px; margin-bottom: 10px; line-height: 1;">⏳</div>
             <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform:uppercase;">Sesión en Pausa</h3>
             <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por motivos de seguridad, la sesión se cerrará por inactividad. ¿Confirmar presencia?</p>
             <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform:uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
@@ -496,7 +496,7 @@
         const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario";
+        let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario"; let todasLasEstacionesBD = [];
 
         // ==========================================
         // RELOJ ZULU (UTC) GLOBAL
@@ -507,7 +507,7 @@
             const min = String(now.getUTCMinutes()).padStart(2, '0');
             const sec = String(now.getUTCSeconds()).padStart(2, '0');
             const clockEl = document.getElementById('liveZuluClock');
-            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} ZULU (UTC)`;
+            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} Z`;
         }
         setInterval(updateZuluClock, 1000);
         updateZuluClock();
@@ -529,13 +529,13 @@
             }
         }
 
+        // Se restauran los iconos tipo Emoji tal como solicitó el usuario para las Alertas
         function showCustomAlert(title, message, type = 'info') {
             const modal = document.getElementById('customAlertModal'); const icon = document.getElementById('alertIcon');
             const titleEl = document.getElementById('alertTitle'); const btn = document.getElementById('alertBtn');
             titleEl.innerText = title; document.getElementById('alertMessage').innerHTML = message;
             
-            icon.innerText = type === 'success' ? '[ OK ]' : type === 'error' ? '[ ERROR ]' : '[ INFO ]';
-            icon.className = `badge-modal-icon ${type}`;
+            icon.innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             
             titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
             btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
@@ -566,6 +566,10 @@
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'index.html'; return; }
 
+            // Lógica de consulta universal de estaciones para que siempre aparezcan las nuevas
+            const { data: catEst } = await supabaseClient.from('estaciones').select('codigo').order('codigo');
+            if(catEst) { todasLasEstacionesBD = catEst.map(e => e.codigo); }
+
             try {
                 const { data: perfil, error } = await supabaseClient.from('perfiles').select('estacion_base, rol, nombre').eq('id', session.user.id).single();
                 if (error) throw error;
@@ -592,12 +596,24 @@
             const wrapperSelector = document.getElementById('divStationSelector'); const wrapperStatic = document.getElementById('divStationStatic');
             const selector = document.getElementById('estacionSelector'); const lblStatic = document.getElementById('lblUserEstacion');
             let savedStation = localStorage.getItem('cargo_current_station');
+            
             if (misEstaciones.length > 1 || miRol === 'admin' || miRol === 'supervisor') {
                 wrapperSelector.style.display = 'flex'; wrapperStatic.style.display = 'none'; selector.innerHTML = '';
-                if(miRol === 'admin' || miRol === 'supervisor') { selector.innerHTML += `<option value="ALL">MUNDO (TODAS)</option>`; }
-                misEstaciones.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
-                if (savedStation && (misEstaciones.includes(savedStation) || savedStation === 'ALL')) { estacionActual = savedStation; } 
-                else { estacionActual = misEstaciones.includes('SAL') ? 'SAL' : misEstaciones[0]; localStorage.setItem('cargo_current_station', estacionActual); }
+                
+                if(miRol === 'admin' || miRol === 'supervisor') { 
+                    selector.innerHTML += `<option value="ALL">MUNDO (TODAS)</option>`; 
+                    todasLasEstacionesBD.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+                } else {
+                    misEstaciones.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+                }
+
+                if (savedStation && (misEstaciones.includes(savedStation) || todasLasEstacionesBD.includes(savedStation) || savedStation === 'ALL')) { 
+                    estacionActual = savedStation; 
+                } 
+                else { 
+                    estacionActual = misEstaciones.includes('SAL') ? 'SAL' : misEstaciones[0]; localStorage.setItem('cargo_current_station', estacionActual); 
+                }
+                
                 selector.value = estacionActual;
                 selector.addEventListener('change', (e) => { estacionActual = e.target.value; localStorage.setItem('cargo_current_station', estacionActual); actualizarRutaFormulario(); cargarVuelosActivos(); });
             } else {
@@ -636,7 +652,7 @@
                 actualizarRutaFormulario(); 
                 cargarVuelosActivos(); 
                 showCustomAlert("Proceso Completado", "La tarjeta de operación se inicializó con éxito.", "success");
-                toggleCrearVuelo();
+                toggleCrearVuelo(); 
             } catch (err) { showCustomAlert("Error en Base de Datos", err.message, "error"); } finally { btn.disabled = false; btn.innerText = "Inicializar Tarjeta"; }
         });
 
@@ -667,7 +683,7 @@
                 label.innerText = "(00:00 Z)";
                 return;
             }
-            const d = new Date(input.value); // Local parser
+            const d = new Date(input.value); 
             let hr = d.getUTCHours();
             let mn = String(d.getUTCMinutes()).padStart(2, '0');
             label.innerText = `(${String(hr).padStart(2,'0')}:${mn} Z)`;
