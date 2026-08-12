@@ -58,7 +58,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
-        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase;}
 
         .sidebar-user {
             padding: 20px;
@@ -68,7 +68,7 @@
             background: rgba(255,255,255,0.02);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #051529; }
         .user-info-text { display: flex; flex-direction: column; }
         .user-info-text strong { font-size: 14px; color: white; }
         .badge-rol { background: rgba(252, 211, 77, 0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #FCD34D; margin-top: 4px; width: fit-content;}
@@ -89,10 +89,12 @@
             font-weight: 600;
             border-radius: 8px;
             transition: 0.2s;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
@@ -101,6 +103,8 @@
             padding: 20px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
+        
+        .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 
         .btn-logout { 
             background-color: transparent; 
@@ -117,6 +121,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-transform: uppercase;
         }
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
@@ -150,7 +155,7 @@
             color: var(--amerijet-blue);
         }
 
-        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px;}
+        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
 
         .main-content {
             flex: 1;
@@ -161,7 +166,7 @@
         .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 30px; max-width: 1600px; margin: 0 auto; }
         
         .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); height: fit-content; position: sticky; top: 20px; display: flex; flex-direction: column; max-height: calc(100vh - 100px); }
-        .panel-form h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
+        .panel-form h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-transform: uppercase;}
         
         .form-group { display: flex; flex-direction: column; margin-bottom: 16px; flex-shrink: 0;}
         .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -174,7 +179,7 @@
         .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
         #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; }
 
-        .chk-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #F1F5F9; padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; transition: 0.2s; }
+        .chk-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #F1F5F9; padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .chk-label:hover { background: #E2E8F0; }
         .chk-label input { margin: 0; padding: 0; cursor: pointer; }
 
@@ -189,7 +194,7 @@
         .user-card strong { color: var(--amerijet-blue); font-size: 15px; text-transform: uppercase;}
         
         .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .btn-action-panel { padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid transparent; text-align: center; transition: 0.2s; background: white;}
+        .btn-action-panel { padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; border: 1px solid transparent; text-align: center; transition: 0.2s; background: white; text-transform: uppercase;}
         .btn-edit { border-color: #BFDBFE; color: #1D4ED8; }
         .btn-edit:hover { background: #EFF6FF; }
         .btn-delete { border-color: #FECDD3; color: #E11D48; }
@@ -197,38 +202,42 @@
         .btn-pwd { border-color: #FDE68A; color: #D97706; grid-column: 1 / -1; margin-top: 2px; }
         .btn-pwd:hover { background: #FFFBEB; }
 
-        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; width: fit-content; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; width: fit-content; letter-spacing: 0.5px; }
         .badge-admin { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
         .badge-sup { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
         .badge-user { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
         
-        .user-email { font-size: 11px; color: #64748B; }
-        .estaciones-list { font-size: 11px; color: #334155; font-weight: 600; padding: 6px 0; border-top: 1px dashed #E2E8F0; margin-top: 5px;}
+        .user-email { font-size: 11px; color: #64748B; font-weight: 600; }
+        .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding: 6px 0; border-top: 1px dashed #E2E8F0; margin-top: 5px; text-transform: uppercase;}
 
         /* TARJETAS DE ESTACIONES */
         .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .estacion-info { display: flex; flex-direction: column; flex-grow: 1;}
-        .estacion-info strong { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); }
+        .estacion-info strong { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase; }
         .estacion-info span { font-size: 11px; color: #64748B; font-weight: 600; margin-top: 2px;}
-        .estacion-info .uld-count { font-size: 11px; font-weight: 800; color: #10B981; margin-top: 6px; display: inline-block; background: #ECFDF5; padding: 2px 6px; border-radius: 4px; border: 1px solid #A7F3D0; width: fit-content;}
+        .estacion-info .uld-count { font-size: 11px; font-weight: 800; color: #10B981; margin-top: 6px; display: inline-block; background: #ECFDF5; padding: 2px 6px; border-radius: 4px; border: 1px solid #A7F3D0; width: fit-content; text-transform: uppercase;}
         
         .estacion-actions { display: flex; gap: 8px;}
-        .btn-icon-config { background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; font-size: 12px; padding: 6px 12px; border-radius: 6px; font-weight: 700; transition: 0.2s; }
+        .btn-icon-config { background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; font-size: 11px; padding: 6px 12px; border-radius: 6px; font-weight: 800; transition: 0.2s; text-transform: uppercase; }
         .btn-icon-config:hover { background: #E2E8F0; color: var(--amerijet-blue); }
-        .btn-icon-delete { background: white; border: 1px solid #FECDD3; color: #E11D48; cursor: pointer; font-size: 12px; padding: 6px 12px; border-radius: 6px; transition: 0.2s; font-weight: 700;}
+        .btn-icon-delete { background: white; border: 1px solid #FECDD3; color: #E11D48; cursor: pointer; font-size: 11px; padding: 6px 12px; border-radius: 6px; transition: 0.2s; font-weight: 800; text-transform: uppercase;}
         .btn-icon-delete:hover { background: #FFF1F2; }
 
         /* MODALES ESTRUCTURA */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); padding: 15px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .modal-generic { text-align: center; max-width: 350px; }
+        
+        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
+        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
+        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
         
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
-        /* MODO CELULAR / RESPONSIVO */
+        /* MODO CELULAR / RESPONSIVE */
         @media (max-width: 1100px) { 
             .dashboard-container { grid-template-columns: 1fr; padding: 15px; gap: 20px; }
             .panel-form { position: static !important; max-height: none; } 
@@ -256,7 +265,7 @@
         </div>
         
         <div class="sidebar-user">
-            <div class="user-avatar">👤</div>
+            <div class="user-avatar">U</div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
                 <span id="lblUserRol" class="badge-rol">...</span>
@@ -264,14 +273,15 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link">✈️ Centro de Vuelos</a>
-            <a href="uld_gestion.html" class="nav-link">📦 Inventario ULD</a>
-            <a href="admin_panel.html" class="nav-link active">👑 Panel de Control</a>
-            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos">🗄️ Historial de Vuelos</a>
+            <a href="dashboard.html" class="nav-link">Centro de Vuelos</a>
+            <a href="uld_gestion.html" class="nav-link">Inventario ULD</a>
+            <a href="admin_panel.html" class="nav-link active">Panel de Control</a>
+            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos">Historial de Vuelos</a>
         </nav>
 
         <div class="sidebar-footer">
-            <button class="btn-logout" id="btnLogout">🚪 Cerrar Sesión</button>
+            <div class="version-badge">VERSION 0.0.1</div>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
         </div>
     </aside>
 
@@ -280,8 +290,10 @@
         
         <!-- TOP HEADER -->
         <header class="top-header">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <div class="header-title">Panel de Administración Global</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="header-title">Panel de Administración Global</div>
+            </div>
         </header>
 
         <!-- DASHBOARD CONTENT -->
@@ -290,7 +302,7 @@
                 
                 <!-- COLUMNA 1: REGISTRAR PERSONAL -->
                 <div class="panel-form">
-                    <h2>➕ Registrar Personal</h2>
+                    <h2>Registrar Personal</h2>
                     <form id="formCrearUser" style="display: flex; flex-direction: column; flex: 1;">
                         <div class="form-group">
                             <label>Usuario de Acceso</label>
@@ -308,6 +320,7 @@
                             <label>Rol en el Sistema</label>
                             <select id="reg_rol" required>
                                 <option value="user">Operador Normal (Solo sus estaciones)</option>
+                                <option value="supervisor_local">Supervisor Local (Edita ULDs, solo sus estaciones)</option>
                                 <option value="supervisor">Supervisor Global (Ve todo, SIN panel admin)</option>
                                 <option value="admin">Administrador (Ve todo + Panel Admin)</option>
                             </select>
@@ -323,7 +336,7 @@
 
                 <!-- COLUMNA 2: GESTIÓN DE PERSONAL -->
                 <div class="panel-form">
-                    <h2>👥 Personal en Base de Datos</h2>
+                    <h2>Personal Registrado</h2>
                     <!-- ESTE DIV TIENE SCROLL INTERNO -->
                     <div class="user-grid" id="usersGrid">
                         <p style="font-size: 12px; color: #64748B;">Cargando personal...</p>
@@ -332,7 +345,7 @@
 
                 <!-- COLUMNA 3: GESTIÓN DE ESTACIONES Y LÍMITES -->
                 <div class="panel-form">
-                    <h2>🏢 Gestión de Estaciones</h2>
+                    <h2>Gestión de Estaciones</h2>
                     <form id="formCrearEstacion" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #E2E8F0; flex-shrink: 0;">
                         <div class="form-group">
                             <label>Código IATA (3 Letras)</label>
@@ -358,7 +371,7 @@
     <!-- MODAL EDICIÓN USUARIO -->
     <div class="modal-overlay" id="editUserModal">
         <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 20px; color: var(--amerijet-blue);">✏️ Editar Perfil de Usuario</h3>
+            <h3 style="font-weight: 800; margin-bottom: 20px; color: var(--amerijet-blue); text-transform: uppercase;">Editar Perfil</h3>
             <form id="formEditUser">
                 <input type="hidden" id="edit_user_id">
                 <div class="form-group">
@@ -369,6 +382,7 @@
                     <label>Rol en el Sistema</label>
                     <select id="edit_rol" required>
                         <option value="user">Operador Normal</option>
+                        <option value="supervisor_local">Supervisor Local</option>
                         <option value="supervisor">Supervisor Global</option>
                         <option value="admin">Administrador Global</option>
                     </select>
@@ -377,8 +391,8 @@
                     <label>Estaciones Autorizadas</label>
                     <div class="checkbox-group" id="estacionesContainerEdit" style="max-height: 200px;"></div>
                 </div>
-                <button type="submit" id="btnModalSaveUser" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; margin-top: 10px;">Guardar Cambios</button>
-                <button type="button" onclick="cerrarModalUser()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:700;">Cancelar</button>
+                <button type="submit" id="btnModalSaveUser" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Cambios</button>
+                <button type="button" onclick="cerrarModalUser()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
             </form>
         </div>
     </div>
@@ -386,7 +400,7 @@
     <!-- MODAL RESET CONTRASEÑA -->
     <div class="modal-overlay" id="passwordUserModal">
         <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 10px; color: #D97706;">🔑 Restablecer Contraseña</h3>
+            <h3 style="font-weight: 800; margin-bottom: 10px; color: #D97706; text-transform: uppercase;">Restablecer Contraseña</h3>
             <p id="lblPwdUserTarget" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;"></p>
             <form id="formResetPassword">
                 <input type="hidden" id="pwd_user_id">
@@ -395,8 +409,8 @@
                     <label>Nueva Contraseña Temporal</label>
                     <input type="password" id="pwd_nueva_password" placeholder="Mínimo 6 caracteres" required minlength="6">
                 </div>
-                <button type="submit" id="btnModalSavePwd" style="background:#D97706; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; margin-top: 10px;">Forzar Nueva Contraseña</button>
-                <button type="button" onclick="cerrarModalPwd()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:700;">Cancelar</button>
+                <button type="submit" id="btnModalSavePwd" style="background:#D97706; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Forzar Nueva Contraseña</button>
+                <button type="button" onclick="cerrarModalPwd()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
             </form>
         </div>
     </div>
@@ -404,7 +418,7 @@
     <!-- NUEVO: MODAL CONFIGURACIÓN STOCK ESTACIÓN -->
     <div class="modal-overlay" id="modalConfigStock">
         <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 5px; color: var(--amerijet-blue);">⚙️ Límite de Stock Permitido</h3>
+            <h3 style="font-weight: 800; margin-bottom: 5px; color: var(--amerijet-blue); text-transform: uppercase;">Límite de Stock Permitido</h3>
             <p style="font-size: 12px; color: #64748B; margin-bottom: 20px; line-height: 1.4;">Estación: <strong id="lblConfigEstacion" style="color:var(--amerijet-blue); font-size:14px;">SAL</strong><br>Define la cantidad máxima de ULDs que esta estación debe tener en inventario.</p>
             
             <form id="formConfigStock">
@@ -431,8 +445,8 @@
                     </div>
                 </div>
 
-                <button type="submit" id="btnSaveConfig" style="background:#10B981; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; margin-top: 10px; font-size:13px;">💾 Guardar Configuración</button>
-                <button type="button" onclick="cerrarModalConfig()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:700; font-size:13px;">Cancelar</button>
+                <button type="submit" id="btnSaveConfig" style="background:#10B981; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; font-size:12px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Configuración</button>
+                <button type="button" onclick="cerrarModalConfig()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; font-size:12px; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
             </form>
         </div>
     </div>
@@ -440,31 +454,31 @@
     <!-- MODALES UNIVERSALES -->
     <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
-            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
-            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <div id="alertIcon" class="badge-modal-icon">[ INFO ]</div>
+            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
-            <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+            <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform: uppercase; transition: 0.2s;">Aceptar</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
         <div class="modal-content modal-generic">
-            <div id="confirmIcon" style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
-            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Confirmar</h3>
+            <div id="confirmIcon" class="badge-modal-icon error">[ ALERTA ]</div>
+            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
-                <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Confirmar</button>
-                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s;">Cancelar</button>
+                <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Confirmar</button>
+                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Cancelar</button>
             </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="inactivityModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
-            <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
-            <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 22px;">Sesión en Pausa</h3>
-            <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por tu seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
-            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Sí, mantener sesión abierta</button>
+            <div class="badge-modal-icon error">[ PAUSA ]</div>
+            <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform: uppercase;">Sesión en Pausa</h3>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por motivos de seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
+            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
         </div>
     </div>
 
@@ -493,9 +507,11 @@
             titleEl.innerText = title;
             document.getElementById('alertMessage').innerHTML = message;
             
-            if(type === 'success') { icon.innerText = '✅'; titleEl.style.color = '#10B981'; btn.style.background = '#10B981'; } 
-            else if(type === 'error') { icon.innerText = '❌'; titleEl.style.color = 'var(--amerijet-red)'; btn.style.background = 'var(--amerijet-red)'; } 
-            else { icon.innerText = 'ℹ️'; titleEl.style.color = 'var(--amerijet-blue)'; btn.style.background = 'var(--amerijet-blue)'; }
+            icon.innerText = type === 'success' ? '[ OK ]' : type === 'error' ? '[ ERROR ]' : '[ INFO ]';
+            icon.className = `badge-modal-icon ${type}`;
+            
+            titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
             
             btn.onclick = () => { closeCustomAlert(); if(callback) callback(); };
             modal.style.display = 'flex';
@@ -591,11 +607,11 @@
                             <div class="estacion-info">
                                 <strong>${est.codigo}</strong>
                                 <span>${est.nombre}</span>
-                                <span class="uld-count">📦 ${totalUlds} ULDs en Rampa</span>
+                                <span class="uld-count">STOCK: ${totalUlds} ULDs en Rampa</span>
                             </div>
                             <div class="estacion-actions">
-                                <button class="btn-icon-config" onclick="abrirModalConfigStock('${est.codigo}', '${strStock}')" title="Configurar Stock Permitido">⚙️ Stock</button>
-                                <button class="btn-icon-delete" onclick="eliminarEstacion('${est.codigo}')" title="Borrar Estación">✖</button>
+                                <button class="btn-icon-config" onclick="abrirModalConfigStock('${est.codigo}', '${strStock}')" title="Configurar Stock Permitido">CONFIG. STOCK</button>
+                                <button class="btn-icon-delete" onclick="eliminarEstacion('${est.codigo}')" title="Borrar Estación">ELIMINAR</button>
                             </div>
                         </div>`;
                 });
@@ -646,7 +662,7 @@
             } catch(err) {
                 showCustomAlert("Error", err.message, "error");
             } finally {
-                btn.disabled = false; btn.innerText = "💾 Guardar Configuración";
+                btn.disabled = false; btn.innerText = "Guardar Configuración";
             }
         });
 
@@ -693,9 +709,10 @@
                 usuarios.forEach(u => {
                     let rolBadge = '';
                     const r = String(u.rol).toLowerCase();
-                    if(r === 'admin') rolBadge = '<span class="badge badge-admin">👑 ADMIN</span>';
-                    else if(r === 'supervisor') rolBadge = '<span class="badge badge-sup">👁️ SUPERVISOR</span>';
-                    else rolBadge = '<span class="badge badge-user">👤 OPERADOR</span>';
+                    if(r === 'admin') rolBadge = '<span class="badge badge-admin">ADMIN</span>';
+                    else if(r === 'supervisor') rolBadge = '<span class="badge badge-sup">SUP. GLOBAL</span>';
+                    else if(r === 'supervisor_local') rolBadge = '<span class="badge" style="background:#E0E7FF; color:#4338CA; border: 1px solid #C7D2FE;">SUP. LOCAL</span>';
+                    else rolBadge = '<span class="badge badge-user">OPERADOR</span>';
                     
                     const estacionesList = u.estacion_base || "Ninguna";
                     
@@ -705,11 +722,11 @@
                         <strong>${u.nombre}</strong>
                         <div>${rolBadge}</div>
                         <div class="user-email">Login: ${u.email.split('@')[0]}</div>
-                        <div class="estaciones-list">📍 Accesos: ${estacionesList}</div>
+                        <div class="estaciones-list">ACCESOS: ${estacionesList}</div>
                         <div class="card-actions">
-                            <button class="btn-action-panel btn-edit" onclick="abrirModalEditUser('${u.id}', '${u.nombre}', '${u.rol}', '${estacionesList}')">✏️ Editar</button>
-                            <button class="btn-action-panel btn-delete" onclick="eliminarPerfil('${u.id}', '${u.nombre}', '${u.email}')">🗑️ Borrar</button>
-                            <button class="btn-action-panel btn-pwd" onclick="abrirModalPwd('${u.id}', '${u.nombre}', '${u.email}')">🔑 Contraseña</button>
+                            <button class="btn-action-panel btn-edit" onclick="abrirModalEditUser('${u.id}', '${u.nombre}', '${u.rol}', '${estacionesList}')">EDITAR</button>
+                            <button class="btn-action-panel btn-delete" onclick="eliminarPerfil('${u.id}', '${u.nombre}', '${u.email}')">ELIMINAR</button>
+                            <button class="btn-action-panel btn-pwd" onclick="abrirModalPwd('${u.id}', '${u.nombre}', '${u.email}')">ACCESO</button>
                         </div>`;
                     grid.appendChild(card);
                 });
