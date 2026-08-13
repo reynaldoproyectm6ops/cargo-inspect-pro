@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Panel de Administración | Cargo Inspect Pro</title>
     <link rel="icon" type="image/png" href="logo_3.png">
     
@@ -11,7 +11,7 @@
     <style>
         :root { 
             --amerijet-blue: #0A2540; 
-            --amerijet-blue-dark: #051529;
+            --amerijet-blue-dark: #0F172A;
             --amerijet-red: #E11D48; 
             --bg-color: #F8FAFC; 
             --text-main: #1E293B;
@@ -22,7 +22,7 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         
-        /* SCROLLBAR PERSONALIZADO TIPO APP NATIVA */
+        /* SCROLLBAR NATIVO */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
@@ -50,134 +50,62 @@
             box-shadow: 4px 0 15px rgba(0,0,0,0.1);
         }
 
-        .sidebar-header {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
         .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase;}
 
-        .sidebar-user {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255,255,255,0.02);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+        .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #051529; }
         .user-info-text { display: flex; flex-direction: column; }
         .user-info-text strong { font-size: 14px; color: white; }
-        .badge-rol { background: rgba(252, 211, 77, 0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #FCD34D; margin-top: 4px; width: fit-content;}
+        .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
 
-        .sidebar-nav {
-            flex: 1;
-            padding: 20px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            overflow-y: auto;
-        }
-
-        .nav-link {
-            padding: 12px 15px;
-            text-decoration: none;
-            color: #94A3B8;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: 0.2s;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 13px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
         .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
 
-        .sidebar-footer {
-            padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 
         .btn-logout { 
-            background-color: transparent; 
-            color: #F87171; 
-            border: 1px solid rgba(248,113,113,0.3); 
-            padding: 12px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            transition: 0.2s; 
-            font-size: 13px; 
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-transform: uppercase;
+            background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; 
+            cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; 
+            justify-content: center; gap: 8px; text-transform: uppercase;
         }
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
-           TOP HEADER Y MAIN CONTENT
+           TOP HEADER (IDÉNTICO A ULD_GESTION)
         ========================================= */
-        .main-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        
+        .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        
+        .header-title-group { display: flex; align-items: center; gap: 15px; }
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px;}
+        
+        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; }
+        .live-zulu-clock { background: var(--amerijet-blue-dark); color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px; font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
 
-        .top-header {
-            background: white;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 25px;
-            border-bottom: 1px solid #E2E8F0;
-            z-index: 900;
-        }
+        /* CONTENIDO PRINCIPAL */
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; }
 
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--amerijet-blue);
-        }
-
-        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
-
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 120px; /* Padding extra mobile */
-        }
-
-        .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 30px; max-width: 1600px; margin: 0 auto; }
+        .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 25px; max-width: 1600px; margin: 0 auto; }
         
         .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); height: fit-content; position: sticky; top: 20px; display: flex; flex-direction: column; max-height: calc(100vh - 100px); }
         .panel-form h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-transform: uppercase;}
         
         .form-group { display: flex; flex-direction: column; margin-bottom: 16px; flex-shrink: 0;}
-        .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between;}
+        .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center;}
         .form-group input, .form-group select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background-color: #F8FAFC; color: var(--text-main); font-weight: 600;}
-        .form-group input:focus, .form-group select:focus { border-color: #3B82F6; background-color: white; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--amerijet-blue); background-color: white; outline: none; }
         
-        /* SCROLLS INTERNOS APLICADOS AQUÍ */
+        /* SCROLLS INTERNOS */
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px; }
-        
         .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
-        #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; }
+        #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
 
         .chk-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #F1F5F9; padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .chk-label:hover { background: #E2E8F0; }
@@ -186,11 +114,12 @@
         .btn-select-all { background: transparent; border: 1px solid #CBD5E1; color: var(--amerijet-blue); font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
         .btn-select-all:hover { background: #E2E8F0; }
 
-        .btn-crear { background: #10B981; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 13px; text-transform: uppercase; transition: 0.2s; margin-top: 10px; letter-spacing: 0.5px; flex-shrink: 0;}
-        .btn-crear:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+        /* BOTONES CORPORATIVOS */
+        .btn-crear { background: var(--amerijet-blue-dark); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 13px; text-transform: uppercase; transition: 0.2s; margin-top: 10px; letter-spacing: 0.5px; flex-shrink: 0;}
+        .btn-crear:hover { background: #1E293B; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
-        .btn-crear-azul { background: #2563EB; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
-        .btn-crear-azul:hover { background: #1D4ED8; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .btn-crear-azul { background: var(--amerijet-blue); }
+        .btn-crear-azul:hover { background: #1E293B; }
         
         /* TARJETAS DE USUARIOS Y ESTACIONES */
         .user-card { background: white; border: 1px solid #E2E8F0; padding: 18px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
@@ -200,23 +129,23 @@
         
         /* SVG BUTTONS CORPORATIVOS (32x32px) */
         .btn-action-panel { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; background: white; flex-shrink: 0; }
-        .btn-edit { border-color: #BFDBFE; color: #1D4ED8; background: #EFF6FF; }
-        .btn-edit:hover { background: #DBEAFE; }
+        .btn-edit { border-color: #CBD5E1; color: var(--amerijet-blue); background: #F1F5F9; }
+        .btn-edit:hover { background: #E2E8F0; }
         .btn-delete { border-color: #FECDD3; color: #E11D48; background: #FFF1F2;}
         .btn-delete:hover { background: #FFE4E6; }
         .btn-pwd { border-color: #FDE68A; color: #D97706; background: #FFFBEB;}
         .btn-pwd:hover { background: #FEF3C7; }
 
         .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; width: fit-content; letter-spacing: 0.5px; }
-        .badge-admin { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+        .badge-admin { background: #F1F5F9; color: var(--amerijet-blue-dark); border: 1px solid #CBD5E1; }
         .badge-sup { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
-        .badge-sup-local { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; } /* Nuevo Rol CSS */
+        .badge-sup-local { background: #E0F2FE; color: #1E40AF; border: 1px solid #BFDBFE; } 
         .badge-user { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
         
         .user-email { font-size: 11px; color: #64748B; font-weight: 600; }
         .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding: 6px 0; border-top: 1px dashed #E2E8F0; margin-top: 5px; text-transform: uppercase;}
 
-        .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
+        .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .estacion-info { display: flex; flex-direction: column; flex-grow: 1;}
         .estacion-info strong { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase; }
         .estacion-info span { font-size: 11px; color: #64748B; font-weight: 600; margin-top: 2px;}
@@ -225,18 +154,22 @@
         .btn-icon-config { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; border-radius: 6px; transition: 0.2s; flex-shrink: 0; }
         .btn-icon-config:hover { background: #E2E8F0; color: var(--amerijet-blue); }
 
-        /* MODALES ESTRUCTURA CORPORATIVA (CERO EMOJIS TEXTO) */
+        /* MODALES ESTRUCTURA CORPORATIVA */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .modal-generic { text-align: center; max-width: 350px; }
-        
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* MODO CELULAR / RESPONSIVE */
-        @media (max-width: 1100px) { 
+        @media (max-width: 1024px) { 
+            .top-header { padding: 0 10px; gap: 5px;}
+            .header-title { display: none; } 
+            .menu-toggle { display: block; }
+            .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
+
             .dashboard-container { grid-template-columns: 1fr; padding: 15px; gap: 20px; }
             .panel-form { position: static !important; max-height: none; } 
             
@@ -246,8 +179,6 @@
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
-            .menu-toggle { display: block; }
-            .header-title { display: none; } 
         }
     </style>
 </head>
@@ -289,9 +220,13 @@
         
         <!-- TOP HEADER -->
         <header class="top-header">
-            <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="header-title-group">
                 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
                 <div class="header-title">Panel de Administración Global</div>
+            </div>
+            <div class="header-controls-wrapper">
+                <!-- LIVE ZULU CLOCK -->
+                <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
             </div>
         </header>
 
@@ -329,7 +264,6 @@
                                 Estaciones Autorizadas 
                                 <button type="button" class="btn-select-all" onclick="seleccionarTodas('crear')">TODAS</button>
                             </label>
-                            <!-- ESTE DIV TIENE SCROLL INTERNO -->
                             <div class="checkbox-group" id="estacionesContainerCrear"></div>
                         </div>
                         <button type="submit" class="btn-crear" id="btnCrear">Crear Personal</button>
@@ -339,7 +273,6 @@
                 <!-- COLUMNA 2: GESTIÓN DE PERSONAL -->
                 <div class="panel-form">
                     <h2>Personal Registrado</h2>
-                    <!-- ESTE DIV TIENE SCROLL INTERNO -->
                     <div class="user-grid" id="usersGrid">
                         <p style="font-size: 12px; color: #64748B;">Cargando personal...</p>
                     </div>
@@ -360,7 +293,6 @@
                         <button type="submit" class="btn-crear btn-crear-azul" id="btnCrearEstacion" style="margin-top: 5px;">Añadir Estación</button>
                     </form>
                     
-                    <!-- ESTE DIV TIENE SCROLL INTERNO -->
                     <div id="estacionesGrid">
                         <p style="font-size: 12px; color: #64748B;">Cargando estaciones...</p>
                     </div>
@@ -373,8 +305,8 @@
     <!-- MODAL EDICIÓN USUARIO -->
     <div class="modal-overlay" id="editUserModal">
         <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 20px; color: var(--amerijet-blue); text-transform: uppercase;">Editar Perfil</h3>
-            <form id="formEditUser">
+            <h3 style="font-weight: 900; margin-bottom: 20px; color: var(--amerijet-blue); text-transform: uppercase;">Editar Perfil</h3>
+            <form id="formEditUser" style="text-align: left;">
                 <input type="hidden" id="edit_user_id">
                 <div class="form-group">
                     <label>Nombre Completo</label>
@@ -390,22 +322,22 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>
+                    <label style="display:flex; justify-content:space-between; align-items:center;">
                         Estaciones Autorizadas
                         <button type="button" class="btn-select-all" onclick="seleccionarTodas('edit')">TODAS</button>
                     </label>
                     <div class="checkbox-group" id="estacionesContainerEdit" style="max-height: 200px;"></div>
                 </div>
-                <button type="submit" id="btnModalSaveUser" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Cambios</button>
-                <button type="button" onclick="cerrarModalUser()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
+                <button type="submit" id="btnModalSaveUser" style="background:var(--amerijet-blue-dark); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Cambios</button>
+                <button type="button" onclick="cerrarModalUser()" style="background:#F1F5F9; color:#334155; border:1px solid #E2E8F0; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
             </form>
         </div>
     </div>
 
     <!-- MODAL RESET CONTRASEÑA -->
     <div class="modal-overlay" id="passwordUserModal">
-        <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 10px; color: #D97706; text-transform: uppercase;">Restablecer Contraseña</h3>
+        <div class="modal-content" style="text-align: left;">
+            <h3 style="font-weight: 900; margin-bottom: 10px; color: #D97706; text-transform: uppercase;">Restablecer Contraseña</h3>
             <p id="lblPwdUserTarget" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;"></p>
             <form id="formResetPassword">
                 <input type="hidden" id="pwd_user_id">
@@ -415,15 +347,15 @@
                     <input type="password" id="pwd_nueva_password" placeholder="Mínimo 6 caracteres" required minlength="6">
                 </div>
                 <button type="submit" id="btnModalSavePwd" style="background:#D97706; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Forzar Nueva Contraseña</button>
-                <button type="button" onclick="cerrarModalPwd()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
+                <button type="button" onclick="cerrarModalPwd()" style="background:#F1F5F9; color:#334155; border:1px solid #E2E8F0; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
             </form>
         </div>
     </div>
 
-    <!-- NUEVO: MODAL CONFIGURACIÓN STOCK ESTACIÓN -->
+    <!-- MODAL CONFIGURACIÓN STOCK ESTACIÓN -->
     <div class="modal-overlay" id="modalConfigStock">
-        <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 5px; color: var(--amerijet-blue); text-transform: uppercase;">Límite de Stock Permitido</h3>
+        <div class="modal-content" style="text-align: left;">
+            <h3 style="font-weight: 900; margin-bottom: 5px; color: var(--amerijet-blue); text-transform: uppercase;">Límite de Stock Permitido</h3>
             <p style="font-size: 12px; color: #64748B; margin-bottom: 20px; line-height: 1.4;">Estación: <strong id="lblConfigEstacion" style="color:var(--amerijet-blue); font-size:14px;">SAL</strong><br>Define la cantidad máxima de ULDs que esta estación debe tener en inventario.</p>
             
             <form id="formConfigStock">
@@ -431,27 +363,27 @@
                 
                 <div class="modal-grid">
                     <div class="form-group">
-                        <label>Grupo PAG / PAJ</label>
+                        <label>PAG / PAJ</label>
                         <input type="number" id="cfg_pag" min="0" value="0">
                     </div>
                     <div class="form-group">
-                        <label>Grupo PMC / PMH</label>
+                        <label>PMC / PMH</label>
                         <input type="number" id="cfg_pmc" min="0" value="0">
                     </div>
                 </div>
                 <div class="modal-grid">
                     <div class="form-group">
-                        <label>Grupo PQA / FQA</label>
+                        <label>PQA / FQA</label>
                         <input type="number" id="cfg_pqa" min="0" value="0">
                     </div>
                     <div class="form-group">
-                        <label>Grupo AKE / AVE</label>
+                        <label>AKE / AVE</label>
                         <input type="number" id="cfg_ake" min="0" value="0">
                     </div>
                 </div>
 
-                <button type="submit" id="btnSaveConfig" style="background:#10B981; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; font-size:12px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Configuración</button>
-                <button type="button" onclick="cerrarModalConfig()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; font-size:12px; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
+                <button type="submit" id="btnSaveConfig" style="background:var(--amerijet-blue-dark); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; font-size:12px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Configuración</button>
+                <button type="button" onclick="cerrarModalConfig()" style="background:#F1F5F9; color:#334155; border:1px solid #E2E8F0; padding:12px; width:100%; border-radius:8px; cursor:pointer; margin-top:8px; font-weight:800; font-size:12px; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar</button>
             </form>
         </div>
     </div>
@@ -460,7 +392,7 @@
     <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
             <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">ℹ️</div>
-            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Título</h3>
+            <h3 id="alertTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform: uppercase; transition: 0.2s;">Aceptar</button>
         </div>
@@ -469,11 +401,11 @@
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
         <div class="modal-content modal-generic">
             <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⚠️</div>
-            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Confirmar</h3>
+            <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
                 <button id="btnConfirmAction" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Confirmar</button>
-                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Cancelar</button>
+                <button onclick="closeCustomConfirm()" style="background:#F1F5F9; color:#334155; border:1px solid #E2E8F0; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Cancelar</button>
             </div>
         </div>
     </div>
@@ -481,9 +413,9 @@
     <div class="modal-overlay" id="inactivityModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
             <div style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⏳</div>
-            <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform: uppercase;">Sesión en Pausa</h3>
+            <h3 style="font-weight: 900; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform: uppercase;">Sesión en Pausa</h3>
             <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por motivos de seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
-            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
+            <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue-dark); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
         </div>
     </div>
 
@@ -493,6 +425,18 @@
         
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         const authSupabase = window.supabase.createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false, autoRefreshToken: false } });
+
+        // Reloj Zulu (Idéntico a uld_gestion.html)
+        function updateZuluClock() {
+            const now = new Date();
+            const hr = String(now.getUTCHours()).padStart(2, '0');
+            const min = String(now.getUTCMinutes()).padStart(2, '0');
+            const sec = String(now.getUTCSeconds()).padStart(2, '0');
+            const clockEl = document.getElementById('liveZuluClock');
+            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} Z`;
+        }
+        setInterval(updateZuluClock, 1000);
+        updateZuluClock();
 
         // Toggle Sidebar Mobile
         function toggleSidebar() {
@@ -512,11 +456,9 @@
             titleEl.innerText = title;
             document.getElementById('alertMessage').innerHTML = message;
             
-            // Regla estricta: Solo Emojis en modales
             icon.innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-            
             titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
-            btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0F172A');
             
             btn.onclick = () => { closeCustomAlert(); if(callback) callback(); };
             modal.style.display = 'flex';
@@ -715,8 +657,12 @@
         // ==========================================
         async function cargarUsuarios() {
             const grid = document.getElementById('usersGrid');
+            grid.innerHTML = '<p style="font-size: 12px; color: #64748B;">Cargando personal...</p>';
+            
             try {
-                const { data: usuarios, error } = await supabaseClient.from('perfiles').select('*').order('created_at', { ascending: false });
+                // Se ordenan por nombre alfabéticamente. 
+                // Esto previene fallos si la columna created_at no coincide o falla.
+                const { data: usuarios, error } = await supabaseClient.from('perfiles').select('*').order('nombre', { ascending: true });
                 if (error) throw error;
 
                 grid.innerHTML = '';
@@ -745,11 +691,13 @@
                         <div class="card-actions">
                             <button class="btn-action-panel btn-pwd" onclick="abrirModalPwd('${u.id}', '${u.nombre}', '${u.email}')" title="Resetear Contraseña">${iconKey}</button>
                             <button class="btn-action-panel btn-edit" onclick="abrirModalEditUser('${u.id}', '${u.nombre}', '${u.rol}', '${estacionesList}')" title="Editar Permisos">${iconEdit}</button>
-                            <button class="btn-action-panel btn-delete" onclick="eliminarPerfil('${u.id}', '${u.nombre}', '${u.email}')" title="Borrar Usuario">${iconTrash}</button>
+                            <button class="btn-action-panel btn-delete" onclick="eliminarPerfil('${u.id}', '${u.nombre}', '${u.email}')" title="Borrar Usuario">${iconDelete}</button>
                         </div>`;
                     grid.appendChild(card);
                 });
-            } catch(e) { grid.innerHTML = `<p style="font-size:12px; color:var(--amerijet-red);">Error cargando personal.</p>`; }
+            } catch(e) { 
+                grid.innerHTML = `<p style="font-size:12px; color:var(--amerijet-red); font-weight:800; padding:10px;">Error: ${e.message || 'No se pudo cargar la base de datos'}</p>`; 
+            }
         }
 
         document.getElementById('formCrearUser').addEventListener('submit', async function(e) {
