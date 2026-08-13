@@ -71,7 +71,7 @@
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
-           TOP HEADER 
+           TOP HEADER DINÁMICO Y MODERNO
         ========================================= */
         .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; }
@@ -145,7 +145,7 @@
         /* Contenedor flexible para alinear los botones en PC y apilarlos en Móvil */
         .form-buttons-wrapper { display: flex; gap: 10px; width: 100%; margin-top: 5px; justify-content: flex-end; align-items: center;}
         
-        .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
+        .btn-crear { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
         .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
         .btn-masivo:hover { background: #7C3AED; }
 
@@ -232,16 +232,13 @@
         .net-danger { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
         .net-warn { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
 
-        /* MODALES DISEÑO CORPORATIVO */
+        /* MODALES DISEÑO CORPORATIVO Y EMOJIS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; text-align: center;}
         
         .modal-title { font-size: 18px; font-weight: 900; color: var(--amerijet-blue-dark); margin-bottom: 10px; text-transform: uppercase; }
         .modal-subtitle { font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; }
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; text-align: left;}
-        
-        .badge-modal-alerta { display: inline-block; color: #E11D48; background: #FFF1F2; border: 1px solid #FECDD3; padding: 6px 12px; border-radius: 6px; font-weight: 900; font-size: 12px; margin-bottom: 15px; letter-spacing: 1px;}
-        .badge-modal-info { display: inline-block; color: var(--amerijet-blue); background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; font-weight: 900; font-size: 12px; margin-bottom: 15px; letter-spacing: 1px;}
 
         .btn-modal-action { background: var(--amerijet-blue-dark); color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-modal-action:hover { background: #1E293B; }
@@ -253,6 +250,11 @@
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .main-content { padding-bottom: 150px; } 
+            
+            /* En móvil, la tabla necesita mostrar bien la columna final */
+            th:first-child, td:first-child { left: 0; }
+            th:nth-child(2), td:nth-child(2) { left: 41px; } /* Ajuste del offset del ULD */
+            
             .table-actions button { flex-grow: 1; justify-content: center;}
             .table-bottom-bar { flex-direction: column; align-items: stretch; }
             .btn-guardar-inv { justify-content: center; }
@@ -298,6 +300,7 @@
         
         <div class="sidebar-user">
             <div class="user-avatar">
+                <!-- Icono de Usuario Vectorial -->
                 <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <div class="user-info-text">
@@ -367,7 +370,7 @@
                 <!-- Alertas de Stock y Estadía -->
                 <div class="stock-banner" id="stockBanner">
                     <div class="stock-header" onclick="toggleStockList()">
-                        <span id="stockHeaderText">CONTROL DE STOCK</span>
+                        <span id="stockHeaderText">✅ CONTROL DE STOCK</span>
                         <span style="font-size: 14px; color:#64748B;">▼</span>
                     </div>
                     <div class="stock-list" id="stockList"></div>
@@ -375,7 +378,7 @@
 
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
-                        <span>ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Evaluar despacho.</span>
+                        <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Evaluar despacho.</span>
                         <span style="font-size: 14px; color:#991B1B;">▼</span>
                     </div>
                     <div class="aging-list" id="agingList"></div>
@@ -446,7 +449,7 @@
                 <!-- Historial Minimalista -->
                 <div class="audit-compact" id="auditCompactView">
                     <span>ÚLTIMA ACTUALIZACIÓN: <strong id="lblLastAuditUser">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:normal; font-size:10px;"></span></span>
-                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">VER HISTORIAL</button>
+                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">VER HISTORIAL COMPLETO</button>
                 </div>
 
                 <!-- TABLA PRINCIPAL (INVENTARIO EN RAMPA) -->
@@ -455,6 +458,7 @@
                     <div class="table-toolbar">
                         <div class="table-actions">
                             <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">TRANSFERIR SELECCIÓN</button>
+                            <!-- Nuevo Botón Borrar Selección (Solo Admin/Sup Local) -->
                             <button class="btn-delete-multi" onclick="borrarSeleccion()" id="btnBorrarGlobal">BORRAR SELECCIÓN</button>
                             <button class="btn-excel" onclick="exportarExcelLocal()">DESCARGAR EXCEL</button>
                         </div>
@@ -551,8 +555,7 @@
     <!-- MODAL RECEPCIÓN INBOUND -->
     <div class="modal-overlay" id="modalInbound">
         <div class="modal-content" style="max-width: 650px; text-align: left;">
-            <div class="badge-modal-info" style="margin-bottom: 5px;">INBOUND</div>
-            <div class="modal-title">RECEPCIÓN DE ULDS</div>
+            <div class="modal-title" style="margin-bottom:5px;">RECEPCIÓN DE ULDS (INBOUND)</div>
             <p class="modal-subtitle">Confirma la recepción. Las unidades recibidas pasarán automáticamente a estado <strong style="color:var(--amerijet-blue);">EMPTY</strong> en tu rampa. Las unidades faltantes puedes devolverlas.</p>
             
             <div style="max-height: 250px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #E2E8F0; border-radius: 8px;">
@@ -589,10 +592,9 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN ULD RÁPIDA (CON CAMBIO DE NÚMERO Y ESTADOS) -->
+    <!-- MODAL EDICIÓN ULD RÁPIDA -->
     <div class="modal-overlay" id="modalEditUld">
         <div class="modal-content">
-            <div class="badge-modal-info" style="margin-bottom: 5px;">EDICIÓN</div>
             <div class="modal-title">ACTUALIZAR ULD</div>
             <form id="formEditUld" style="text-align: left;">
                 <input type="hidden" id="edit_old_uld_number">
@@ -642,7 +644,6 @@
     <!-- MODAL IMPORTACIÓN MASIVA (COPY-PASTE EXCEL) -->
     <div class="modal-overlay" id="modalImportMasivo">
         <div class="modal-content" style="max-width: 500px;">
-            <div class="badge-modal-info" style="margin-bottom: 5px;">DATA</div>
             <div class="modal-title">IMPORTACIÓN MASIVA (EXCEL)</div>
             <p class="modal-subtitle">Copia la columna entera de ULDs desde tu archivo Excel y pégala en este cuadro. El sistema los registrará en tu estación como <strong style="color:#10B981;">EMPTY</strong> y <strong style="color:#0A2540;">SERVICEABLE</strong>.</p>
             
@@ -671,7 +672,6 @@
     <!-- MODAL ACCESORIOS (BODEGA NET) -->
     <div class="modal-overlay" id="modalAccesorios">
         <div class="modal-content">
-            <div class="badge-modal-info" style="margin-bottom: 5px;">ACCESORIOS</div>
             <div class="modal-title" id="modalAccesoriosTitle">ACTUALIZAR BODEGA</div>
             <form id="formAccesorios" style="text-align: left;">
                 
@@ -697,7 +697,6 @@
     <!-- MODAL TRANSFERENCIA DE LOTE MANUAL -->
     <div class="modal-overlay" id="modalTransfer">
         <div class="modal-content">
-            <div class="badge-modal-info" style="margin-bottom: 5px;">LOTE</div>
             <div class="modal-title">TRANSFERIR SELECCIÓN</div>
             <p class="modal-subtitle">Selecciona la estación destino. Las unidades pasarán a estado <strong style="color:var(--amerijet-blue);">EN TRÁNSITO</strong> y notificarán a la estación receptora.</p>
             <div class="form-group-inline" style="margin-bottom: 20px; text-align: left;">
@@ -709,10 +708,10 @@
         </div>
     </div>
 
-    <!-- MODALES UNIVERSALES CORPORATIVOS (DISEÑO EXACTO A IMAGEN) -->
+    <!-- MODALES UNIVERSALES CORPORATIVOS (DISEÑO EXACTO A IMAGEN Y EMOJIS RESTAURADOS) -->
     <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
         <div class="modal-content">
-            <div id="alertIcon" class="badge-modal-alerta">[ ALERTA ]</div>
+            <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">ℹ️</div>
             <h3 id="alertTitle" class="modal-title">Título</h3>
             <p id="alertMessage" class="modal-subtitle">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" class="btn-modal-action">ACEPTAR</button>
@@ -721,7 +720,7 @@
 
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
         <div class="modal-content">
-            <div id="confirmIcon" class="badge-modal-alerta">[ ALERTA ]</div>
+            <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⚠️</div>
             <h3 id="confirmTitle" class="modal-title">Confirmar</h3>
             <p id="confirmMessage" class="modal-subtitle">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
@@ -733,8 +732,8 @@
 
     <div class="modal-overlay" id="inactivityModal" style="z-index: 9999;">
         <div class="modal-content">
-            <div class="badge-modal-alerta" style="margin-bottom: 5px;">[ PAUSA ]</div>
-            <h3 class="modal-title">Sesión en Pausa</h3>
+            <div style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⏳</div>
+            <h3 class="modal-title" style="color:var(--amerijet-red);">Sesión en Pausa</h3>
             <p class="modal-subtitle">Por motivos de seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
             <button onclick="resetInactivityTimers()" class="btn-modal-action">Mantener Sesión Activa</button>
         </div>
@@ -763,8 +762,12 @@
         const itemsPorPagina = 100;
         let pivotGlobalData = [];
 
+        // Expresión Regular ESTRICTA IATA: 3 Letras, 4 o 5 Números, 2 Letras/Números.
         const uldRegex = /^[A-Z]{3}[0-9]{4,5}[A-Z0-9]{2}$/;
 
+        // ==========================================
+        // RELOJ ZULU (UTC) GLOBAL
+        // ==========================================
         function updateZuluClock() {
             const now = new Date();
             const hr = String(now.getUTCHours()).padStart(2, '0');
@@ -812,6 +815,9 @@
             list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'block' : 'none';
         }
 
+        // ==========================================
+        // MODALES CORPORATIVOS DINÁMICOS CON EMOJIS GIGANTES
+        // ==========================================
         function showCustomAlert(title, message, type = 'info') {
             const modal = document.getElementById('customAlertModal');
             const icon = document.getElementById('alertIcon');
@@ -821,19 +827,15 @@
             titleEl.innerText = title; 
             document.getElementById('alertMessage').innerHTML = message;
             
+            icon.innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            
             if(type === 'success') {
-                icon.innerText = '[ OK ]';
-                icon.className = 'badge-modal-info';
-                icon.style.color = '#059669'; icon.style.background = '#ECFDF5'; icon.style.borderColor = '#A7F3D0';
+                titleEl.style.color = '#059669'; 
                 btn.style.background = '#0F172A'; 
             } else if (type === 'error') {
-                icon.innerText = '[ ERROR ]';
-                icon.className = 'badge-modal-alerta';
                 titleEl.style.color = '#E11D48';
                 btn.style.background = '#E11D48'; 
             } else {
-                icon.innerText = '[ INFO ]';
-                icon.className = 'badge-modal-info';
                 titleEl.style.color = '#0A2540';
                 btn.style.background = '#0F172A';
             }
@@ -856,6 +858,14 @@
         }
         function closeCustomConfirm() { document.getElementById('customConfirmModal').style.display = 'none'; currentConfirmCallback = null; }
         document.getElementById('btnConfirmAction').addEventListener('click', () => { if(currentConfirmCallback) currentConfirmCallback(); closeCustomConfirm(); });
+
+        let inactivityTimer; let warningTimer; const WARNING_TIME = 28 * 60 * 1000; const LOGOUT_TIME = 30 * 60 * 1000;
+        function resetInactivityTimers() {
+            clearTimeout(inactivityTimer); clearTimeout(warningTimer); document.getElementById('inactivityModal').style.display = 'none';
+            warningTimer = setTimeout(() => { document.getElementById('inactivityModal').style.display = 'flex'; }, WARNING_TIME);
+            inactivityTimer = setTimeout(async () => { await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }, LOGOUT_TIME);
+        }
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
 
         async function inicializar() {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -1036,9 +1046,9 @@
 
                 if (actual > limite) {
                     hayExceso = true;
-                    alertas.push(`<div class="stock-item danger"><span>[ ALERTA ] <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Depurar: <b>${actual - limite}</b></span></div>`);
+                    alertas.push(`<div class="stock-item danger"><span>⚠️ <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Depurar: <b>${actual - limite}</b></span></div>`);
                 } else {
-                    alertas.push(`<div class="stock-item ok"><span>[ OK ] <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Stock normal</span></div>`);
+                    alertas.push(`<div class="stock-item ok"><span>✅ <b>${labelInteligente}</b>: Tienes ${actual} (Límite: ${limite})${detalleDesglose}</span> <span>Stock normal</span></div>`);
                 }
             }
             
@@ -1046,10 +1056,10 @@
             
             if (hayExceso) {
                 banner.className = 'stock-banner danger';
-                headerText.innerHTML = '<span>[ ALERTA ] DE STOCK: Tienes ULDs en exceso, debes depurar.</span><span style="font-size: 14px; color:#B45309;">▼</span>';
+                headerText.innerHTML = '<span>⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.</span><span style="font-size: 14px; color:#B45309;">▼</span>';
             } else {
                 banner.className = 'stock-banner success';
-                headerText.innerHTML = '<span>[ OK ] CONTROL DE STOCK: Tu estación está dentro de los límites.</span><span style="font-size: 14px; color:#047857;">▼</span>';
+                headerText.innerHTML = '<span>✅ CONTROL DE STOCK: Tu estación está dentro de los límites.</span><span style="font-size: 14px; color:#047857;">▼</span>';
             }
             banner.style.display = 'flex';
         }
@@ -1102,7 +1112,6 @@
                 let updTime = "N/A", updDate = "N/A";
                 if(u.updated_ontime) {
                     const d = new Date(u.updated_ontime);
-                    // Force display as ZULU properly parsed
                     updDate = `${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCFullYear()).slice(-2)}`;
                     let hr = String(d.getUTCHours()).padStart(2,'0'); 
                     let min = String(d.getUTCMinutes()).padStart(2,'0');
@@ -1116,7 +1125,6 @@
                     statusBadge = `<span style="font-weight:700;">${u.uld_status}</span>`;
                 }
 
-                // Permisos: Todos editan. Solo Admin/Sup_Local Borran.
                 const canDelete = (miRol === 'admin' || miRol === 'supervisor_local');
                 const btnDelHTML = canDelete ? `<button class="btn-delete" onclick="borrarUld('${u.uld_number}')" title="Borrar ULD">${iconDelete}</button>` : '';
                 
@@ -1198,22 +1206,22 @@
                                 <div style="font-weight:900; font-size:14px;">${tipo}</div>
                                 <div style="display:flex; flex-direction:column; gap:2px;">
                                     <span>Rampa (Físicos): <b>${uldsFisicos}</b></span>
-                                    <span style="font-size:10px; font-weight:800; text-transform:uppercase;">[ OK ] Contenedor Completo (Sin Red)</span>
+                                    <span style="font-size:10px; font-weight:800; text-transform:uppercase;">✅ Contenedor Completo (Sin Red)</span>
                                 </div>
                             </div>`;
                         return; 
                     }
 
                     const balance = redesBodega - uldsFisicos;
-                    let itemClass = "balance-ok"; let mensajeTexto = `[ OK ] BALANCE PERFECTO`;
+                    let itemClass = "balance-ok"; let mensajeTexto = `✅ BALANCE PERFECTO`;
 
                     if (balance < 0) { 
                         itemClass = "balance-danger"; 
-                        mensajeTexto = `[ ALERTA ] Faltan ${Math.abs(balance)} Redes`; 
+                        mensajeTexto = `❌ Faltan ${Math.abs(balance)} Redes`; 
                     } 
                     else if (balance > 0) { 
                         itemClass = "balance-warning"; 
-                        mensajeTexto = `[ AVISO ] Excedente: ${balance} Redes extra`; 
+                        mensajeTexto = `⚠️ Excedente: ${balance} Redes extra`; 
                     } 
 
                     balanceContainer.innerHTML += `
@@ -1256,7 +1264,7 @@
                 });
 
                 if(tiposActivos.size === 0) {
-                    container.innerHTML = '<p style="font-size:12px; color:var(--amerijet-red); margin-bottom:15px; font-weight:800; text-transform:uppercase;">[ INFO ] Registra un ULD primero.</p>';
+                    container.innerHTML = '<p style="font-size:12px; color:var(--amerijet-red); margin-bottom:15px; font-weight:800; text-transform:uppercase;">⚠️ Registra un ULD primero.</p>';
                 } else {
                     let htmlGrid = '<div class="modal-grid">';
                     let tiposArray = Array.from(tiposActivos).sort();
@@ -1388,10 +1396,10 @@
                 
                 // CONSTRUIR EL REPORTE FINAL
                 let htmlReporte = `<div style="text-align: left; font-size: 13px; line-height: 1.6;">`;
-                htmlReporte += `[ OK ] <b>${validosParaSubir.length}</b> ULDs se procesaron correctamente.<br>`;
+                htmlReporte += `✅ <b>${validosParaSubir.length}</b> ULDs se procesaron correctamente.<br>`;
                 
                 if (invalidosReporte.length > 0) {
-                    htmlReporte += `<br><span style="color:var(--amerijet-red); font-weight:bold;">[ ERROR ] <b>${invalidosReporte.length}</b> ULDs fueron rechazados por formato incorrecto:</span><br>`;
+                    htmlReporte += `<br><span style="color:var(--amerijet-red); font-weight:bold;">❌ <b>${invalidosReporte.length}</b> ULDs fueron rechazados por formato incorrecto:</span><br>`;
                     htmlReporte += `<ul style="margin-top: 5px; padding-left: 20px; color: #64748B;">`;
                     invalidosReporte.forEach(inv => {
                         htmlReporte += `<li>${inv}</li>`;
@@ -1545,7 +1553,7 @@
                 }).in('uld_number', seleccionados);
                 
                 let historialNuevoLocal = [...historialAuditoria];
-                historialNuevoLocal.push({ accion: `Despacho de ${seleccionados.length} ULDs a ${destino} (Resta de Redes Automática)`, usuario: miNombre, fecha: now.toISOString() });
+                historialNuevoLocal.push({ accion: `Despacho de ${seleccionados.length} ULDs a ${destino}`, usuario: miNombre, fecha: now.toISOString() });
                 if (historialNuevoLocal.length > 20) historialNuevoLocal = historialNuevoLocal.slice(-20);
                 
                 let redesActuales = {...redesIngresadasEnBodega};
@@ -1571,7 +1579,7 @@
                     redesDestino[tipo] = (parseInt(redesDestino[tipo]) || 0) + tiposAEnviar[tipo];
                 });
 
-                historialDestino.push({ accion: `Recepción de ${seleccionados.length} ULDs desde ${estacionVista} (Suma de Redes Automática)`, usuario: "Sistema Auto", fecha: now.toISOString() });
+                historialDestino.push({ accion: `Recepción de ${seleccionados.length} ULDs desde ${estacionVista}`, usuario: "Sistema Auto", fecha: now.toISOString() });
                 if (historialDestino.length > 20) historialDestino = historialDestino.slice(-20);
 
                 await supabaseClient.from('uld_accesorios').upsert([{ 
@@ -1932,15 +1940,15 @@
                             
                             let esCerrado = contenedoresCerradosPivot.some(prefix => t.startsWith(prefix));
                             if(esCerrado) {
-                                netHtml = `<div class="net-badge net-ok">[ OK ] Completo</div>`;
+                                netHtml = `<div class="net-badge net-ok">✅ Completo</div>`;
                             } else {
                                 const balance = redesBodega - valFisicos;
                                 if (balance === 0) {
-                                    netHtml = `<div class="net-badge net-ok">[ OK ] Nets</div>`;
+                                    netHtml = `<div class="net-badge net-ok">✅ Nets OK</div>`;
                                 } else if (balance < 0) {
-                                    netHtml = `<div class="net-badge net-danger">[ ALERTA ] Faltan ${Math.abs(balance)}</div>`;
+                                    netHtml = `<div class="net-badge net-danger">❌ Faltan ${Math.abs(balance)}</div>`;
                                 } else {
-                                    netHtml = `<div class="net-badge net-warn">[ AVISO ] Sobran ${balance}</div>`;
+                                    netHtml = `<div class="net-badge net-warn">⚠️ Sobran ${balance}</div>`;
                                 }
                             }
                         }
@@ -1974,7 +1982,6 @@
         function exportarPivotExcel() {
             if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos globales para exportar.", "info");
             
-            // Generar tabla HTML real para forzar a Excel a respetar las columnas
             let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body><table border="1">`;
             
             const pivotMap = {}; const typesSet = new Set();
