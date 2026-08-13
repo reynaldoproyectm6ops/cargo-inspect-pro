@@ -159,7 +159,7 @@
         .header-title-group { display: flex; align-items: center; gap: 15px; }
         .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px;}
         
-        /* ZULU CLOCK LIVE - ESTILO CÁPSULA LED */
+        /* ZULU CLOCK LIVE Y STATION */
         .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; }
 
         .live-zulu-clock {
@@ -177,7 +177,7 @@
         }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
-        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: none; }
+        .station-label { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; }
         .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
@@ -332,7 +332,7 @@
         .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px;}
         .btn-close-flight:hover { background: #FFF1F2; transform: translateY(-1px); }
 
-        /* MODALES ALERTA CON ICONOS RESTAURADOS */
+        /* MODALES ALERTA CON ICONOS EMOJI */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; }
         .modal-generic { text-align: center; max-width: 350px; }
@@ -353,10 +353,10 @@
             .header-controls-wrapper { gap: 8px; }
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
             .station-selector { font-size: 11px; }
-            .station-module span { display: none; } /* Oculta la palabra "ESTACIÓN" para ahorrar espacio */
+            /* Se oculta SOLAMENTE la etiqueta "ESTACIÓN:" pero se mantiene el código IATA */
+            .station-label { display: none; } 
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
-            /* Ajuste de tarjeta en móvil para que controles SVG no se salgan */
             .vuelo-card-header { padding: 15px; gap: 10px; }
             .vuelo-title { font-size: 18px; }
             .ctrl-btn { width: 30px; height: 30px; }
@@ -413,11 +413,11 @@
                 
                 <div class="header-station">
                     <div class="station-module" id="divStationSelector" style="display: none;">
-                        <span>ESTACIÓN:</span>
+                        <span class="station-label">ESTACIÓN:</span>
                         <select id="estacionSelector" class="station-selector"></select>
                     </div>
                     <div class="station-module" id="divStationStatic" style="display: none;">
-                        <span>ESTACIÓN:</span>
+                        <span class="station-label">ESTACIÓN:</span>
                         <span id="lblUserEstacion" class="station-static">Cargando...</span>
                     </div>
                 </div>
