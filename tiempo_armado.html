@@ -63,9 +63,12 @@
         .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); flex-shrink: 0;}
         .header-title-group { display: flex; align-items: center; gap: 15px; overflow: hidden;}
         .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
-        .station-badge-top { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; white-space: nowrap;}
         
+        /* ZULU CLOCK & CONTROLS */
         .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; flex-shrink: 0;}
+        .live-zulu-clock { background: var(--amerijet-blue-dark); color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px; font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
+        .station-badge-top { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; white-space: nowrap;}
+        
         .btn-volver-top { background: #F1F5F9; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 11px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer; text-transform: uppercase;}
         .btn-volver-top:hover { background: #E2E8F0; }
         
@@ -270,13 +273,15 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <div class="main-wrapper">
         <header class="top-header">
-            <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="header-title-group">
                 <button class="menu-toggle" onclick="toggleSidebar()">
                     <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
-                <div class="header-title">TIEMPOS Y MANIFIESTO <span class="station-badge-top" id="topStation">--</span></div>
+                <div class="header-title">TIEMPOS Y MANIFIESTO</div>
             </div>
             <div class="header-controls-wrapper">
+                <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
+                <div class="station-badge-top" id="topStation">ESTACIÓN: --</div>
                 <button class="btn-volver-top" onclick="navegarA('dashboard.html')">
                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                     VOLVER
@@ -750,7 +755,7 @@
                 document.getElementById('lblFecha').innerText = vuelo.fecha;
                 
                 estacionDelVuelo = vuelo.estacion_registro;
-                document.getElementById('topStation').innerText = estacionDelVuelo;
+                document.getElementById('topStation').innerText = `ESTACIÓN: ${estacionDelVuelo}`;
                 
                 rutaDelVuelo = vuelo.ruta || '';
                 let partesRuta = rutaDelVuelo.split('-');
@@ -791,6 +796,7 @@
             } catch(e) {}
         }
 
+        // --- ULDs PRINCIPALES ---
         async function cargarInventarioEstacion() {
             try {
                 const { data } = await supabaseClient.from('uld_inventario').select('uld_number, uld_type, use_status').eq('location', estacionDelVuelo);
