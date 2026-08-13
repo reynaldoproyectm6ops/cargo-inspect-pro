@@ -68,7 +68,7 @@
             background: rgba(255,255,255,0.02);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #051529; }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; }
         .user-info-text { display: flex; flex-direction: column; }
         .user-info-text strong { font-size: 14px; color: white; }
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
@@ -123,7 +123,7 @@
             gap: 8px;
             text-transform: uppercase;
         }
-        .btn-logout:hover { background: #E11D48; color: white; border-color: #E11D48; }
+        .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
            TOP HEADER DINÁMICO Y MODERNO
@@ -259,8 +259,8 @@
         .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
         .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1; }
         
-        .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap;}
-        .header-left-side { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px;}
+        .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: nowrap; }
+        .header-left-side { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
         .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
         .header-badges-wrapper { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
         
@@ -272,8 +272,9 @@
         .status-despachado { background: #8B5CF6; color: white; }
         .status-importacion { background: #EC4899; color: white; }
 
-        .card-controls { display: flex; gap: 6px; flex-shrink: 0;}
-        .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; font-size: 11px; font-weight: 800; padding: 6px 10px; border-radius: 6px; transition: 0.2s; text-transform: uppercase;}
+        /* BOTONES DE CONTROL DE ESQUINA EN TARJETA (CON ICONOS SVG) */
+        .card-controls { display: flex; gap: 8px; flex-shrink: 0;}
+        .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .ctrl-btn:hover { background: white; color: var(--amerijet-blue-dark); border-color: white; }
         .ctrl-btn.ctrl-delete:hover { background: #E11D48; color: white; border-color: #E11D48; }
         
@@ -359,7 +360,11 @@
             .station-selector { font-size: 11px; }
             .station-module span { display: none; } /* Oculta la palabra "ESTACIÓN" para ahorrar espacio */
             .station-module { padding: 4px 8px; border-radius: 12px; }
-            .vuelo-card-header { padding: 15px; }
+            
+            /* Ajuste de tarjeta en móvil para que controles SVG no se salgan */
+            .vuelo-card-header { padding: 15px; gap: 10px; }
+            .vuelo-title { font-size: 18px; }
+            .ctrl-btn { width: 30px; height: 30px; }
         }
     </style>
 </head>
@@ -374,7 +379,10 @@
         </div>
         
         <div class="sidebar-user">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar">
+                <!-- Icono de Usuario Vectorial -->
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
                 <span id="lblUserRol" class="badge-rol">...</span>
@@ -517,7 +525,7 @@
             'SAL': 'America/El_Salvador',
             'SAP': 'America/Tegucigalpa',
             'PTY': 'America/Panama',
-            'MIA': 'America/New_York', // Cubre horario de verano de Miami
+            'MIA': 'America/New_York', 
             'MEX': 'America/Mexico_City',
             'BOG': 'America/Bogota',
             'SJO': 'America/Costa_Rica',
@@ -691,7 +699,6 @@
         
         function getStationOffsetMinutes(dateObj, stationCode) {
             const tz = getStationTimezone(stationCode);
-            // Calcula matemáticamente la diferencia entre el meridiano cero y el país seleccionado
             const utcDateStr = dateObj.toLocaleString('en-US', { timeZone: 'UTC' });
             const tzDateStr = dateObj.toLocaleString('en-US', { timeZone: tz });
             
@@ -735,7 +742,6 @@
         // ==========================================
 
         function marcarTiempoAhora(inputId) {
-            // El botón AHORA obtiene la hora Universal exacta y la traduce a la pantalla del país que estás viendo
             const nowUtc = new Date().toISOString();
             const localStr = convertUTCToStationLocal(nowUtc, estacionActual);
             document.getElementById(inputId).value = localStr;
@@ -743,7 +749,6 @@
         }
 
         function formatDateTimeLocal(isoString) {
-            // Cuando la base de datos se descarga, traduce el ZULU puro a la hora de la estación que estás viendo
             return convertUTCToStationLocal(isoString, estacionActual);
         }
 
@@ -756,7 +761,6 @@
                 return;
             }
             
-            // Toma lo que escribiste en la pantalla, lo trata como si estuvieras en ese país, y lo vuelve a pasar a Zulu
             const utcIso = convertStationLocalToUTC(input.value, estacionActual);
             const d = new Date(utcIso);
             let hr = String(d.getUTCHours()).padStart(2, '0');
@@ -832,8 +836,12 @@
                                 </div>
                             </div>
                             <div class="card-controls" style="display: ${displayCardBtns};">
-                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')">EDITAR</button>
-                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')">ELIMINAR</button>
+                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')" title="Editar Vuelo">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                                </button>
+                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')" title="Eliminar Vuelo">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                </button>
                             </div>
                         </div>
                         <div class="vuelo-card-body">
@@ -928,6 +936,7 @@
                     grid.appendChild(card);
                 });
 
+                // Inicializar labels Zulu
                 vuelosActivos.forEach(v => {
                     actualizarLabelZulu(`t_inicio_${v.id}`);
                     actualizarLabelZulu(`t_fin_${v.id}`);
@@ -1033,7 +1042,6 @@
             const hInicio = document.getElementById(`t_inicio_${idVuelo}`).value; 
             const hFin = document.getElementById(`t_fin_${idVuelo}`).value; 
             
-            // CONVIERTE LA HORA DE LA ESTACIÓN A UTC PURO PARA GUARDAR EN NUBE
             const hInicioUTC = hInicio ? convertStationLocalToUTC(hInicio, estacionActual) : null;
             const hFinUTC = hFin ? convertStationLocalToUTC(hFin, estacionActual) : null;
 
