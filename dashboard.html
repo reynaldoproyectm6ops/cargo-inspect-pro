@@ -160,6 +160,8 @@
         .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px;}
         
         /* ZULU CLOCK LIVE - ESTILO CÁPSULA LED */
+        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; }
+
         .live-zulu-clock {
             background: var(--amerijet-blue-dark);
             color: #38BDF8;
@@ -175,7 +177,7 @@
         }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
-        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; }
+        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: none; /* Oculto en móvil */ }
         .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
@@ -183,7 +185,7 @@
         .main-content {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 120px; /* Margen Inferior Extra Celular */
+            padding-bottom: 120px; 
         }
 
         .dashboard-container { 
@@ -327,14 +329,10 @@
         .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px;}
         .btn-close-flight:hover { background: #FFF1F2; transform: translateY(-1px); }
 
-        /* MODALES ALERTA CON ICONOS CORPORATIVOS */
+        /* MODALES ALERTA CON ICONOS RESTAURADOS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; }
         .modal-generic { text-align: center; max-width: 350px; }
-        
-        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
-        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
-        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
 
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
@@ -349,9 +347,12 @@
             .menu-toggle { display: block; }
             .header-title { display: none; } 
             
-            .top-header { padding: 0 15px; }
-            .live-zulu-clock { font-size: 11px; padding: 4px 10px; }
-            .station-selector { font-size: 12px; }
+            .top-header { padding: 0 15px; flex-wrap: nowrap;}
+            .header-controls-wrapper { gap: 5px; }
+            .live-zulu-clock { font-size: 10px; padding: 4px 8px; border-radius: 12px; }
+            .station-selector { font-size: 11px; }
+            .station-module span { display: block; font-size: 9px; } /* Muestra "ESTACIÓN" pequeño */
+            .station-module { padding: 4px 8px; border-radius: 12px; }
         }
     </style>
 </head>
@@ -396,7 +397,7 @@
                 <div class="header-title">Tablero de Operaciones</div>
             </div>
             
-            <div style="display:flex; align-items:center; gap: 10px;">
+            <div class="header-controls-wrapper">
                 <!-- LIVE ZULU CLOCK -->
                 <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
                 
@@ -464,10 +465,10 @@
         </div>
     </div>
 
-    <!-- MODALES UNIVERSALES CORPORATIVOS -->
+    <!-- MODALES UNIVERSALES CON EMOJIS RESTAURADOS -->
     <div class="modal-overlay" id="customAlertModal">
         <div class="modal-content modal-generic">
-            <div id="alertIcon" class="badge-modal-icon">[ INFO ]</div>
+            <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1;">ℹ️</div>
             <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform:uppercase; transition: 0.2s;">Aceptar</button>
@@ -476,7 +477,7 @@
 
     <div class="modal-overlay" id="customConfirmModal">
         <div class="modal-content modal-generic">
-            <div id="confirmIcon" class="badge-modal-icon error">[ ALERTA ]</div>
+            <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1;">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
@@ -488,7 +489,7 @@
 
     <div class="modal-overlay" id="inactivityModal">
         <div class="modal-content modal-generic">
-            <div class="badge-modal-icon error">[ PAUSA ]</div>
+            <div style="font-size: 50px; margin-bottom: 10px; line-height: 1;">⏳</div>
             <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform:uppercase;">Sesión en Pausa</h3>
             <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por motivos de seguridad, la sesión se cerrará por inactividad. ¿Confirmar presencia?</p>
             <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform:uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
@@ -511,7 +512,7 @@
             const min = String(now.getUTCMinutes()).padStart(2, '0');
             const sec = String(now.getUTCSeconds()).padStart(2, '0');
             const clockEl = document.getElementById('liveZuluClock');
-            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} ZULU (UTC)`;
+            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} Z`;
         }
         setInterval(updateZuluClock, 1000);
         updateZuluClock();
@@ -533,16 +534,13 @@
             }
         }
 
-        // ==========================================
-        // SISTEMA DE MODALES CORPORATIVO
-        // ==========================================
+        // Se restauran los iconos tipo Emoji tal como solicitó el usuario para las Alertas
         function showCustomAlert(title, message, type = 'info') {
             const modal = document.getElementById('customAlertModal'); const icon = document.getElementById('alertIcon');
             const titleEl = document.getElementById('alertTitle'); const btn = document.getElementById('alertBtn');
             titleEl.innerText = title; document.getElementById('alertMessage').innerHTML = message;
             
-            icon.innerText = type === 'success' ? '[ OK ]' : type === 'error' ? '[ ERROR ]' : '[ INFO ]';
-            icon.className = `badge-modal-icon ${type}`;
+            icon.innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             
             titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
             btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
@@ -676,8 +674,12 @@
 
         function formatDateTimeLocal(isoString) {
             if (!isoString) return "";
+            
+            // LA HORA VIENE DIRECTO EN ZULU DESDE SUPABASE, USAMOS EL PARSER NATIVO
             const d = new Date(isoString);
             if (isNaN(d.getTime())) return "";
+            
+            // Le pedimos a JS que nos dé la fecha restándole nuestra zona horaria
             const tzOffset = d.getTimezoneOffset() * 60000;
             return new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
         }
@@ -690,10 +692,13 @@
                 label.innerText = "(00:00 Z)";
                 return;
             }
-            const d = new Date(input.value); 
-            if(isNaN(d.getTime())) return;
-            let hr = String(d.getUTCHours()).padStart(2, '0');
-            let mn = String(d.getUTCMinutes()).padStart(2, '0');
+            
+            const localDate = new Date(input.value); 
+            if(isNaN(localDate.getTime())) return;
+            
+            // Se le suma automáticamente la diferencia horaria que JS tiene en la máquina
+            let hr = String(localDate.getUTCHours()).padStart(2, '0');
+            let mn = String(localDate.getUTCMinutes()).padStart(2, '0');
             label.innerText = `(${hr}:${mn} Z)`;
         }
 
@@ -740,6 +745,7 @@
 
                     const badgeEstacion = (estacionActual === 'ALL') ? `<span style="background: rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: auto;">EST: ${v.estacion_registro}</span>` : '';
                     
+                    // JS FORMATEA CORRECTAMENTE INDEPENDIENTEMENTE DE QUÉ PAÍS ESTÉ SELECCIONADO EN PANTALLA
                     const hInicio = formatDateTimeLocal(v.hora_inicio_lotificada);
                     const hFin = formatDateTimeLocal(v.hora_fin_lotificada);
 
@@ -967,9 +973,18 @@
             const hInicio = document.getElementById(`t_inicio_${idVuelo}`).value; 
             const hFin = document.getElementById(`t_fin_${idVuelo}`).value; 
             
-            // CONVERTIR A FORMATO UTC (ZULU) PARA SUPABASE
-            const hInicioUTC = hInicio ? new Date(hInicio).toISOString() : null;
-            const hFinUTC = hFin ? new Date(hFin).toISOString() : null;
+            // LA HORA LOCAL DE TU CELULAR ES CONVERTIDA AQUÍ A UTC ANTES DE ENVIARSE A SUPABASE
+            let hInicioUTC = null;
+            if(hInicio) {
+                const localDate = new Date(hInicio);
+                hInicioUTC = new Date(localDate.getTime() + (localDate.getTimezoneOffset() * 60000)).toISOString();
+            }
+
+            let hFinUTC = null;
+            if(hFin) {
+                const localDate = new Date(hFin);
+                hFinUTC = new Date(localDate.getTime() + (localDate.getTimezoneOffset() * 60000)).toISOString();
+            }
 
             try { 
                 const { error } = await supabaseClient.from('vuelos_operaciones').update({ hora_inicio_lotificada: hInicioUTC, hora_fin_lotificada: hFinUTC, estado: 'EN IMPORTACION' }).eq('id', idVuelo); 
