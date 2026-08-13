@@ -11,7 +11,7 @@
     <style>
         :root { 
             --amerijet-blue: #0A2540; 
-            --amerijet-blue-dark: #051529;
+            --amerijet-blue-dark: #0F172A; /* Color del modal de tu imagen */
             --amerijet-red: #E11D48; 
             --bg-color: #F1F5F9; 
             --text-main: #1E293B;
@@ -22,6 +22,12 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         
+        /* SCROLLBAR NATIVO */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
         body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
@@ -30,12 +36,6 @@
             overflow: hidden;
         }
         
-        /* SCROLLBAR NATIVO */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-
         /* =========================================
            SIDEBAR OSCURO PROFESIONAL
         ========================================= */
@@ -55,7 +55,7 @@
         .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
 
         .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #051529; }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; }
         .user-info-text { display: flex; flex-direction: column; }
         .user-info-text strong { font-size: 14px; color: white; }
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
@@ -71,25 +71,24 @@
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
-           TOP HEADER 
+           TOP HEADER DINÁMICO Y MODERNO
         ========================================= */
         .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; }
+        .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; }
         .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
-        
         .header-title-group { display: flex; align-items: center; gap: 15px; }
-        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; }
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px;}
         
-        /* ZULU CLOCK LIVE */
-        .live-zulu-clock { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-weight: 900; font-size: 14px; letter-spacing: 1px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; }
+        .live-zulu-clock { background: var(--amerijet-blue-dark); color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px; font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
 
-        .station-module { display: flex; align-items: center; gap: 8px; background: #F1F5F9; padding: 8px 15px; border-radius: 8px; border: 1px solid #E2E8F0; }
-        .station-module span { font-size: 11px; color: #64748B; font-weight: 700; text-transform: uppercase; }
-        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 800; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
-        .station-static { color: #10B981; font-weight: 800; font-size: 14px; text-transform: uppercase; }
+        .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: none; }
+        .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
+        .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; padding-bottom: 60px; }
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; }
         .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
         /* BANNER INBOUND (ULDs EN TRÁNSITO) */
@@ -156,28 +155,47 @@
         .btn-ver-historial:hover { background: #E2E8F0; }
 
         /* TABLA EXCEL, TOOLBAR Y PAGINACIÓN */
-        .table-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; margin-bottom: 30px; }
+        .table-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; margin-bottom: 30px; position: relative;}
         .table-toolbar { padding: 15px 20px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .table-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .table-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
+        
         .btn-transfer { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; padding: 8px 15px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; display: flex; align-items: center; gap: 5px; transition: 0.2s; text-transform: uppercase;}
         .btn-transfer:hover { background: #FEF3C7; }
+        
+        .btn-delete-multi { background: #FEF2F2; color: #E11D48; border: 1px solid #FECACA; padding: 8px 15px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; display: none; align-items: center; gap: 5px; transition: 0.2s; text-transform: uppercase;}
+        .btn-delete-multi:hover { background: #FEE2E2; }
+        
         .btn-excel { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; padding: 8px 15px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; display: flex; align-items: center; gap: 5px; transition: 0.2s; text-transform: uppercase;}
         .btn-excel:hover { background: #D1FAE5; }
+        
         .search-box { display: flex; align-items: center; background: white; border: 1px solid #CBD5E1; border-radius: 8px; padding: 6px 12px; width: 280px; max-width: 100%;}
         .search-box input { border: none; outline: none; width: 100%; font-size: 13px; font-weight: 600; color: var(--text-main); }
         
-        .table-container { overflow-x: auto; max-height: 50vh; overflow-y: auto;}
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; white-space: nowrap; }
-        th { background-color: #0078D4; color: white; padding: 12px 10px; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.2); position: sticky; top: 0; z-index: 10; text-transform: uppercase;}
-        td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 500; text-transform: uppercase;}
-        tr:hover { background-color: #F8FAFC; }
+        /* CONTENEDOR DE TABLA CON SCROLL HORIZONTAL Y COLUMNAS CONGELADAS */
+        .table-container { overflow-x: auto; max-height: 50vh; overflow-y: auto; max-width: 100%;}
+        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 12px; white-space: nowrap; }
+        
+        th { background-color: #0078D4; color: white; padding: 12px 10px; font-weight: 700; border-bottom: 1px solid #E2E8F0; text-transform: uppercase; z-index: 1;}
+        td { padding: 10px; border-bottom: 1px solid #E2E8F0; color: #334155; font-weight: 500; text-transform: uppercase; background-color: white;}
+        tr:hover td { background-color: #F8FAFC; }
+
+        /* CHECKBOXES MÁS GRANDES PARA DEDOS */
+        .chk-transfer, #chkAll { width: 20px; height: 20px; cursor: pointer; accent-color: var(--amerijet-blue); }
+
+        /* CONGELAR PRIMERAS Y ÚLTIMAS COLUMNAS EN SCROLL HORIZONTAL */
+        th:first-child, td:first-child { position: sticky; left: 0; z-index: 2; border-right: 1px solid #E2E8F0;}
+        th:nth-child(2), td:nth-child(2) { position: sticky; left: 40px; z-index: 2; border-right: 1px solid #E2E8F0;} /* ULD Number */
+        th:last-child, td:last-child { position: sticky; right: 0; z-index: 2; border-left: 1px solid #E2E8F0; box-shadow: -2px 0 5px rgba(0,0,0,0.03);}
+        th:first-child, th:nth-child(2), th:last-child { z-index: 3; background-color: #0078D4; }
 
         .val-valido { background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
         .val-error { background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
         
-        .btn-edit-uld { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 8px; transition: 0.2s;}
+        /* ICONOS SVG PARA ACCIONES EN TABLA (AHORRA ESPACIO) */
+        .td-actions { display: flex; gap: 6px; align-items: center; justify-content: center;}
+        .btn-edit-uld { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
         .btn-edit-uld:hover { background: #DBEAFE; }
-        .btn-delete { background: #FEF2F2; border: 1px solid #FECACA; color: #E11D48; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; transition: 0.2s;}
+        .btn-delete { background: #FEF2F2; border: 1px solid #FECACA; color: #E11D48; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
         .btn-delete:hover { background: #FEE2E2; }
 
         .table-bottom-bar { padding: 15px 20px; background: white; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E2E8F0; flex-wrap: wrap; gap: 15px;}
@@ -187,8 +205,8 @@
         .btn-pag:hover:not(:disabled) { background: #E2E8F0; }
         .btn-pag:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-guardar-inv { background: #1E293B; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;}
-        .btn-guardar-inv:hover { background: #0F172A; transform: translateY(-1px); }
+        .btn-guardar-inv { background: var(--amerijet-blue-dark); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;}
+        .btn-guardar-inv:hover { background: #1E293B; transform: translateY(-1px); }
 
         /* ESTILOS VISTA GLOBAL (PIVOT TABLE) */
         .pivot-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; display: none; margin: 25px; }
@@ -203,7 +221,7 @@
         .pivot-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 12px; white-space: nowrap; }
         .pivot-table th { background-color: var(--amerijet-blue); color: white; padding: 12px 10px; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px;}
         .pivot-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; border-right: 1px solid #F1F5F9; color: #334155; font-weight: 600; vertical-align: top; text-transform: uppercase;}
-        .pivot-table tr:hover { background-color: #F8FAFC; }
+        .pivot-table tr:hover td { background-color: #F8FAFC; }
         .pivot-table .col-station { font-weight: 800; text-align: left; background-color: #F8FAFC; position: sticky; left: 0; z-index: 1; border-right: 2px solid #CBD5E1; color: var(--amerijet-blue); vertical-align: middle;}
         .pivot-table .col-total { font-weight: 800; background-color: #EFF6FF; color: #1D4ED8; vertical-align: middle;}
         .pivot-table tfoot th { background-color: #E2E8F0; color: var(--amerijet-blue-dark); position: sticky; bottom: 0; z-index: 2; border-top: 2px solid #CBD5E1;}
@@ -215,51 +233,59 @@
         .net-danger { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
         .net-warn { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
 
-        /* MODALES */
+        /* MODALES DISEÑO CORPORATIVO (Basado en imagen del usuario) */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
-        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto;}
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .modal-title { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .modal-generic { text-align: center; max-width: 350px; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; text-align: center;}
         
-        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
-        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
-        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
+        .modal-title { font-size: 18px; font-weight: 900; color: var(--amerijet-blue-dark); margin-bottom: 10px; text-transform: uppercase; }
+        .modal-subtitle { font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; text-align: left;}
+        
+        .badge-modal-alerta { display: inline-block; color: #E11D48; background: #FFF1F2; border: 1px solid #FECDD3; padding: 6px 12px; border-radius: 6px; font-weight: 900; font-size: 12px; margin-bottom: 15px; letter-spacing: 1px;}
+        .badge-modal-info { display: inline-block; color: var(--amerijet-blue); background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; font-weight: 900; font-size: 12px; margin-bottom: 15px; letter-spacing: 1px;}
 
-        .btn-modal-action { color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
-        .btn-modal-cancel { background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-modal-action { background: var(--amerijet-blue-dark); color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-modal-action:hover { background: #1E293B; }
+        .btn-modal-cancel { background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; transition: 0.2s; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-modal-cancel:hover { background: #E2E8F0; }
 
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .main-content { padding-bottom: 150px; } /* Ajuste profundo para móviles */
+            .main-content { padding-bottom: 150px; } 
+            
+            /* En móvil, la tabla necesita mostrar bien la columna final */
+            th:first-child, td:first-child { left: 0; }
+            th:nth-child(2), td:nth-child(2) { left: 41px; } /* Ajuste del offset del ULD */
+            
+            .table-actions button { flex-grow: 1; justify-content: center;}
+            .table-bottom-bar { flex-direction: column; align-items: stretch; }
+            .btn-guardar-inv { justify-content: center; }
         }
+        
         @media (max-width: 1024px) { 
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
             .menu-toggle { display: block; }
             .header-title { display: none; } 
-            .live-zulu-clock { font-size: 12px; padding: 5px 10px; }
+            
+            .top-header { padding: 0 10px; gap: 5px;}
+            .header-controls-wrapper { gap: 8px; }
+            .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
+            .station-selector { font-size: 11px; }
+            .station-module span { display: none; } 
+            .station-module { padding: 4px 8px; border-radius: 12px; }
             
             .top-panel { flex-direction: column; align-items: stretch; }
             .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
             .form-group-inline { width: 100%; }
-            
-            /* Ajuste de Botones en Celular */
             .form-buttons-wrapper { flex-direction: column; }
             .btn-crear, .btn-masivo { width: 100%; margin-top: 5px; justify-content: center;}
             
-            .table-toolbar { flex-direction: column; align-items: stretch; }
-            .table-actions { width: 100%; }
-            .table-actions button { flex-grow: 1; justify-content: center;}
             .search-box { width: 100%; }
-            
-            .table-bottom-bar { flex-direction: column; align-items: stretch; }
             .pagination-wrapper { justify-content: space-between; width: 100%;}
-            .btn-guardar-inv { width: 100%; justify-content: center; margin-top: 10px;}
-            
             .pivot-wrapper { margin: 15px; }
             .audit-compact { flex-direction: column; gap: 10px; text-align: center; }
             .modal-content { padding: 20px; }
@@ -277,7 +303,10 @@
         </div>
         
         <div class="sidebar-user">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar">
+                <!-- Icono de Usuario Vectorial -->
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
                 <span id="lblUserRol" class="badge-rol">...</span>
@@ -307,7 +336,7 @@
                 <div class="header-title">Gestión de Inventario ULD</div>
             </div>
             
-            <div style="display:flex; align-items:center; gap: 15px;">
+            <div class="header-controls-wrapper">
                 <!-- LIVE ZULU CLOCK -->
                 <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
                 
@@ -327,8 +356,8 @@
         <!-- DASHBOARD CONTENT -->
         <main class="main-content">
             
-            <!-- BANNER NOTIFICACIÓN INBOUND (TRANSFERENCIAS ENTRANTES) -->
-            <div id="inboundBanner" style="margin: 25px 25px 0 25px;">
+            <!-- BANNER NOTIFICACIÓN INBOUND -->
+            <div id="inboundBanner">
                 <div style="display:flex; align-items:center; gap:15px;">
                     <div style="font-size:18px; font-weight:900; background:white; color:#059669; padding:8px 12px; border-radius:8px;">[ INBOUND ]</div>
                     <div>
@@ -424,7 +453,7 @@
                 <!-- Historial Minimalista -->
                 <div class="audit-compact" id="auditCompactView">
                     <span>ÚLTIMA ACTUALIZACIÓN: <strong id="lblLastAuditUser">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:normal; font-size:10px;"></span></span>
-                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">VER HISTORIAL COMPLETO</button>
+                    <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">VER HISTORIAL</button>
                 </div>
 
                 <!-- TABLA PRINCIPAL (INVENTARIO EN RAMPA) -->
@@ -433,6 +462,8 @@
                     <div class="table-toolbar">
                         <div class="table-actions">
                             <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">TRANSFERIR SELECCIÓN</button>
+                            <!-- Nuevo Botón Borrar Selección (Solo Admin/Sup Local) -->
+                            <button class="btn-delete-multi" onclick="borrarSeleccion()" id="btnBorrarGlobal">BORRAR SELECCIÓN</button>
                             <button class="btn-excel" onclick="exportarExcelLocal()">DESCARGAR EXCEL</button>
                         </div>
                         <div class="search-box">
@@ -445,8 +476,8 @@
                         <table id="uldTable">
                             <thead>
                                 <tr>
-                                    <th style="width: 30px;"><input type="checkbox" id="chkAll" onclick="toggleAllCheckboxes()"></th>
-                                    <th>ULD Number</th>
+                                    <th style="width: 40px; min-width: 40px; text-align:center;"><input type="checkbox" id="chkAll" onclick="toggleAllCheckboxes()"></th>
+                                    <th style="min-width: 120px;">ULD Number</th>
                                     <th>ULD Status</th>
                                     <th>Location</th>
                                     <th>Updated On</th>
@@ -457,7 +488,7 @@
                                     <th>Received On</th>
                                     <th>Updated (ZULU)</th>
                                     <th>Validation</th>
-                                    <th id="thAccion">Acción</th>
+                                    <th id="thAccion" style="text-align:center;">Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="uldBody">
@@ -474,7 +505,7 @@
                                 <button class="btn-pag" id="btnNextPage" onclick="cambiarPagina(1)">SIGUIENTE</button>
                             </div>
                         </div>
-                        <button class="btn-guardar-inv" onclick="guardarInventarioGlobal()" id="btnGuardarInv">GUARDAR INVENTARIO FÍSICO</button>
+                        <button class="btn-guardar-inv" onclick="validarInventarioSeleccion()" id="btnGuardarInv">VALIDAR SELECCIÓN FÍSICA</button>
                     </div>
                 </div>
             </div>
@@ -527,9 +558,10 @@
 
     <!-- MODAL RECEPCIÓN INBOUND -->
     <div class="modal-overlay" id="modalInbound">
-        <div class="modal-content" style="max-width: 650px;">
-            <div class="modal-title">RECEPCIÓN DE ULDS (INBOUND)</div>
-            <p style="font-size: 12px; color: #475569; margin-bottom: 15px; text-transform:uppercase;">Confirma la recepción. Las unidades recibidas pasarán automáticamente a estado <strong style="color:var(--amerijet-blue);">EMPTY</strong> en tu rampa. Las unidades faltantes puedes devolverlas.</p>
+        <div class="modal-content" style="max-width: 650px; text-align: left;">
+            <div class="badge-modal-info" style="margin-bottom: 5px;">[ INBOUND ]</div>
+            <div class="modal-title">RECEPCIÓN DE ULDS</div>
+            <p class="modal-subtitle">Confirma la recepción. Las unidades recibidas pasarán automáticamente a estado <strong style="color:var(--amerijet-blue);">EMPTY</strong> en tu rampa. Las unidades faltantes puedes devolverlas.</p>
             
             <div style="max-height: 250px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #E2E8F0; border-radius: 8px;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align:left; text-transform:uppercase;">
@@ -548,28 +580,29 @@
             </div>
 
             <div style="display: flex; gap: 10px;" id="inboundMainButtons">
-                <button onclick="recibirInbound()" style="flex:1; background:#10B981; color:white; padding:12px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">RECIBIR COMO EMPTY</button>
-                <button onclick="rechazarInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:12px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">DEVOLVER / RECHAZAR</button>
+                <button onclick="recibirInbound()" style="flex:1; background:#10B981; color:white; padding:12px; border:none; border-radius:8px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">RECIBIR COMO EMPTY</button>
+                <button onclick="rechazarInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:12px; border:none; border-radius:8px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">DEVOLVER / RECHAZAR</button>
             </div>
 
             <div id="divReturnStation" style="display:none; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 15px; border-radius: 8px; margin-top: 15px;">
                 <label style="font-size:10px; font-weight:800; color:var(--amerijet-red); margin-bottom:5px; display:block; text-transform:uppercase;">SELECCIONA ESTACIÓN DESTINO PARA LA DEVOLUCIÓN:</label>
-                <select id="selReturnStation" style="width:100%; padding:10px; border-radius:6px; border:1px solid #CBD5E1; margin-bottom:10px; font-weight:600; text-transform:uppercase;"></select>
+                <select id="selReturnStation" style="width:100%; padding:10px; border-radius:8px; border:1px solid #CBD5E1; margin-bottom:10px; font-weight:600; text-transform:uppercase;"></select>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="confirmarRechazoInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:10px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">CONFIRMAR DEVOLUCIÓN</button>
-                    <button onclick="cancelarRechazoInbound()" style="flex:1; background:#E2E8F0; color:#334155; padding:10px; border:none; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">CANCELAR</button>
+                    <button onclick="confirmarRechazoInbound()" style="flex:1; background:var(--amerijet-red); color:white; padding:12px; border:none; border-radius:8px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">CONFIRMAR DEVOLUCIÓN</button>
+                    <button onclick="cancelarRechazoInbound()" style="flex:1; background:#E2E8F0; color:#334155; padding:12px; border:none; border-radius:8px; font-weight:800; cursor:pointer; text-transform:uppercase; font-size:11px;">CANCELAR</button>
                 </div>
             </div>
 
-            <button onclick="cerrarModalInbound()" style="width:100%; background:#F1F5F9; color:#334155; padding:12px; border:none; border-radius:6px; font-weight:800; cursor:pointer; margin-top:10px; text-transform:uppercase; font-size:11px;">CERRAR PANTALLA</button>
+            <button onclick="cerrarModalInbound()" class="btn-modal-cancel">CERRAR PANTALLA</button>
         </div>
     </div>
 
     <!-- MODAL EDICIÓN ULD RÁPIDA (CON CAMBIO DE NÚMERO) -->
     <div class="modal-overlay" id="modalEditUld">
         <div class="modal-content">
-            <div class="modal-title">EDITAR ULD</div>
-            <form id="formEditUld">
+            <div class="badge-modal-info" style="margin-bottom: 5px;">[ EDICIÓN ]</div>
+            <div class="modal-title">ACTUALIZAR ULD</div>
+            <form id="formEditUld" style="text-align: left;">
                 <input type="hidden" id="edit_old_uld_number">
                 
                 <div class="form-group-inline" style="margin-bottom: 15px;">
@@ -607,8 +640,9 @@
     <!-- MODAL IMPORTACIÓN MASIVA (COPY-PASTE EXCEL) -->
     <div class="modal-overlay" id="modalImportMasivo">
         <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-title" style="margin-bottom: 10px;">IMPORTACIÓN MASIVA (EXCEL)</div>
-            <p style="font-size: 11px; color: #475569; margin-bottom: 15px; text-transform:uppercase;">Copia la columna entera de ULDs desde tu archivo Excel y pégala en este cuadro. El sistema los registrará en tu estación como <strong style="color:#10B981;">EMPTY</strong> y <strong style="color:#0A2540;">SERVICEABLE</strong>.</p>
+            <div class="badge-modal-info" style="margin-bottom: 5px;">[ DATA ]</div>
+            <div class="modal-title">IMPORTACIÓN MASIVA (EXCEL)</div>
+            <p class="modal-subtitle">Copia la columna entera de ULDs desde tu archivo Excel y pégala en este cuadro. El sistema los registrará en tu estación como <strong style="color:#10B981;">EMPTY</strong> y <strong style="color:#0A2540;">SERVICEABLE</strong>.</p>
             
             <textarea id="txtImportMasivo" rows="12" placeholder="Ejemplo:&#10;PMC01376M6&#10;PMC05044M6&#10;PAG10006M6..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 14px; text-transform: uppercase; resize: vertical; outline: none; margin-bottom: 5px;" oninput="actualizarContadorMasivo()"></textarea>
             
@@ -621,9 +655,9 @@
 
     <!-- MODAL HISTORIAL LOG COMPLETO -->
     <div class="modal-overlay" id="modalHistorialLog">
-        <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-content" style="max-width: 500px; text-align: left;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px;">
-                <h3 style="font-weight: 800; color: var(--amerijet-blue); margin:0; text-transform:uppercase; font-size:16px;">HISTORIAL DE CAMBIOS</h3>
+                <h3 style="font-weight: 900; color: var(--amerijet-blue-dark); margin:0; text-transform:uppercase; font-size:16px;">HISTORIAL DE CAMBIOS</h3>
                 <button onclick="cerrarModalHistorialLog()" style="background:none; border:none; font-size:18px; color:#94A3B8; cursor:pointer; font-weight:800;">X</button>
             </div>
             <div id="logContainerModal" style="max-height: 300px; overflow-y: auto;">
@@ -635,8 +669,9 @@
     <!-- MODAL ACCESORIOS (BODEGA NET) -->
     <div class="modal-overlay" id="modalAccesorios">
         <div class="modal-content">
+            <div class="badge-modal-info" style="margin-bottom: 5px;">[ ACCESORIOS ]</div>
             <div class="modal-title" id="modalAccesoriosTitle">ACTUALIZAR BODEGA</div>
-            <form id="formAccesorios">
+            <form id="formAccesorios" style="text-align: left;">
                 
                 <div id="secNetsModal" style="display:none;">
                     <h4 style="font-size:10px; color:#64748B; margin-bottom:12px; letter-spacing:0.5px; text-transform:uppercase;">CONTEO DE REDES DISPONIBLES</h4>
@@ -651,7 +686,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-modal-action" style="background:var(--amerijet-blue); margin-top:15px;">GUARDAR INVENTARIO</button>
+                <button type="submit" class="btn-modal-action" style="margin-top:15px;">GUARDAR INVENTARIO</button>
                 <button type="button" onclick="cerrarModalAcc()" class="btn-modal-cancel">CANCELAR</button>
             </form>
         </div>
@@ -660,36 +695,46 @@
     <!-- MODAL TRANSFERENCIA DE LOTE MANUAL -->
     <div class="modal-overlay" id="modalTransfer">
         <div class="modal-content">
-            <div class="modal-title">TRANSFERIR ULDS SELECCIONADOS</div>
-            <p style="font-size: 11px; color: #475569; margin-bottom: 15px; text-transform:uppercase; line-height:1.4;">Selecciona la estación destino. Las unidades pasarán a estado <strong style="color:var(--amerijet-blue);">EN TRÁNSITO</strong> y notificarán a la estación receptora.</p>
-            <div class="form-group-inline" style="margin-bottom: 20px;">
+            <div class="badge-modal-info" style="margin-bottom: 5px;">[ LOTE ]</div>
+            <div class="modal-title">TRANSFERIR SELECCIÓN</div>
+            <p class="modal-subtitle">Selecciona la estación destino. Las unidades pasarán a estado <strong style="color:var(--amerijet-blue);">EN TRÁNSITO</strong> y notificarán a la estación receptora.</p>
+            <div class="form-group-inline" style="margin-bottom: 20px; text-align: left;">
                 <label>Estación Destino</label>
-                <select id="transfer_target" required></select>
+                <select id="transfer_target" required style="margin-top: 5px;"></select>
             </div>
             <button onclick="ejecutarTransferencia()" class="btn-modal-action" style="background:#D97706;">CONFIRMAR DESPACHO</button>
             <button type="button" onclick="cerrarModalTransfer()" class="btn-modal-cancel">CANCELAR</button>
         </div>
     </div>
 
-    <!-- MODALES UNIVERSALES (ALERTAS Y CONFIRMACIONES) -->
+    <!-- MODALES UNIVERSALES CORPORATIVOS (DISEÑO EXACTO A IMAGEN) -->
     <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
-        <div class="modal-content modal-generic">
-            <div id="alertIcon" class="badge-modal-icon">[ INFO ]</div>
-            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Título</h3>
-            <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
+        <div class="modal-content">
+            <div id="alertIcon" class="badge-modal-alerta">[ ALERTA ]</div>
+            <h3 id="alertTitle" class="modal-title">Título</h3>
+            <p id="alertMessage" class="modal-subtitle">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" class="btn-modal-action">ACEPTAR</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
-        <div class="modal-content modal-generic">
-            <div id="confirmIcon" class="badge-modal-icon error">[ ALERTA ]</div>
-            <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Confirmar</h3>
-            <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
+        <div class="modal-content">
+            <div id="confirmIcon" class="badge-modal-alerta">[ ALERTA ]</div>
+            <h3 id="confirmTitle" class="modal-title">Confirmar</h3>
+            <p id="confirmMessage" class="modal-subtitle">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
-                <button id="btnConfirmAction" class="btn-modal-action">CONFIRMAR</button>
-                <button onclick="closeCustomConfirm()" class="btn-modal-cancel" style="margin-top:0;">CANCELAR</button>
+                <button id="btnConfirmAction" class="btn-modal-action">GUARDAR Y ACTUALIZAR</button>
+                <button onclick="closeCustomConfirm()" class="btn-modal-cancel" style="margin-top: 0;">CANCELAR</button>
             </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="inactivityModal" style="z-index: 9999;">
+        <div class="modal-content">
+            <div class="badge-modal-alerta" style="margin-bottom: 5px;">[ PAUSA ]</div>
+            <h3 class="modal-title">Sesión en Pausa</h3>
+            <p class="modal-subtitle">Por motivos de seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
+            <button onclick="resetInactivityTimers()" class="btn-modal-action">Mantener Sesión Activa</button>
         </div>
     </div>
 
@@ -713,7 +758,6 @@
         let historialAuditoria = [];
         
         let paginaActual = 1;
-        // Paginación ajustada a 100 items por página
         const itemsPorPagina = 100;
         let pivotGlobalData = [];
 
@@ -729,7 +773,7 @@
             const min = String(now.getUTCMinutes()).padStart(2, '0');
             const sec = String(now.getUTCSeconds()).padStart(2, '0');
             const clockEl = document.getElementById('liveZuluClock');
-            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} ZULU (UTC)`;
+            if(clockEl) clockEl.innerText = `${hr}:${min}:${sec} Z`;
         }
         setInterval(updateZuluClock, 1000);
         updateZuluClock();
@@ -770,31 +814,61 @@
             list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'block' : 'none';
         }
 
+        // ==========================================
+        // MODALES CORPORATIVOS DINÁMICOS
+        // ==========================================
         function showCustomAlert(title, message, type = 'info') {
             const modal = document.getElementById('customAlertModal');
             const icon = document.getElementById('alertIcon');
             const titleEl = document.getElementById('alertTitle');
             const btn = document.getElementById('alertBtn');
-            titleEl.innerText = title; document.getElementById('alertMessage').innerHTML = message;
             
-            icon.innerText = type === 'success' ? '[ OK ]' : type === 'error' ? '[ ERROR ]' : '[ INFO ]';
-            icon.className = `badge-modal-icon ${type}`;
-
-            titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
-            btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            titleEl.innerText = title; 
+            document.getElementById('alertMessage').innerHTML = message;
+            
+            if(type === 'success') {
+                icon.innerText = '[ OK ]';
+                icon.className = 'badge-modal-info';
+                icon.style.color = '#059669'; icon.style.background = '#ECFDF5'; icon.style.borderColor = '#A7F3D0';
+                btn.style.background = '#0F172A'; // Botón principal siempre oscuro (Corporativo)
+            } else if (type === 'error') {
+                icon.innerText = '[ ERROR ]';
+                icon.className = 'badge-modal-alerta';
+                titleEl.style.color = '#E11D48';
+                btn.style.background = '#E11D48'; 
+            } else {
+                icon.innerText = '[ INFO ]';
+                icon.className = 'badge-modal-info';
+                titleEl.style.color = '#0A2540';
+                btn.style.background = '#0F172A';
+            }
+            
             modal.style.display = 'flex';
         }
         function closeCustomAlert() { document.getElementById('customAlertModal').style.display = 'none'; }
 
         let currentConfirmCallback = null;
         function showCustomConfirm(title, message, confirmBtnText, btnColor, callback) {
-            document.getElementById('confirmTitle').innerText = title; document.getElementById('confirmTitle').style.color = btnColor;
+            document.getElementById('confirmTitle').innerText = title;
             document.getElementById('confirmMessage').innerHTML = message;
-            const btn = document.getElementById('btnConfirmAction'); btn.innerText = confirmBtnText; btn.style.background = btnColor;
-            currentConfirmCallback = callback; document.getElementById('customConfirmModal').style.display = 'flex';
+            
+            const btn = document.getElementById('btnConfirmAction'); 
+            btn.innerText = confirmBtnText; 
+            btn.style.background = btnColor;
+            
+            currentConfirmCallback = callback; 
+            document.getElementById('customConfirmModal').style.display = 'flex';
         }
         function closeCustomConfirm() { document.getElementById('customConfirmModal').style.display = 'none'; currentConfirmCallback = null; }
         document.getElementById('btnConfirmAction').addEventListener('click', () => { if(currentConfirmCallback) currentConfirmCallback(); closeCustomConfirm(); });
+
+        let inactivityTimer; let warningTimer; const WARNING_TIME = 28 * 60 * 1000; const LOGOUT_TIME = 30 * 60 * 1000;
+        function resetInactivityTimers() {
+            clearTimeout(inactivityTimer); clearTimeout(warningTimer); document.getElementById('inactivityModal').style.display = 'none';
+            warningTimer = setTimeout(() => { document.getElementById('inactivityModal').style.display = 'flex'; }, WARNING_TIME);
+            inactivityTimer = setTimeout(async () => { await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }, LOGOUT_TIME);
+        }
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
 
         async function inicializar() {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -805,13 +879,18 @@
                 miRol = String(perfil.rol).toLowerCase();
                 miNombre = perfil.nombre || "Usuario";
                 document.getElementById('lblUserName').innerText = miNombre;
-                document.getElementById('lblUserRol').innerText = miRol.toUpperCase();
+                document.getElementById('lblUserRol').innerText = miRol.replace('_', ' ').toUpperCase();
                 
                 misEstaciones = (perfil.estacion_base || "SAL").split(',').map(s => s.trim());
                 
                 if(miRol === 'admin' || miRol === 'supervisor') {
                     document.getElementById('btnReportesHistoricos').style.display = 'flex';
                     if(miRol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+                }
+
+                // Permisos Masivos: Borrar solo Admin/Sup Local
+                if(miRol === 'admin' || miRol === 'supervisor_local') {
+                    document.getElementById('btnBorrarGlobal').style.display = 'flex';
                 }
 
                 const { data: catEst } = await supabaseClient.from('estaciones').select('*').order('codigo');
@@ -836,9 +915,13 @@
             if (misEstaciones.length > 1 || miRol === 'admin' || miRol === 'supervisor') {
                 wrapperSelector.style.display = 'flex'; wrapperStatic.style.display = 'none'; selector.innerHTML = '';
                 
-                if(miRol === 'admin' || miRol === 'supervisor') { selector.innerHTML += `<option value="ALL">MUNDO (TODAS)</option>`; }
-                todasLasEstacionesBD.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
-                
+                if(miRol === 'admin' || miRol === 'supervisor') { 
+                    selector.innerHTML += `<option value="ALL">MUNDO (TODAS)</option>`; 
+                    todasLasEstacionesBD.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+                } else {
+                    misEstaciones.forEach(est => { selector.innerHTML += `<option value="${est}">${est}</option>`; });
+                }
+
                 if (savedStation && (misEstaciones.includes(savedStation) || todasLasEstacionesBD.includes(savedStation) || savedStation === 'ALL')) {
                     estacionVista = savedStation; 
                 } else {
@@ -885,6 +968,7 @@
                 if (error) throw new Error(error.message);
                 
                 datosVistaActual = ulds || []; 
+                // CORRECCIÓN INBOUND: Aseguramos ignorar mayúsculas/minúsculas para el tránsito.
                 uldsEnTransito = datosVistaActual.filter(u => u.opp_status && u.opp_status.toUpperCase() === 'IN TRANSIT');
                 uldsEnRampa = datosVistaActual.filter(u => !u.opp_status || u.opp_status.toUpperCase() !== 'IN TRANSIT');
 
@@ -996,13 +1080,8 @@
                 );
             }
             
-            // ORDENAMIENTO INTELIGENTE: Por Tipo y luego por Número de ULD (Alfanumérico)
+            // ORDENAMIENTO ABSOLUTO A-Z POR NÚMERO DE ULD
             datosFiltrados.sort((a, b) => {
-                const typeA = (a.uld_type || 'ZZZ').toUpperCase();
-                const typeB = (b.uld_type || 'ZZZ').toUpperCase();
-                if (typeA < typeB) return -1;
-                if (typeA > typeB) return 1;
-
                 const numA = (a.uld_number || '').toUpperCase();
                 const numB = (b.uld_number || '').toUpperCase();
                 return numA.localeCompare(numB);
@@ -1026,6 +1105,11 @@
             const datosPagina = datosFiltrados.slice(startIndex, endIndex);
 
             tbody.innerHTML = '';
+            
+            // Iconos SVG para Ahorrar Espacio
+            const iconEdit = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
+            const iconDelete = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
+
             datosPagina.forEach(u => {
                 const valClass = u.validation_uld === 'VALIDO' ? 'val-valido' : 'val-error';
                 let rxDate = "N/A"; if(u.received_on) { const [y, m, d] = u.received_on.split('-'); rxDate = `${m}/${d}/${y.slice(-2)}`; }
@@ -1046,15 +1130,15 @@
                     statusBadge = `<span style="font-weight:700;">[ ${u.uld_status} ]</span>`;
                 }
 
-                // Permisos Supervisor Local y Admin para Modificar/Borrar
-                const canModify = (miRol === 'admin' || miRol === 'supervisor_local');
-                const displayBtns = canModify ? `inline-block` : `none`;
+                // Permisos: Todos editan. Solo Admin/Sup_Local Borran.
+                const canDelete = (miRol === 'admin' || miRol === 'supervisor_local');
+                const btnDelHTML = canDelete ? `<button class="btn-delete" onclick="borrarUld('${u.uld_number}')" title="Borrar ULD">${iconDelete}</button>` : '';
                 
                 const safeDamageR = (u.damage_reason || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
                 tbody.innerHTML += `
                     <tr>
-                        <td><input type="checkbox" class="chk-transfer" value="${u.uld_number}"></td>
+                        <td style="text-align:center;"><input type="checkbox" class="chk-transfer" value="${u.uld_number}"></td>
                         <td style="font-weight:900;">${u.uld_number}</td>
                         <td>${statusBadge}</td>
                         <td style="font-weight:800; color:var(--amerijet-blue);">${u.location}</td>
@@ -1067,8 +1151,10 @@
                         <td style="color:#1D4ED8; font-weight:700;">${updTime}</td>
                         <td><span class="${valClass}">${u.validation_uld || 'N/A'}</span></td>
                         <td>
-                            <button class="btn-edit-uld" style="display:${displayBtns};" onclick="abrirModalEditUld('${u.uld_number}', '${u.use_status || 'EMPTY'}', '${u.uld_status || 'SERVICEABLE'}', '${safeDamageR}')">EDITAR</button>
-                            <button class="btn-delete" style="display:${displayBtns};" onclick="borrarUld('${u.uld_number}')">BORRAR</button>
+                            <div class="td-actions">
+                                <button class="btn-edit-uld" onclick="abrirModalEditUld('${u.uld_number}', '${u.use_status || 'EMPTY'}', '${u.uld_status || 'SERVICEABLE'}', '${safeDamageR}')" title="Editar ULD">${iconEdit}</button>
+                                ${btnDelHTML}
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -1512,8 +1598,67 @@
                 document.getElementById('chkAll').checked = false; 
                 cerrarModalTransfer(); 
                 await refrescarPantalla();
-                showCustomAlert("Despacho Exitoso", `Se transfirieron ${seleccionados.length} ULDs hacia ${destino}.<br><br><b>Automatización:</b> Se restaron las redes de bodega local y se sumaron al destino.`, "success");
+                showCustomAlert("Despacho Exitoso", `Se transfirieron ${seleccionados.length} ULDs hacia ${destino}.<br><br><b>Automatización:</b> Se restaron las redes proporcionales a los ULDs de la bodega local y se sumaron al destino.`, "success");
             } catch(e) { showCustomAlert("Error de Transferencia", "Ocurrió un error al procesar el lote y las redes.", "error"); }
+        }
+
+        // =====================================
+        // ACCIONES MASIVAS: BORRAR Y VALIDAR SELECCIÓN
+        // =====================================
+        function borrarSeleccion() {
+            const seleccionados = Array.from(document.querySelectorAll('.chk-transfer:checked')).map(cb => cb.value);
+            if(seleccionados.length === 0) { 
+                showCustomAlert("Atención", "Selecciona las unidades que deseas eliminar de la base de datos.", "info"); 
+                return; 
+            }
+            
+            showCustomConfirm(
+                "Eliminación Múltiple", 
+                `¿Confirmas que deseas borrar <b>${seleccionados.length} ULDs</b> permanentemente del sistema global?`, 
+                "SÍ, ELIMINAR", 
+                "var(--amerijet-red)",
+                async () => {
+                    try {
+                        await supabaseClient.from('uld_inventario').delete().in('uld_number', seleccionados);
+                        document.getElementById('chkAll').checked = false; 
+                        await refrescarPantalla();
+                        showCustomAlert("Eliminado", `Se han borrado ${seleccionados.length} unidades del sistema.`, "success");
+                    } catch(e) { showCustomAlert("Error", e.message, "error"); }
+                }
+            );
+        }
+
+        function validarInventarioSeleccion() {
+            const seleccionados = Array.from(document.querySelectorAll('.chk-transfer:checked')).map(cb => cb.value);
+            if(seleccionados.length === 0) { 
+                showCustomAlert("Atención", "Selecciona los ULDs que has contado físicamente para validar su estadía.", "info"); 
+                return; 
+            }
+            
+            showCustomConfirm(
+                "Validar Inventario Físico",
+                `Se actualizará el tiempo de estadía de los <b>${seleccionados.length} ULDs</b> seleccionados.<br><br>¿Confirmas que el conteo en rampa de estas unidades es correcto?`,
+                "GUARDAR Y ACTUALIZAR",
+                "var(--amerijet-blue)",
+                async () => {
+                    const btn = document.getElementById('btnGuardarInv'); btn.disabled = true; btn.innerText = "Sincronizando...";
+                    try {
+                        const now = new Date().toISOString();
+                        await supabaseClient.from('uld_inventario').update({ updated_ontime: now }).in('uld_number', seleccionados);
+
+                        let nuevoHistorial = [...historialAuditoria];
+                        nuevoHistorial.push({ accion: `Validación de Inventario (${seleccionados.length} ULDs)`, usuario: miNombre, fecha: now });
+                        if (nuevoHistorial.length > 20) nuevoHistorial = nuevoHistorial.slice(-20); 
+
+                        await supabaseClient.from('uld_accesorios').upsert([{ station: estacionVista, historial_inventario: nuevoHistorial }]);
+
+                        document.getElementById('chkAll').checked = false; 
+                        await refrescarPantalla();
+                        showCustomAlert("Inventario Actualizado", "Los registros en rampa seleccionados han sido validados exitosamente.", "success");
+                    } catch(e) { showCustomAlert("Error", "No se pudo actualizar el inventario.", "error"); }
+                    finally { btn.disabled = false; btn.innerText = "VALIDAR SELECCIÓN FÍSICA"; }
+                }
+            );
         }
 
         // =====================================
@@ -1705,34 +1850,6 @@
         }
         function cerrarModalHistorialLog() { document.getElementById('modalHistorialLog').style.display = 'none'; }
 
-        function guardarInventarioGlobal() {
-            if(uldsEnRampa.length === 0) { showCustomAlert("Atención", "No hay ULDs en rampa para validar.", "info"); return; }
-            showCustomConfirm(
-                "Validar Inventario Físico",
-                `Se validará el estado de los <b>${uldsEnRampa.length} ULDs físicos</b> en ${estacionVista}.<br><br>¿Confirmas que el conteo en rampa es correcto?`,
-                "GUARDAR Y ACTUALIZAR",
-                "var(--amerijet-blue)",
-                async () => {
-                    const btn = document.getElementById('btnGuardarInv'); btn.disabled = true; btn.innerText = "Sincronizando...";
-                    try {
-                        const now = new Date().toISOString();
-                        await supabaseClient.from('uld_inventario').update({ updated_ontime: now })
-                                .eq('location', estacionVista).neq('opp_status', 'IN TRANSIT');
-
-                        let nuevoHistorial = [...historialAuditoria];
-                        nuevoHistorial.push({ accion: "Inventario Físico en Rampa Validado", usuario: miNombre, fecha: now });
-                        if (nuevoHistorial.length > 20) nuevoHistorial = nuevoHistorial.slice(-20); 
-
-                        await supabaseClient.from('uld_accesorios').upsert([{ station: estacionVista, historial_inventario: nuevoHistorial }]);
-
-                        await refrescarPantalla();
-                        showCustomAlert("Inventario Actualizado", "Los registros en rampa han sido validados exitosamente.", "success");
-                    } catch(e) { showCustomAlert("Error", "No se pudo actualizar el inventario.", "error"); }
-                    finally { btn.disabled = false; btn.innerText = "GUARDAR INVENTARIO FÍSICO"; }
-                }
-            );
-        }
-
         // =====================================
         // TABLA GLOBAL PIVOT PARA MUNDO (TODA LA RED)
         // =====================================
@@ -1867,6 +1984,10 @@
         // Exportar EXCEL del Cuadro Resumen Global
         function exportarPivotExcel() {
             if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos globales para exportar.", "info");
+            
+            // Generar tabla HTML real para forzar a Excel a respetar las columnas
+            let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body><table border="1">`;
+            
             const pivotMap = {}; const typesSet = new Set();
             pivotGlobalData.forEach(row => {
                 const loc = row.location || 'UNKNOWN'; const type = row.uld_type ? row.uld_type.toUpperCase() : 'N/A';
@@ -1877,34 +1998,44 @@
             });
             const sortedTypes = Array.from(typesSet).sort(); const sortedStations = Object.keys(pivotMap).sort();
             
-            let csv = "\uFEFFSTATION,LAST UPDATE,"; sortedTypes.forEach(t => csv += `${t},`); csv += "TOTAL PALLETS\n";
+            tableHtml += `<tr><th>STATION</th><th>LAST UPDATE</th>`; 
+            sortedTypes.forEach(t => tableHtml += `<th>${t}</th>`); 
+            tableHtml += `<th>TOTAL PALLETS</th></tr>`;
+            
             const sumsByType = {}; sortedTypes.forEach(t => sumsByType[t] = 0); let grandTotal = 0;
 
             sortedStations.forEach(station => {
                 const dataSt = pivotMap[station]; let dateStr = "N/A";
                 if(dataSt.lastUpdate) { const d = dataSt.lastUpdate; dateStr = `${d.getUTCMonth()+1}/${d.getUTCDate()}/${d.getUTCFullYear()}`; }
-                csv += `"${station}","${dateStr}",`;
-                sortedTypes.forEach(t => { const val = dataSt.types[t] || 0; if(val > 0) sumsByType[t] += val; csv += `"${val > 0 ? val : ''}",`; });
-                grandTotal += dataSt.total; csv += `"${dataSt.total}"\n`;
+                tableHtml += `<tr><td>${station}</td><td>${dateStr}</td>`;
+                sortedTypes.forEach(t => { const val = dataSt.types[t] || 0; if(val > 0) sumsByType[t] += val; tableHtml += `<td>${val > 0 ? val : ''}</td>`; });
+                grandTotal += dataSt.total; tableHtml += `<td>${dataSt.total}</td></tr>`;
             });
-            csv += `"Total by Type","",`; sortedTypes.forEach(t => csv += `"${sumsByType[t]}",`); csv += `"${grandTotal}"\n`;
+            tableHtml += `<tr><td>Total by Type</td><td></td>`; 
+            sortedTypes.forEach(t => tableHtml += `<td>${sumsByType[t]}</td>`); 
+            tableHtml += `<td>${grandTotal}</td></tr></table></body></html>`;
 
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `Pivot_Global_${new Date().toISOString().slice(0,10)}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel' }); 
+            const link = document.createElement("a"); 
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Pivot_Global_${new Date().toISOString().slice(0,10)}.xls`); 
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         // Exportar EXCEL de TODOS los ULDs del Mundo a detalle
         function exportarTodoExcel() {
             if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos para exportar en el mundo entero.", "info");
-            const blob = new Blob([construirCSV(pivotGlobalData)], { type: 'text/csv;charset=utf-8;' }); 
+            const blob = new Blob([construirHTMLXLS(pivotGlobalData)], { type: 'application/vnd.ms-excel' }); 
             const link = document.createElement("a"); 
             link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `Inventario_Global_Completo_${new Date().toISOString().slice(0,10)}.csv`); 
+            link.setAttribute("download", `Inventario_Global_Completo_${new Date().toISOString().slice(0,10)}.xls`); 
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        function construirCSV(arrayDeUlds) {
-            let csv = "\uFEFFULD Number,ULD Status,Damage Reason,Location,Updated On,Use Status,Opp Status,ULD Type,Owner,Received On,Updated OnTime (ZULU),Validation ULD\n";
+        function construirHTMLXLS(arrayDeUlds) {
+            let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body><table border="1">`;
+            html += `<tr><th>ULDNumber</th><th>ULDStatus</th><th>Damage Reason</th><th>Location</th><th>UpdatedOn</th><th>UseStatus</th><th>OppStatus</th><th>ULDType</th><th>Owner</th><th>ReceivedOn</th><th>UpdatedOnTime (ZULU)</th><th>Validation ULD</th></tr>`;
+            
             arrayDeUlds.forEach(u => {
                 let rxDate = "", updStr = "", updTimeStr = "";
                 if(u.received_on) { const [y,m,d] = u.received_on.split('-'); rxDate = `${m}/${d}/${y.slice(-2)}`; }
@@ -1916,14 +2047,19 @@
                     updTimeStr = `${updStr} ${hr}:${min} Z`;
                 }
                 const damageR = u.damage_reason ? u.damage_reason.replace(/,/g, ' ') : '';
-                csv += `"${u.uld_number}","${u.uld_status || 'SERVICEABLE'}","${damageR}","${u.location}","${updStr}","${u.use_status}","${u.opp_status}","${u.uld_type}","${u.owner}","${rxDate}","${updTimeStr}","${u.validation_uld}"\n`;
-            }); return csv;
+                html += `<tr><td>${u.uld_number}</td><td>${u.uld_status || 'SERVICEABLE'}</td><td>${damageR}</td><td>${u.location}</td><td>${updStr}</td><td>${u.use_status}</td><td>${u.opp_status}</td><td>${u.uld_type}</td><td>${u.owner}</td><td>${rxDate}</td><td>${updTimeStr}</td><td>${u.validation_uld}</td></tr>`;
+            }); 
+            html += `</table></body></html>`;
+            return html;
         }
 
         function exportarExcelLocal() {
             if (datosFiltrados.length === 0) return showCustomAlert("Atención", "No hay datos en la tabla actual para exportar.", "info");
-            const blob = new Blob([construirCSV(datosFiltrados)], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `Inventario_Rampa_${estacionVista}_${new Date().toISOString().slice(0,10)}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            const blob = new Blob([construirHTMLXLS(datosFiltrados)], { type: 'application/vnd.ms-excel' }); 
+            const link = document.createElement("a"); 
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Inventario_Rampa_${estacionVista}_${new Date().toISOString().slice(0,10)}.xls`); 
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         document.getElementById('btnLogout').addEventListener('click', async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; });
