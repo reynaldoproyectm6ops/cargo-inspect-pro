@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Centro de Mando de Vuelos | Cargo Inspect Pro</title>
     <link rel="icon" type="image/png" href="logo_3.png">
     
@@ -336,12 +336,7 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; }
         .modal-generic { text-align: center; max-width: 350px; }
-        
-        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
-        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
-        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
 
-        /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* RESPONSIVE */
@@ -480,10 +475,10 @@
         </div>
     </div>
 
-    <!-- MODALES UNIVERSALES CON EMOJIS RESTAURADOS -->
+    <!-- MODALES UNIVERSALES CON EMOJIS GIGANTES -->
     <div class="modal-overlay" id="customAlertModal">
         <div class="modal-content modal-generic">
-            <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1;">ℹ️</div>
+            <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">ℹ️</div>
             <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform:uppercase; transition: 0.2s;">Aceptar</button>
@@ -492,7 +487,7 @@
 
     <div class="modal-overlay" id="customConfirmModal">
         <div class="modal-content modal-generic">
-            <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1;">⚠️</div>
+            <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform:uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
@@ -504,7 +499,7 @@
 
     <div class="modal-overlay" id="inactivityModal">
         <div class="modal-content modal-generic">
-            <div style="font-size: 50px; margin-bottom: 10px; line-height: 1;">⏳</div>
+            <div style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⏳</div>
             <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform:uppercase;">Sesión en Pausa</h3>
             <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por motivos de seguridad, la sesión se cerrará por inactividad. ¿Confirmar presencia?</p>
             <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform:uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
@@ -613,7 +608,7 @@
                 if (perfil) {
                     miNombre = perfil.nombre || "Usuario"; miRol = String(perfil.rol).toLowerCase();
                     const estacionesStr = perfil.estacion_base || "SAL"; misEstaciones = estacionesStr.split(',').map(s => s.trim());
-                    document.getElementById('lblUserName').innerText = miNombre; document.getElementById('lblUserRol').innerText = miRol;
+                    document.getElementById('lblUserName').innerText = miNombre; document.getElementById('lblUserRol').innerText = miRol.replace('_', ' ').toUpperCase();
                     
                     if(miRol === 'admin' || miRol === 'supervisor') {
                         document.getElementById('btnUldMenu').innerHTML = "Inventario Maestro ULD";
@@ -936,7 +931,7 @@
                     grid.appendChild(card);
                 });
 
-                // Inicializar labels Zulu
+                // Inicializar labels Zulu visualmente al cargar
                 vuelosActivos.forEach(v => {
                     actualizarLabelZulu(`t_inicio_${v.id}`);
                     actualizarLabelZulu(`t_fin_${v.id}`);
