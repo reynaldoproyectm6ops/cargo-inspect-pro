@@ -177,7 +177,7 @@
         }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
-        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: none; /* Oculto en móvil */ }
+        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: none; }
         .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
@@ -259,18 +259,20 @@
         .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
         .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1; }
         
-        .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-        .header-left-side { display: flex; flex-direction: column; gap: 8px; }
-        .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; }
-        .vuelo-tail { background: rgba(255,255,255,0.15); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 1px;}
+        .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap;}
+        .header-left-side { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px;}
+        .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .header-badges-wrapper { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
         
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; text-transform: uppercase;}
+        .vuelo-tail { background: rgba(255,255,255,0.15); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;}
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; text-transform: uppercase; white-space: nowrap;}
         .status-aperturado { background: #38BDF8; color: #0F172A; }
         .status-armando { background: #F59E0B; color: white; }
         .status-despachado { background: #8B5CF6; color: white; }
         .status-importacion { background: #EC4899; color: white; }
 
-        .card-controls { display: flex; gap: 6px; }
+        .card-controls { display: flex; gap: 6px; flex-shrink: 0;}
         .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; font-size: 11px; font-weight: 800; padding: 6px 10px; border-radius: 6px; transition: 0.2s; text-transform: uppercase;}
         .ctrl-btn:hover { background: white; color: var(--amerijet-blue-dark); border-color: white; }
         .ctrl-btn.ctrl-delete:hover { background: #E11D48; color: white; border-color: #E11D48; }
@@ -333,6 +335,10 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; }
         .modal-generic { text-align: center; max-width: 350px; }
+        
+        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
+        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
+        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
 
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
@@ -347,12 +353,13 @@
             .menu-toggle { display: block; }
             .header-title { display: none; } 
             
-            .top-header { padding: 0 15px; flex-wrap: nowrap;}
-            .header-controls-wrapper { gap: 5px; }
-            .live-zulu-clock { font-size: 10px; padding: 4px 8px; border-radius: 12px; }
+            .top-header { padding: 0 10px; gap: 5px;}
+            .header-controls-wrapper { gap: 8px; }
+            .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px;}
             .station-selector { font-size: 11px; }
-            .station-module span { display: block; font-size: 9px; } /* Muestra "ESTACIÓN" pequeño */
+            .station-module span { display: none; } /* Oculta la palabra "ESTACIÓN" para ahorrar espacio */
             .station-module { padding: 4px 8px; border-radius: 12px; }
+            .vuelo-card-header { padding: 15px; }
         }
     </style>
 </head>
@@ -665,23 +672,35 @@
         // CÁLCULO ESTRICTO ISO A ZULU (UTC)
         // ==========================================
         function marcarTiempoAhora(inputId) { 
+            // 1. Obtiene la hora física exacta del dispositivo y su zona horaria
             const now = new Date();
-            const tzOffset = now.getTimezoneOffset() * 60000;
-            const localISOTime = new Date(now.getTime() - tzOffset).toISOString().slice(0, 16);
-            document.getElementById(inputId).value = localISOTime;
+            const y = now.getFullYear();
+            const mo = String(now.getMonth() + 1).padStart(2, '0');
+            const da = String(now.getDate()).padStart(2, '0');
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            
+            // 2. Coloca la fecha y hora local exacta en la casilla HTML
+            document.getElementById(inputId).value = `${y}-${mo}-${da}T${h}:${m}`;
+            
+            // 3. Actualiza visualmente la etiqueta Zulu
             actualizarLabelZulu(inputId);
         }
 
         function formatDateTimeLocal(isoString) {
             if (!isoString) return "";
             
-            // LA HORA VIENE DIRECTO EN ZULU DESDE SUPABASE, USAMOS EL PARSER NATIVO
             const d = new Date(isoString);
             if (isNaN(d.getTime())) return "";
             
-            // Le pedimos a JS que nos dé la fecha restándole nuestra zona horaria
-            const tzOffset = d.getTimezoneOffset() * 60000;
-            return new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+            // 1. Extrae nativamente la hora a la zona horaria del dispositivo actual
+            const y = d.getFullYear();
+            const mo = String(d.getMonth() + 1).padStart(2, '0');
+            const da = String(d.getDate()).padStart(2, '0');
+            const h = String(d.getHours()).padStart(2, '0');
+            const m = String(d.getMinutes()).padStart(2, '0');
+            
+            return `${y}-${mo}-${da}T${h}:${m}`;
         }
 
         function actualizarLabelZulu(inputId) {
@@ -696,7 +715,8 @@
             const localDate = new Date(input.value); 
             if(isNaN(localDate.getTime())) return;
             
-            // Se le suma automáticamente la diferencia horaria que JS tiene en la máquina
+            // localDate ya sabe en qué zona horaria estás. 
+            // getUTCHours() calcula matemáticamente la hora Zulu exacta.
             let hr = String(localDate.getUTCHours()).padStart(2, '0');
             let mn = String(localDate.getUTCMinutes()).padStart(2, '0');
             label.innerText = `(${hr}:${mn} Z)`;
@@ -762,9 +782,9 @@
                         <div class="vuelo-card-header">
                             <div class="header-left-side">
                                 <h3 class="vuelo-title">${v.vuelo_id} ${badgeEstacion}</h3>
-                                <div>
+                                <div class="header-badges-wrapper">
                                     <span class="vuelo-tail">TAIL: ${v.matricula_avion}</span>
-                                    <span class="status-badge ${statusClass}" style="margin-left: 5px;">${currentStatus}</span>
+                                    <span class="status-badge ${statusClass}">${currentStatus}</span>
                                 </div>
                             </div>
                             <div class="card-controls" style="display: ${displayCardBtns};">
@@ -864,7 +884,7 @@
                     grid.appendChild(card);
                 });
 
-                // Inicializar labels Zulu
+                // Inicializar labels Zulu visualmente al cargar
                 vuelosActivos.forEach(v => {
                     actualizarLabelZulu(`t_inicio_${v.id}`);
                     actualizarLabelZulu(`t_fin_${v.id}`);
