@@ -28,7 +28,7 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
-        /* PREVENIR DESBORDAMIENTO HORIZONTAL ABSOLUTO */
+        /* PREVENIR DESBORDAMIENTO HORIZONTAL */
         html, body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
@@ -124,11 +124,11 @@
         .btn-crear-azul { background: var(--amerijet-blue); }
         .btn-crear-azul:hover { background: #1E293B; }
         
-        /* TARJETAS DE USUARIOS Y ESTACIONES - BLINDADO RESPONSIVE */
+        /* TARJETAS DE USUARIOS Y ESTACIONES - REPARADO EL ALTO Y DESBORDAMIENTO */
         .user-card { 
             background: white; border: 1px solid #E2E8F0; padding: 15px; border-radius: 12px; 
             display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
-            width: 100%; box-sizing: border-box; overflow: hidden;
+            width: 100%; box-sizing: border-box;
         }
         .user-card strong { color: var(--amerijet-blue); font-size: 15px; text-transform: uppercase; word-break: break-word;}
         
@@ -170,14 +170,13 @@
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
-        /* MODO CELULAR / RESPONSIVE (ARREGLADO PARA NO DESBORDAR) */
+        /* MODO CELULAR / RESPONSIVE */
         @media (max-width: 1024px) { 
             .top-header { padding: 0 15px; gap: 10px; width: 100vw;}
             .header-title { display: none; } 
             .menu-toggle { display: block; }
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
 
-            /* En móviles, convertimos el grid principal a flex column para control total del ancho */
             .dashboard-container { 
                 display: flex; 
                 flex-direction: column; 
@@ -189,10 +188,10 @@
                 position: static !important; 
                 max-height: none; 
                 width: 100%; 
-                padding: 20px 15px; /* Reducimos el padding interno en móvil */
+                padding: 20px 15px;
             } 
             
-            /* Forzar a 1 sola columna las tarjetas en móviles para evitar que se aplasten */
+            /* Forzar a 1 sola columna las tarjetas en móviles */
             .user-grid { display: flex; flex-direction: column; gap: 15px; max-height: none; overflow: visible;}
             #estacionesGrid { max-height: none; overflow: visible;}
             
