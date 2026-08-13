@@ -155,12 +155,12 @@
             color: var(--amerijet-blue);
         }
 
-        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
 
         .main-content {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 50px;
+            padding-bottom: 120px; /* Padding extra mobile */
         }
 
         .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 30px; max-width: 1600px; margin: 0 auto; }
@@ -169,19 +169,22 @@
         .panel-form h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-transform: uppercase;}
         
         .form-group { display: flex; flex-direction: column; margin-bottom: 16px; flex-shrink: 0;}
-        .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between;}
         .form-group input, .form-group select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background-color: #F8FAFC; color: var(--text-main); font-weight: 600;}
         .form-group input:focus, .form-group select:focus { border-color: #3B82F6; background-color: white; outline: none; }
         
         /* SCROLLS INTERNOS APLICADOS AQUÍ */
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px; }
         
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
         #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; }
 
         .chk-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #F1F5F9; padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .chk-label:hover { background: #E2E8F0; }
         .chk-label input { margin: 0; padding: 0; cursor: pointer; }
+        
+        .btn-select-all { background: transparent; border: 1px solid #CBD5E1; color: var(--amerijet-blue); font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+        .btn-select-all:hover { background: #E2E8F0; }
 
         .btn-crear { background: #10B981; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 13px; text-transform: uppercase; transition: 0.2s; margin-top: 10px; letter-spacing: 0.5px; flex-shrink: 0;}
         .btn-crear:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
@@ -189,48 +192,43 @@
         .btn-crear-azul { background: #2563EB; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
         .btn-crear-azul:hover { background: #1D4ED8; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
         
-        /* TARJETAS DE USUARIOS */
+        /* TARJETAS DE USUARIOS Y ESTACIONES */
         .user-card { background: white; border: 1px solid #E2E8F0; padding: 18px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .user-card strong { color: var(--amerijet-blue); font-size: 15px; text-transform: uppercase;}
         
-        .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .btn-action-panel { padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; border: 1px solid transparent; text-align: center; transition: 0.2s; background: white; text-transform: uppercase;}
-        .btn-edit { border-color: #BFDBFE; color: #1D4ED8; }
-        .btn-edit:hover { background: #EFF6FF; }
-        .btn-delete { border-color: #FECDD3; color: #E11D48; }
-        .btn-delete:hover { background: #FFF1F2; }
-        .btn-pwd { border-color: #FDE68A; color: #D97706; grid-column: 1 / -1; margin-top: 2px; }
-        .btn-pwd:hover { background: #FFFBEB; }
+        .card-actions { display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;}
+        
+        /* SVG BUTTONS CORPORATIVOS (32x32px) */
+        .btn-action-panel { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; background: white; flex-shrink: 0; }
+        .btn-edit { border-color: #BFDBFE; color: #1D4ED8; background: #EFF6FF; }
+        .btn-edit:hover { background: #DBEAFE; }
+        .btn-delete { border-color: #FECDD3; color: #E11D48; background: #FFF1F2;}
+        .btn-delete:hover { background: #FFE4E6; }
+        .btn-pwd { border-color: #FDE68A; color: #D97706; background: #FFFBEB;}
+        .btn-pwd:hover { background: #FEF3C7; }
 
         .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; width: fit-content; letter-spacing: 0.5px; }
         .badge-admin { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
         .badge-sup { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
+        .badge-sup-local { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; } /* Nuevo Rol CSS */
         .badge-user { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
         
         .user-email { font-size: 11px; color: #64748B; font-weight: 600; }
         .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding: 6px 0; border-top: 1px dashed #E2E8F0; margin-top: 5px; text-transform: uppercase;}
 
-        /* TARJETAS DE ESTACIONES */
         .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .estacion-info { display: flex; flex-direction: column; flex-grow: 1;}
         .estacion-info strong { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase; }
         .estacion-info span { font-size: 11px; color: #64748B; font-weight: 600; margin-top: 2px;}
         .estacion-info .uld-count { font-size: 11px; font-weight: 800; color: #10B981; margin-top: 6px; display: inline-block; background: #ECFDF5; padding: 2px 6px; border-radius: 4px; border: 1px solid #A7F3D0; width: fit-content; text-transform: uppercase;}
         
-        .estacion-actions { display: flex; gap: 8px;}
-        .btn-icon-config { background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; font-size: 11px; padding: 6px 12px; border-radius: 6px; font-weight: 800; transition: 0.2s; text-transform: uppercase; }
+        .btn-icon-config { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; border-radius: 6px; transition: 0.2s; flex-shrink: 0; }
         .btn-icon-config:hover { background: #E2E8F0; color: var(--amerijet-blue); }
-        .btn-icon-delete { background: white; border: 1px solid #FECDD3; color: #E11D48; cursor: pointer; font-size: 11px; padding: 6px 12px; border-radius: 6px; transition: 0.2s; font-weight: 800; text-transform: uppercase;}
-        .btn-icon-delete:hover { background: #FFF1F2; }
 
-        /* MODALES ESTRUCTURA */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); padding: 15px; }
+        /* MODALES ESTRUCTURA CORPORATIVA (CERO EMOJIS TEXTO) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .modal-generic { text-align: center; max-width: 350px; }
-        
-        .badge-modal-icon { font-size: 14px; font-weight: 900; background: #F1F5F9; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 8px 15px; border-radius: 6px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
-        .badge-modal-icon.error { background: #FFF1F2; border-color: #FECDD3; color: #E11D48; }
-        .badge-modal-icon.success { background: #ECFDF5; border-color: #A7F3D0; color: #059669; }
         
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
@@ -242,7 +240,6 @@
             .dashboard-container { grid-template-columns: 1fr; padding: 15px; gap: 20px; }
             .panel-form { position: static !important; max-height: none; } 
             
-            /* En celulares, la altura máxima de las listas evitará que cubran toda la pantalla */
             .user-grid { max-height: 400px; }
             #estacionesGrid { max-height: 400px; }
             
@@ -265,7 +262,9 @@
         </div>
         
         <div class="sidebar-user">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
                 <span id="lblUserRol" class="badge-rol">...</span>
@@ -326,7 +325,10 @@
                             </select>
                         </div>
                         <div class="form-group" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
-                            <label>Estaciones Autorizadas</label>
+                            <label>
+                                Estaciones Autorizadas 
+                                <button type="button" class="btn-select-all" onclick="seleccionarTodas('crear')">TODAS</button>
+                            </label>
                             <!-- ESTE DIV TIENE SCROLL INTERNO -->
                             <div class="checkbox-group" id="estacionesContainerCrear"></div>
                         </div>
@@ -388,7 +390,10 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Estaciones Autorizadas</label>
+                    <label>
+                        Estaciones Autorizadas
+                        <button type="button" class="btn-select-all" onclick="seleccionarTodas('edit')">TODAS</button>
+                    </label>
                     <div class="checkbox-group" id="estacionesContainerEdit" style="max-height: 200px;"></div>
                 </div>
                 <button type="submit" id="btnModalSaveUser" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Guardar Cambios</button>
@@ -451,10 +456,10 @@
         </div>
     </div>
 
-    <!-- MODALES UNIVERSALES -->
+    <!-- MODALES UNIVERSALES CON EMOJIS GIGANTES -->
     <div class="modal-overlay" id="customAlertModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
-            <div id="alertIcon" class="badge-modal-icon">[ INFO ]</div>
+            <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">ℹ️</div>
             <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
             <button onclick="closeCustomAlert()" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform: uppercase; transition: 0.2s;">Aceptar</button>
@@ -463,7 +468,7 @@
 
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 9998;">
         <div class="modal-content modal-generic">
-            <div id="confirmIcon" class="badge-modal-icon error">[ ALERTA ]</div>
+            <div id="confirmIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 18px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro?</p>
             <div style="display: flex; gap: 10px;">
@@ -475,7 +480,7 @@
 
     <div class="modal-overlay" id="inactivityModal" style="z-index: 9999;">
         <div class="modal-content modal-generic">
-            <div class="badge-modal-icon error">[ PAUSA ]</div>
+            <div style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">⏳</div>
             <h3 style="font-weight: 800; margin-bottom: 10px; color: var(--amerijet-red); font-size: 18px; text-transform: uppercase;">Sesión en Pausa</h3>
             <p style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Por motivos de seguridad, cerraremos tu sesión por inactividad. ¿Sigues ahí?</p>
             <button onclick="resetInactivityTimers()" style="background:var(--amerijet-blue); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; text-transform: uppercase; transition: 0.2s;">Mantener Sesión Activa</button>
@@ -507,8 +512,8 @@
             titleEl.innerText = title;
             document.getElementById('alertMessage').innerHTML = message;
             
-            icon.innerText = type === 'success' ? '[ OK ]' : type === 'error' ? '[ ERROR ]' : '[ INFO ]';
-            icon.className = `badge-modal-icon ${type}`;
+            // Regla estricta: Solo Emojis en modales
+            icon.innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             
             titleEl.style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
             btn.style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
@@ -565,13 +570,19 @@
             cargarUsuarios();
         }
 
+        // Selección Rápida de Checkboxes
+        function seleccionarTodas(tipo) {
+            const className = tipo === 'crear' ? '.chk-crear' : '.chk-edit';
+            const checkboxes = document.querySelectorAll(className);
+            const estanTodasMarcadas = Array.from(checkboxes).every(cb => cb.checked);
+            checkboxes.forEach(cb => cb.checked = !estanTodasMarcadas);
+        }
+
         async function cargarEstaciones() {
             try {
-                // 1. Obtenemos las estaciones
                 const { data: estaciones, error } = await supabaseClient.from('estaciones').select('*').order('codigo', { ascending: true });
                 if (error) throw error;
                 
-                // 2. Obtenemos TODOS los ULDs para hacer el conteo global por estación
                 const { data: uldsData } = await supabaseClient.from('uld_inventario').select('location');
                 
                 const conteoPorEstacion = {};
@@ -595,6 +606,9 @@
                     return;
                 }
 
+                const iconConfig = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>`;
+                const iconTrash = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
+
                 listaEstacionesCache.forEach(est => {
                     containerCrear.innerHTML += `<label class="chk-label"><input type="checkbox" value="${est.codigo}" class="chk-crear"> ${est.codigo}</label>`;
                     containerEdit.innerHTML += `<label class="chk-label"><input type="checkbox" value="${est.codigo}" class="chk-edit" id="edit_chk_${est.codigo}"> ${est.codigo}</label>`;
@@ -610,8 +624,8 @@
                                 <span class="uld-count">STOCK: ${totalUlds} ULDs en Rampa</span>
                             </div>
                             <div class="estacion-actions">
-                                <button class="btn-icon-config" onclick="abrirModalConfigStock('${est.codigo}', '${strStock}')" title="Configurar Stock Permitido">CONFIG. STOCK</button>
-                                <button class="btn-icon-delete" onclick="eliminarEstacion('${est.codigo}')" title="Borrar Estación">ELIMINAR</button>
+                                <button class="btn-action-panel btn-icon-config" onclick="abrirModalConfigStock('${est.codigo}', '${strStock}')" title="Configurar Stock">${iconConfig}</button>
+                                <button class="btn-action-panel btn-delete" onclick="eliminarEstacion('${est.codigo}')" title="Borrar Estación">${iconTrash}</button>
                             </div>
                         </div>`;
                 });
@@ -706,12 +720,17 @@
                 if (error) throw error;
 
                 grid.innerHTML = '';
+                
+                const iconEdit = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
+                const iconDelete = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
+                const iconKey = `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12.65 10A5.99 5.99 0 0 0 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6a5.99 5.99 0 0 0 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>`;
+
                 usuarios.forEach(u => {
                     let rolBadge = '';
                     const r = String(u.rol).toLowerCase();
-                    if(r === 'admin') rolBadge = '<span class="badge badge-admin">ADMIN</span>';
+                    if(r === 'admin') rolBadge = '<span class="badge badge-admin">ADMINISTRADOR</span>';
                     else if(r === 'supervisor') rolBadge = '<span class="badge badge-sup">SUP. GLOBAL</span>';
-                    else if(r === 'supervisor_local') rolBadge = '<span class="badge" style="background:#E0E7FF; color:#4338CA; border: 1px solid #C7D2FE;">SUP. LOCAL</span>';
+                    else if(r === 'supervisor_local') rolBadge = '<span class="badge badge-sup-local">SUP. LOCAL</span>';
                     else rolBadge = '<span class="badge badge-user">OPERADOR</span>';
                     
                     const estacionesList = u.estacion_base || "Ninguna";
@@ -724,9 +743,9 @@
                         <div class="user-email">Login: ${u.email.split('@')[0]}</div>
                         <div class="estaciones-list">ACCESOS: ${estacionesList}</div>
                         <div class="card-actions">
-                            <button class="btn-action-panel btn-edit" onclick="abrirModalEditUser('${u.id}', '${u.nombre}', '${u.rol}', '${estacionesList}')">EDITAR</button>
-                            <button class="btn-action-panel btn-delete" onclick="eliminarPerfil('${u.id}', '${u.nombre}', '${u.email}')">ELIMINAR</button>
-                            <button class="btn-action-panel btn-pwd" onclick="abrirModalPwd('${u.id}', '${u.nombre}', '${u.email}')">ACCESO</button>
+                            <button class="btn-action-panel btn-pwd" onclick="abrirModalPwd('${u.id}', '${u.nombre}', '${u.email}')" title="Resetear Contraseña">${iconKey}</button>
+                            <button class="btn-action-panel btn-edit" onclick="abrirModalEditUser('${u.id}', '${u.nombre}', '${u.rol}', '${estacionesList}')" title="Editar Permisos">${iconEdit}</button>
+                            <button class="btn-action-panel btn-delete" onclick="eliminarPerfil('${u.id}', '${u.nombre}', '${u.email}')" title="Borrar Usuario">${iconTrash}</button>
                         </div>`;
                     grid.appendChild(card);
                 });
@@ -763,7 +782,7 @@
                 async () => {
                     try { 
                         await supabaseClient.from('perfiles').delete().eq('id', id); 
-                        showCustomAlert("Perfil Borrado", `Perfil eliminado.\n\nNota técnica: Para liberar totalmente la memoria, borra también a "${email}" desde la sección Auth en Supabase.`, "success");
+                        showCustomAlert("Perfil Borrado", `Perfil eliminado.\n\nNota técnica: Para liberar totalmente la memoria, recuerda borrar también a "${email}" desde la sección Auth en Supabase.`, "success");
                         cargarUsuarios(); 
                     } catch(err) { showCustomAlert("Error", err.message, "error"); }
                 }
