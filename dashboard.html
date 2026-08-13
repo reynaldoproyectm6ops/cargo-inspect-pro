@@ -355,7 +355,7 @@
             
             .top-header { padding: 0 10px; gap: 5px;}
             .header-controls-wrapper { gap: 8px; }
-            .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px;}
+            .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
             .station-selector { font-size: 11px; }
             .station-module span { display: none; } /* Oculta la palabra "ESTACIÓN" para ahorrar espacio */
             .station-module { padding: 4px 8px; border-radius: 12px; }
@@ -511,6 +511,25 @@
         let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario"; let todasLasEstacionesBD = [];
 
         // ==========================================
+        // DICCIONARIO INTERNACIONAL DE HUSOS HORARIOS (IANA)
+        // ==========================================
+        const stationTimezones = {
+            'SAL': 'America/El_Salvador',
+            'SAP': 'America/Tegucigalpa',
+            'PTY': 'America/Panama',
+            'MIA': 'America/New_York', // Cubre horario de verano de Miami
+            'MEX': 'America/Mexico_City',
+            'BOG': 'America/Bogota',
+            'SJO': 'America/Costa_Rica',
+            'SDQ': 'America/Santo_Domingo',
+            'GUA': 'America/Guatemala'
+        };
+
+        function getStationTimezone(code) {
+            return stationTimezones[code] || Intl.DateTimeFormat().resolvedOptions().timeZone;
+        }
+
+        // ==========================================
         // RELOJ ZULU (UTC) GLOBAL
         // ==========================================
         function updateZuluClock() {
@@ -541,7 +560,6 @@
             }
         }
 
-        // Se restauran los iconos tipo Emoji tal como solicitó el usuario para las Alertas
         function showCustomAlert(title, message, type = 'info') {
             const modal = document.getElementById('customAlertModal'); const icon = document.getElementById('alertIcon');
             const titleEl = document.getElementById('alertTitle'); const btn = document.getElementById('alertBtn');
@@ -578,7 +596,6 @@
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'index.html'; return; }
 
-            // Lógica de consulta universal de estaciones para que siempre aparezcan las nuevas
             const { data: catEst } = await supabaseClient.from('estaciones').select('codigo').order('codigo');
             if(catEst) { todasLasEstacionesBD = catEst.map(e => e.codigo); }
 
@@ -669,38 +686,65 @@
         });
 
         // ==========================================
-        // CÁLCULO ESTRICTO ISO A ZULU (UTC)
+        // MOTOR DE CONVERSIÓN DE ZONAS HORARIAS NATIVO
         // ==========================================
-        function marcarTiempoAhora(inputId) { 
-            // 1. Obtiene la hora física exacta del dispositivo y su zona horaria
-            const now = new Date();
-            const y = now.getFullYear();
-            const mo = String(now.getMonth() + 1).padStart(2, '0');
-            const da = String(now.getDate()).padStart(2, '0');
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
+        
+        function getStationOffsetMinutes(dateObj, stationCode) {
+            const tz = getStationTimezone(stationCode);
+            // Calcula matemáticamente la diferencia entre el meridiano cero y el país seleccionado
+            const utcDateStr = dateObj.toLocaleString('en-US', { timeZone: 'UTC' });
+            const tzDateStr = dateObj.toLocaleString('en-US', { timeZone: tz });
             
-            // 2. Coloca la fecha y hora local exacta en la casilla HTML
-            document.getElementById(inputId).value = `${y}-${mo}-${da}T${h}:${m}`;
+            const utcTime = new Date(utcDateStr).getTime();
+            const tzTime = new Date(tzDateStr).getTime();
+            return (utcTime - tzTime) / 60000;
+        }
+
+        function convertStationLocalToUTC(localStr, stationCode) {
+            if(!localStr) return null;
+            const baseDate = new Date(localStr + 'Z'); 
+            const offsetMins = getStationOffsetMinutes(baseDate, stationCode);
+            const realUtcTime = baseDate.getTime() + (offsetMins * 60000);
+            return new Date(realUtcTime).toISOString();
+        }
+
+        function convertUTCToStationLocal(utcIsoStr, stationCode) {
+            if(!utcIsoStr) return "";
+            const date = new Date(utcIsoStr);
+            if(isNaN(date.getTime())) return "";
             
-            // 3. Actualiza visualmente la etiqueta Zulu
+            const tz = getStationTimezone(stationCode);
+            const options = {
+                timeZone: tz,
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', hour12: false
+            };
+            
+            const formatter = new Intl.DateTimeFormat('en-US', options);
+            const parts = formatter.formatToParts(date);
+            const p = {};
+            parts.forEach(({ type, value }) => { p[type] = value; });
+            
+            if (p.hour === '24') p.hour = '00';
+            
+            return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+        }
+
+        // ==========================================
+        // FUNCIONES DE INTERFAZ DEL MOTOR DE TIEMPO
+        // ==========================================
+
+        function marcarTiempoAhora(inputId) {
+            // El botón AHORA obtiene la hora Universal exacta y la traduce a la pantalla del país que estás viendo
+            const nowUtc = new Date().toISOString();
+            const localStr = convertUTCToStationLocal(nowUtc, estacionActual);
+            document.getElementById(inputId).value = localStr;
             actualizarLabelZulu(inputId);
         }
 
         function formatDateTimeLocal(isoString) {
-            if (!isoString) return "";
-            
-            const d = new Date(isoString);
-            if (isNaN(d.getTime())) return "";
-            
-            // 1. Extrae nativamente la hora a la zona horaria del dispositivo actual
-            const y = d.getFullYear();
-            const mo = String(d.getMonth() + 1).padStart(2, '0');
-            const da = String(d.getDate()).padStart(2, '0');
-            const h = String(d.getHours()).padStart(2, '0');
-            const m = String(d.getMinutes()).padStart(2, '0');
-            
-            return `${y}-${mo}-${da}T${h}:${m}`;
+            // Cuando la base de datos se descarga, traduce el ZULU puro a la hora de la estación que estás viendo
+            return convertUTCToStationLocal(isoString, estacionActual);
         }
 
         function actualizarLabelZulu(inputId) {
@@ -712,15 +756,17 @@
                 return;
             }
             
-            const localDate = new Date(input.value); 
-            if(isNaN(localDate.getTime())) return;
-            
-            // localDate ya sabe en qué zona horaria estás. 
-            // getUTCHours() calcula matemáticamente la hora Zulu exacta.
-            let hr = String(localDate.getUTCHours()).padStart(2, '0');
-            let mn = String(localDate.getUTCMinutes()).padStart(2, '0');
+            // Toma lo que escribiste en la pantalla, lo trata como si estuvieras en ese país, y lo vuelve a pasar a Zulu
+            const utcIso = convertStationLocalToUTC(input.value, estacionActual);
+            const d = new Date(utcIso);
+            let hr = String(d.getUTCHours()).padStart(2, '0');
+            let mn = String(d.getUTCMinutes()).padStart(2, '0');
             label.innerText = `(${hr}:${mn} Z)`;
         }
+
+        // ==========================================
+        // FLUJO DE DATOS Y TARJETAS
+        // ==========================================
 
         async function toggleOperacion(idVuelo, tipoOp, estadoActual) {
             const columna = tipoOp === 'export' ? 'aplica_export' : 'aplica_import';
@@ -752,7 +798,6 @@
 
                 grid.innerHTML = "";
                 
-                // Lógica de Permisos de Edición/Borrado
                 const canModify = (miRol === 'admin' || miRol === 'supervisor' || miRol === 'supervisor_local');
                 const displayCardBtns = canModify ? `flex` : `none`;
 
@@ -765,7 +810,6 @@
 
                     const badgeEstacion = (estacionActual === 'ALL') ? `<span style="background: rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: auto;">EST: ${v.estacion_registro}</span>` : '';
                     
-                    // JS FORMATEA CORRECTAMENTE INDEPENDIENTEMENTE DE QUÉ PAÍS ESTÉ SELECCIONADO EN PANTALLA
                     const hInicio = formatDateTimeLocal(v.hora_inicio_lotificada);
                     const hFin = formatDateTimeLocal(v.hora_fin_lotificada);
 
@@ -884,7 +928,6 @@
                     grid.appendChild(card);
                 });
 
-                // Inicializar labels Zulu visualmente al cargar
                 vuelosActivos.forEach(v => {
                     actualizarLabelZulu(`t_inicio_${v.id}`);
                     actualizarLabelZulu(`t_fin_${v.id}`);
@@ -895,9 +938,6 @@
 
         async function irAlArmado(idVuelo) { try { await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); window.location.href = `tiempo_armado.html?id=${idVuelo}`; } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } }
         
-        // ==========================================
-        // LÓGICA DE LIMPIEZA CLÍNICA (DESPACHO Y ELIMINACIÓN)
-        // ==========================================
         async function limpiarFotosInspeccion(idVuelo, matriculaAvion) {
             try {
                 const { data: logs } = await supabaseClient.from('avion_inspecciones')
@@ -993,18 +1033,9 @@
             const hInicio = document.getElementById(`t_inicio_${idVuelo}`).value; 
             const hFin = document.getElementById(`t_fin_${idVuelo}`).value; 
             
-            // LA HORA LOCAL DE TU CELULAR ES CONVERTIDA AQUÍ A UTC ANTES DE ENVIARSE A SUPABASE
-            let hInicioUTC = null;
-            if(hInicio) {
-                const localDate = new Date(hInicio);
-                hInicioUTC = new Date(localDate.getTime() + (localDate.getTimezoneOffset() * 60000)).toISOString();
-            }
-
-            let hFinUTC = null;
-            if(hFin) {
-                const localDate = new Date(hFin);
-                hFinUTC = new Date(localDate.getTime() + (localDate.getTimezoneOffset() * 60000)).toISOString();
-            }
+            // CONVIERTE LA HORA DE LA ESTACIÓN A UTC PURO PARA GUARDAR EN NUBE
+            const hInicioUTC = hInicio ? convertStationLocalToUTC(hInicio, estacionActual) : null;
+            const hFinUTC = hFin ? convertStationLocalToUTC(hFin, estacionActual) : null;
 
             try { 
                 const { error } = await supabaseClient.from('vuelos_operaciones').update({ hora_inicio_lotificada: hInicioUTC, hora_fin_lotificada: hFinUTC, estado: 'EN IMPORTACION' }).eq('id', idVuelo); 
