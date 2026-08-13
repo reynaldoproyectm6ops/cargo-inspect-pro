@@ -28,14 +28,14 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
-        /* PREVENIR DESBORDAMIENTO HORIZONTAL */
-        body { 
+        /* PREVENIR DESBORDAMIENTO HORIZONTAL ABSOLUTO */
+        html, body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
             display: flex; 
             height: 100vh;
+            width: 100vw;
             overflow-x: hidden;
-            width: 100%;
         }
         
         /* =========================================
@@ -50,6 +50,7 @@
             transition: transform 0.3s ease;
             z-index: 1000;
             box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
 
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -78,36 +79,36 @@
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
-           TOP HEADER 
+           TOP HEADER Y MAIN WRAPPER
         ========================================= */
-        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; max-width: 100%; overflow-x: hidden; }
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; width: 100%; overflow-x: hidden; }
         
-        .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; }
-        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
+        .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; width: 100%; box-sizing: border-box;}
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); flex-shrink: 0;}
         
         .header-title-group { display: flex; align-items: center; gap: 15px; overflow: hidden; }
-        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px; white-space: nowrap;}
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; }
+        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; flex-shrink: 0;}
         .live-zulu-clock { background: var(--amerijet-blue-dark); color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px; font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 120px; }
+        .main-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 120px; width: 100%; box-sizing: border-box;}
 
-        .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 25px; max-width: 1600px; margin: 0 auto; width: 100%;}
+        .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 25px; max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box;}
         
-        .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); height: fit-content; position: sticky; top: 20px; display: flex; flex-direction: column; max-height: calc(100vh - 100px); overflow-x: hidden;}
+        .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); height: fit-content; position: sticky; top: 20px; display: flex; flex-direction: column; max-height: calc(100vh - 100px); overflow-x: hidden; box-sizing: border-box; width: 100%;}
         .panel-form h2 { font-size: 16px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-transform: uppercase;}
         
-        .form-group { display: flex; flex-direction: column; margin-bottom: 16px; flex-shrink: 0; width: 100%;}
+        .form-group { display: flex; flex-direction: column; margin-bottom: 16px; flex-shrink: 0; width: 100%; box-sizing: border-box;}
         .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center;}
         .form-group input, .form-group select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; background-color: #F8FAFC; color: var(--text-main); font-weight: 600; width: 100%; box-sizing: border-box;}
         .form-group input:focus, .form-group select:focus { border-color: var(--amerijet-blue); background-color: white; outline: none; }
         
         /* SCROLLS INTERNOS */
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px; }
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
-        #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px; width: 100%; box-sizing: border-box;}
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; width: 100%; box-sizing: border-box;}
+        #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box;}
 
         .chk-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #F1F5F9; padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .chk-label:hover { background: #E2E8F0; }
@@ -117,17 +118,17 @@
         .btn-select-all:hover { background: #E2E8F0; }
 
         /* BOTONES CORPORATIVOS */
-        .btn-crear { background: var(--amerijet-blue-dark); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 13px; text-transform: uppercase; transition: 0.2s; margin-top: 10px; letter-spacing: 0.5px; flex-shrink: 0;}
+        .btn-crear { background: var(--amerijet-blue-dark); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 13px; text-transform: uppercase; transition: 0.2s; margin-top: 10px; letter-spacing: 0.5px; flex-shrink: 0; box-sizing: border-box;}
         .btn-crear:hover { background: #1E293B; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
         .btn-crear-azul { background: var(--amerijet-blue); }
         .btn-crear-azul:hover { background: #1E293B; }
         
-        /* TARJETAS DE USUARIOS Y ESTACIONES - REPARADO PARA EVITAR COLAPSOS */
+        /* TARJETAS DE USUARIOS Y ESTACIONES - BLINDADO RESPONSIVE */
         .user-card { 
             background: white; border: 1px solid #E2E8F0; padding: 15px; border-radius: 12px; 
             display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
-            width: 100%; height: 100%; box-sizing: border-box;
+            width: 100%; box-sizing: border-box; overflow: hidden;
         }
         .user-card strong { color: var(--amerijet-blue); font-size: 15px; text-transform: uppercase; word-break: break-word;}
         
@@ -138,12 +139,12 @@
         .badge-user { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
         
         .user-email { font-size: 11px; color: #64748B; font-weight: 600; word-break: break-all; }
-        .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding-top: 8px; border-top: 1px dashed #E2E8F0; margin-top: auto; text-transform: uppercase;}
+        .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding-top: 8px; border-top: 1px dashed #E2E8F0; margin-top: auto; text-transform: uppercase; word-break: break-word;}
         
         .card-actions { display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;}
         
         /* SVG BUTTONS CORPORATIVOS (32x32px) */
-        .btn-action-panel { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; background: white; flex-shrink: 0; }
+        .btn-action-panel { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; background: white; flex-shrink: 0; padding:0;}
         .btn-edit { border-color: #CBD5E1; color: var(--amerijet-blue); background: #F1F5F9; }
         .btn-edit:hover { background: #E2E8F0; }
         .btn-delete { border-color: #FECDD3; color: #E11D48; background: #FFF1F2;}
@@ -151,40 +152,51 @@
         .btn-pwd { border-color: #FDE68A; color: #D97706; background: #FFFBEB;}
         .btn-pwd:hover { background: #FEF3C7; }
 
-        .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
+        .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); width: 100%; box-sizing: border-box;}
         .estacion-info { display: flex; flex-direction: column; flex-grow: 1; min-width: 0;}
-        .estacion-info strong { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase; }
+        .estacion-info strong { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase; word-break: break-word;}
         .estacion-info span { font-size: 11px; color: #64748B; font-weight: 600; margin-top: 2px;}
         .estacion-info .uld-count { font-size: 11px; font-weight: 800; color: #10B981; margin-top: 6px; display: inline-block; background: #ECFDF5; padding: 2px 6px; border-radius: 4px; border: 1px solid #A7F3D0; width: fit-content; text-transform: uppercase;}
         
-        .btn-icon-config { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; border-radius: 6px; transition: 0.2s; flex-shrink: 0; }
+        .btn-icon-config { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F8FAFC; border: 1px solid #CBD5E1; color: #475569; cursor: pointer; border-radius: 6px; transition: 0.2s; flex-shrink: 0; padding:0;}
         .btn-icon-config:hover { background: #E2E8F0; color: var(--amerijet-blue); }
 
         /* MODALES ESTRUCTURA CORPORATIVA */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
-        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto;}
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; box-sizing: border-box;}
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; box-sizing: border-box;}
         .modal-generic { text-align: center; max-width: 350px; }
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%;}
 
         /* OVERLAY SIDEBAR MOBILE */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
-        /* MODO CELULAR / RESPONSIVE */
+        /* MODO CELULAR / RESPONSIVE (ARREGLADO PARA NO DESBORDAR) */
         @media (max-width: 1024px) { 
-            .top-header { padding: 0 15px; gap: 5px;}
+            .top-header { padding: 0 15px; gap: 10px; width: 100vw;}
             .header-title { display: none; } 
             .menu-toggle { display: block; }
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
 
-            /* Ajustes críticos para evitar desbordamiento */
-            .dashboard-container { grid-template-columns: 1fr; padding: 15px 10px; gap: 15px; max-width: 100vw; overflow-x: hidden; }
-            .panel-form { position: static !important; max-height: none; width: 100%; padding: 15px;} 
+            /* En móviles, convertimos el grid principal a flex column para control total del ancho */
+            .dashboard-container { 
+                display: flex; 
+                flex-direction: column; 
+                padding: 15px; 
+                gap: 15px; 
+                width: 100vw; 
+            }
+            .panel-form { 
+                position: static !important; 
+                max-height: none; 
+                width: 100%; 
+                padding: 20px 15px; /* Reducimos el padding interno en móvil */
+            } 
             
             /* Forzar a 1 sola columna las tarjetas en móviles para evitar que se aplasten */
-            .user-grid { grid-template-columns: 1fr; max-height: 400px; }
-            #estacionesGrid { max-height: 400px; }
+            .user-grid { display: flex; flex-direction: column; gap: 15px; max-height: none; overflow: visible;}
+            #estacionesGrid { max-height: none; overflow: visible;}
             
-            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); width: 260px;}
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
         }
@@ -434,7 +446,6 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         const authSupabase = window.supabase.createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false, autoRefreshToken: false } });
 
-        // Reloj Zulu (Idéntico a uld_gestion.html)
         function updateZuluClock() {
             const now = new Date();
             const hr = String(now.getUTCHours()).padStart(2, '0');
@@ -446,7 +457,6 @@
         setInterval(updateZuluClock, 1000);
         updateZuluClock();
 
-        // Toggle Sidebar Mobile
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebarOverlay').classList.toggle('active');
@@ -483,9 +493,6 @@
         function closeCustomConfirm() { document.getElementById('customConfirmModal').style.display = 'none'; currentConfirmCallback = null; }
         document.getElementById('btnConfirmAction').addEventListener('click', () => { if(currentConfirmCallback) currentConfirmCallback(); closeCustomConfirm(); });
 
-        // ==========================================
-        // SISTEMA DE SEGURIDAD: TIMEOUT DE INACTIVIDAD
-        // ==========================================
         let inactivityTimer; let warningTimer; const WARNING_TIME = 28 * 60 * 1000; const LOGOUT_TIME = 30 * 60 * 1000;
         function resetInactivityTimers() {
             clearTimeout(inactivityTimer); clearTimeout(warningTimer); document.getElementById('inactivityModal').style.display = 'none';
@@ -494,9 +501,6 @@
         }
         ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
 
-        // ==========================================
-        // INICIALIZACIÓN Y CARGA
-        // ==========================================
         let listaEstacionesCache = [];
 
         async function inicializarAdmin() {
@@ -520,7 +524,6 @@
             cargarUsuarios();
         }
 
-        // Selección Rápida de Checkboxes
         function seleccionarTodas(tipo) {
             const className = tipo === 'crear' ? '.chk-crear' : '.chk-edit';
             const checkboxes = document.querySelectorAll(className);
@@ -582,32 +585,22 @@
             } catch(e) { console.error(e); }
         }
 
-        // ==========================================
-        // GESTIÓN DE STOCK POR ESTACIÓN
-        // ==========================================
         function abrirModalConfigStock(codigo, stockJsonStr) {
             document.getElementById('lblConfigEstacion').innerText = codigo;
             document.getElementById('cfg_estacion_codigo').value = codigo;
-            
             let stock = {};
             try { stock = JSON.parse(stockJsonStr); } catch(e) {}
-
             document.getElementById('cfg_pag').value = stock['PAG/PAJ'] || 0;
             document.getElementById('cfg_pmc').value = stock['PMC/PMH'] || 0;
             document.getElementById('cfg_pqa').value = stock['PQA/FQA'] || 0;
             document.getElementById('cfg_ake').value = stock['AKE/AVE'] || 0;
-
             document.getElementById('modalConfigStock').style.display = 'flex';
         }
-
-        function cerrarModalConfig() {
-            document.getElementById('modalConfigStock').style.display = 'none';
-        }
+        function cerrarModalConfig() { document.getElementById('modalConfigStock').style.display = 'none'; }
 
         document.getElementById('formConfigStock').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSaveConfig'); btn.disabled = true; btn.innerText = "Guardando...";
-            
             const codigo = document.getElementById('cfg_estacion_codigo').value;
             const nuevoStock = {
                 "PAG/PAJ": parseInt(document.getElementById('cfg_pag').value) || 0,
@@ -615,35 +608,25 @@
                 "PQA/FQA": parseInt(document.getElementById('cfg_pqa').value) || 0,
                 "AKE/AVE": parseInt(document.getElementById('cfg_ake').value) || 0
             };
-
             try {
                 const { error } = await supabaseClient.from('estaciones').update({ stock_permitido: nuevoStock }).eq('codigo', codigo);
                 if (error) throw error;
-                
-                cerrarModalConfig();
-                await cargarEstaciones();
+                cerrarModalConfig(); await cargarEstaciones();
                 showCustomAlert("Stock Actualizado", `Los límites de inventario para ${codigo} se guardaron correctamente.`, "success");
-            } catch(err) {
-                showCustomAlert("Error", err.message, "error");
-            } finally {
-                btn.disabled = false; btn.innerText = "Guardar Configuración";
-            }
+            } catch(err) { showCustomAlert("Error", err.message, "error"); } 
+            finally { btn.disabled = false; btn.innerText = "Guardar Configuración"; }
         });
 
-        // ==========================================
-        // GESTIÓN BÁSICA DE ESTACIONES
-        // ==========================================
         document.getElementById('formCrearEstacion').addEventListener('submit', async function(e) {
             e.preventDefault();
             const payload = { 
                 codigo: document.getElementById('est_codigo').value.trim().toUpperCase(), 
                 nombre: document.getElementById('est_nombre').value.trim(),
-                stock_permitido: {"PAG/PAJ": 0, "PMC/PMH": 0, "PQA/FQA": 0, "AKE/AVE": 0} // Por defecto 0
+                stock_permitido: {"PAG/PAJ": 0, "PMC/PMH": 0, "PQA/FQA": 0, "AKE/AVE": 0}
             };
             try { 
                 await supabaseClient.from('estaciones').upsert([payload]); 
-                document.getElementById('formCrearEstacion').reset(); 
-                await cargarEstaciones(); 
+                document.getElementById('formCrearEstacion').reset(); await cargarEstaciones(); 
                 showCustomAlert("Estación Agregada", "La nueva base ha sido agregada a la red.", "success");
             } catch(err) { showCustomAlert("Error", err.message, "error"); } 
         });
@@ -652,23 +635,18 @@
             showCustomConfirm("Borrar Estación", `¿Confirmas que deseas eliminar la estación <b>${codigo}</b> del sistema?`, "Sí, Borrar", "var(--amerijet-red)", 
                 async () => {
                     try { 
-                        await supabaseClient.from('estaciones').delete().eq('codigo', codigo); 
-                        await cargarEstaciones(); 
+                        await supabaseClient.from('estaciones').delete().eq('codigo', codigo); await cargarEstaciones(); 
                         showCustomAlert("Estación Borrada", "Se eliminó correctamente.", "success");
                     } catch(err) { showCustomAlert("Error", err.message, "error"); }
                 }
             );
         }
 
-        // ==========================================
-        // GESTIÓN DE USUARIOS
-        // ==========================================
         async function cargarUsuarios() {
             const grid = document.getElementById('usersGrid');
             grid.innerHTML = '<p style="font-size: 12px; color: #64748B;">Cargando personal...</p>';
             
             try {
-                // Ordenar por nombre alfabéticamente para mayor seguridad en la carga
                 const { data: usuarios, error } = await supabaseClient.from('perfiles').select('*').order('nombre', { ascending: true });
                 if (error) throw error;
 
@@ -688,7 +666,6 @@
                     
                     const estacionesList = u.estacion_base || "NINGUNA";
                     
-                    // Aseguramos que nada contenga comillas que rompan el HTML
                     const safeId = u.id || '';
                     const safeNombre = (u.nombre || 'SIN NOMBRE').replace(/'/g, "\\'").replace(/"/g, "&quot;");
                     const safeEmailFull = (u.email || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
@@ -710,9 +687,7 @@
                         </div>`;
                     grid.appendChild(card);
                 });
-            } catch(e) { 
-                grid.innerHTML = `<p style="font-size:12px; color:var(--amerijet-red); font-weight:800; padding:10px;">Error: ${e.message || 'No se pudo cargar la base de datos'}</p>`; 
-            }
+            } catch(e) { grid.innerHTML = `<p style="font-size:12px; color:var(--amerijet-red); font-weight:800; padding:10px;">Error: ${e.message}</p>`; }
         }
 
         document.getElementById('formCrearUser').addEventListener('submit', async function(e) {
@@ -735,10 +710,9 @@
                 
                 if (insertError) throw insertError;
 
-                document.getElementById('formCrearUser').reset(); 
-                cargarUsuarios();
+                document.getElementById('formCrearUser').reset(); cargarUsuarios();
                 showCustomAlert("Usuario Creado", "El personal fue registrado exitosamente y ya puede iniciar sesión.", "success");
-            } catch (err) { showCustomAlert("Error", err.message, "error"); } 
+            } catch (err) { showCustomAlert("Error en Creación", err.message, "error"); } 
             finally { btn.disabled = false; btn.innerText = "Crear Personal"; }
         });
 
@@ -748,8 +722,7 @@
                     try { 
                         const { error } = await supabaseClient.from('perfiles').delete().eq('id', id); 
                         if (error) throw error;
-                        
-                        showCustomAlert("Perfil Borrado", `Perfil eliminado.\n\nNota técnica: Para liberar totalmente la memoria, recuerda borrar también a "${email}" desde la sección Auth en Supabase.`, "success");
+                        showCustomAlert("Perfil Borrado", `Perfil eliminado.\n\nNota técnica: Recuerda borrar también a "${email}" desde Auth en Supabase.`, "success");
                         cargarUsuarios(); 
                     } catch(err) { showCustomAlert("Error", err.message, "error"); }
                 }
@@ -781,19 +754,16 @@
                     estacion_base: Array.from(checkboxes).map(cb => cb.value).join(', ')
                 }).eq('id', document.getElementById('edit_user_id').value);
                 
-                if (error) throw error; // Ahora sí captura el rechazo de PostgreSQL
+                if (error) throw error; 
 
                 cerrarModalUser(); cargarUsuarios();
                 showCustomAlert("Perfil Actualizado", "Los permisos y datos han sido actualizados.", "success");
             } catch (err) { 
-                showCustomAlert("No se guardó el rol", "La Base de Datos bloqueó el guardado. Es seguro que la columna 'rol' en Supabase tiene un filtro que no admite la palabra 'supervisor_local'. Debes modificar esa columna en la BD.\n\nError: " + err.message, "error"); 
+                showCustomAlert("Error al guardar el rol", "Asegúrate de haber ejecutado el código SQL que añade el nuevo rol al ENUM en Supabase.\n\nError: " + err.message, "error"); 
             } 
             finally { btnSave.disabled = false; btnSave.innerText = "Guardar Cambios"; }
         });
 
-        // ==========================================
-        // GESTIÓN DE CONTRASEÑAS
-        // ==========================================
         function abrirModalPwd(id, nombre, email) {
             document.getElementById('pwd_user_id').value = id;
             document.getElementById('pwd_user_email').value = email;
@@ -811,22 +781,13 @@
             const userEmail = document.getElementById('pwd_user_email').value;
 
             btnSave.disabled = true; btnSave.innerText = "Forzando cambio...";
-
             try {
-                const { error } = await supabaseClient.rpc('cambiar_password_usuario', {
-                    user_email: userEmail,
-                    nueva_pass: nuevaPassword
-                });
-
+                const { error } = await supabaseClient.rpc('cambiar_password_usuario', { user_email: userEmail, nueva_pass: nuevaPassword });
                 if (error) throw error;
-
                 showCustomAlert("Contraseña Actualizada", `¡ÉXITO! La nueva clave de acceso generada es: <b>${nuevaPassword}</b>`, "success");
                 cerrarModalPwd();
-            } catch (err) {
-                showCustomAlert("Error de Seguridad", "No se pudo resetear la contraseña: " + err.message, "error");
-            } finally {
-                btnSave.disabled = false; btnSave.innerText = "Forzar Nueva Contraseña";
-            }
+            } catch (err) { showCustomAlert("Error de Seguridad", "No se pudo resetear la contraseña: " + err.message, "error"); } 
+            finally { btnSave.disabled = false; btnSave.innerText = "Forzar Nueva Contraseña"; }
         });
 
         document.getElementById('btnLogout').addEventListener('click', async () => {
