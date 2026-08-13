@@ -28,7 +28,7 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
-        /* PREVENIR DESBORDAMIENTO HORIZONTAL EN MÓVILES */
+        /* PREVENIR DESBORDAMIENTO HORIZONTAL */
         body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
@@ -97,7 +97,7 @@
         .dashboard-container { display: grid; grid-template-columns: 320px 1fr 340px; gap: 25px; padding: 25px; max-width: 1600px; margin: 0 auto; width: 100%;}
         
         .panel-form { background: white; padding: 25px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); height: fit-content; position: sticky; top: 20px; display: flex; flex-direction: column; max-height: calc(100vh - 100px); overflow-x: hidden;}
-        .panel-form h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-transform: uppercase;}
+        .panel-form h2 { font-size: 16px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-transform: uppercase;}
         
         .form-group { display: flex; flex-direction: column; margin-bottom: 16px; flex-shrink: 0; width: 100%;}
         .form-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center;}
@@ -106,7 +106,7 @@
         
         /* SCROLLS INTERNOS */
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px; }
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 8px; flex: 1; align-content: start; }
         #estacionesGrid { overflow-y: auto; padding-right: 8px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
 
         .chk-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: #F1F5F9; padding: 6px 10px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
@@ -123,9 +123,22 @@
         .btn-crear-azul { background: var(--amerijet-blue); }
         .btn-crear-azul:hover { background: #1E293B; }
         
-        /* TARJETAS DE USUARIOS Y ESTACIONES */
-        .user-card { background: white; border: 1px solid #E2E8F0; padding: 18px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); width: 100%; box-sizing: border-box; overflow: hidden;}
-        .user-card strong { color: var(--amerijet-blue); font-size: 15px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        /* TARJETAS DE USUARIOS Y ESTACIONES - REPARADO PARA EVITAR COLAPSOS */
+        .user-card { 
+            background: white; border: 1px solid #E2E8F0; padding: 15px; border-radius: 12px; 
+            display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
+            width: 100%; height: 100%; box-sizing: border-box;
+        }
+        .user-card strong { color: var(--amerijet-blue); font-size: 15px; text-transform: uppercase; word-break: break-word;}
+        
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; width: fit-content; letter-spacing: 0.5px; }
+        .badge-admin { background: #F1F5F9; color: var(--amerijet-blue-dark); border: 1px solid #CBD5E1; }
+        .badge-sup { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
+        .badge-sup-local { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; } 
+        .badge-user { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+        
+        .user-email { font-size: 11px; color: #64748B; font-weight: 600; word-break: break-all; }
+        .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding-top: 8px; border-top: 1px dashed #E2E8F0; margin-top: auto; text-transform: uppercase;}
         
         .card-actions { display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;}
         
@@ -137,15 +150,6 @@
         .btn-delete:hover { background: #FFE4E6; }
         .btn-pwd { border-color: #FDE68A; color: #D97706; background: #FFFBEB;}
         .btn-pwd:hover { background: #FEF3C7; }
-
-        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; width: fit-content; letter-spacing: 0.5px; }
-        .badge-admin { background: #F1F5F9; color: var(--amerijet-blue-dark); border: 1px solid #CBD5E1; }
-        .badge-sup { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
-        .badge-sup-local { background: #E0F2FE; color: #1E40AF; border: 1px solid #BFDBFE; } 
-        .badge-user { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
-        
-        .user-email { font-size: 11px; color: #64748B; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .estaciones-list { font-size: 11px; color: #334155; font-weight: 700; padding: 6px 0; border-top: 1px dashed #E2E8F0; margin-top: 5px; text-transform: uppercase;}
 
         .estacion-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; flex-wrap: wrap; gap:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .estacion-info { display: flex; flex-direction: column; flex-grow: 1; min-width: 0;}
@@ -664,7 +668,7 @@
             grid.innerHTML = '<p style="font-size: 12px; color: #64748B;">Cargando personal...</p>';
             
             try {
-                // Ordenar por nombre para prevenir fallos en created_at si existieran registros corruptos
+                // Ordenar por nombre alfabéticamente para mayor seguridad en la carga
                 const { data: usuarios, error } = await supabaseClient.from('perfiles').select('*').order('nombre', { ascending: true });
                 if (error) throw error;
 
@@ -682,20 +686,20 @@
                     else if(r === 'supervisor_local') rolBadge = '<span class="badge badge-sup-local">SUP. LOCAL</span>';
                     else rolBadge = '<span class="badge badge-user">OPERADOR</span>';
                     
-                    const estacionesList = u.estacion_base || "Ninguna";
+                    const estacionesList = u.estacion_base || "NINGUNA";
                     
-                    // Variables seguras para evitar errores de inyección JS por comillas en nombres/correos
-                    const safeId = u.id;
-                    const safeNombre = u.nombre ? u.nombre.replace(/'/g, "\\'") : 'SIN NOMBRE';
-                    const safeEmailFull = u.email || '';
-                    const safeEmailLogin = safeEmailFull ? safeEmailFull.split('@')[0] : 'N/A';
-                    const safeRol = r; // Ya está en minúsculas
-                    const safeEstaciones = estacionesList.replace(/'/g, "\\'");
+                    // Aseguramos que nada contenga comillas que rompan el HTML
+                    const safeId = u.id || '';
+                    const safeNombre = (u.nombre || 'SIN NOMBRE').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                    const safeEmailFull = (u.email || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                    const safeEmailLogin = u.email ? u.email.split('@')[0] : 'N/A';
+                    const safeRol = r; 
+                    const safeEstaciones = estacionesList.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
                     const card = document.createElement('div');
                     card.className = 'user-card';
                     card.innerHTML = `
-                        <strong>${u.nombre || 'SIN NOMBRE'}</strong>
+                        <strong>${safeNombre}</strong>
                         <div>${rolBadge}</div>
                         <div class="user-email" title="${safeEmailFull}">Login: ${safeEmailLogin}</div>
                         <div class="estaciones-list">ACCESOS: ${estacionesList}</div>
@@ -724,10 +728,12 @@
                 const { data: authData, error: authError } = await authSupabase.auth.signUp({ email: secureEmail, password: document.getElementById('reg_password').value });
                 if (authError) throw authError;
 
-                await supabaseClient.from('perfiles').upsert([{
+                const { error: insertError } = await supabaseClient.from('perfiles').upsert([{
                     id: authData.user.id, email: secureEmail, nombre: document.getElementById('reg_nombre').value.trim(),
                     rol: document.getElementById('reg_rol').value, estacion_base: Array.from(checkboxes).map(cb => cb.value).join(', ')
                 }]);
+                
+                if (insertError) throw insertError;
 
                 document.getElementById('formCrearUser').reset(); 
                 cargarUsuarios();
@@ -740,7 +746,9 @@
             showCustomConfirm("Eliminar Perfil", `¿Estás seguro de borrar a <b>${nombre}</b> del sistema de acceso?`, "Sí, Borrar Usuario", "var(--amerijet-red)", 
                 async () => {
                     try { 
-                        await supabaseClient.from('perfiles').delete().eq('id', id); 
+                        const { error } = await supabaseClient.from('perfiles').delete().eq('id', id); 
+                        if (error) throw error;
+                        
                         showCustomAlert("Perfil Borrado", `Perfil eliminado.\n\nNota técnica: Para liberar totalmente la memoria, recuerda borrar también a "${email}" desde la sección Auth en Supabase.`, "success");
                         cargarUsuarios(); 
                     } catch(err) { showCustomAlert("Error", err.message, "error"); }
@@ -751,7 +759,6 @@
         function abrirModalEditUser(id, nombre, rol, estacionesStr) {
             document.getElementById('edit_user_id').value = id;
             document.getElementById('edit_nombre').value = nombre;
-            // Al forzar el rol a minúsculas en 'cargarUsuarios', nos aseguramos que esto encaje con el value del select
             document.getElementById('edit_rol').value = rol; 
             
             document.querySelectorAll('.chk-edit').forEach(cb => cb.checked = false);
@@ -768,13 +775,19 @@
 
             const btnSave = document.getElementById('btnModalSaveUser'); btnSave.disabled = true; btnSave.innerText = "Guardando...";
             try {
-                await supabaseClient.from('perfiles').update({
-                    nombre: document.getElementById('edit_nombre').value, rol: document.getElementById('edit_rol').value,
+                const { error } = await supabaseClient.from('perfiles').update({
+                    nombre: document.getElementById('edit_nombre').value, 
+                    rol: document.getElementById('edit_rol').value,
                     estacion_base: Array.from(checkboxes).map(cb => cb.value).join(', ')
                 }).eq('id', document.getElementById('edit_user_id').value);
+                
+                if (error) throw error; // Ahora sí captura el rechazo de PostgreSQL
+
                 cerrarModalUser(); cargarUsuarios();
                 showCustomAlert("Perfil Actualizado", "Los permisos y datos han sido actualizados.", "success");
-            } catch (err) { showCustomAlert("Error", err.message, "error"); } 
+            } catch (err) { 
+                showCustomAlert("No se guardó el rol", "La Base de Datos bloqueó el guardado. Es seguro que la columna 'rol' en Supabase tiene un filtro que no admite la palabra 'supervisor_local'. Debes modificar esa columna en la BD.\n\nError: " + err.message, "error"); 
+            } 
             finally { btnSave.disabled = false; btnSave.innerText = "Guardar Cambios"; }
         });
 
