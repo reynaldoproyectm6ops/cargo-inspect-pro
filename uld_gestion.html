@@ -85,9 +85,9 @@
         .live-zulu-clock { background: var(--amerijet-blue-dark); color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px; font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
-        .station-module span { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: none; }
+        .station-module .lbl-text { font-size: 11px; color: #64748B; font-weight: 800; text-transform: uppercase; display: inline-block; }
         .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
-        .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
+        .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; display: inline-block !important; }
 
         /* CONTENIDO PRINCIPAL */
         .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; }
@@ -261,7 +261,8 @@
             .header-controls-wrapper { gap: 8px; }
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
             .station-selector { font-size: 11px; }
-            .station-module span { display: none; } 
+            
+            .station-module .lbl-text { display: none; } 
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
             .top-panel { flex-direction: column; align-items: stretch; }
@@ -331,11 +332,11 @@
                 
                 <div class="header-station">
                     <div class="station-module" id="divStationSelector" style="display: none;">
-                        <span>ESTACIÓN:</span>
+                        <span class="lbl-text">ESTACIÓN:</span>
                         <select id="estacionSelector" class="station-selector"></select>
                     </div>
                     <div class="station-module" id="divStationStatic" style="display: none;">
-                        <span>ESTACIÓN:</span>
+                        <span class="lbl-text">ESTACIÓN:</span>
                         <span id="lblUserEstacion" class="station-static">Cargando...</span>
                     </div>
                 </div>
@@ -924,7 +925,6 @@
                 wrapperSelector.style.display = 'none'; wrapperStatic.style.display = 'flex';
                 estacionVista = misEstaciones[0]; lblStatic.innerText = estacionVista;
                 localStorage.setItem('cargo_current_station', estacionVista);
-                document.getElementById('thAccion').style.display = 'none';
             }
         }
 
@@ -1968,7 +1968,6 @@
         // EXPORTACIÓN A EXCEL CON SHEETJS (.XLSX REAL)
         // =====================================
         
-        // Mapeo de datos para que las columnas salgan perfectas
         function formatForExcel(arrayDeUlds) {
             return arrayDeUlds.map(u => {
                 let rxDate = "", updStr = "", updTimeStr = "";
@@ -2002,21 +2001,17 @@
             });
         }
 
-        // Exportar EXCEL del Cuadro Resumen Global (Pivot)
         function exportarPivotExcel() {
             if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos globales para exportar.", "info");
             
-            // Usamos table_to_sheet para capturar la estructura visual exacta del Pivot
             const table = document.getElementById("pivotTable");
             const ws = XLSX.utils.table_to_sheet(table);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Cuadro Global");
             
-            // Genera y descarga un archivo .xlsx real binario
             XLSX.writeFile(wb, `Pivot_Global_ULDs_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
-        // Exportar EXCEL de TODOS los ULDs del Mundo a detalle
         function exportarTodoExcel() {
             if (pivotGlobalData.length === 0) return showCustomAlert("Atención", "No hay datos para exportar en el mundo entero.", "info");
             
@@ -2026,7 +2021,6 @@
             XLSX.writeFile(wb, `Inventario_Global_Completo_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
-        // Exportar Excel de la Estación Actual
         function exportarExcelLocal() {
             if (datosFiltrados.length === 0) return showCustomAlert("Atención", "No hay datos en la tabla actual para exportar.", "info");
             
