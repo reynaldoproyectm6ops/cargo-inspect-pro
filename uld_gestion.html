@@ -18,6 +18,8 @@
             --bg-color: #F1F5F9; 
             --text-main: #1E293B;
             --text-muted: #64748B;
+            --success-green: #10B981;
+            --warn-orange: #F59E0B;
             --border-radius: 12px;
             --sidebar-width: 260px;
         }
@@ -869,7 +871,7 @@
         let miNombre = "Usuario";
         let estacionVista = "";
         
-        let datosVistaActual = [];    
+        let datosVistaActual = [];   
         let uldsEnRampa = []; 
         let uldsEnTransito = []; 
         let datosFiltrados = [];        
@@ -2156,8 +2158,20 @@
             XLSX.writeFile(wb, `Inventario_Rampa_${estacionVista}_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
-        document.getElementById('btnLogout').addEventListener('click', async () => { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href = 'index.html'; });
+        // =====================================
+        // FUNCIONES DE NAVEGACIÓN Y SESIÓN
+        // =====================================
+        function navegarA(url) {
+            window.location.href = url;
+        }
 
+        async function logoutSeguro() {
+            localStorage.removeItem('cargo_current_station');
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        // Iniciar la aplicación
         inicializar();
     </script>
 </body>
