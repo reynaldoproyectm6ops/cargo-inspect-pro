@@ -38,7 +38,7 @@
         }
         
         /* =========================================
-           SIDEBAR OSCURO PROFESIONAL (VIVO Y DINÁMICO)
+           SIDEBAR OSCURO PROFESIONAL (ANIMADO)
         ========================================= */
         .sidebar {
             width: var(--sidebar-width);
@@ -70,12 +70,7 @@
             background: rgba(255,255,255,0.02);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
-        /* ICONO DE USUARIO NATIVO SVG */
-        .user-avatar { 
-            width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; 
-            display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;
-        }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;}
         .user-info-text { display: flex; flex-direction: column; overflow: hidden; }
         .user-info-text strong { font-size: 14px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
@@ -89,9 +84,15 @@
             overflow-y: auto;
         }
 
-        /* EFECTOS DINÁMICOS DE LOS BOTONES DEL MENÚ */
+        /* EFECTOS DINÁMICOS DE BOTONES */
+        @keyframes iconBounce {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.15) translateY(-3px); }
+            100% { transform: scale(1.1) translateY(-1px); }
+        }
+
         .nav-link {
-            padding: 14px 15px;
+            padding: 12px 15px;
             text-decoration: none;
             color: #94A3B8;
             font-weight: 700;
@@ -131,12 +132,12 @@
         }
         
         .nav-link svg {
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), color 0.3s ease;
+            transition: color 0.3s ease;
             flex-shrink: 0;
         }
         
         .nav-link:hover svg {
-            transform: scale(1.15) translateY(-1px);
+            animation: iconBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
             color: #38BDF8;
         }
 
@@ -149,9 +150,13 @@
         }
         
         .nav-link.active::before { display: none; }
-        .nav-link.active svg { color: #0F172A; transform: none; }
+        .nav-link.active svg { color: #0F172A; animation: none; transform: none; }
 
-        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
         .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 
         .btn-logout { 
@@ -176,16 +181,39 @@
         /* =========================================
            TOP HEADER DINÁMICO Y MODERNO
         ======================================== */
-        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; width: 100%; overflow-x: hidden; }
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
 
         .top-header {
             background: linear-gradient(to right, #ffffff, #F8FAFC);
-            height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04);
-            border-bottom: 1px solid #E2E8F0; z-index: 900; width: 100%; box-sizing: border-box;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+            border-bottom: 1px solid #E2E8F0;
+            z-index: 900;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .menu-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--amerijet-blue); flex-shrink: 0; padding: 0;}
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--amerijet-blue);
+            flex-shrink: 0;
+            padding: 0;
+        }
+
         .header-title-group { display: flex; align-items: center; gap: 15px; overflow: hidden;}
         .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
@@ -194,9 +222,16 @@
 
         .live-zulu-clock {
             background: var(--amerijet-blue-dark);
-            color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px;
-            font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; 
+            color: #38BDF8;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap; 
         }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
@@ -205,18 +240,71 @@
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; width: 100%; box-sizing: border-box; }
-        .dashboard-container { display: flex; flex-direction: column; gap: 25px; padding: 30px; max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 120px; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .dashboard-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 25px; 
+            padding: 30px; 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            width: 100%;
+            box-sizing: border-box;
+        }
         
         /* PANEL FORMULARIO DESPLEGABLE */
-        .panel-form { background: white; padding: 20px 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #E2E8F0; transition: all 0.3s ease; width: 100%; box-sizing: border-box; }
-        .panel-form-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
-        .panel-form-header h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin: 0; text-transform: uppercase; }
-        .toggle-icon { font-size: 14px; color: #64748B; transition: transform 0.3s; }
+        .panel-form { 
+            background: white; 
+            padding: 20px 25px; 
+            border-radius: var(--border-radius); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+            border: 1px solid #E2E8F0; 
+            transition: all 0.3s ease; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .panel-form-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            cursor: pointer; 
+            user-select: none; 
+        }
+        .panel-form-header h2 { 
+            font-size: 16px; 
+            font-weight: 800; 
+            color: var(--amerijet-blue); 
+            margin: 0; 
+            text-transform: uppercase;
+        }
+        .toggle-icon { 
+            font-size: 14px; 
+            color: #64748B; 
+            transition: transform 0.3s; 
+        }
         .toggle-icon.open { transform: rotate(180deg); }
         
-        #formCrearVueloContainer { display: none; margin-top: 20px; border-top: 1px solid #E2E8F0; padding-top: 20px; }
-        .form-grid-horizontal { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end; }
+        #formCrearVueloContainer { 
+            display: none; 
+            margin-top: 20px; 
+            border-top: 1px solid #E2E8F0; 
+            padding-top: 20px; 
+        }
+
+        .form-grid-horizontal { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; 
+            align-items: end; 
+        }
         
         .form-group { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
         .form-group label { font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
@@ -227,7 +315,8 @@
         .btn-crear:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.3); }
 
         .panel-vuelos { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
-        .panel-vuelos h2 { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; text-transform: uppercase;}
+        .panel-vuelos h2 { font-size: 18px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 20px; text-transform: uppercase;}
+        
         .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 25px; align-content: start; width: 100%;}
 
         /* DISEÑO MODERNO DE TARJETA DE VUELO */
@@ -321,16 +410,14 @@
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); width: 260px;}
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
-            
-            /* AJUSTES PARA EL HEADER MÓVIL (MENU HAMBURGUESA VISIBLE) */
-            .top-header { padding: 10px 15px; height: auto; flex-wrap: wrap; gap: 10px; }
-            .header-title-group { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
+            .menu-toggle { display: block; }
             .header-title { display: none; } 
-            .menu-toggle { display: block; margin-right: 15px; }
             
-            .header-controls-wrapper { display: flex; flex: 1; justify-content: flex-end; align-items: center; }
+            .top-header { padding: 0 10px; gap: 5px; width: 100vw;}
+            .header-controls-wrapper { gap: 8px; }
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
-            .station-module .lbl-text { display: none; } 
+            .station-selector { font-size: 11px; }
+            .station-label { display: none; } 
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
             .vuelo-card-header { padding: 15px; gap: 10px; }
@@ -351,7 +438,7 @@
         
         <div class="sidebar-user">
             <div class="user-avatar">
-                <!-- Icono NATIVO Usuario -->
+                <!-- Icono de Usuario NATIVO -->
                 <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <div class="user-info-text">
@@ -361,54 +448,54 @@
         </div>
 
         <nav class="sidebar-nav">
-            <!-- CENTRO DE VUELOS (Grid/4 Squares) -->
+            <!-- CENTRO DE VUELOS -->
             <a href="dashboard.html" class="nav-link active">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4"/>
+                    <line x1="8" y1="6" x2="14" y2="6"/>
+                    <line x1="8" y1="10" x2="16" y2="10"/>
+                    <line x1="8" y1="14" x2="12" y2="14"/>
+                    <path d="M22 19l-3-2v-2l-2-1v-1l3 1h2l3-1v1l-2 1v2z"/>
                 </svg>
                 <span>CENTRO DE VUELOS</span>
             </a>
-            
-            <!-- ESTADO DE FLOTA (Airplane inside Doc) -->
+
+            <!-- ESTADO DE FLOTA (NUEVO - VISIBLE A TODOS) -->
             <a href="estado_flota.html" class="nav-link" id="btnEstadoFlota">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <path d="M14 2v6h6"></path>
-                    <path d="M12 11l2.5 2.5m-5 0L12 11m0 0v5m-3 3h6"></path>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 2v20h16V2H4z"/>
+                    <path d="M12 14l-3-2V9l3 1h2l3-1v3l-3 2v2l-1 1-1-1v-2z"/>
+                    <line x1="8" y1="18" x2="16" y2="18"/>
                 </svg>
                 <span>ESTADO DE FLOTA</span>
             </a>
 
-            <!-- INVENTARIO ULD (Square with Check) -->
+            <!-- INVENTARIO ULD -->
             <a href="uld_gestion.html" class="nav-link" id="btnUldMenu">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="9 11 12 14 22 4"></polyline>
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="11" width="8" height="9"/>
+                    <rect x="5" y="4" width="6" height="7"/>
+                    <line x1="18" y1="9" x2="18" y2="15"/>
+                    <line x1="15" y1="12" x2="21" y2="12"/>
                 </svg>
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </a>
 
-            <!-- PANEL DE CONTROL (Shield) -->
+            <!-- PANEL DE CONTROL (SOLO ADMIN) -->
             <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    <path d="M12 2v20"></path>
-                    <path d="M4 12h8"></path>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
                 <span>PANEL DE CONTROL</span>
             </a>
 
-            <!-- HISTORIAL DE VUELOS (Document with text lines) -->
+            <!-- HISTORIAL DE VUELOS (SUPERVISORES Y ADMIN) -->
             <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <path d="M14 2v6h6"></path>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <path d="M12 7v5l4 2"/>
                 </svg>
                 <span>HISTORIAL DE VUELOS</span>
             </a>
@@ -638,12 +725,16 @@
                     const estacionesStr = perfil.estacion_base || "SAL"; misEstaciones = estacionesStr.split(',').map(s => s.trim());
                     document.getElementById('lblUserName').innerText = miNombre; document.getElementById('lblUserRol').innerText = miRol.replace('_', ' ').toUpperCase();
                     
+                    if(['admin', 'supervisor', 'supervisor_local'].includes(miRol)) {
+                        document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                    }
                     if(miRol === 'admin' || miRol === 'supervisor') {
                         document.getElementById('lblUldMenuText').innerText = "INVENTARIO MAESTRO ULD";
-                        document.getElementById('btnReportesHistoricos').style.display = 'flex';
-                        if(miRol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
                     } else { 
                         document.getElementById('lblUldMenuText').innerText = "INVENTARIO LOCAL ULD"; 
+                    }
+                    if(miRol === 'admin') {
+                        document.getElementById('btnAdminPanel').style.display = 'flex';
                     }
                     configurarSelectorEstacionInteligente();
                 }
