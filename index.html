@@ -22,7 +22,7 @@
             --text-main: #1E293B;
             --text-muted: #64748B;
             --input-bg: #F8FAFC;
-            --border-radius: 12px;
+            --border-radius: 16px;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
@@ -46,7 +46,7 @@
         }
         #offlineBanner.active { transform: translateY(0); }
 
-        /* DISEÑO PREMIUM DE TARJETA (Efecto Cristal) */
+        /* DISEÑO PREMIUM DE TARJETA CON GLOW DINÁMICO */
         .login-wrapper {
             animation: fadeIn 0.6s ease-out;
             width: 100%;
@@ -54,22 +54,20 @@
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border-radius: 20px;
             text-align: center;
             position: relative;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.8);
+            /* Sombra y Glow dinámico en lugar de la barra roja */
+            animation: pulseGlow 4s infinite alternate ease-in-out;
         }
 
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 6px;
-            background: linear-gradient(90deg, var(--amerijet-red), #F43F5E);
-            border-radius: 16px 16px 0 0;
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 15px rgba(56, 189, 248, 0.2); }
+            100% { box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 40px rgba(56, 189, 248, 0.6); }
         }
 
         .brand-logo-img { max-width: 200px; height: auto; margin-bottom: 5px; }
@@ -77,10 +75,10 @@
         .subtitle {
             color: var(--text-muted);
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 30px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
         }
 
         .input-group { margin-bottom: 20px; text-align: left; }
@@ -88,7 +86,7 @@
             display: block;
             margin-bottom: 8px;
             color: var(--text-main);
-            font-weight: 700;
+            font-weight: 800;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -113,18 +111,18 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
-        .input-group input::placeholder { color: #94A3B8; font-weight: 500; }
+        .input-group input::placeholder { color: #94A3B8; font-weight: 600; }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--amerijet-red) 0%, var(--amerijet-red-hover) 100%);
+            background: linear-gradient(135deg, var(--amerijet-blue) 0%, #1E3A8A 100%);
             color: white; border: none; padding: 16px; width: 100%; border-radius: 8px;
-            font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            cursor: pointer; margin-top: 10px; transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
+            font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; margin-top: 10px; transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(10, 37, 64, 0.3);
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
-        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(225, 29, 72, 0.4); }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10, 37, 64, 0.5); }
         .btn-primary:active:not(:disabled) { transform: translateY(1px); }
         .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
 
@@ -148,28 +146,31 @@
         .btn-continue:hover { background: #059669; transform: translateY(-2px); }
 
         .btn-text {
-            background: transparent; border: none; color: #64748B; font-weight: 700;
-            font-size: 12px; cursor: pointer; margin-top: 20px; text-decoration: underline;
+            background: transparent; border: none; color: #64748B; font-weight: 800; text-transform: uppercase;
+            font-size: 11px; cursor: pointer; margin-top: 20px;
         }
-        .btn-text:hover { color: var(--amerijet-red); }
+        .btn-text:hover { color: var(--amerijet-red); text-decoration: underline; }
         
         .link-forgot {
             display: block; text-align: right; font-size: 11px; color: var(--amerijet-blue); 
-            font-weight: 700; text-decoration: none; cursor: pointer; margin-top: -10px; margin-bottom: 15px;
+            font-weight: 800; text-decoration: none; cursor: pointer; margin-top: -10px; margin-bottom: 20px;
+            text-transform: uppercase;
         }
         .link-forgot:hover { color: var(--amerijet-red); text-decoration: underline; }
 
-        .footer-note { margin-top: 30px; font-size: 11px; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        .footer-note { margin-top: 30px; font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}
 
         /* MODALES ALERTA Y RECUPERACIÓN */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(4px); padding: 15px; }
-        .modal-content { background: white; padding: 30px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); }
         
-        .modal-title-clean { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 10px; }
-        .modal-desc-clean { font-size: 13px; color: #475569; margin-bottom: 20px; line-height: 1.5; }
+        .modal-title-clean { font-size: 18px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 10px; text-transform: uppercase;}
+        .modal-desc-clean { font-size: 12px; color: #475569; margin-bottom: 20px; line-height: 1.5; font-weight: 600;}
 
-        .btn-modal-action { color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-modal-cancel { background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 13px; transition: 0.2s; margin-top: 10px; }
+        .btn-modal-action { color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-modal-action:hover { opacity: 0.9; transform: translateY(-1px);}
+        .btn-modal-cancel { background:#F1F5F9; color:#334155; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; margin-top: 10px; text-transform: uppercase;}
+        .btn-modal-cancel:hover { background: #E2E8F0; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -197,7 +198,7 @@
                 <form id="loginForm">
                     <div class="input-group">
                         <label for="username">Nombre de Usuario</label>
-                        <input type="text" id="username" placeholder="Usuario o Correo Electrónico" required autocomplete="username">
+                        <input type="text" id="username" placeholder="Usuario de acceso" required autocomplete="username" style="text-transform: lowercase;">
                     </div>
                     <div class="input-group">
                         <label for="password">Contraseña de Acceso</label>
@@ -217,16 +218,15 @@
 
             <!-- PANEL 2: SESIÓN VIVA ENCONTRADA (ZERO-BYPASS) -->
             <div id="panelSessionActive" style="display: none;">
-                <div style="background: #F1F5F9; border: 1px dashed #CBD5E1; padding: 25px 20px; border-radius: 12px; margin-bottom: 15px;">
-                    <h3 style="color: var(--amerijet-blue); font-size: 16px; font-weight: 900; margin-bottom: 8px;">Sesión Activa Detectada</h3>
-                    <p style="color: #64748B; font-size: 13px; font-weight: 600;" id="lblUserEmail">Cargando usuario...</p>
+                <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 25px 20px; border-radius: 12px; margin-bottom: 15px;">
+                    <h3 style="color: var(--amerijet-blue); font-size: 16px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase;">Sesión Activa Detectada</h3>
+                    <p style="color: #64748B; font-size: 12px; font-weight: 700;" id="lblUserEmail">Cargando usuario...</p>
                 </div>
                 <button class="btn-continue" onclick="window.location.href='dashboard.html'">Continuar al Tablero</button>
-                <button class="btn-text" onclick="cerrarSesionActual()">Cerrar sesión actual</button>
+                <button class="btn-text" onclick="cerrarSesionActual()">CERRAR SESIÓN ACTUAL</button>
             </div>
-
-            <div class="footer-note">Powered by @reynaldo_zaldana © 2026<br>Acceso Restringido</div>
         </div>
+        <div class="footer-note">Powered by @reynaldo_zaldana © 2026<br>Acceso Restringido y Monitoreado</div>
     </div>
 
     <!-- MODAL ALERTAS PERSONALIZADO -->
@@ -238,33 +238,24 @@
         </div>
     </div>
 
-    <!-- MODAL 1: RECUPERAR CONTRASEÑA -->
+    <!-- MODAL RECUPERAR/CAMBIAR CONTRASEÑA DIRECTO -->
     <div class="modal-overlay" id="modalRecover">
         <div class="modal-content">
-            <h3 class="modal-title-clean">Recuperación de Acceso</h3>
-            <p class="modal-desc-clean">Ingresa tu nombre de usuario para recibir un enlace de restablecimiento seguro.</p>
-            <form id="formRecover" onsubmit="enviarEnlaceRecuperacion(event)">
+            <h3 class="modal-title-clean">Restablecer Contraseña</h3>
+            <p class="modal-desc-clean">Ingresa tu usuario y la nueva contraseña que deseas establecer. <br><br><span style="color:var(--amerijet-red); font-size:10px; font-weight:800; text-transform:uppercase;">Cuentas administrativas están estrictamente protegidas.</span></p>
+            
+            <form id="formRecover" onsubmit="ejecutarCambioContrasena(event)">
                 <div class="input-group">
                     <label>Usuario Registrado</label>
-                    <input type="text" id="recoverUsername" placeholder="Ej: reynaldo" required>
+                    <input type="text" id="recoverUsername" placeholder="Ej: diegos" required autocomplete="off" style="text-transform: lowercase;">
                 </div>
-                <button type="submit" class="btn-modal-action" id="btnRecoverSubmit" style="background: var(--amerijet-blue);">Enviar Solicitud</button>
-                <button type="button" class="btn-modal-cancel" onclick="cerrarModalRecuperacion()">Cancelar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 2: ESTABLECER NUEVA CONTRASEÑA (Aparece tras click en el correo) -->
-    <div class="modal-overlay" id="modalSetPassword">
-        <div class="modal-content">
-            <h3 class="modal-title-clean">Actualizar Contraseña</h3>
-            <p class="modal-desc-clean">Establece tu nueva credencial de seguridad para acceder al sistema.</p>
-            <form id="formSetPassword" onsubmit="actualizarNuevaContrasena(event)">
-                <div class="input-group">
+                <div class="input-group" style="margin-top: 15px;">
                     <label>Nueva Contraseña</label>
-                    <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    <input type="password" id="recoverNewPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
                 </div>
-                <button type="submit" class="btn-modal-action" id="btnSetPassword" style="background: #10B981;">Actualizar Credencial</button>
+                
+                <button type="submit" class="btn-modal-action" id="btnRecoverSubmit" style="background: var(--amerijet-blue); margin-top: 10px;">Actualizar Credencial</button>
+                <button type="button" class="btn-modal-cancel" onclick="cerrarModalRecuperacion()">Cancelar</button>
             </form>
         </div>
     </div>
@@ -313,35 +304,21 @@
         updateNetworkStatus();
 
         // ==========================================
-        // ZERO-BYPASS Y DETECCIÓN DE RECUPERACIÓN DE CONTRASEÑA
+        // ZERO-BYPASS Y VERIFICACIÓN DE SESIÓN
         // ==========================================
         async function verificarSesion() {
             const supabase = getSupabase();
             if (!supabase) return;
 
-            // Escuchar eventos globales de Autenticación (como el click en el correo de recuperación)
-            supabase.auth.onAuthStateChange(async (event, session) => {
-                if (event === 'PASSWORD_RECOVERY') {
-                    // Si el usuario viene desde el correo, mostramos el modal final directamente
-                    document.getElementById('modalSetPassword').style.display = 'flex';
-                }
-            });
-
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
                 
-                // Si la URL contiene el hash de recuperación, no mostramos el dashboard aún,
-                // dejamos que el evento 'PASSWORD_RECOVERY' de arriba abra el modal.
-                if (window.location.hash.includes('type=recovery')) {
-                    return; 
-                }
-
                 if (session && session.user) {
                     document.getElementById('panelLoginForm').style.display = 'none';
                     document.getElementById('panelSessionActive').style.display = 'block';
-                    document.getElementById('lblUserEmail').innerText = session.user.email;
+                    document.getElementById('lblUserEmail').innerText = session.user.email.split('@')[0].toUpperCase();
                 } else {
-                    // Activar botón de credenciales si el navegador/SO lo soporta
+                    // Activar botón de credenciales biométricas si el navegador/SO lo soporta
                     if (window.PasswordCredential && navigator.credentials) {
                         document.getElementById('btnBiometric').style.display = 'flex';
                     }
@@ -356,64 +333,61 @@
         }
 
         // ==========================================
-        // FLUJO DE RECUPERACIÓN Y CAMBIO DE CONTRASEÑA
+        // FLUJO DE RECUPERACIÓN DIRECTA PROTEGIDA
         // ==========================================
-        function abrirModalRecuperacion() { document.getElementById('modalRecover').style.display = 'flex'; }
-        function cerrarModalRecuperacion() { document.getElementById('modalRecover').style.display = 'none'; }
-
-        async function enviarEnlaceRecuperacion(event) {
-            event.preventDefault();
-            const supabase = getSupabase();
-            if (!supabase) return;
-
-            const input = document.getElementById('recoverUsername').value.trim().toLowerCase();
-            const secureEmail = input.includes('@') ? input : `${input}@cargo.com`;
-            const btn = document.getElementById('btnRecoverSubmit');
-            
-            btn.disabled = true; btn.innerText = "Procesando...";
-
-            try {
-                const { data, error } = await supabase.auth.resetPasswordForEmail(secureEmail, {
-                    // Le decimos a Supabase que el correo los regrese a este mismo archivo
-                    redirectTo: window.location.origin + window.location.pathname
-                });
-                
-                if (error) throw error;
-                
-                cerrarModalRecuperacion();
-                showCustomAlert("Solicitud Procesada", "Si el usuario existe en el sistema, se ha enviado un enlace de recuperación.", "success");
-            } catch (err) {
-                showCustomAlert("Error de Sistema", err.message, "error");
-            } finally {
-                btn.disabled = false; btn.innerText = "Enviar Solicitud";
-            }
+        function abrirModalRecuperacion() { 
+            document.getElementById('recoverUsername').value = '';
+            document.getElementById('recoverNewPassword').value = '';
+            document.getElementById('modalRecover').style.display = 'flex'; 
+        }
+        
+        function cerrarModalRecuperacion() { 
+            document.getElementById('modalRecover').style.display = 'none'; 
         }
 
-        async function actualizarNuevaContrasena(event) {
+        async function ejecutarCambioContrasena(event) {
             event.preventDefault();
             const supabase = getSupabase();
             if (!supabase) return;
 
-            const newPass = document.getElementById('newPassword').value;
-            const btn = document.getElementById('btnSetPassword');
-            btn.disabled = true; btn.innerText = "Actualizando...";
+            const inputUser = document.getElementById('recoverUsername').value.trim().toLowerCase();
+            const newPass = document.getElementById('recoverNewPassword').value;
+            const secureEmail = inputUser.includes('@') ? inputUser : `${inputUser}@cargo.com`;
+            const btn = document.getElementById('btnRecoverSubmit');
+            
+            btn.disabled = true; btn.innerText = "Verificando...";
 
             try {
-                const { data, error } = await supabase.auth.updateUser({
-                    password: newPass
+                // 1. Verificar el usuario y su rol en la BD
+                const { data: perfil, error: errPerfil } = await supabase
+                    .from('perfiles')
+                    .select('rol, nombre')
+                    .eq('email', secureEmail)
+                    .single();
+
+                if (errPerfil || !perfil) {
+                    throw new Error("Usuario no encontrado en la base de datos.");
+                }
+
+                // LÓGICA DE PROTECCIÓN ESTRICTA PARA EL ADMIN
+                if (String(perfil.rol).toLowerCase() === 'admin' || inputUser === 'admin' || inputUser === 'reynaldo') {
+                    throw new Error("ACCESO DENEGADO. Por seguridad, la cuenta de Administrador está protegida y no permite cambios de credenciales por esta vía.");
+                }
+
+                // 2. Si el usuario es operador/supervisor, ejecutar RPC para cambiar contraseña
+                btn.innerText = "Actualizando...";
+                const { error: errRpc } = await supabase.rpc('cambiar_password_usuario', { 
+                    user_email: secureEmail, 
+                    nueva_pass: newPass 
                 });
 
-                if (error) throw error;
+                if (errRpc) throw errRpc;
 
-                document.getElementById('modalSetPassword').style.display = 'none';
-                showCustomAlert("Actualización Exitosa", "Tu credencial ha sido actualizada. Serás redirigido al tablero.", "success");
-                
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
-
-            } catch(err) {
-                showCustomAlert("Fallo en Actualización", err.message, "error");
+                cerrarModalRecuperacion();
+                showCustomAlert("Actualización Exitosa", `La contraseña para el usuario ${inputUser.toUpperCase()} ha sido actualizada correctamente. Ya puedes ingresar al sistema.`, "success");
+            } catch (err) {
+                showCustomAlert("Error de Seguridad", err.message, "error");
+            } finally {
                 btn.disabled = false; btn.innerText = "Actualizar Credencial";
             }
         }
@@ -479,7 +453,6 @@
             if (!navigator.onLine) return showCustomAlert("Sin Red", "Servicio no disponible sin red.", "error");
 
             if (!navigator.credentials) {
-                // Falla controlada para Android si Chrome decide no habilitar la API
                 document.getElementById('username').focus();
                 showCustomAlert("Información", "Utiliza el autocompletado de tu teclado para ingresar con tu huella o PIN.", "info");
                 return;
@@ -489,7 +462,6 @@
             if (!supabase) return;
 
             try {
-                // Extraer credencial del Gestor de Contraseñas de Google / iCloud Keychain
                 const cred = await navigator.credentials.get({ 
                     password: true, 
                     mediation: 'optional' 
@@ -516,7 +488,6 @@
                         setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
                     }
                 } else {
-                    // Fallback nativo: Le pedimos al usuario que use el teclado
                     document.getElementById('username').focus();
                     showCustomAlert("Información", "Toca la casilla de 'Nombre de Usuario' para desplegar tus contraseñas guardadas en este dispositivo.", "info");
                 }
