@@ -38,32 +38,106 @@
         }
         #offlineBanner.active { transform: translateY(0); }
 
-        /* SIDEBAR OSCURO */
-        .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
+        /* =========================================
+           SIDEBAR OSCURO PROFESIONAL (ANIMADO)
+        ========================================= */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--amerijet-blue-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer; }
-        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer;}
+        .sidebar-header span { font-weight: 900; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
 
         .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .user-info-text { display: flex; flex-direction: column; }
-        .user-info-text strong { font-size: 14px; color: white; }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;}
+        .user-info-text { display: flex; flex-direction: column; overflow: hidden; }
+        .user-info-text strong { font-size: 14px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
 
         .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px; border:none; background:transparent; cursor:pointer; text-align:left;}
-        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+        
+        /* EFECTOS DINÁMICOS DE BOTONES */
+        @keyframes iconBounce {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.15) translateY(-3px); }
+            100% { transform: scale(1.1) translateY(-1px); }
+        }
+
+        .nav-link {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #94A3B8;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #38BDF8;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-link:hover { 
+            background: rgba(56, 189, 248, 0.08); 
+            color: white; 
+            transform: translateX(4px); 
+        }
+        
+        .nav-link:hover::before { transform: scaleY(1); }
+        .nav-link svg { transition: color 0.3s ease; flex-shrink: 0; }
+        .nav-link:hover svg { animation: iconBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; color: #38BDF8; }
+
+        .nav-link.active { 
+            background: #38BDF8; color: #0F172A; box-shadow: 0 4px 15px rgba(56,189,248,0.3); 
+            font-weight: 900; transform: translateX(0);
+        }
+        .nav-link.active::before { display: none; }
+        .nav-link.active svg { color: #0F172A; animation: none; transform: none; }
 
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout { 
+            background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; 
+            cursor: pointer; font-weight: 800; transition: 0.2s; font-size: 12px; width: 100%; display: flex; align-items: center; 
+            justify-content: center; gap: 8px; text-transform: uppercase;
+        }
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* TOP HEADER */
         .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .top-header { background: white; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #E2E8F0; z-index: 900; flex-shrink:0;}
-        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
-        .header-title { font-weight: 800; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px;}
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); padding: 0;}
+        .header-title-group { display: flex; align-items: center; gap: 15px; }
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
 
         /* CONTENIDO PRINCIPAL */
         .main-content { flex: 1; overflow-y: auto; padding-bottom: 50px; }
@@ -72,46 +146,53 @@
         /* PANEL ANALÍTICO GLOBAL (KPI) */
         .kpi-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .kpi-card { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 15px;}
-        .kpi-icon { font-size: 35px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px;}
+        .kpi-icon { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; flex-shrink: 0;}
+        .kpi-icon svg { width: 32px; height: 32px; }
         .icon-blue { background: #EFF6FF; color: #2563EB; }
         .icon-green { background: #ECFDF5; color: #10B981; }
         .icon-red { background: #FEF2F2; color: #E11D48; }
         
         .kpi-data { display: flex; flex-direction: column; }
         .kpi-data span { font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; margin-bottom: 2px;}
-        .kpi-data strong { font-size: 24px; font-weight: 900; color: var(--amerijet-blue-dark); }
-        .kpi-data small { font-size: 11px; color: #94A3B8; font-weight: 600; margin-top: 2px;}
+        .kpi-data strong { font-size: 24px; font-weight: 900; color: var(--amerijet-blue-dark); line-height: 1;}
+        .kpi-data small { font-size: 11px; color: #94A3B8; font-weight: 600; margin-top: 4px;}
 
-        /* GRID DE FLOTA */
+        /* GRID DE FLOTA REDISEÑADO */
         .fleet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 25px; margin-top: 10px;}
         
-        .fleet-card { background: white; border-radius: 16px; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;}
+        .fleet-card { 
+            background: white; border-radius: 16px; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+            overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
         .fleet-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1;}
         
-        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E2E8F0; }
-        .header-optimo { background: linear-gradient(135deg, #F0FDF4, #D1FAE5); }
-        .header-dano { background: linear-gradient(135deg, #FEF2F2, #FEE2E2); }
+        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;}
         
-        .tail-number { font-size: 22px; font-weight: 900; color: var(--amerijet-blue-dark); display: flex; align-items: center; gap: 10px;}
+        .tail-number { font-size: 20px; font-weight: 900; color: var(--amerijet-blue-dark); display: flex; align-items: center; gap: 8px;}
+        .tail-number svg { color: var(--amerijet-blue); width: 22px; height: 22px;}
         
-        .status-badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .status-badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-transform: uppercase;}
         .optimo { background: white; color: #059669; border: 1px solid #34D399; }
-        .dano { background: white; color: #DC2626; border: 1px solid #F87171; }
+        .dano { background: white; color: #E11D48; border: 1px solid #FDA4AF; }
 
-        .card-body { padding: 20px; background: #F8FAFC; flex: 1; }
+        .card-body { padding: 20px; background: white; flex: 1; display: flex; flex-direction: column;}
         
-        .damage-list { display: flex; flex-direction: column; gap: 12px; }
-        .damage-item { background: white; padding: 15px; border-radius: 10px; border: 1px dashed #CBD5E1; border-left: 4px solid #EF4444; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+        /* SCROLL EN LISTA DE DAÑOS */
+        .damage-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; max-height: 250px; padding-right: 5px;}
         
-        .damage-title { font-size: 13px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 6px;}
-        .damage-desc { font-size: 12px; color: #475569; line-height: 1.4; margin-bottom: 10px;}
+        .damage-item { background: #F8FAFC; padding: 15px; border-radius: 10px; border: 1px solid #E2E8F0; border-left: 4px solid #EF4444; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
         
-        .damage-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 8px 10px; border-radius: 6px; border: 1px solid #E2E8F0;}
-        .damage-meta span { display: flex; align-items: center; gap: 4px; }
+        .damage-title { font-size: 13px; font-weight: 800; color: var(--amerijet-blue-dark); margin-bottom: 6px; text-transform: uppercase;}
+        .damage-desc { font-size: 12px; color: #475569; line-height: 1.4; margin-bottom: 12px;}
+        
+        .damage-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; font-weight: 700; color: #64748B; background: white; padding: 8px 10px; border-radius: 6px; border: 1px solid #E2E8F0;}
+        .damage-meta span { display: flex; align-items: center; gap: 4px; text-transform: uppercase;}
         .damage-meta strong { color: #334155; }
+        .damage-meta svg { width: 12px; height: 12px; color: #94A3B8;}
 
-        .empty-state { text-align: center; padding: 30px 20px; color: #64748B; font-size: 13px; font-weight: 600;}
-        .empty-state span { font-size: 30px; display: block; margin-bottom: 10px;}
+        .empty-state { text-align: center; padding: 40px 20px; color: #64748B; font-size: 12px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;}
+        .empty-state svg { width: 40px; height: 40px; color: #10B981; margin-bottom: 15px;}
 
         /* MODALES */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
@@ -122,7 +203,8 @@
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); z-index: 1001;}
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; z-index: 1000;}
-            .menu-toggle { display: block; }
+            .menu-toggle { display: block; margin-right: 15px;}
+            .header-title-group { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
             .header-title { display: none; } 
             .fleet-grid { grid-template-columns: 1fr; }
             .container { padding: 15px; }
@@ -144,36 +226,95 @@
         </div>
     </div>
 
-    <!-- MENÚ LATERAL -->
+    <!-- MENÚ LATERAL (SIDEBAR MAESTRA ANIMADA) -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <img src="logo_3.png" alt="Logo" onclick="navegarA('dashboard.html')" style="cursor:pointer;">
             <span>Cargo Inspect Pro</span>
         </div>
+        
         <div class="sidebar-user">
-            <div class="user-avatar">👤</div>
+            <div class="user-avatar">
+                <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
                 <span id="lblUserRol" class="badge-rol">...</span>
             </div>
         </div>
+
         <nav class="sidebar-nav">
-            <button class="nav-link" onclick="navegarA('dashboard.html')">✈️ Centro de Vuelos</button>
-            <button class="nav-link active" onclick="navegarA('estado_flota.html')">🛫 Estado de Flota</button>
-            <button class="nav-link" onclick="navegarA('uld_gestion.html')">📦 Inventario ULD</button>
-            <button class="nav-link" id="btnAdminPanel" style="display: none;" onclick="navegarA('admin_panel.html')">👑 Panel de Control</button>
-            <button class="nav-link" id="btnReportesHistoricos" style="display: none;" onclick="navegarA('reporte_vuelos.html')">🗄️ Historial de Vuelos</button>
+            <!-- CENTRO DE VUELOS (Grid Perfectly Aligned) -->
+            <button class="nav-link" onclick="navegarA('dashboard.html')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                </svg>
+                <span>CENTRO DE VUELOS</span>
+            </button>
+
+            <!-- ESTADO DE FLOTA (Document + Airplane) -->
+            <button class="nav-link active" onclick="navegarA('estado_flota.html')" id="btnEstadoFlota">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <path d="M12 14l-4-4h2V7h4v3h2l-4 4z"></path>
+                    <line x1="8" y1="17" x2="16" y2="17"></line>
+                </svg>
+                <span>ESTADO DE FLOTA</span>
+            </button>
+
+            <!-- INVENTARIO ULD (Stacked Boxes +) -->
+            <button class="nav-link" onclick="navegarA('uld_gestion.html')" id="btnUldMenu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 21V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v16"></path>
+                    <path d="M10 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9"></path>
+                    <line x1="2" y1="21" x2="18" y2="21"></line>
+                    <path d="M19 14h4m-2-2v4"></path>
+                </svg>
+                <span id="lblUldMenuText">INVENTARIO ULD</span>
+            </button>
+
+            <!-- PANEL DE CONTROL (Gear) -->
+            <button class="nav-link" onclick="navegarA('admin_panel.html')" id="btnAdminPanel" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>PANEL DE CONTROL</span>
+            </button>
+
+            <!-- HISTORIAL DE VUELOS (Clock History) -->
+            <button class="nav-link" onclick="navegarA('reporte_vuelos.html')" id="btnReportesHistoricos" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                    <path d="M12 7v5l4 2"></path>
+                </svg>
+                <span>HISTORIAL DE VUELOS</span>
+            </button>
         </nav>
+
         <div class="sidebar-footer">
-            <button class="btn-logout" onclick="logoutSeguro()">🚪 Cerrar Sesión</button>
+            <div class="version-badge">VERSION 0.0.1</div>
+            <button class="btn-logout" onclick="logoutSeguro()">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                CERRAR SESIÓN
+            </button>
         </div>
     </aside>
 
     <div class="main-wrapper">
         <header class="top-header">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <div class="header-title">Monitor de Salud de Flota (Aircraft Damage Report)</div>
+            <div class="header-title-group">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div class="header-title">Monitor de Salud de Flota (Aircraft Damage Report)</div>
+            </div>
         </header>
 
         <main class="main-content">
@@ -182,7 +323,11 @@
                 <!-- DASHBOARD ANALÍTICO -->
                 <div class="kpi-section">
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-blue">✈️</div>
+                        <div class="kpi-icon icon-blue">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21.5 4s-2 .5-3.5 2L14.5 9.5 6.3 7.7l-1.6 1.6 5.8 4.2L6.8 17 4.2 16 3 17l3.4 4.6L11 25l1-1.2-1-2.6 3.5-3.7 4.2 5.8z"></path>
+                            </svg>
+                        </div>
                         <div class="kpi-data">
                             <span>Total Aeronaves</span>
                             <strong id="kpiTotalAviones">0</strong>
@@ -190,7 +335,12 @@
                         </div>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-green">✅</div>
+                        <div class="kpi-icon icon-green">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
                         <div class="kpi-data">
                             <span>Óptimas</span>
                             <strong id="kpiSanos">0</strong>
@@ -198,7 +348,13 @@
                         </div>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-red">⚠️</div>
+                        <div class="kpi-icon icon-red">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
                         <div class="kpi-data">
                             <span>Con Reportes</span>
                             <strong id="kpiDanos">0</strong>
@@ -209,7 +365,7 @@
 
                 <div class="fleet-grid" id="fleetGrid">
                     <!-- Inyectado por JS -->
-                    <div style="grid-column: 1/-1; text-align:center; padding: 40px; color:#64748B;">Sincronizando estado de flota... ⏳</div>
+                    <div style="grid-column: 1/-1; text-align:center; padding: 40px; color:#64748B; font-weight: 600; text-transform: uppercase;">Sincronizando estado de flota... ⏳</div>
                 </div>
 
             </div>
@@ -220,9 +376,9 @@
     <div class="modal-overlay" id="customAlertModal" style="z-index: 3000;">
         <div class="modal-content">
             <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
-            <h3 id="alertTitle" style="font-weight: 800; margin-bottom: 10px; font-size: 20px;">Título</h3>
+            <h3 id="alertTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 18px; text-transform: uppercase; color: var(--amerijet-blue-dark);">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
-            <button onclick="document.getElementById('customAlertModal').style.display='none'" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:700; font-size: 14px; transition: 0.2s;">Aceptar</button>
+            <button onclick="document.getElementById('customAlertModal').style.display='none'" id="alertBtn" style="background:var(--amerijet-blue-dark); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s;">Aceptar</button>
         </div>
     </div>
 
@@ -261,7 +417,7 @@
             document.getElementById('alertTitle').innerText = title; document.getElementById('alertMessage').innerHTML = message;
             document.getElementById('alertIcon').innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             document.getElementById('alertTitle').style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
-            document.getElementById('alertBtn').style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
+            document.getElementById('alertBtn').style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0F172A');
             modal.style.display = 'flex';
         }
 
@@ -274,9 +430,18 @@
             if (perfil) {
                 document.getElementById('lblUserName').innerText = perfil.nombre || "Usuario";
                 document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
-                if(perfil.rol === 'admin' || perfil.rol === 'supervisor') {
+                
+                // LÓGICA DE ROLES EN LA BARRA LATERAL
+                if(['admin', 'supervisor', 'supervisor_local'].includes(String(perfil.rol).toLowerCase())) {
                     document.getElementById('btnReportesHistoricos').style.display = 'flex';
-                    if(perfil.rol === 'admin') document.getElementById('btnAdminPanel').style.display = 'flex';
+                }
+                if(String(perfil.rol).toLowerCase() === 'admin' || String(perfil.rol).toLowerCase() === 'supervisor') {
+                    document.getElementById('lblUldMenuText').innerText = "INVENTARIO MAESTRO ULD";
+                } else { 
+                    document.getElementById('lblUldMenuText').innerText = "INVENTARIO LOCAL ULD"; 
+                }
+                if(String(perfil.rol).toLowerCase() === 'admin') {
+                    document.getElementById('btnAdminPanel').style.display = 'flex';
                 }
             }
 
@@ -303,7 +468,6 @@
                 
                 if (danos) {
                     danos.forEach(d => {
-                        // Si hay un daño de un avión que no está en catálogo (por error humano de escritura previa), lo agregamos al mapa
                         if (!mapaDanos[d.matricula_avion]) mapaDanos[d.matricula_avion] = [];
                         mapaDanos[d.matricula_avion].push(d);
                     });
@@ -316,6 +480,10 @@
                 
                 grid.innerHTML = '';
 
+                const iconLocation = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
+                const iconBar = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`;
+                const iconCalendar = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+
                 matriculas.forEach(tail => {
                     const reportes = mapaDanos[tail];
                     const estaSano = reportes.length === 0;
@@ -323,15 +491,16 @@
                     if (estaSano) kpiSanos++; else kpiDanosCount++;
 
                     const headerClass = estaSano ? 'header-optimo' : 'header-dano';
+                    
                     const badge = estaSano 
-                        ? `<div class="status-badge optimo"><span>✅</span> Óptimo</div>` 
-                        : `<div class="status-badge dano"><span>⚠️</span> ${reportes.length} Daños</div>`;
+                        ? `<div class="status-badge optimo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Óptimo</div>` 
+                        : `<div class="status-badge dano"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> ${reportes.length} Daños</div>`;
 
                     let reportesHTML = '';
                     if (estaSano) {
                         reportesHTML = `
                             <div class="empty-state">
-                                <span>✨</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                                 Aeronave inspeccionada sin reportes estructurales abiertos. Lista para operar.
                             </div>
                         `;
@@ -347,9 +516,9 @@
                                     <div class="damage-title">${idx + 1}. [${(r.area || '').toUpperCase()}] - ${r.componente}</div>
                                     <div class="damage-desc">${r.descripcion}</div>
                                     <div class="damage-meta">
-                                        <span>📍 Loc: <strong>${ev.ubicacion || 'General'}</strong></span>
-                                        <span>📊 Sev: <strong>${severidad}</strong></span>
-                                        <span>🗓️ Rep: <strong>${fRep}</strong></span>
+                                        <span>${iconLocation} Loc: <strong>${ev.ubicacion || 'General'}</strong></span>
+                                        <span>${iconBar} Sev: <strong>${severidad}</strong></span>
+                                        <span>${iconCalendar} Rep: <strong>${fRep}</strong></span>
                                     </div>
                                 </div>
                             `;
@@ -360,7 +529,10 @@
                     const cardHTML = `
                         <div class="fleet-card">
                             <div class="card-header ${headerClass}">
-                                <div class="tail-number">✈️ ${tail}</div>
+                                <div class="tail-number">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21.5 4s-2 .5-3.5 2L14.5 9.5 6.3 7.7l-1.6 1.6 5.8 4.2L6.8 17 4.2 16 3 17l3.4 4.6L11 25l1-1.2-1-2.6 3.5-3.7 4.2 5.8z"></path></svg>
+                                    ${tail}
+                                </div>
                                 ${badge}
                             </div>
                             <div class="card-body">
@@ -377,7 +549,7 @@
                 document.getElementById('kpiDanos').innerText = kpiDanosCount;
 
             } catch (e) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color:var(--amerijet-red); font-weight:bold;">Error de conexión con la base de datos: ${e.message}</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color:var(--amerijet-red); font-weight:bold; text-transform: uppercase;">Error de conexión con la base de datos: ${e.message}</div>`;
             }
         }
 
