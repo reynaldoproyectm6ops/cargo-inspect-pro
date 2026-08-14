@@ -46,28 +46,35 @@
         }
         #offlineBanner.active { transform: translateY(0); }
 
-        /* DISEÑO PREMIUM DE TARJETA CON GLOW DINÁMICO */
+        /* CONTENEDOR PRINCIPAL */
         .login-wrapper {
             animation: fadeIn 0.6s ease-out;
             width: 100%;
             max-width: 400px;
         }
 
+        /* DISEÑO PREMIUM DE TARJETA CON SOMBRA ROJA DINÁMICA (GLOW) */
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             padding: 40px 30px;
             border-radius: 20px;
             text-align: center;
             position: relative;
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.8);
-            /* Sombra y Glow dinámico en lugar de la barra roja */
-            animation: pulseGlow 4s infinite alternate ease-in-out;
+            
+            /* Sombra y Borde Dinámico Rojo */
+            animation: pulseRedGlow 3s infinite alternate ease-in-out;
         }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 15px rgba(56, 189, 248, 0.2); }
-            100% { box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 40px rgba(56, 189, 248, 0.6); }
+        @keyframes pulseRedGlow {
+            0% { 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 15px rgba(225, 29, 72, 0.2); 
+                border: 1px solid rgba(225, 29, 72, 0.3);
+            }
+            100% { 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 45px rgba(225, 29, 72, 0.7); 
+                border: 1px solid rgba(225, 29, 72, 0.8);
+            }
         }
 
         .brand-logo-img { max-width: 200px; height: auto; margin-bottom: 5px; }
@@ -312,7 +319,7 @@
 
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
-                
+
                 if (session && session.user) {
                     document.getElementById('panelLoginForm').style.display = 'none';
                     document.getElementById('panelSessionActive').style.display = 'block';
