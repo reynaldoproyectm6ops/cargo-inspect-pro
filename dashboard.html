@@ -38,7 +38,7 @@
         }
         
         /* =========================================
-           SIDEBAR OSCURO PROFESIONAL
+           SIDEBAR OSCURO PROFESIONAL (VIVO Y DINÁMICO)
         ========================================= */
         .sidebar {
             width: var(--sidebar-width);
@@ -60,7 +60,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
-        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
+        .sidebar-header span { font-weight: 900; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
 
         .sidebar-user {
             padding: 20px;
@@ -70,7 +70,12 @@
             background: rgba(255,255,255,0.02);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;}
+        
+        /* ICONO DE USUARIO NATIVO SVG */
+        .user-avatar { 
+            width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;
+        }
         .user-info-text { display: flex; flex-direction: column; overflow: hidden; }
         .user-info-text strong { font-size: 14px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
@@ -84,28 +89,69 @@
             overflow-y: auto;
         }
 
+        /* EFECTOS DINÁMICOS DE LOS BOTONES DEL MENÚ */
         .nav-link {
-            padding: 12px 15px;
+            padding: 14px 15px;
             text-decoration: none;
             color: #94A3B8;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 8px;
-            transition: 0.2s;
-            font-size: 13px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
-
-        .sidebar-footer {
-            padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
         }
         
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #38BDF8;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-link:hover { 
+            background: rgba(56, 189, 248, 0.08); 
+            color: white; 
+            transform: translateX(4px); 
+        }
+        
+        .nav-link:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .nav-link svg {
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), color 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .nav-link:hover svg {
+            transform: scale(1.15) translateY(-1px);
+            color: #38BDF8;
+        }
+
+        .nav-link.active { 
+            background: #38BDF8; 
+            color: #0F172A; 
+            box-shadow: 0 4px 15px rgba(56,189,248,0.3); 
+            font-weight: 900;
+            transform: translateX(0);
+        }
+        
+        .nav-link.active::before { display: none; }
+        .nav-link.active svg { color: #0F172A; transform: none; }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 
         .btn-logout { 
@@ -115,9 +161,9 @@
             padding: 12px; 
             border-radius: 8px; 
             cursor: pointer; 
-            font-weight: 700; 
+            font-weight: 800; 
             transition: 0.2s; 
-            font-size: 13px; 
+            font-size: 12px; 
             width: 100%;
             display: flex;
             align-items: center;
@@ -130,39 +176,16 @@
         /* =========================================
            TOP HEADER DINÁMICO Y MODERNO
         ======================================== */
-        .main-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            width: 100%;
-            overflow-x: hidden;
-        }
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; width: 100%; overflow-x: hidden; }
 
         .top-header {
             background: linear-gradient(to right, #ffffff, #F8FAFC);
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 25px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
-            border-bottom: 1px solid #E2E8F0;
-            z-index: 900;
-            width: 100%;
-            box-sizing: border-box;
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+            border-bottom: 1px solid #E2E8F0; z-index: 900; width: 100%; box-sizing: border-box;
         }
 
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--amerijet-blue);
-            flex-shrink: 0;
-            padding: 0;
-        }
-
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--amerijet-blue); flex-shrink: 0; padding: 0;}
         .header-title-group { display: flex; align-items: center; gap: 15px; overflow: hidden;}
         .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
@@ -171,16 +194,9 @@
 
         .live-zulu-clock {
             background: var(--amerijet-blue-dark);
-            color: #38BDF8;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-family: monospace;
-            font-weight: 800;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            white-space: nowrap; 
+            color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px;
+            font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; 
         }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
@@ -189,83 +205,29 @@
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 120px; 
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .dashboard-container { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
-            padding: 30px; 
-            max-width: 1600px; 
-            margin: 0 auto; 
-            width: 100%;
-            box-sizing: border-box;
-        }
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; width: 100%; box-sizing: border-box; }
+        .dashboard-container { display: flex; flex-direction: column; gap: 25px; padding: 30px; max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box; }
         
         /* PANEL FORMULARIO DESPLEGABLE */
-        .panel-form { 
-            background: white; 
-            padding: 20px 25px; 
-            border-radius: var(--border-radius); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-            border: 1px solid #E2E8F0; 
-            transition: all 0.3s ease; 
-            width: 100%;
-            box-sizing: border-box;
-        }
-        
-        .panel-form-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            cursor: pointer; 
-            user-select: none; 
-        }
-        .panel-form-header h2 { 
-            font-size: 16px; 
-            font-weight: 800; 
-            color: var(--amerijet-blue); 
-            margin: 0; 
-            text-transform: uppercase;
-        }
-        .toggle-icon { 
-            font-size: 14px; 
-            color: #64748B; 
-            transition: transform 0.3s; 
-        }
+        .panel-form { background: white; padding: 20px 25px; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #E2E8F0; transition: all 0.3s ease; width: 100%; box-sizing: border-box; }
+        .panel-form-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+        .panel-form-header h2 { font-size: 16px; font-weight: 800; color: var(--amerijet-blue); margin: 0; text-transform: uppercase; }
+        .toggle-icon { font-size: 14px; color: #64748B; transition: transform 0.3s; }
         .toggle-icon.open { transform: rotate(180deg); }
         
-        #formCrearVueloContainer { 
-            display: none; 
-            margin-top: 20px; 
-            border-top: 1px solid #E2E8F0; 
-            padding-top: 20px; 
-        }
-
-        .form-grid-horizontal { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
-            align-items: end; 
-        }
+        #formCrearVueloContainer { display: none; margin-top: 20px; border-top: 1px solid #E2E8F0; padding-top: 20px; }
+        .form-grid-horizontal { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end; }
         
         .form-group { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
         .form-group label { font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
         .form-group input, .form-group select { padding: 11px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; color: var(--text-main); background-color: #F8FAFC; transition: all 0.2s; width: 100%; text-transform: uppercase; font-weight: 600; box-sizing: border-box;}
         .form-group input:focus, .form-group select:focus { border-color: #3B82F6; background-color: white; outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
         
-        .btn-crear { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 13px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 13px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); height: 42px; letter-spacing: 0.5px;}
+        .btn-crear { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 13px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 12px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); height: 42px; letter-spacing: 0.5px;}
         .btn-crear:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.3); }
 
         .panel-vuelos { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
         .panel-vuelos h2 { font-size: 18px; font-weight: 800; color: var(--amerijet-blue); margin-bottom: 20px; text-transform: uppercase;}
-        
         .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 25px; align-content: start; width: 100%;}
 
         /* DISEÑO MODERNO DE TARJETA DE VUELO */
@@ -359,14 +321,16 @@
             .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); width: 260px;}
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
-            .menu-toggle { display: block; }
-            .header-title { display: none; } 
             
-            .top-header { padding: 0 10px; gap: 5px; width: 100vw;}
-            .header-controls-wrapper { gap: 8px; }
+            /* AJUSTES PARA EL HEADER MÓVIL (MENU HAMBURGUESA VISIBLE) */
+            .top-header { padding: 10px 15px; height: auto; flex-wrap: wrap; gap: 10px; }
+            .header-title-group { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
+            .header-title { display: none; } 
+            .menu-toggle { display: block; margin-right: 15px; }
+            
+            .header-controls-wrapper { display: flex; flex: 1; justify-content: flex-end; align-items: center; }
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
-            .station-selector { font-size: 11px; }
-            .station-label { display: none; } 
+            .station-module .lbl-text { display: none; } 
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
             .vuelo-card-header { padding: 15px; gap: 10px; }
@@ -387,7 +351,8 @@
         
         <div class="sidebar-user">
             <div class="user-avatar">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <!-- Icono NATIVO Usuario -->
+                <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
@@ -396,21 +361,56 @@
         </div>
 
         <nav class="sidebar-nav">
+            <!-- CENTRO DE VUELOS (Grid/4 Squares) -->
             <a href="dashboard.html" class="nav-link active">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                CENTRO DE VUELOS
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>CENTRO DE VUELOS</span>
             </a>
+            
+            <!-- ESTADO DE FLOTA (Airplane inside Doc) -->
+            <a href="estado_flota.html" class="nav-link" id="btnEstadoFlota">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <path d="M12 11l2.5 2.5m-5 0L12 11m0 0v5m-3 3h6"></path>
+                </svg>
+                <span>ESTADO DE FLOTA</span>
+            </a>
+
+            <!-- INVENTARIO ULD (Square with Check) -->
             <a href="uld_gestion.html" class="nav-link" id="btnUldMenu">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 11 12 14 22 4"></polyline>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </a>
+
+            <!-- PANEL DE CONTROL (Shield) -->
             <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-                PANEL DE CONTROL
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="M12 2v20"></path>
+                    <path d="M4 12h8"></path>
+                </svg>
+                <span>PANEL DE CONTROL</span>
             </a>
+
+            <!-- HISTORIAL DE VUELOS (Document with text lines) -->
             <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                HISTORIAL DE VUELOS
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                </svg>
+                <span>HISTORIAL DE VUELOS</span>
             </a>
         </nav>
 
