@@ -178,15 +178,27 @@
 
         .card-body { padding: 20px; background: white; flex: 1; display: flex; flex-direction: column;}
         
-        /* SCROLL EN LISTA DE DAÑOS */
+        /* SCROLL EN LISTA DE DAÑOS Y TARJETAS LIMPIAS */
         .damage-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; max-height: 250px; padding-right: 5px;}
         
-        .damage-item { background: #F8FAFC; padding: 15px; border-radius: 10px; border: 1px solid #E2E8F0; border-left: 4px solid #EF4444; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+        .damage-item { 
+            background: white; 
+            padding: 16px; 
+            border-radius: 12px; 
+            border: 1px solid #E2E8F0; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .damage-item:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
         
-        .damage-title { font-size: 13px; font-weight: 800; color: var(--amerijet-blue-dark); margin-bottom: 6px; text-transform: uppercase;}
-        .damage-desc { font-size: 12px; color: #475569; line-height: 1.4; margin-bottom: 12px;}
+        .damage-title { font-size: 13px; font-weight: 800; color: var(--amerijet-blue-dark); margin-bottom: 8px; text-transform: uppercase; display: flex; align-items: center; gap: 6px;}
+        .damage-desc { font-size: 12px; color: #475569; line-height: 1.5; margin-bottom: 12px;}
         
-        .damage-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; font-weight: 700; color: #64748B; background: white; padding: 8px 10px; border-radius: 6px; border: 1px solid #E2E8F0;}
+        .damage-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; font-weight: 700; color: #64748B; background: #F8FAFC; padding: 8px 10px; border-radius: 6px; border: 1px solid #E2E8F0;}
         .damage-meta span { display: flex; align-items: center; gap: 4px; text-transform: uppercase;}
         .damage-meta strong { color: #334155; }
         .damage-meta svg { width: 12px; height: 12px; color: #94A3B8;}
@@ -245,7 +257,7 @@
         </div>
 
         <nav class="sidebar-nav">
-            <!-- CENTRO DE VUELOS (Grid Perfectly Aligned) -->
+            <!-- CENTRO DE VUELOS -->
             <button class="nav-link" onclick="navegarA('dashboard.html')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"></rect>
@@ -256,7 +268,7 @@
                 <span>CENTRO DE VUELOS</span>
             </button>
 
-            <!-- ESTADO DE FLOTA (Document + Airplane) -->
+            <!-- ESTADO DE FLOTA -->
             <button class="nav-link active" onclick="navegarA('estado_flota.html')" id="btnEstadoFlota">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -267,7 +279,7 @@
                 <span>ESTADO DE FLOTA</span>
             </button>
 
-            <!-- INVENTARIO ULD (Stacked Boxes +) -->
+            <!-- INVENTARIO ULD -->
             <button class="nav-link" onclick="navegarA('uld_gestion.html')" id="btnUldMenu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 21V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v16"></path>
@@ -278,7 +290,7 @@
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </button>
 
-            <!-- PANEL DE CONTROL (Gear) -->
+            <!-- PANEL DE CONTROL (SOLO ADMIN) -->
             <button class="nav-link" onclick="navegarA('admin_panel.html')" id="btnAdminPanel" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
@@ -287,7 +299,7 @@
                 <span>PANEL DE CONTROL</span>
             </button>
 
-            <!-- HISTORIAL DE VUELOS (Clock History) -->
+            <!-- HISTORIAL DE VUELOS (SOLO SUP. Y ADMIN) -->
             <button class="nav-link" onclick="navegarA('reporte_vuelos.html')" id="btnReportesHistoricos" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
@@ -324,8 +336,9 @@
                 <div class="kpi-section">
                     <div class="kpi-card">
                         <div class="kpi-icon icon-blue">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21.5 4s-2 .5-3.5 2L14.5 9.5 6.3 7.7l-1.6 1.6 5.8 4.2L6.8 17 4.2 16 3 17l3.4 4.6L11 25l1-1.2-1-2.6 3.5-3.7 4.2 5.8z"></path>
+                            <!-- Ícono de avión simétrico y geométrico inclinado -->
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);">
+                                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
                             </svg>
                         </div>
                         <div class="kpi-data">
@@ -376,9 +389,9 @@
     <div class="modal-overlay" id="customAlertModal" style="z-index: 3000;">
         <div class="modal-content">
             <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">ℹ️</div>
-            <h3 id="alertTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 18px; text-transform: uppercase; color: var(--amerijet-blue-dark);">Título</h3>
+            <h3 id="alertTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 20px; color: var(--amerijet-blue-dark);">Título</h3>
             <p id="alertMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5;">Mensaje</p>
-            <button onclick="document.getElementById('customAlertModal').style.display='none'" id="alertBtn" style="background:var(--amerijet-blue-dark); color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s;">Aceptar</button>
+            <button onclick="document.getElementById('customAlertModal').style.display='none'" id="alertBtn" style="color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; transition: 0.2s;">Aceptar</button>
         </div>
     </div>
 
@@ -417,7 +430,7 @@
             document.getElementById('alertTitle').innerText = title; document.getElementById('alertMessage').innerHTML = message;
             document.getElementById('alertIcon').innerText = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             document.getElementById('alertTitle').style.color = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
-            document.getElementById('alertBtn').style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0F172A');
+            document.getElementById('alertBtn').style.background = type === 'error' ? '#E11D48' : (type === 'success' ? '#10B981' : '#0A2540');
             modal.style.display = 'flex';
         }
 
@@ -483,6 +496,7 @@
                 const iconLocation = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
                 const iconBar = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`;
                 const iconCalendar = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+                const iconAlert = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
 
                 matriculas.forEach(tail => {
                     const reportes = mapaDanos[tail];
@@ -513,7 +527,10 @@
                             
                             reportesHTML += `
                                 <div class="damage-item">
-                                    <div class="damage-title">${idx + 1}. [${(r.area || '').toUpperCase()}] - ${r.componente}</div>
+                                    <div class="damage-title">
+                                        ${iconAlert}
+                                        ${idx + 1}. [${(r.area || '').toUpperCase()}] - ${r.componente}
+                                    </div>
                                     <div class="damage-desc">${r.descripcion}</div>
                                     <div class="damage-meta">
                                         <span>${iconLocation} Loc: <strong>${ev.ubicacion || 'General'}</strong></span>
@@ -530,7 +547,7 @@
                         <div class="fleet-card">
                             <div class="card-header ${headerClass}">
                                 <div class="tail-number">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21.5 4s-2 .5-3.5 2L14.5 9.5 6.3 7.7l-1.6 1.6 5.8 4.2L6.8 17 4.2 16 3 17l3.4 4.6L11 25l1-1.2-1-2.6 3.5-3.7 4.2 5.8z"></path></svg>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path></svg>
                                     ${tail}
                                 </div>
                                 ${badge}
