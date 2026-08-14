@@ -440,6 +440,7 @@
         
         <div class="sidebar-user">
             <div class="user-avatar">
+                <!-- Icono NATIVO Usuario -->
                 <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <div class="user-info-text">
@@ -451,7 +452,7 @@
         <nav class="sidebar-nav">
             <!-- CENTRO DE VUELOS (Grid Perfectly Aligned) -->
             <a href="dashboard.html" class="nav-link active">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"></rect>
                     <rect x="14" y="3" width="7" height="7" rx="1"></rect>
                     <rect x="14" y="14" width="7" height="7" rx="1"></rect>
@@ -460,32 +461,31 @@
                 <span>CENTRO DE VUELOS</span>
             </a>
 
-            <!-- ESTADO DE FLOTA (Document + Airplane) -->
+            <!-- ESTADO DE FLOTA (Document + Airplane) - NUEVA REGLA: VISIBLE PARA TODOS -->
             <a href="estado_flota.html" class="nav-link" id="btnEstadoFlota">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <path d="M14 2v6h6"></path>
-                    <path d="M12 16.5v-6"></path>
-                    <path d="M9 13.5l3-3 3 3"></path>
-                    <line x1="8" y1="18.5" x2="16" y2="18.5"></line>
+                    <path d="M12 14l-4-4h2V7h4v3h2l-4 4z"></path>
+                    <line x1="8" y1="17" x2="16" y2="17"></line>
                 </svg>
                 <span>ESTADO DE FLOTA</span>
             </a>
 
             <!-- INVENTARIO ULD (Stacked Boxes +) -->
             <a href="uld_gestion.html" class="nav-link" id="btnUldMenu">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 14h-6"></path>
-                    <path d="M18 11v6"></path>
-                    <rect x="4" y="10" width="8" height="10" rx="1"></rect>
-                    <rect x="4" y="4" width="6" height="6" rx="1"></rect>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 21V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v16"></path>
+                    <path d="M10 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9"></path>
+                    <line x1="2" y1="21" x2="18" y2="21"></line>
+                    <path d="M19 14h4m-2-2v4"></path>
                 </svg>
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </a>
 
             <!-- PANEL DE CONTROL (Gear) -->
             <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
@@ -494,7 +494,7 @@
 
             <!-- HISTORIAL DE VUELOS (Clock History) -->
             <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                     <path d="M3 3v5h5"></path>
                     <path d="M12 7v5l4 2"></path>
