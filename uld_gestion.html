@@ -467,7 +467,7 @@
                     <div class="stock-header" onclick="toggleStockList()">
                         <span id="stockHeaderText">✅ CONTROL DE STOCK</span>
                         <!-- CORRECCIÓN DE LA FLECHA DOBLE (Un solo ícono) -->
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        <span style="font-size: 14px; color:inherit;">▼</span>
                     </div>
                     <div class="stock-list" id="stockList"></div>
                 </div>
@@ -475,7 +475,7 @@
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
                         <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Evaluar despacho.</span>
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        <span style="font-size: 14px; color:#991B1B;">▼</span>
                     </div>
                     <div class="aging-list" id="agingList"></div>
                 </div>
@@ -1168,10 +1168,12 @@
             
             if (hayExceso) {
                 banner.className = 'stock-banner danger';
-                headerText.innerHTML = '<span>⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.</span><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
+                headerText.nextElementSibling.style.color = '#B45309';
+                document.getElementById('stockHeaderText').innerHTML = '⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.';
             } else {
                 banner.className = 'stock-banner success';
-                headerText.innerHTML = '<span>✅ CONTROL DE STOCK: Tu estación está dentro de los límites.</span><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
+                headerText.nextElementSibling.style.color = '#047857';
+                document.getElementById('stockHeaderText').innerHTML = '✅ CONTROL DE STOCK: Tu estación está dentro de los límites.';
             }
             banner.style.display = 'flex';
         }
