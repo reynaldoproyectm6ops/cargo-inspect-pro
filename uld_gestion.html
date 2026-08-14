@@ -13,7 +13,7 @@
     <style>
         :root { 
             --amerijet-blue: #0A2540; 
-            --amerijet-blue-dark: #0F172A; 
+            --amerijet-blue-dark: #051529; 
             --amerijet-red: #E11D48; 
             --bg-color: #F1F5F9; 
             --text-main: #1E293B;
@@ -36,10 +36,11 @@
             display: flex; 
             height: 100vh;
             overflow: hidden;
+            width: 100vw;
         }
         
         /* =========================================
-           SIDEBAR OSCURO PROFESIONAL
+           SIDEBAR OSCURO PROFESIONAL (ANIMADO)
         ========================================= */
         .sidebar {
             width: var(--sidebar-width);
@@ -47,41 +48,91 @@
             color: white;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
 
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; }
-        .sidebar-header span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
+        .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer; }
+        .sidebar-header span { font-weight: 900; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
 
         .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; }
-        .user-info-text { display: flex; flex-direction: column; }
-        .user-info-text strong { font-size: 14px; color: white; }
+        .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;}
+        .user-info-text { display: flex; flex-direction: column; overflow: hidden; }
+        .user-info-text strong { font-size: 14px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
 
         .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 600; border-radius: 8px; transition: 0.2s; font-size: 13px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-link.active { background: #38BDF8; color: white; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+        
+        /* EFECTOS DINÁMICOS DE BOTONES */
+        @keyframes iconBounce {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.15) translateY(-3px); }
+            100% { transform: scale(1.1) translateY(-1px); }
+        }
+
+        .nav-link {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #94A3B8;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #38BDF8;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-link:hover { background: rgba(56, 189, 248, 0.08); color: white; transform: translateX(4px); }
+        .nav-link:hover::before { transform: scaleY(1); }
+        .nav-link svg { transition: color 0.3s ease; flex-shrink: 0; }
+        .nav-link:hover svg { animation: iconBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; color: #38BDF8; }
+
+        .nav-link.active { background: #38BDF8; color: #0F172A; box-shadow: 0 4px 15px rgba(56,189,248,0.3); font-weight: 900; transform: translateX(0); }
+        .nav-link.active::before { display: none; }
+        .nav-link.active svg { color: #0F172A; animation: none; transform: none; }
 
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
-        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; }
+
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 800; transition: 0.2s; font-size: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase;}
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* =========================================
            TOP HEADER 
         ========================================= */
-        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; }
-        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); }
-        .header-title-group { display: flex; align-items: center; gap: 15px; }
-        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px;}
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; width: 100%; overflow-x: hidden; }
+        .top-header { background: linear-gradient(to right, #ffffff, #F8FAFC); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); border-bottom: 1px solid #E2E8F0; z-index: 900; box-sizing: border-box; width: 100%;}
+        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--amerijet-blue); flex-shrink: 0; padding: 0;}
+        .header-title-group { display: flex; align-items: center; gap: 15px; overflow: hidden; }
+        .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; }
+        .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; flex-shrink: 0;}
         .live-zulu-clock { background: var(--amerijet-blue-dark); color: #38BDF8; border: none; padding: 6px 14px; border-radius: 20px; font-family: monospace; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
 
         .station-module { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 20px; border: 1px solid #CBD5E1; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
@@ -90,8 +141,8 @@
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; display: inline-block !important; }
 
         /* CONTENIDO PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .main-content { flex: 1; overflow-y: auto; padding-bottom: 120px; width: 100%; box-sizing: border-box;}
+        .container { padding: 25px; max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; width: 100%; box-sizing: border-box;}
 
         /* BANNER INBOUND (ULDs EN TRÁNSITO) */
         #inboundBanner { background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(16,185,129,0.2); flex-wrap: wrap; gap: 15px; display: none; margin: 25px 25px 0 25px; }
@@ -102,7 +153,7 @@
         .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .widget-card { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; position: relative; }
         .widget-title { font-size: 12px; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #F1F5F9; padding-bottom: 10px; padding-right: 110px; line-height: 1.4; }
-        .widget-data { font-size: 28px; font-weight: 800; color: var(--amerijet-blue); }
+        .widget-data { font-size: 28px; font-weight: 900; color: var(--amerijet-blue-dark); }
         
         .nets-balance-list { display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; padding-right: 5px; }
         .balance-item { display: grid; grid-template-columns: 80px 1fr; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; align-items: center; }
@@ -136,22 +187,24 @@
         .stock-item.ok span { color: #047857; }
 
         /* PANEL SUPERIOR DE REGISTRO */
-        .top-panel { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+        .top-panel { background: white; padding: 20px; border-radius: var(--border-radius); border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; width: 100%; box-sizing: border-box;}
         .form-add-uld { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; width: 100%;}
         .top-panel h2 { font-size: 16px; color: var(--amerijet-blue); margin-right: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
         
         .form-group-inline { display: flex; flex-direction: column; flex-grow: 1; min-width: 150px;}
         .form-group-inline label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .form-group-inline input, .form-group-inline select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; text-transform: uppercase; font-weight: 600; width: 100%;}
+        .form-group-inline input, .form-group-inline select { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; text-transform: uppercase; font-weight: 600; width: 100%; outline: none; transition: 0.2s;}
+        .form-group-inline input:focus, .form-group-inline select:focus { border-color: var(--amerijet-blue); }
         
         .form-buttons-wrapper { display: flex; gap: 10px; width: 100%; margin-top: 5px; justify-content: flex-end; align-items: center;}
         
         .btn-crear { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
+        .btn-crear:hover { box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
         .btn-masivo { background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s; height: 38px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;}
-        .btn-masivo:hover { background: #7C3AED; }
+        .btn-masivo:hover { background: #7C3AED; box-shadow: 0 4px 12px rgba(139,92,246,0.3);}
 
         /* Historial Minimalista */
-        .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-bottom: 5px; text-transform: uppercase; }
+        .audit-compact { background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #475569; margin-bottom: 5px; text-transform: uppercase; font-weight: 600;}
         .btn-ver-historial { background: white; border: 1px solid #CBD5E1; color: var(--amerijet-blue); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; text-transform: uppercase;}
         .btn-ver-historial:hover { background: #E2E8F0; }
 
@@ -170,33 +223,33 @@
         .btn-excel:hover { background: #D1FAE5; }
         
         .search-box { display: flex; align-items: center; background: white; border: 1px solid #CBD5E1; border-radius: 8px; padding: 6px 12px; width: 280px; max-width: 100%;}
-        .search-box input { border: none; outline: none; width: 100%; font-size: 13px; font-weight: 600; color: var(--text-main); }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 13px; font-weight: 600; color: var(--text-main); text-transform: uppercase;}
         
         /* CONTENEDOR DE TABLA CON SCROLL HORIZONTAL COMPLETO (SIN COLUMNAS PEGADAS) */
         .table-container { overflow-x: auto; max-height: 65vh; overflow-y: auto; max-width: 100%; -webkit-overflow-scrolling: touch;}
         table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 12px; white-space: nowrap !important; table-layout: auto;}
         
-        th { background-color: #0078D4; color: white; padding: 12px 10px; font-weight: 700; border-bottom: 1px solid #E2E8F0; text-transform: uppercase; position: sticky; top: 0; z-index: 10; white-space: nowrap !important;}
+        th { background-color: var(--amerijet-blue-dark); color: white; padding: 12px 10px; font-weight: 800; border-bottom: 1px solid #E2E8F0; text-transform: uppercase; position: sticky; top: 0; z-index: 10; white-space: nowrap !important;}
         td { padding: 10px; border-bottom: 1px solid #E2E8F0; color: #334155; font-weight: 600; text-transform: uppercase; background-color: white; white-space: nowrap !important;}
         tr:hover td { background-color: #F8FAFC; }
 
         /* CHECKBOXES MÁS GRANDES PARA DEDOS */
-        .chk-transfer, #chkAll { width: 24px; height: 24px; cursor: pointer; accent-color: var(--amerijet-blue); }
+        .chk-transfer, #chkAll { width: 20px; height: 20px; cursor: pointer; accent-color: var(--amerijet-blue); margin: 0;}
 
-        .val-valido { background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
-        .val-error { background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 800; }
+        .val-valido { background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 4px; font-weight: 800; border: 1px solid #A7F3D0;}
+        .val-error { background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 4px; font-weight: 800; border: 1px solid #FECACA;}
         
         /* ICONOS SVG PARA ACCIONES EN TABLA (SERIOS Y NEUTROS) */
-        .td-actions { display: flex; gap: 6px; align-items: center; justify-content: center;}
+        .td-actions { display: flex; gap: 6px; align-items: center; justify-content: flex-start;}
         .btn-edit-uld { background: #F1F5F9; border: 1px solid #CBD5E1; color: #475569; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
         .btn-edit-uld:hover { background: #E2E8F0; color: var(--amerijet-blue);}
-        .btn-delete { background: #F8FAFC; border: 1px solid #E2E8F0; color: #94A3B8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
-        .btn-delete:hover { background: #FEF2F2; border-color: #FECACA; color: #E11D48; }
+        .btn-delete { background: #FFF1F2; border: 1px solid #FECDD3; color: #E11D48; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
+        .btn-delete:hover { background: #FFE4E6; }
 
         .table-bottom-bar { padding: 15px 20px; background: white; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E2E8F0; flex-wrap: wrap; gap: 15px;}
-        .pagination-wrapper { display: flex; align-items: center; gap: 15px; font-size: 12px; font-weight: 600; color: #475569; text-transform: uppercase;}
+        .pagination-wrapper { display: flex; align-items: center; gap: 15px; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase;}
         .pag-btns { display: flex; gap: 5px; }
-        .btn-pag { background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; color: var(--amerijet-blue); transition: 0.2s; text-transform: uppercase; font-size: 11px;}
+        .btn-pag { background: #F1F5F9; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 800; color: var(--amerijet-blue); transition: 0.2s; text-transform: uppercase; font-size: 11px;}
         .btn-pag:hover:not(:disabled) { background: #E2E8F0; }
         .btn-pag:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -206,7 +259,7 @@
         /* ESTILOS VISTA GLOBAL (PIVOT TABLE) */
         .pivot-wrapper { background: white; border-radius: var(--border-radius); border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; display: none; margin: 25px; }
         .pivot-header { background: var(--amerijet-blue-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .pivot-header h2 { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; margin: 0; text-transform: uppercase; }
+        .pivot-header h2 { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; margin: 0; text-transform: uppercase; }
         .pivot-stats { display: flex; gap: 20px; flex-wrap: wrap; }
         .pivot-stat-box { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); text-align: center; }
         .pivot-stat-box span { display: block; font-size: 10px; text-transform: uppercase; font-weight: 700; color: #94A3B8; margin-bottom: 2px;}
@@ -228,74 +281,70 @@
         .net-warn { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
 
         /* MODALES DISEÑO CORPORATIVO Y EMOJIS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; }
-        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; text-align: center;}
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; box-sizing: border-box;}
+        .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; text-align: center; box-sizing: border-box;}
         
         .modal-title { font-size: 18px; font-weight: 900; color: var(--amerijet-blue-dark); margin-bottom: 10px; text-transform: uppercase; }
-        .modal-subtitle { font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; }
+        .modal-subtitle { font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;}
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; text-align: left;}
 
-        .btn-modal-action { background: var(--amerijet-blue-dark); color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-modal-action { background: var(--amerijet-blue-dark); color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-modal-action:hover { background: #1E293B; }
-        .btn-modal-cancel { background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 13px; transition: 0.2s; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-modal-cancel { background:#F8FAFC; color:#334155; border:1px solid #E2E8F0; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 12px; transition: 0.2s; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-modal-cancel:hover { background: #E2E8F0; }
 
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .main-content { padding-bottom: 150px; } 
             .table-actions button { flex-grow: 1; justify-content: center;}
             .table-bottom-bar { flex-direction: column; align-items: stretch; }
             .btn-guardar-inv { justify-content: center; }
+            .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
+            .form-buttons-wrapper { flex-direction: column; }
+            .btn-crear, .btn-masivo { width: 100%; justify-content: center;}
         }
         
         @media (max-width: 1024px) { 
-            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); width: 260px;}
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
-            .menu-toggle { display: block; }
-            .header-title { display: none; } 
             
-            .top-header { padding: 0 10px; gap: 5px;}
-            .header-controls-wrapper { gap: 8px; }
+            .top-header { padding: 10px 15px; height: auto; flex-wrap: wrap; gap: 10px; width: 100vw; }
+            .header-title-group { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
+            .header-title { display: none; } 
+            .menu-toggle { display: block; margin-right: 15px;}
+            
+            .header-controls-wrapper { display: flex; flex: 1; justify-content: flex-end; align-items: center; gap: 8px;}
             .live-zulu-clock { font-size: 11px; padding: 4px 8px; border-radius: 12px; }
             .station-selector { font-size: 11px; }
-            
             .station-module .lbl-text { display: none; } 
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
-            .top-panel { flex-direction: column; align-items: stretch; }
-            .form-add-uld { flex-direction: column; align-items: stretch; width: 100%; }
-            .form-group-inline { width: 100%; }
-            .form-buttons-wrapper { flex-direction: column; }
-            .btn-crear, .btn-masivo { width: 100%; margin-top: 5px; justify-content: center;}
-            
+            .top-panel { padding: 15px; }
             .search-box { width: 100%; }
             .pagination-wrapper { justify-content: space-between; width: 100%;}
             .pivot-wrapper { margin: 15px; }
             .audit-compact { flex-direction: column; gap: 10px; text-align: center; }
-            .modal-content { padding: 20px; }
             
-            /* Ajuste extra de tamaño SVG en móvil */
             .ctrl-btn { width: 30px; height: 30px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MENÚ LATERAL (SIDEBAR) -->
+    <!-- MENÚ LATERAL (SIDEBAR MAESTRA ANIMADA) -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="logo_3.png" alt="Logo">
+            <img src="logo_3.png" alt="Logo" onclick="navegarA('dashboard.html')" style="cursor:pointer;">
             <span>Cargo Inspect Pro</span>
         </div>
         
         <div class="sidebar-user">
             <div class="user-avatar">
-                <!-- Icono de Usuario Vectorial -->
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <!-- Icono Vectorial Usuario -->
+                <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <div class="user-info-text">
                 <strong id="lblUserName">Cargando...</strong>
@@ -304,15 +353,65 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link">Centro de Vuelos</a>
-            <a href="uld_gestion.html" class="nav-link active" id="btnUldMenu">Inventario ULD</a>
-            <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">Panel de Control</a>
-            <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">Historial de Vuelos</a>
+            <!-- CENTRO DE VUELOS -->
+            <button class="nav-link" onclick="navegarA('dashboard.html')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                </svg>
+                <span>CENTRO DE VUELOS</span>
+            </button>
+
+            <!-- ESTADO DE FLOTA -->
+            <button class="nav-link" onclick="navegarA('estado_flota.html')" id="btnEstadoFlota">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <path d="M12 14l-4-4h2V7h4v3h2l-4 4z"></path>
+                    <line x1="8" y1="17" x2="16" y2="17"></line>
+                </svg>
+                <span>ESTADO DE FLOTA</span>
+            </button>
+
+            <!-- INVENTARIO ULD (ACTIVO) -->
+            <button class="nav-link active" onclick="navegarA('uld_gestion.html')" id="btnUldMenu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 21V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v16"></path>
+                    <path d="M10 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9"></path>
+                    <line x1="2" y1="21" x2="18" y2="21"></line>
+                    <path d="M19 14h4m-2-2v4"></path>
+                </svg>
+                <span id="lblUldMenuText">INVENTARIO ULD</span>
+            </button>
+
+            <!-- PANEL DE CONTROL (SOLO ADMIN) -->
+            <button class="nav-link" onclick="navegarA('admin_panel.html')" id="btnAdminPanel" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>PANEL DE CONTROL</span>
+            </button>
+
+            <!-- HISTORIAL DE VUELOS (SOLO SUP Y ADMIN) -->
+            <button class="nav-link" onclick="navegarA('reporte_vuelos.html')" id="btnReportesHistoricos" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                    <path d="M12 7v5l4 2"></path>
+                </svg>
+                <span>HISTORIAL DE VUELOS</span>
+            </button>
         </nav>
 
         <div class="sidebar-footer">
             <div class="version-badge">VERSION 0.0.1</div>
-            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+            <button class="btn-logout" onclick="logoutSeguro()">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                CERRAR SESIÓN
+            </button>
         </div>
     </aside>
 
@@ -322,7 +421,9 @@
         <!-- TOP HEADER -->
         <header class="top-header">
             <div class="header-title-group">
-                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
                 <div class="header-title">Gestión de Inventario ULD</div>
             </div>
             
@@ -365,7 +466,8 @@
                 <div class="stock-banner" id="stockBanner">
                     <div class="stock-header" onclick="toggleStockList()">
                         <span id="stockHeaderText">✅ CONTROL DE STOCK</span>
-                        <span style="font-size: 14px; color:#64748B;">▼</span>
+                        <!-- CORRECCIÓN DE LA FLECHA DOBLE (Un solo ícono) -->
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="stock-list" id="stockList"></div>
                 </div>
@@ -373,7 +475,7 @@
                 <div class="aging-banner" id="agingBanner">
                     <div class="aging-header" onclick="toggleAgingList()">
                         <span>⚠️ ALERTA: Tienes <span id="lblAgingCount">0</span> ULD(s) con más de 7 días. Evaluar despacho.</span>
-                        <span style="font-size: 14px; color:#991B1B;">▼</span>
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="aging-list" id="agingList"></div>
                 </div>
@@ -390,7 +492,7 @@
                         <button class="btn-update-acc" onclick="abrirModalAccesoriosDinamico('nets')" id="btnNetDinamico">CONFIG. NETS</button>
                         <div class="widget-title">Balance de Redes vs ULDs</div>
                         <div class="nets-balance-list" id="wgNetsBalanceContainer">
-                            <p style="font-size:11px; color:#64748B; font-style:italic; text-transform:uppercase;">Esperando datos...</p>
+                            <p style="font-size:11px; color:#64748B; font-weight:600; text-transform:uppercase;">Esperando datos...</p>
                         </div>
                     </div>
                     
@@ -435,14 +537,17 @@
                         <!-- BOTONES DE REGISTRO -->
                         <div class="form-buttons-wrapper">
                             <button type="submit" class="btn-crear" id="btnSubmitUld">REGISTRAR MANUAL</button>
-                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">IMPORTACIÓN MASIVA (EXCEL)</button>
+                            <button type="button" class="btn-masivo" onclick="abrirModalImportarMasivo()">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                IMPORTACIÓN MASIVA (EXCEL)
+                            </button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Historial Minimalista -->
                 <div class="audit-compact" id="auditCompactView">
-                    <span>ÚLTIMA ACTUALIZACIÓN: <strong id="lblLastAuditUser">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:normal; font-size:10px;"></span></span>
+                    <span>ÚLTIMA ACTUALIZACIÓN: <strong id="lblLastAuditUser" style="color:var(--amerijet-blue-dark);">N/A</strong> <span id="lblLastAuditTime" style="color:#94A3B8; font-weight:600; font-size:10px;"></span></span>
                     <button class="btn-ver-historial" onclick="abrirModalHistorialLog()">VER HISTORIAL COMPLETO</button>
                 </div>
 
@@ -451,14 +556,22 @@
                     
                     <div class="table-toolbar">
                         <div class="table-actions">
-                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">TRANSFERIR SELECCIÓN</button>
-                            <!-- Nuevo Botón Borrar Selección (Solo Admin/Sup Local) -->
-                            <button class="btn-delete-multi" onclick="borrarSeleccion()" id="btnBorrarGlobal">BORRAR SELECCIÓN</button>
-                            <button class="btn-excel" onclick="exportarExcelLocal()">DESCARGAR EXCEL</button>
+                            <button class="btn-transfer" onclick="abrirModalTransferir()" id="btnTransferGlobal">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1L4 5v14l12 4 4-4V5l-4-4zm2 17.17l-2 2V4.83l2-2v14.34zM16 21l-10-3.33V6l10-3.33V21z"/></svg>
+                                TRANSFERIR SELECCIÓN
+                            </button>
+                            <button class="btn-delete-multi" onclick="borrarSeleccion()" id="btnBorrarGlobal">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                BORRAR SELECCIÓN
+                            </button>
+                            <button class="btn-excel" onclick="exportarExcelLocal()">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                DESCARGAR EXCEL
+                            </button>
                         </div>
                         <div class="search-box">
                             <span style="color:#64748B; font-weight:800; font-size:12px;">BUSCAR: </span>
-                            <input type="text" id="searchInput" onkeyup="filtrarYPaginar()" placeholder="Uld o Tipo..." style="margin-left: 8px;">
+                            <input type="text" id="searchInput" onkeyup="filtrarYPaginar()" placeholder="ULD O TIPO..." style="margin-left: 8px;">
                         </div>
                     </div>
 
@@ -495,7 +608,10 @@
                                 <button class="btn-pag" id="btnNextPage" onclick="cambiarPagina(1)">SIGUIENTE</button>
                             </div>
                         </div>
-                        <button class="btn-guardar-inv" onclick="validarInventarioSeleccion()" id="btnGuardarInv">VALIDAR SELECCIÓN FÍSICA</button>
+                        <button class="btn-guardar-inv" onclick="validarInventarioSeleccion()" id="btnGuardarInv">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            VALIDAR SELECCIÓN FÍSICA
+                        </button>
                     </div>
                 </div>
             </div>
@@ -515,8 +631,14 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn-excel" style="margin:0;" onclick="exportarTodoExcel()">DETALLE GLOBAL (EXCEL)</button>
-                        <button class="btn-excel" style="margin:0;" onclick="exportarPivotExcel()">CUADRO GLOBAL (EXCEL)</button>
+                        <button class="btn-excel" style="margin:0;" onclick="exportarTodoExcel()">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                            DETALLE GLOBAL (EXCEL)
+                        </button>
+                        <button class="btn-excel" style="margin:0;" onclick="exportarPivotExcel()">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                            CUADRO GLOBAL (EXCEL)
+                        </button>
                     </div>
                 </div>
                 
@@ -655,10 +777,12 @@
         <div class="modal-content" style="max-width: 500px; text-align: left;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 10px;">
                 <h3 style="font-weight: 900; color: var(--amerijet-blue-dark); margin:0; text-transform:uppercase; font-size:16px;">HISTORIAL DE CAMBIOS</h3>
-                <button onclick="cerrarModalHistorialLog()" style="background:none; border:none; font-size:18px; color:#94A3B8; cursor:pointer; font-weight:800;">X</button>
+                <button onclick="cerrarModalHistorialLog()" style="background:none; border:none; color:#94A3B8; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
             </div>
             <div id="logContainerModal" style="max-height: 300px; overflow-y: auto;">
-                <p style="font-size:11px; color:#64748B; font-style:italic; text-transform:uppercase; text-align:center;">Cargando historial...</p>
+                <p style="font-size:11px; color:#64748B; font-weight:600; text-transform:uppercase; text-align:center;">Cargando historial...</p>
             </div>
         </div>
     </div>
@@ -1044,10 +1168,10 @@
             
             if (hayExceso) {
                 banner.className = 'stock-banner danger';
-                headerText.innerHTML = '<span>⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.</span><span style="font-size: 14px; color:#B45309;">▼</span>';
+                headerText.innerHTML = '<span>⚠️ ALERTA DE STOCK: Tienes ULDs en exceso, debes depurar.</span><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
             } else {
                 banner.className = 'stock-banner success';
-                headerText.innerHTML = '<span>✅ CONTROL DE STOCK: Tu estación está dentro de los límites.</span><span style="font-size: 14px; color:#047857;">▼</span>';
+                headerText.innerHTML = '<span>✅ CONTROL DE STOCK: Tu estación está dentro de los límites.</span><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
             }
             banner.style.display = 'flex';
         }
@@ -1810,7 +1934,7 @@
         function abrirModalHistorialLog() {
             const container = document.getElementById('logContainerModal'); container.innerHTML = '';
             if(!historialAuditoria || historialAuditoria.length === 0) {
-                container.innerHTML = '<p style="font-size:11px; color:#64748B; font-style:italic; text-transform:uppercase; text-align:center;">No hay historial registrado en esta estación.</p>'; 
+                container.innerHTML = '<p style="font-size:11px; color:#64748B; font-weight:600; text-transform:uppercase; text-align:center;">No hay historial registrado en esta estación.</p>'; 
                 document.getElementById('modalHistorialLog').style.display = 'flex'; return;
             }
             const ultimosLogs = [...historialAuditoria].reverse(); let html = '';
