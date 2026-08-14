@@ -639,9 +639,10 @@
             document.getElementById('lblUserName').innerText = perfil.nombre || "Admin";
             document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
 
-            // JS Handles showing specific buttons
+            // JS Handles showing specific buttons for Admin
             document.getElementById('btnReportesHistoricos').style.display = 'flex';
-            document.getElementById('btnAdminPanel').style.display = 'flex'; // En caso de que se haya ocultado por CSS
+            document.getElementById('btnAdminPanel').style.display = 'flex'; 
+            document.getElementById('lblUldMenuText').innerText = "INVENTARIO MAESTRO ULD"; 
 
             await cargarEstaciones();
             cargarUsuarios();
