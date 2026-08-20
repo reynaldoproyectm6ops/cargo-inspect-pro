@@ -129,9 +129,17 @@
         .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
         
-        .info-card { background: var(--amerijet-blue-dark); padding: 20px 25px; border-radius: 12px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(26,54,93,0.15); flex-wrap: wrap; gap: 15px;}
+        /* Ajuste Mobile para tarjeta de información */
+        .info-card { background: var(--amerijet-blue-dark); padding: 20px 25px; border-radius: 12px; color: white; display: flex; flex-direction: column; align-items: flex-start; box-shadow: 0 4px 15px rgba(26,54,93,0.15); gap: 15px;}
+        @media (min-width: 768px) {
+            .info-card { flex-direction: row; justify-content: space-between; align-items: center; }
+            .info-card .inspector-group { align-items: flex-end; }
+        }
+        .inspector-group { display: flex; flex-direction: column; width: 100%; }
+        @media (min-width: 768px) { .inspector-group { width: auto; } }
+
         .info-card h1 { font-size: 28px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
-        .info-card select { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer;}
+        .info-card select { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; width: 100%;}
         .info-card select option { color: #333; }
 
         .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
@@ -250,6 +258,10 @@
             .menu-toggle { display: block; }
             .container { padding: 15px; }
             .bottom-bar { left: 0; padding: 12px 15px; }
+            
+            .header-info-mobile {
+                display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+            }
         }
     </style>
 </head>
@@ -307,7 +319,7 @@
             <button class="nav-link" onclick="navegarA('admin_panel.html')" id="btnAdminPanel" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
                 <span>PANEL DE CONTROL</span>
             </button>
@@ -338,12 +350,12 @@
                 <button class="menu-toggle" onclick="toggleSidebar()">
                     <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
-                <div class="header-title">Inspección Aeronave<span>Reporte de Condición Estructural</span></div>
+                <div class="header-title">Inspección Aeronave<span>Reporte Estructural</span></div>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="font-size: 12px; font-weight: 900; background: #EFF6FF; color: var(--amerijet-blue); padding: 6px 12px; border-radius: 6px; border: 1px solid #BFDBFE;" id="lblTailHead">---</div>
+            
+            <div class="header-info-mobile" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
+                <div style="font-size: 11px; font-weight: 900; background: #EFF6FF; color: var(--amerijet-blue); padding: 6px 12px; border-radius: 6px; border: 1px solid #BFDBFE; white-space: nowrap;" id="lblTailHead">---</div>
                 <button class="btn-volver-top" onclick="navegarA('dashboard.html')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     Vuelos
                 </button>
             </div>
@@ -358,7 +370,7 @@
                         <div style="font-size: 11px; opacity: 0.9; font-weight: 800; text-transform: uppercase;">Vuelo Operativo</div>
                         <h1 id="lblVuelo">Cargando...</h1>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                    <div class="inspector-group">
                         <span style="font-size: 10px; opacity: 0.9; font-weight: 800; margin-bottom:6px; text-transform: uppercase;">Inspector Encargado</span>
                         <select id="selInspector" onchange="marcarCambios()">
                             <option value="">Cargando inspectores...</option>
@@ -373,16 +385,16 @@
                         Utilice esta sección únicamente para reportar daños. Al guardar, el panel se limpiará y el hallazgo bajará a la Matriz de Trazabilidad.
                     </p>
 
+                    <!-- LOWER FORWARD -->
                     <div class="comp-item" id="c_lower_fwd">
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
-                            <option value="OK">[ OK ] Sin Novedad</option>
-                            <option value="HALLAZGO">[ ALERTA ] Reportar Daño Estructura</option>
-                            <option value="OTROS">[ ALERTA ] OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
-                            <!-- NUEVO: Selector de Tipo de Daño -->
                             <select id="tipo_dano_lower_fwd" onchange="marcarCambios()">
                                 <option value="">-- Naturaleza del Daño --</option>
                                 <option value="Golpe / Abolladura">Golpe / Abolladura</option>
@@ -394,29 +406,27 @@
                             <input type="text" id="desc_lower_fwd" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_fwd', 'lower_fwd')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_fwd"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
 
+                    <!-- LOWER AFT -->
                     <div class="comp-item" id="c_lower_aft">
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
-                            <option value="OK">[ OK ] Sin Novedad</option>
-                            <option value="HALLAZGO">[ ALERTA ] Reportar Daño Estructura</option>
-                            <option value="OTROS">[ ALERTA ] OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
-                            <!-- NUEVO: Selector de Tipo de Daño -->
                             <select id="tipo_dano_lower_aft" onchange="marcarCambios()">
                                 <option value="">-- Naturaleza del Daño --</option>
                                 <option value="Golpe / Abolladura">Golpe / Abolladura</option>
@@ -428,29 +438,27 @@
                             <input type="text" id="desc_lower_aft" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_aft', 'lower_aft')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_aft"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
 
+                    <!-- BULK -->
                     <div class="comp-item" id="c_bulk">
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
-                            <option value="OK">[ OK ] Sin Novedad</option>
-                            <option value="HALLAZGO">[ ALERTA ] Reportar Daño Estructura</option>
-                            <option value="OTROS">[ ALERTA ] OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_bulk" class="hallazgo-panel">
-                            <!-- NUEVO: Selector de Tipo de Daño -->
                             <select id="tipo_dano_bulk" onchange="marcarCambios()">
                                 <option value="">-- Naturaleza del Daño --</option>
                                 <option value="Golpe / Abolladura">Golpe / Abolladura</option>
@@ -462,30 +470,28 @@
                             <input type="text" id="desc_bulk" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_bulk', 'bulk')">
                             </label>
                             <div class="photo-gallery" id="gal_bulk"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
 
+                    <!-- MAIN DECK -->
                     <div class="comp-item" style="border: 2px solid var(--amerijet-blue); background: white;">
                         <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
                         <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
-                            <option value="OK">[ OK ] Sin Novedad</option>
-                            <option value="FUSELAJE">[ ALERTA ] Reportar Daño Estructura / Puerta MD</option>
-                            <option value="LOCKS">[ ALERTA ] Mapear Daño en Seguros de Piso (CLS)</option>
-                            <option value="OTROS">[ ALERTA ] OTROS (Rodos dañados, guías, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="FUSELAJE">⚠️ Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">⚠️ Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">⚠️ OTROS (Rodos dañados, guías, etc.)</option>
                         </select>
 
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
-                            <!-- NUEVO: Selector de Tipo de Daño -->
                             <select id="tipo_dano_md_fuselaje" onchange="marcarCambios()">
                                 <option value="">-- Naturaleza del Daño --</option>
                                 <option value="Golpe / Abolladura">Golpe / Abolladura</option>
@@ -497,15 +503,13 @@
                             <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Foto del Daño (MD)
+                                📸 Foto del Daño (MD)
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_md_fus', 'md_fuselaje')">
                             </label>
                             <div class="photo-gallery" id="gal_md_fus"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -513,9 +517,8 @@
 
                 <!-- PANEL MAPEO CLS B767 -->
                 <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        Mapeo de Seguros (CLS)
+                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">
+                        ⚠️ Mapeo de Seguros (CLS)
                     </div>
                     
                     <div class="config-tabs">
@@ -599,15 +602,13 @@
                         <input type="text" id="inpComentariosCLS" placeholder="Añadir comentarios o detalles adicionales (Opcional)..." oninput="marcarCambios()" style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-top: 8px; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);">
 
                         <label class="btn-camera" style="margin-top: 8px;">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            Tomar Foto del Seguro
+                            📸 Tomar Foto del Seguro
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_cls_map', 'cls_temp')">
                         </label>
                         <div class="photo-gallery" id="gal_cls_map"></div>
 
                         <button type="button" class="btn-add-matrix" style="margin-top:10px;" onclick="agregarLockAMatriz()">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Pasar Hallazgo a Matriz
+                            ➕ Pasar Hallazgo a Matriz
                         </button>
                     </div>
                 </div>
@@ -627,12 +628,12 @@
 
                 <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO -->
                 <div class="card" style="margin-bottom: 20px; border: 2px solid var(--warn-orange);">
-                    <div class="card-header" style="color:var(--warn-orange);">3. Incidencias Temporales del Vuelo</div>
+                    <div class="card-header" style="color:var(--warn-orange);">3. Incidencias y Notas Generales del Vuelo</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
-                        Estos reportes aplican SOLO para la operación actual y no manchan el historial permanente del avión.
+                        Estos reportes (y las notas) aplican SOLO para la operación actual y no manchan el historial permanente del avión.
                     </p>
+                    
                     <div class="comp-item" style="border-color: var(--warn-orange); margin-bottom: 5px;">
-                        
                         <select id="sel_incidencia_area" style="margin-bottom: 8px; border-color:#FED7AA; color:#92400E; font-weight:800;">
                             <option value="General">-- Ubicación de la Incidencia (General) --</option>
                             <option value="Lower Forward">Lower Forward Deck</option>
@@ -641,28 +642,21 @@
                             <option value="Main Deck">Main Deck</option>
                         </select>
 
-                        <input type="text" id="desc_incidencia" placeholder="Descripción de la incidencia en rampa/vuelo..." oninput="marcarCambios()">
+                        <input type="text" id="desc_incidencia" placeholder="Descripción de la incidencia o nota general..." oninput="marcarCambios()">
                         
                         <label class="btn-camera">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            Tomar Foto (Opcional)
+                            📸 Tomar Foto (Opcional)
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_incidencias', 'temp_incidencia')">
                         </label>
                         <div class="photo-gallery" id="gal_incidencias"></div>
                         <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Agregar Incidencia a este Vuelo
+                            ➕ Agregar Incidencia / Nota
                         </button>
                     </div>
                     
                     <div id="listaIncidencias" style="margin-top: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px;"></div>
                 </div>
 
-                <!-- SECCIÓN 4: CIERRE FINAL -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div class="card-header">4. Cierre y Comentarios Supervisor</div>
-                    <textarea id="txtNotasFinales" rows="4" placeholder="Anotaciones finales de validación..." oninput="marcarCambios()"></textarea>
-                </div>
             </div>
         </main>
         
@@ -689,9 +683,8 @@
     <!-- MODALES DE EDICIÓN Y CONFIRMACIÓN -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
-            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                Editar / Actualizar Daño
+            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">
+                ✏️ Editar / Actualizar Daño
             </h3>
             <input type="hidden" id="modalIndex">
             
@@ -719,8 +712,7 @@
             <input type="text" id="modalNotas" placeholder="Notas adicionales de la actualización / reparación..." style="margin-bottom: 12px; padding: 10px;" oninput="marcarCambios()">
             
             <label class="btn-camera" style="margin-top: 5px;">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                Foto de Evidencia Adicional
+                📸 Foto de Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_update', 'modal_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_update"></div>
@@ -734,9 +726,8 @@
 
     <div class="modal-overlay" id="modalActualizarIncidencia">
         <div class="modal-content">
-            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                Editar Incidencia
+            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">
+                ✏️ Editar Incidencia
             </h3>
             <input type="hidden" id="modalIncIndex">
             
@@ -757,8 +748,7 @@
             </div>
             
             <label class="btn-camera" style="margin-top: 5px; border-color: var(--warn-orange); color: var(--warn-orange);">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                Añadir Evidencia Adicional
+                📸 Añadir Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_inc', 'modal_inc_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_inc"></div>
@@ -773,9 +763,7 @@
     <!-- MODAL DE CONFIRMACIÓN -->
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 3000;">
         <div class="modal-content">
-            <div style="display:flex; justify-content:center; margin-bottom: 10px; color: var(--amerijet-red);">
-                <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            </div>
+            <div style="font-size: 45px; margin-bottom: 10px; color: var(--amerijet-red);">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;"></p>
             <div style="display: flex; gap: 10px; flex-direction:column;">
@@ -835,9 +823,7 @@
         function showToast(mensaje, type = 'success') {
             const container = document.getElementById('toast-container') || (function() { const c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); return c; })();
             const toast = document.createElement('div');
-            let icon = type === 'success' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' 
-                     : type === 'error' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>' 
-                     : '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+            let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             toast.className = `toast ${type}`; 
             toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
             container.appendChild(toast);
@@ -952,13 +938,10 @@
                     if(notasBD.includes('||_JSON_||')) {
                         try {
                             const paquete = JSON.parse(notasBD.split('||_JSON_||')[1]);
-                            document.getElementById('txtNotasFinales').value = paquete.notas || '';
                             incidenciasVuelo = paquete.incidencias || [];
-                            // Rehidratar arrays vacios para fotos (se borran de BD)
-                            incidenciasVuelo.forEach(inc => { fotosBanco[inc.idTracking] = []; });
+                            // Rehidratamos la base de datos de fotos con las que vienen de la Nube (si existen)
+                            incidenciasVuelo.forEach(inc => { fotosBanco[inc.idTracking] = inc.fotos || []; });
                         } catch(e) {}
-                    } else {
-                        document.getElementById('txtNotasFinales').value = notasBD; 
                     }
                 }
 
@@ -974,7 +957,7 @@
                     selInspector.value = currentUser;
                 }
 
-                // Carga del historial del avión (Sin fotos para no saturar memoria)
+                // Carga del historial del avión (AQUÍ SÍ DESCARGAMOS LAS FOTOS DE LA NUBE PARA QUE ESTÉN DISPONIBLES)
                 const { data: danosBD } = await supabaseClient.from('avion_danos')
                     .select('*')
                     .eq('matricula_avion', vueloData.tail)
@@ -999,12 +982,13 @@
                             nota_solucion: d.nota_solucion || '', 
                             fechaReporte: d.creado_at, 
                             fechaActualizacion: d.actualizado_at,
-                            imgAvion: null, 
-                            imgPaleta: null, 
+                            imgAvion: ev.imgAvion || null, 
+                            imgPaleta: ev.imgPaleta || null, 
                             vuelo_origen: d.vuelo_origen, 
                             esHistorico: esHistorico
                         });
-                        fotosBanco['hist_' + d.id] = []; // Bloqueamos la descarga pesada
+                        // Si vienen fotos de la BD (de otro inspector) las guardamos en memoria
+                        fotosBanco['hist_' + d.id] = ev.fotos || []; 
                     });
                 }
 
@@ -1058,20 +1042,16 @@
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
                         <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px; display:flex; align-items:center; gap:4px;">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 
-                            Área: ${inc.area || 'General'}
+                            📍 Área: ${inc.area || 'General'}
                         </div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark); margin-bottom: 8px;">${inc.descripcion}</div>
                         ${htmlF}
                         <div style="margin-top: 15px; border-top: 1px dashed #FDE68A; padding-top: 15px;">
                             <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); color:white; width:100%; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="abrirModalIncidencia('${inc.idTracking}')">
-                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                                Editar Incidencia
+                                ✏️ Editar Incidencia
                             </button>
                         </div>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
                     </div>
                 `;
             });
@@ -1315,11 +1295,11 @@
 
             areasOrdenadas.forEach(area => {
                 if(gruposArea[area].length === 0) return; 
-                let areaHTML = `<div class="group-header"><span style="display:flex; align-items:center; gap:4px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
+                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
-                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">Heredado</span>` : `<span class="badge-status st-new">Daño Activo</span>`);
+                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
                     let htmlF = "";
                     if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
                         htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
@@ -1335,17 +1315,14 @@
                         <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
                         <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
                         <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
-                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Rep: ${fRep}</span> 
-                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.24l5.67-5.67"></path></svg> Upd: ${fUpd}</span>
+                            <span>📅 Rep: ${fRep}</span> 
+                            <span>🔄 Upd: ${fUpd}</span>
                         </div>
                         ${htmlF}
                         <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                            Editar / Actualizar Daño
+                            ✏️ Editar / Actualizar Daño
                         </button>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
                     </div>`;
                 });
                 
@@ -1421,9 +1398,14 @@
 
             try {
                 for (let h of matrizHallazgos) {
-                    // EXTREMADAMENTE IMPORTANTE: NO MANDAMOS BASE64 EN EL JSON
-                    // "fotos", "imgAvion" y "imgPaleta" se quedan en memoria local
-                    let ev = { tipo: h.tipo || 'COMPARTIMENTO', ubicacion: h.ubicacion || 'General' };
+                    // AHORA SÍ GUARDAMOS LAS FOTOS TEMPORALMENTE EN LA NUBE PARA QUE ESTÉN DISPONIBLES EN TIEMPO REAL
+                    let ev = { 
+                        tipo: h.tipo || 'COMPARTIMENTO', 
+                        ubicacion: h.ubicacion || 'General',
+                        fotos: fotosBanco[h.idTracking] || [], 
+                        imgAvion: h.imgAvion || null,
+                        imgPaleta: h.imgPaleta || null
+                    };
                     
                     let payloadDano = {
                         matricula_avion: vueloData.tail, area: h.area, componente: h.componente, descripcion: h.descripcion,
@@ -1442,11 +1424,14 @@
                     }
                 }
 
-                // Las fotos no viajan a la DB.
+                // Las incidencias y sus fotos también se guardan en la nube de forma temporal
                 const paqueteTemporales = {
-                    notas: document.getElementById('txtNotasFinales').value,
                     incidencias: incidenciasVuelo.map(inc => ({
-                        idTracking: inc.idTracking, area: inc.area, descripcion: inc.descripcion, fecha: inc.fecha
+                        idTracking: inc.idTracking, 
+                        area: inc.area, 
+                        descripcion: inc.descripcion, 
+                        fecha: inc.fecha,
+                        fotos: fotosBanco[inc.idTracking] || []
                     }))
                 };
                 
