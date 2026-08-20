@@ -174,7 +174,6 @@
         /* PALETA INTERACTIVA DE LOCKS */
         .pallet-locks-container { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 30px 10px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
         .pallet-draw { position: relative; width: 400px; height: 220px; margin: 0 auto; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; }
-        /* CORRECCIÓN: Estilos ajustados para que las cajas ocupen todo el espacio interior */
         .pallet-core-text { position: absolute; inset: 0; font-weight: 900; font-size: 40px; color: #0F172A; letter-spacing: 2px; display: flex; justify-content: center; align-items: center; pointer-events: none;}
         
         .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; }
@@ -409,15 +408,13 @@
                             <input type="text" id="desc_lower_fwd" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_fwd', 'lower_fwd')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_fwd"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -443,15 +440,13 @@
                             <input type="text" id="desc_lower_aft" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_aft', 'lower_aft')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_aft"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -477,15 +472,13 @@
                             <input type="text" id="desc_bulk" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_bulk', 'bulk')">
                             </label>
                             <div class="photo-gallery" id="gal_bulk"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -512,15 +505,13 @@
                             <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Foto del Daño (MD)
+                                📸 Foto del Daño (MD)
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_md_fuselaje', 'md_fuselaje')">
                             </label>
                             <div class="photo-gallery" id="gal_md_fuselaje"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -614,15 +605,13 @@
                         <input type="text" id="inpComentariosCLS" placeholder="Añadir comentarios o detalles adicionales (Opcional)..." oninput="marcarCambios()" style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-top: 8px; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);">
 
                         <label class="btn-camera" style="margin-top: 8px;">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            Tomar Foto del Seguro
+                            📸 Tomar Foto del Seguro
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_cls_map', 'cls_temp')">
                         </label>
                         <div class="photo-gallery" id="gal_cls_map"></div>
 
                         <button type="button" class="btn-add-matrix" style="margin-top:10px;" onclick="agregarLockAMatriz()">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Pasar Hallazgo a Matriz
+                            📥 Pasar Hallazgo a Matriz
                         </button>
                     </div>
                 </div>
@@ -697,7 +686,7 @@
     <!-- MODALES DE EDICIÓN Y CONFIRMACIÓN -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
-            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">
                 ✏️ Editar / Actualizar Daño
             </h3>
             <input type="hidden" id="modalIndex">
@@ -740,7 +729,7 @@
 
     <div class="modal-overlay" id="modalActualizarIncidencia">
         <div class="modal-content">
-            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">
                 ✏️ Editar Incidencia
             </h3>
             <input type="hidden" id="modalIncIndex">
@@ -777,9 +766,7 @@
     <!-- MODAL DE CONFIRMACIÓN -->
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 3000;">
         <div class="modal-content">
-            <div style="display:flex; justify-content:center; margin-bottom: 10px; color: var(--amerijet-red);">
-                ⚠️
-            </div>
+            <div style="font-size: 45px; margin-bottom: 10px; color: var(--amerijet-red);">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;"></p>
             <div style="display: flex; gap: 10px; flex-direction:column;">
@@ -1175,7 +1162,18 @@
         // --- ACTUALIZACIÓN DINÁMICA DE ETIQUETA EN PALLET ---
         function updatePalletCoreText(selArray) {
             const pct = document.querySelector('.pallet-core-text');
-            if (!pct) return;
+            const pDraw = document.getElementById('palletBoxRenderHTML');
+            if (!pct || !pDraw) return;
+            
+            // Limpiar cajas adjuntas previas
+            document.querySelectorAll('.attached-box').forEach(el => el.remove());
+            
+            // Reset styles base
+            pDraw.style.transform = "scale(1)";
+            pDraw.style.marginBottom = "0px";
+            pDraw.style.marginLeft = "auto";
+            pDraw.style.marginRight = "auto";
+
             if (selArray.length === 0) {
                 pct.innerHTML = "MD";
             } else if (selArray.length === 1) {
@@ -1184,22 +1182,38 @@
                 const pos1 = selArray[0];
                 const pos2 = selArray[1];
                 
-                // Si son Right y Left, se apilan verticalmente (Horizontal Split)
+                // Si son Right y Left (Lateral) -> Un cuadro arriba y otro abajo (Unidos por el Centerline en medio)
                 if ((pos1.includes('R') && pos2.includes('L')) || (pos1.includes('L') && pos2.includes('R'))) {
-                    const top = pos1.includes('R') ? pos1 : pos2;
-                    const bot = pos1.includes('L') ? pos1 : pos2;
-                    pct.innerHTML = `
-                        <div style="display:flex; flex-direction:column; width:100%; height:100%;">
-                            <div style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom: 3px dashed #CBD5E1;">${top}</div>
-                            <div style="flex:1; display:flex; align-items:center; justify-content:center;">${bot}</div>
-                        </div>`;
-                } else {
-                    // Si son Front y Back (ej. P2 y P3), se ponen lado a lado (Vertical Split)
-                    pct.innerHTML = `
-                        <div style="display:flex; flex-direction:row; width:100%; height:100%;">
-                            <div style="flex:1; display:flex; align-items:center; justify-content:center; border-right: 3px dashed #CBD5E1;">${pos1}</div>
-                            <div style="flex:1; display:flex; align-items:center; justify-content:center;">${pos2}</div>
-                        </div>`;
+                    const topStr = pos1.includes('R') ? pos1 : pos2;
+                    const botStr = pos1.includes('L') ? pos1 : pos2;
+                    
+                    pct.innerHTML = topStr;
+                    
+                    const botBox = document.createElement('div');
+                    botBox.className = 'attached-box';
+                    botBox.style.cssText = "position:absolute; top:100%; left:-3px; right:-3px; height:100%; background:white; border: 3px solid #1E293B; border-top:none; display:flex; align-items:center; justify-content:center; font-size:40px; font-weight:900; color:#0F172A; letter-spacing:2px; z-index:1;";
+                    botBox.innerHTML = botStr;
+                    pDraw.appendChild(botBox);
+                    
+                    pDraw.style.transform = "scale(0.65)";
+                    pDraw.style.marginBottom = "100px";
+                } 
+                // Si son Frontales/Traseras (Longitudinal) -> Un cuadro a la izquierda y otro a la derecha (Unidos por Fwd/Aft Locks)
+                else {
+                    const sorted = [...selArray].sort();
+                    const leftStr = sorted[0];
+                    const rightStr = sorted[1];
+                    
+                    pct.innerHTML = leftStr;
+                    
+                    const rightBox = document.createElement('div');
+                    rightBox.className = 'attached-box';
+                    rightBox.style.cssText = "position:absolute; top:-3px; bottom:-3px; left:100%; width:100%; background:white; border: 3px solid #1E293B; border-left:none; display:flex; align-items:center; justify-content:center; font-size:40px; font-weight:900; color:#0F172A; letter-spacing:2px; z-index:1;";
+                    rightBox.innerHTML = rightStr;
+                    pDraw.appendChild(rightBox);
+                    
+                    pDraw.style.transform = "scale(0.55)";
+                    pDraw.style.marginLeft = "10%";
                 }
             } else {
                 pct.innerHTML = `<div style="font-size: 22px; line-height: 1.2;">${selArray.join(' / ')}</div>`;
@@ -1285,7 +1299,8 @@
                 rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${configActualGlobal}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
                 const cA = await html2canvas(rDiv, { scale: 1.5 }); iAvion = cA.toDataURL('image/jpeg', 0.8);
                 
-                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:450px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${comp}</div><div class="pallet-draw" style="display:block; margin: 0 auto; transform: scale(0.9);">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
+                const pStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || 'transform: scale(0.9); margin: 0 auto;';
+                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:600px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${comp}</div><div class="pallet-draw" style="${pStyle}; display:block;">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
                 const cP = await html2canvas(rDiv, { scale: 1.5 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
                 rDiv.innerHTML = "";
 
@@ -1535,7 +1550,8 @@
                             locks.forEach(lockName => { if (funcStr.includes(`'${lockName}'`)) el.classList.add('active'); });
                         });
 
-                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:450px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div class="pallet-draw" style="display:block; margin: 0 auto; transform: scale(0.9);">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
+                        const pStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || 'transform: scale(0.9); margin: 0 auto;';
+                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:600px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div class="pallet-draw" style="${pStyle}; display:block;">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
                         const cP = await html2canvas(rDiv, { scale: 1.5 }); 
                         h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
                         rDiv.innerHTML = ""; document.querySelectorAll('.hotspot').forEach(n => n.classList.remove('active'));
