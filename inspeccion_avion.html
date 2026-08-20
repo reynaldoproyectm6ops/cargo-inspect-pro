@@ -61,7 +61,6 @@
 
         .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
         
-        /* EFECTOS DINÁMICOS DE BOTONES */
         @keyframes iconBounce {
             0% { transform: scale(1) translateY(0); }
             50% { transform: scale(1.15) translateY(-3px); }
@@ -103,31 +102,19 @@
             border-radius: 0 4px 4px 0;
         }
 
-        .nav-link:hover { 
-            background: rgba(56, 189, 248, 0.08); 
-            color: white; 
-            transform: translateX(4px); 
-        }
-        
+        .nav-link:hover { background: rgba(56, 189, 248, 0.08); color: white; transform: translateX(4px); }
         .nav-link:hover::before { transform: scaleY(1); }
         .nav-link svg { transition: color 0.3s ease; flex-shrink: 0; }
         .nav-link:hover svg { animation: iconBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; color: #38BDF8; }
 
-        .nav-link.active { 
-            background: #38BDF8; color: #0F172A; box-shadow: 0 4px 15px rgba(56,189,248,0.3); 
-            font-weight: 900; transform: translateX(0);
-        }
+        .nav-link.active { background: #38BDF8; color: #0F172A; box-shadow: 0 4px 15px rgba(56,189,248,0.3); font-weight: 900; transform: translateX(0); }
         .nav-link.active::before { display: none; }
         .nav-link.active svg { color: #0F172A; animation: none; transform: none; }
 
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
 
-        .btn-logout { 
-            background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; 
-            cursor: pointer; font-weight: 800; transition: 0.2s; font-size: 12px; width: 100%; display: flex; align-items: center; 
-            justify-content: center; gap: 8px; text-transform: uppercase;
-        }
+        .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 800; transition: 0.2s; font-size: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase;}
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
         /* HEADER Y MAIN CONTENT */
@@ -139,17 +126,14 @@
         .btn-volver-top { background: #F8FAFC; color: var(--amerijet-blue); border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor:pointer;}
         .btn-volver-top:hover { background: #E2E8F0; }
 
-        /* Padding bottom extra para móviles */
         .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
         
-        /* TARJETA AZUL SUPERIOR CON SELECTOR DINÁMICO */
         .info-card { background: var(--amerijet-blue-dark); padding: 20px 25px; border-radius: 12px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(26,54,93,0.15); flex-wrap: wrap; gap: 15px;}
         .info-card h1 { font-size: 28px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
         .info-card select { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer;}
         .info-card select option { color: #333; }
 
-        /* CAJAS BLANCAS */
         .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
         .card-header { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 15px; text-transform: uppercase; }
 
@@ -165,7 +149,7 @@
         
         .photo-gallery { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-top: 5px;}
         .photo-thumb { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; border: 1px solid #CBD5E1; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
-        .btn-add-matrix { background: var(--amerijet-red); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 800; font-size: 12px; width: 100%; display: flex; justify-content: center; margin-top: 12px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-add-matrix { background: var(--amerijet-red); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 800; font-size: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-add-matrix:hover { background: #BE123C; }
 
         /* PLANOS DIGITALES B767 */
@@ -206,13 +190,10 @@
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
-        /* CONTADORES Y BADGES */
         .counter-badge { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E3A8A; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 8px; margin-right: 6px; text-transform: uppercase;}
         .counter-badge.total { background: #1E3A8A; color: white; border-color: #1E3A8A; }
 
-        /* MATRIZ DINÁMICA */
         .matrix-container { margin-top: 15px; }
-        
         .compartment-scroll { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 25px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px 15px 5px 15px; }
         .group-header { font-size: 13px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #CBD5E1; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;}
         
@@ -225,10 +206,9 @@
 
         .btn-update-matrix { background: var(--amerijet-blue); color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 11px; text-transform: uppercase; font-weight: 800; cursor: pointer; margin-top: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; width: 100%;}
         .btn-update-matrix:hover { background: var(--amerijet-blue-dark); }
-        .btn-del-matrix { position: absolute; top: 15px; right: 15px; background: #FEE2E2; border: 1px solid #FCA5A5; color: #DC2626; border-radius: 6px; padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s;}
+        .btn-del-matrix { position: absolute; top: 15px; right: 15px; background: #FEE2E2; border: 1px solid #FCA5A5; color: #DC2626; border-radius: 6px; padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;}
         .btn-del-matrix:hover { background: #FECACA; }
         
-        /* BOTTOM BAR */
         .bottom-bar { background: white; padding: 15px 25px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; border-top: 1px solid #E2E8F0; z-index: 100; flex-shrink: 0; position: fixed; bottom: 0; left: var(--sidebar-width); right: 0; transition: left 0.3s;}
         .btn-panel { border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 12px; cursor: pointer; color: white; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; transition: 0.2s; letter-spacing: 0.5px;}
         .btn-save { background: var(--amerijet-blue); box-shadow: 0 4px 10px rgba(10,37,64,0.15); }
@@ -237,8 +217,20 @@
         .btn-pdf:hover { background: #059669; transform: translateY(-1px);}
 
         /* MODALES Y TOAST */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(2px); padding: 15px;}
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px;}
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;}
+
+        /* LOADING OVERLAY */
+        #loadingOverlay {
+            flex-direction: column;
+            color: white;
+            z-index: 9999;
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         #renderContainer { position: absolute; left: -9999px; top: 0; width: 800px; z-index: -100; background: white; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
@@ -263,7 +255,7 @@
 </head>
 <body>
 
-    <!-- MENÚ LATERAL (SIDEBAR MAESTRA ANIMADA) -->
+    <!-- MENÚ LATERAL -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -282,7 +274,6 @@
         </div>
 
         <nav class="sidebar-nav">
-            <!-- CENTRO DE VUELOS -->
             <button class="nav-link" onclick="navegarA('dashboard.html')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"></rect>
@@ -293,7 +284,6 @@
                 <span>CENTRO DE VUELOS</span>
             </button>
 
-            <!-- ESTADO DE FLOTA -->
             <button class="nav-link" onclick="navegarA('estado_flota.html')" id="btnEstadoFlota">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -304,7 +294,6 @@
                 <span>ESTADO DE FLOTA</span>
             </button>
 
-            <!-- INVENTARIO ULD -->
             <button class="nav-link" onclick="navegarA('uld_gestion.html')" id="btnUldMenu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 21V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v16"></path>
@@ -315,7 +304,6 @@
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </button>
 
-            <!-- PANEL DE CONTROL -->
             <button class="nav-link" onclick="navegarA('admin_panel.html')" id="btnAdminPanel" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
@@ -324,7 +312,6 @@
                 <span>PANEL DE CONTROL</span>
             </button>
 
-            <!-- HISTORIAL DE VUELOS -->
             <button class="nav-link" onclick="navegarA('reporte_vuelos.html')" id="btnReportesHistoricos" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
@@ -373,12 +360,9 @@
                     </div>
                     <div style="display:flex; flex-direction:column; align-items:flex-end;">
                         <span style="font-size: 10px; opacity: 0.9; font-weight: 800; margin-bottom:6px; text-transform: uppercase;">Inspector Encargado</span>
-                        
-                        <!-- ESTE ES EL SELECTOR QUE AHORA ES DINÁMICO -->
                         <select id="selInspector" onchange="marcarCambios()">
                             <option value="">Cargando inspectores...</option>
                         </select>
-                        
                     </div>
                 </div>
 
@@ -392,80 +376,147 @@
                     <div class="comp-item" id="c_lower_fwd">
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
+                            <option value="OK">[ OK ] Sin Novedad</option>
+                            <option value="HALLAZGO">[ ALERTA ] Reportar Daño Estructura</option>
+                            <option value="OTROS">[ ALERTA ] OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
-                            <input type="text" id="desc_lower_fwd" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
-                            <label class="btn-camera">📸 Tomar Foto
+                            <!-- NUEVO: Selector de Tipo de Daño -->
+                            <select id="tipo_dano_lower_fwd" onchange="marcarCambios()">
+                                <option value="">-- Naturaleza del Daño --</option>
+                                <option value="Golpe / Abolladura">Golpe / Abolladura</option>
+                                <option value="Fricción / Rayón">Fricción / Rayón</option>
+                                <option value="Falta Pieza / Faltante">Falta Pieza / Faltante</option>
+                                <option value="Pieza Quebrada / Dañada">Pieza Quebrada / Dañada</option>
+                                <option value="Mecanismo Atascado">Mecanismo Atascado</option>
+                            </select>
+                            <input type="text" id="desc_lower_fwd" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
+                            
+                            <label class="btn-camera">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_fwd', 'lower_fwd')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_fwd"></div>
-                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">📥 Pasar Hallazgo a Matriz</button>
+                            
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+                                Pasar Hallazgo a Matriz
+                            </button>
                         </div>
                     </div>
 
                     <div class="comp-item" id="c_lower_aft">
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
+                            <option value="OK">[ OK ] Sin Novedad</option>
+                            <option value="HALLAZGO">[ ALERTA ] Reportar Daño Estructura</option>
+                            <option value="OTROS">[ ALERTA ] OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
-                            <input type="text" id="desc_lower_aft" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
-                            <label class="btn-camera">📸 Tomar Foto
+                            <!-- NUEVO: Selector de Tipo de Daño -->
+                            <select id="tipo_dano_lower_aft" onchange="marcarCambios()">
+                                <option value="">-- Naturaleza del Daño --</option>
+                                <option value="Golpe / Abolladura">Golpe / Abolladura</option>
+                                <option value="Fricción / Rayón">Fricción / Rayón</option>
+                                <option value="Falta Pieza / Faltante">Falta Pieza / Faltante</option>
+                                <option value="Pieza Quebrada / Dañada">Pieza Quebrada / Dañada</option>
+                                <option value="Mecanismo Atascado">Mecanismo Atascado</option>
+                            </select>
+                            <input type="text" id="desc_lower_aft" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
+                            
+                            <label class="btn-camera">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_aft', 'lower_aft')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_aft"></div>
-                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">📥 Pasar Hallazgo a Matriz</button>
+                            
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+                                Pasar Hallazgo a Matriz
+                            </button>
                         </div>
                     </div>
 
                     <div class="comp-item" id="c_bulk">
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, faltantes, etc.)</option>
+                            <option value="OK">[ OK ] Sin Novedad</option>
+                            <option value="HALLAZGO">[ ALERTA ] Reportar Daño Estructura</option>
+                            <option value="OTROS">[ ALERTA ] OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_bulk" class="hallazgo-panel">
-                            <input type="text" id="desc_bulk" placeholder="Describa el daño o componente dañado..." oninput="marcarCambios()">
-                            <label class="btn-camera">📸 Tomar Foto
+                            <!-- NUEVO: Selector de Tipo de Daño -->
+                            <select id="tipo_dano_bulk" onchange="marcarCambios()">
+                                <option value="">-- Naturaleza del Daño --</option>
+                                <option value="Golpe / Abolladura">Golpe / Abolladura</option>
+                                <option value="Fricción / Rayón">Fricción / Rayón</option>
+                                <option value="Falta Pieza / Faltante">Falta Pieza / Faltante</option>
+                                <option value="Pieza Quebrada / Dañada">Pieza Quebrada / Dañada</option>
+                                <option value="Mecanismo Atascado">Mecanismo Atascado</option>
+                            </select>
+                            <input type="text" id="desc_bulk" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
+                            
+                            <label class="btn-camera">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_bulk', 'bulk')">
                             </label>
                             <div class="photo-gallery" id="gal_bulk"></div>
-                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">📥 Pasar Hallazgo a Matriz</button>
+                            
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+                                Pasar Hallazgo a Matriz
+                            </button>
                         </div>
                     </div>
 
                     <div class="comp-item" style="border: 2px solid var(--amerijet-blue); background: white;">
                         <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
                         <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="FUSELAJE">⚠️ Reportar Daño Estructura / Puerta MD</option>
-                            <option value="LOCKS">⚠️ Mapear Daño en Seguros de Piso (CLS)</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos dañados, guías, faltantes, etc.)</option>
+                            <option value="OK">[ OK ] Sin Novedad</option>
+                            <option value="FUSELAJE">[ ALERTA ] Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">[ ALERTA ] Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">[ ALERTA ] OTROS (Rodos dañados, guías, etc.)</option>
                         </select>
 
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
+                            <!-- NUEVO: Selector de Tipo de Daño -->
+                            <select id="tipo_dano_md_fuselaje" onchange="marcarCambios()">
+                                <option value="">-- Naturaleza del Daño --</option>
+                                <option value="Golpe / Abolladura">Golpe / Abolladura</option>
+                                <option value="Fricción / Rayón">Fricción / Rayón</option>
+                                <option value="Falta Pieza / Faltante">Falta Pieza / Faltante</option>
+                                <option value="Pieza Quebrada / Dañada">Pieza Quebrada / Dañada</option>
+                                <option value="Mecanismo Atascado">Mecanismo Atascado</option>
+                            </select>
                             <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción..." oninput="marcarCambios()">
-                            <label class="btn-camera">📸 Foto del Daño (MD)
+                            
+                            <label class="btn-camera">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                Foto del Daño (MD)
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_md_fus', 'md_fuselaje')">
                             </label>
                             <div class="photo-gallery" id="gal_md_fus"></div>
-                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">📥 Pasar Hallazgo a Matriz</button>
+                            
+                            <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+                                Pasar Hallazgo a Matriz
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- PANEL MAPEO CLS B767 -->
                 <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">⚠️ Mapeo de Seguros (CLS)</div>
+                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Mapeo de Seguros (CLS)
+                    </div>
                     
                     <div class="config-tabs">
                         <button type="button" class="tab-btn active" onclick="dibujarPlanoAvionCSS('A', this)">Conf A</button>
@@ -547,13 +598,16 @@
                         
                         <input type="text" id="inpComentariosCLS" placeholder="Añadir comentarios o detalles adicionales (Opcional)..." oninput="marcarCambios()" style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-top: 8px; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);">
 
-                        <label class="btn-camera" style="margin-top: 8px;">📸 Tomar Foto del Seguro
+                        <label class="btn-camera" style="margin-top: 8px;">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            Tomar Foto del Seguro
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_cls_map', 'cls_temp')">
                         </label>
                         <div class="photo-gallery" id="gal_cls_map"></div>
 
                         <button type="button" class="btn-add-matrix" style="margin-top:10px;" onclick="agregarLockAMatriz()">
-                            ➕ Pasar Hallazgo a Matriz
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Pasar Hallazgo a Matriz
                         </button>
                     </div>
                 </div>
@@ -589,11 +643,16 @@
 
                         <input type="text" id="desc_incidencia" placeholder="Descripción de la incidencia en rampa/vuelo..." oninput="marcarCambios()">
                         
-                        <label class="btn-camera">📸 Tomar Foto (Opcional)
+                        <label class="btn-camera">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            Tomar Foto (Opcional)
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_incidencias', 'temp_incidencia')">
                         </label>
                         <div class="photo-gallery" id="gal_incidencias"></div>
-                        <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">➕ Agregar Incidencia a este Vuelo</button>
+                        <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Agregar Incidencia a este Vuelo
+                        </button>
                     </div>
                     
                     <div id="listaIncidencias" style="margin-top: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px;"></div>
@@ -619,10 +678,21 @@
         </div>
     </div>
 
+    <!-- MODAL LOADING OVERLAY -->
+    <div class="modal-overlay" id="loadingOverlay">
+        <svg class="spinner" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20" fill="none" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" stroke-dasharray="90, 150"></circle>
+        </svg>
+        <div id="loadingText" style="margin-top: 15px; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: white;">Procesando...</div>
+    </div>
+
     <!-- MODALES DE EDICIÓN Y CONFIRMACIÓN -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
-            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">✏️ Editar / Actualizar Daño</h3>
+            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Editar / Actualizar Daño
+            </h3>
             <input type="hidden" id="modalIndex">
             
             <div style="display:flex; gap:10px; margin-bottom: 10px; text-align: left;">
@@ -648,7 +718,9 @@
             
             <input type="text" id="modalNotas" placeholder="Notas adicionales de la actualización / reparación..." style="margin-bottom: 12px; padding: 10px;" oninput="marcarCambios()">
             
-            <label class="btn-camera" style="margin-top: 5px;">📸 Foto de Evidencia Adicional
+            <label class="btn-camera" style="margin-top: 5px;">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                Foto de Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_update', 'modal_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_update"></div>
@@ -662,7 +734,10 @@
 
     <div class="modal-overlay" id="modalActualizarIncidencia">
         <div class="modal-content">
-            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">✏️ Editar Incidencia</h3>
+            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Editar Incidencia
+            </h3>
             <input type="hidden" id="modalIncIndex">
             
             <div style="text-align: left;">
@@ -681,7 +756,9 @@
                 </div>
             </div>
             
-            <label class="btn-camera" style="margin-top: 5px; border-color: var(--warn-orange); color: var(--warn-orange);">📸 Añadir Evidencia Adicional
+            <label class="btn-camera" style="margin-top: 5px; border-color: var(--warn-orange); color: var(--warn-orange);">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                Añadir Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_inc', 'modal_inc_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_inc"></div>
@@ -696,7 +773,9 @@
     <!-- MODAL DE CONFIRMACIÓN -->
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 3000;">
         <div class="modal-content">
-            <div style="font-size: 45px; margin-bottom: 10px;">⚠️</div>
+            <div style="display:flex; justify-content:center; margin-bottom: 10px; color: var(--amerijet-red);">
+                <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
             <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;"></p>
             <div style="display: flex; gap: 10px; flex-direction:column;">
@@ -720,7 +799,6 @@
         let configActualGlobal = 'A';
         let incidenciasVuelo = [];
         
-        // Datos del usuario logueado
         let currentUser = "";
         let currentStation = "SAL";
 
@@ -745,10 +823,31 @@
         let hayCambiosSinGuardar = false;
         function marcarCambios() { hayCambiosSinGuardar = true; }
         
+        // --- UI LOADING & TOAST ---
+        function showLoading(text = "Procesando...") {
+            document.getElementById('loadingText').innerText = text;
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showToast(mensaje, type = 'success') {
+            const container = document.getElementById('toast-container') || (function() { const c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); return c; })();
+            const toast = document.createElement('div');
+            let icon = type === 'success' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' 
+                     : type === 'error' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>' 
+                     : '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+            toast.className = `toast ${type}`; 
+            toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'fadeOutToast 0.3s ease-out forwards'; setTimeout(() => toast.remove(), 300); }, 2500);
+        }
+
         function navegarA(url) {
             if (hayCambiosSinGuardar) {
                 showCustomConfirm(
-                    "⚠️ Cambios sin guardar", 
+                    "Cambios sin guardar", 
                     "Tienes cambios no guardados. Si sales ahora, perderás las fotos y textos que acabas de agregar.<br><br><b>¿Deseas salir y perder los cambios?</b>", 
                     "Salir sin guardar", 
                     "var(--amerijet-red)", 
@@ -760,7 +859,7 @@
         function logoutSeguro() {
             if (hayCambiosSinGuardar) {
                 showCustomConfirm(
-                    "⚠️ Cambios sin guardar", 
+                    "Cambios sin guardar", 
                     "Tienes cambios pendientes en la inspección. ¿Salir y perder los cambios?", 
                     "Cerrar Sesión", 
                     "var(--amerijet-red)", 
@@ -771,16 +870,6 @@
             }
         }
         window.addEventListener('beforeunload', (e) => { if (hayCambiosSinGuardar) { e.preventDefault(); e.returnValue = ''; } });
-
-        function showToast(mensaje, type = 'success') {
-            const container = document.getElementById('toast-container') || (function() { const c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); return c; })();
-            const toast = document.createElement('div');
-            let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-            toast.className = `toast ${type}`; 
-            toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = 'fadeOutToast 0.3s ease-out forwards'; setTimeout(() => toast.remove(), 300); }, 2500);
-        }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 
@@ -821,7 +910,6 @@
 
             if(!operacionId) return;
             try {
-                // Obtenemos los datos del vuelo
                 const { data: op } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, ruta, estacion_registro').eq('id', operacionId).single();
                 if(op) {
                     vueloData.vuelo = op.vuelo_id; 
@@ -832,35 +920,26 @@
                     document.getElementById('lblTailHead').innerText = op.matricula_avion;
                 }
 
-                // --- LOGICA DEL SELECTOR DINÁMICO DE INSPECTOR ---
                 const selInspector = document.getElementById('selInspector');
                 selInspector.innerHTML = '<option value="">Cargando inspectores...</option>'; 
                 
-                // 1. Buscamos todos los perfiles en la base de datos
                 const { data: personal, error: errPerfiles } = await supabaseClient.from('perfiles').select('nombre, estacion_base');
                 let personalEstacion = [];
                 
                 if (personal && !errPerfiles) {
-                    // 2. Filtramos solo los que pertenecen a la estación del vuelo
                     const estacionVuelo = (vueloData.estacion || "SAL").toUpperCase();
                     personalEstacion = personal.filter(p => p.estacion_base && p.estacion_base.toUpperCase().includes(estacionVuelo));
                     
-                    // Si nadie coincide, cargamos todos para que no se quede bloqueado
-                    if(personalEstacion.length === 0) {
-                        personalEstacion = personal;
-                    }
+                    if(personalEstacion.length === 0) { personalEstacion = personal; }
                     
                     selInspector.innerHTML = '<option value="">Seleccione Inspector...</option>';
                     personalEstacion.forEach(p => {
-                        if(p.nombre) {
-                            selInspector.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
-                        }
+                        if(p.nombre) selInspector.innerHTML += `<option value="${p.nombre}">${p.nombre}</option>`;
                     });
                 } else {
                     selInspector.innerHTML = '<option value="">Error al cargar</option>';
                 }
 
-                // 3. Obtenemos si ya alguien había guardado esta inspección antes
                 const { data: logGuardado } = await supabaseClient.from('avion_inspecciones')
                     .select('notas_adicionales, inspector_nombre')
                     .eq('vuelo_operacion_id', operacionId)
@@ -875,30 +954,27 @@
                             const paquete = JSON.parse(notasBD.split('||_JSON_||')[1]);
                             document.getElementById('txtNotasFinales').value = paquete.notas || '';
                             incidenciasVuelo = paquete.incidencias || [];
-                            incidenciasVuelo.forEach(inc => { fotosBanco[inc.idTracking] = inc.fotos || []; });
+                            // Rehidratar arrays vacios para fotos (se borran de BD)
+                            incidenciasVuelo.forEach(inc => { fotosBanco[inc.idTracking] = []; });
                         } catch(e) {}
                     } else {
                         document.getElementById('txtNotasFinales').value = notasBD; 
                     }
                 }
 
-                // 4. Asignamos el valor correcto al Select
                 if (savedInspector) {
-                    // Si el inspector guardado por alguna razón no está en la lista (se mudó, etc), lo agregamos para no perder la data
                     if (!personalEstacion.some(p => p.nombre === savedInspector)) {
                         selInspector.innerHTML += `<option value="${savedInspector}">${savedInspector}</option>`;
                     }
                     selInspector.value = savedInspector;
                 } else if (currentUser) {
-                    // Si es nuevo, preseleccionamos al usuario logueado
                     if (!personalEstacion.some(p => p.nombre === currentUser)) {
                         selInspector.innerHTML += `<option value="${currentUser}">${currentUser}</option>`;
                     }
                     selInspector.value = currentUser;
                 }
-                // ---------------------------------------------------
 
-                // Carga del historial del avión
+                // Carga del historial del avión (Sin fotos para no saturar memoria)
                 const { data: danosBD } = await supabaseClient.from('avion_danos')
                     .select('*')
                     .eq('matricula_avion', vueloData.tail)
@@ -923,12 +999,12 @@
                             nota_solucion: d.nota_solucion || '', 
                             fechaReporte: d.creado_at, 
                             fechaActualizacion: d.actualizado_at,
-                            imgAvion: ev.imgAvion || null, 
-                            imgPaleta: ev.imgPaleta || null, 
+                            imgAvion: null, 
+                            imgPaleta: null, 
                             vuelo_origen: d.vuelo_origen, 
                             esHistorico: esHistorico
                         });
-                        fotosBanco['hist_' + d.id] = ev.fotos || [];
+                        fotosBanco['hist_' + d.id] = []; // Bloqueamos la descarga pesada
                     });
                 }
 
@@ -944,7 +1020,9 @@
             const desc = document.getElementById('desc_incidencia').value.trim();
             if(!desc) { showToast("Debe describir la incidencia.", "error"); return; }
             
-            const idLocal = 'inc_' + Date.now();
+            // Generar ID único usando random para evitar colisiones rápidas
+            const idLocal = 'inc_' + Date.now() + Math.random().toString(36).substr(2, 5);
+            
             incidenciasVuelo.push({
                 idTracking: idLocal,
                 area: areaInc,
@@ -952,9 +1030,11 @@
                 fecha: new Date().toISOString()
             });
 
-            if(fotosBanco['temp_incidencia']) {
+            if(fotosBanco['temp_incidencia'] && fotosBanco['temp_incidencia'].length > 0) {
                 fotosBanco[idLocal] = [...fotosBanco['temp_incidencia']];
                 fotosBanco['temp_incidencia'] = [];
+            } else {
+                fotosBanco[idLocal] = [];
             }
 
             document.getElementById('desc_incidencia').value = "";
@@ -962,7 +1042,7 @@
             document.getElementById('sel_incidencia_area').value = "General";
             marcarCambios();
             renderizarIncidencias();
-            showToast("Incidencia registrada. Se mostrará al final en el PDF.", "info");
+            showToast("Incidencia temporal registrada.", "info");
         }
 
         function renderizarIncidencias() {
@@ -977,13 +1057,21 @@
                 }
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
-                        <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px;">📍 Área: ${inc.area || 'General'}</div>
+                        <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px; display:flex; align-items:center; gap:4px;">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 
+                            Área: ${inc.area || 'General'}
+                        </div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark); margin-bottom: 8px;">${inc.descripcion}</div>
                         ${htmlF}
                         <div style="margin-top: 15px; border-top: 1px dashed #FDE68A; padding-top: 15px;">
-                            <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); color:white; width:100%; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="abrirModalIncidencia('${inc.idTracking}')">✏️ Editar Incidencia</button>
+                            <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); color:white; width:100%; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="abrirModalIncidencia('${inc.idTracking}')">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                Editar Incidencia
+                            </button>
                         </div>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
                     </div>
                 `;
             });
@@ -1021,6 +1109,7 @@
             if(fotosBanco['modal_inc_temp'] && fotosBanco['modal_inc_temp'].length > 0) {
                 if(!fotosBanco[idTracking]) fotosBanco[idTracking] = [];
                 fotosBanco[idTracking].push(...fotosBanco['modal_inc_temp']);
+                fotosBanco['modal_inc_temp'] = [];
             }
             document.getElementById('modalActualizarIncidencia').style.display = 'none';
             marcarCambios(); showToast("Incidencia actualizada.", "success");
@@ -1036,32 +1125,43 @@
         // --- SISTEMA DE PANELES DE INPUT ---
         function togglePanelHallazgo(idCaja, sel) { 
             document.getElementById('panel_' + idCaja).style.display = (sel.value === 'HALLAZGO' || sel.value === 'OTROS') ? 'block' : 'none'; 
-            if(sel.value === 'OTROS') {
-                document.getElementById('desc_' + idCaja).placeholder = "Especifique (Ej: Rodo quebrado, falta pin, etc.)...";
-            } else {
-                document.getElementById('desc_' + idCaja).placeholder = "Describa el daño en estructura...";
-            }
         }
 
         function pasarAMatrizComp(nombreArea, idCaja, idSelect = null) {
-            const desc = document.getElementById('desc_' + idCaja).value.trim();
-            if(!desc) { showToast("Describe el daño antes de continuar.", "error"); return; }
+            const selTipoDano = document.getElementById('tipo_dano_' + idCaja);
+            const inputDesc = document.getElementById('desc_' + idCaja);
+            
+            let descFinal = "";
+            if (selTipoDano && selTipoDano.value) {
+                descFinal = selTipoDano.value + (inputDesc.value.trim() ? " - " + inputDesc.value.trim() : "");
+            } else {
+                descFinal = inputDesc.value.trim();
+            }
+
+            if(!descFinal) { showToast("Seleccione la naturaleza del daño y/o asigne una descripción.", "error"); return; }
 
             const targetSelect = document.getElementById(idSelect || ('sel_' + idCaja));
             const tipoComp = (targetSelect && targetSelect.value === 'OTROS') ? 'Otros Componentes' : 'Estructura';
 
-            const idLocalTemp = 'comp_' + Date.now();
+            const idLocalTemp = 'comp_' + Date.now() + Math.random().toString(36).substr(2, 5);
+            
             matrizHallazgos.push({
                 id_db: null, idTracking: idLocalTemp, tipo: 'COMPARTIMENTO', area: nombreArea, ubicacion: 'General', 
-                componente: tipoComp, descripcion: desc, consecuencia: 'N/A', severidad: 'N/A', estado_actual: 'ABIERTO', 
+                componente: tipoComp, descripcion: descFinal, consecuencia: 'N/A', severidad: 'N/A', estado_actual: 'ABIERTO', 
                 vuelo_origen: vueloData.vuelo, nota_solucion: '', esHistorico: false, creado_at: new Date().toISOString()
             });
 
-            if(fotosBanco[idCaja]) { fotosBanco[idLocalTemp] = [...fotosBanco[idCaja]]; fotosBanco[idCaja] = []; }
+            if(fotosBanco[idCaja] && fotosBanco[idCaja].length > 0) { 
+                fotosBanco[idLocalTemp] = [...fotosBanco[idCaja]]; 
+                fotosBanco[idCaja] = []; 
+            } else {
+                fotosBanco[idLocalTemp] = [];
+            }
 
             document.getElementById('panel_' + idCaja).style.display = 'none'; 
             if(targetSelect) targetSelect.value = "OK";
-            document.getElementById('desc_' + idCaja).value = ""; 
+            if(selTipoDano) selTipoDano.value = "";
+            inputDesc.value = ""; 
             document.getElementById('gal_' + idCaja).innerHTML = "";
             
             marcarCambios(); showToast("Daño agregado a la matriz.", "info");
@@ -1073,7 +1173,6 @@
             const pLocks = document.getElementById('panelMapeoCLS');
             if (sel.value === 'FUSELAJE' || sel.value === 'OTROS') {
                 pFus.style.display = 'block'; pLocks.style.display = 'none';
-                document.getElementById('desc_md_fuselaje').placeholder = sel.value === 'FUSELAJE' ? "Ubicación y descripción (Ej: Marco Puerta L1)..." : "Describa el daño (Ej: Rodo quebrado, falta pin, etc.)...";
             } else if (sel.value === 'LOCKS') {
                 pFus.style.display = 'none'; pLocks.style.display = 'block';
             } else {
@@ -1145,10 +1244,12 @@
 
             if(!ubi || !comp || !dano) { showToast("Faltan datos por llenar en la sección de Seguros.", "error"); return; }
 
-            const idT = 'cls_' + Date.now(); let iAvion = null; let iPaleta = null;
+            const idT = 'cls_' + Date.now() + Math.random().toString(36).substr(2, 5);
+            let iAvion = null; let iPaleta = null;
             const descripcionFinal = notasAdd ? `${dano} - Notas: ${notasAdd}` : dano;
 
             try {
+                showLoading("Mapeando daños visuales...");
                 const rDiv = document.getElementById('renderContainer');
                 rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${configActualGlobal}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
                 const cA = await html2canvas(rDiv, { scale: 1.5 }); iAvion = cA.toDataURL('image/jpeg', 0.8);
@@ -1164,7 +1265,10 @@
                     esHistorico: false, imgAvion: iAvion, imgPaleta: iPaleta, creado_at: new Date().toISOString()
                 });
 
-                if(fotosBanco['cls_temp']) { fotosBanco[idT] = [...fotosBanco['cls_temp']]; fotosBanco['cls_temp'] = []; }
+                if(fotosBanco['cls_temp'] && fotosBanco['cls_temp'].length > 0) { 
+                    fotosBanco[idT] = [...fotosBanco['cls_temp']]; 
+                    fotosBanco['cls_temp'] = []; 
+                } else { fotosBanco[idT] = []; }
                 
                 document.getElementById('inpUbicacion').value = ""; document.getElementById('inpComponente').value = ""; 
                 document.getElementById('selDanoSeveridad').value = ""; document.getElementById('inpComentariosCLS').value = "";
@@ -1177,6 +1281,7 @@
                 marcarCambios(); showToast("CLS agregado a la matriz.", "info");
                 renderizarMatrizDinamica(); 
             } catch(e) { alert("Error renderizando mapas."); }
+            finally { hideLoading(); }
         }
 
         // --- MATRIZ DINÁMICA ---
@@ -1210,11 +1315,11 @@
 
             areasOrdenadas.forEach(area => {
                 if(gruposArea[area].length === 0) return; 
-                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
+                let areaHTML = `<div class="group-header"><span style="display:flex; align-items:center; gap:4px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
-                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
+                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">Heredado</span>` : `<span class="badge-status st-new">Daño Activo</span>`);
                     let htmlF = "";
                     if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
                         htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
@@ -1230,11 +1335,17 @@
                         <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
                         <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
                         <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
-                            <span>📅 Rep: ${fRep}</span> <span>🔄 Upd: ${fUpd}</span>
+                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Rep: ${fRep}</span> 
+                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.24l5.67-5.67"></path></svg> Upd: ${fUpd}</span>
                         </div>
                         ${htmlF}
-                        <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">✏️ Editar / Actualizar Daño</button>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
+                        <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            Editar / Actualizar Daño
+                        </button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
                     </div>`;
                 });
                 
@@ -1268,9 +1379,11 @@
                 async () => {
                     if (h.id_db) {
                         try {
+                            showLoading("Eliminando registro...");
                             const { error } = await supabaseClient.from('avion_danos').delete().eq('id', h.id_db);
                             if (error) throw error;
-                        } catch (e) { showToast("Error de conexión al eliminar.", "error"); return; }
+                        } catch (e) { showToast("Error de conexión al eliminar.", "error"); hideLoading(); return; }
+                        finally { hideLoading(); }
                     }
                     matrizHallazgos = matrizHallazgos.filter(x => x.idTracking !== idTracking);
                     delete fotosBanco[idTracking];
@@ -1296,6 +1409,7 @@
             if(fotosBanco['modal_temp'] && fotosBanco['modal_temp'].length > 0) {
                 if(!fotosBanco[matrizHallazgos[idx].idTracking]) fotosBanco[matrizHallazgos[idx].idTracking] = [];
                 fotosBanco[matrizHallazgos[idx].idTracking].push(...fotosBanco['modal_temp']);
+                fotosBanco['modal_temp'] = [];
             }
             document.getElementById('modalActualizar').style.display = 'none';
             marcarCambios(); showToast("Estado actualizado."); renderizarMatrizDinamica();
@@ -1303,11 +1417,14 @@
 
         async function guardarProgresoEnBD() {
             const btn = document.getElementById('btnGuardarBD');
-            btn.innerHTML = "⏳ Subiendo Nube..."; btn.disabled = true;
+            showLoading("Sincronizando con la nube...");
 
             try {
                 for (let h of matrizHallazgos) {
-                    let ev = { fotos: fotosBanco[h.idTracking] || [], imgAvion: h.imgAvion, imgPaleta: h.imgPaleta, tipo: h.tipo || 'COMPARTIMENTO', ubicacion: h.ubicacion || 'General' };
+                    // EXTREMADAMENTE IMPORTANTE: NO MANDAMOS BASE64 EN EL JSON
+                    // "fotos", "imgAvion" y "imgPaleta" se quedan en memoria local
+                    let ev = { tipo: h.tipo || 'COMPARTIMENTO', ubicacion: h.ubicacion || 'General' };
+                    
                     let payloadDano = {
                         matricula_avion: vueloData.tail, area: h.area, componente: h.componente, descripcion: h.descripcion,
                         consecuencia: h.consecuencia || 'N/A', severidad: h.severidad || 'N/A', estado_actual: h.estado_actual,
@@ -1325,10 +1442,11 @@
                     }
                 }
 
+                // Las fotos no viajan a la DB.
                 const paqueteTemporales = {
                     notas: document.getElementById('txtNotasFinales').value,
                     incidencias: incidenciasVuelo.map(inc => ({
-                        idTracking: inc.idTracking, area: inc.area, descripcion: inc.descripcion, fecha: inc.fecha, fotos: fotosBanco[inc.idTracking] || []
+                        idTracking: inc.idTracking, area: inc.area, descripcion: inc.descripcion, fecha: inc.fecha
                     }))
                 };
                 
@@ -1348,16 +1466,14 @@
                 hayCambiosSinGuardar = false;
                 showToast("¡Progreso Salvado en la Nube!", "success"); 
             } 
-            catch(e) { showCustomAlert("Error de Base de Datos", e.message, "error"); } 
+            catch(e) { console.error(e); showCustomConfirm("Error", "Ocurrió un problema guardando en la Nube.", "OK", "var(--amerijet-red)", null); } 
             finally { 
-                btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Guardar Nube`; 
-                btn.disabled = false; 
+                hideLoading();
             }
         }
 
         async function generarPDFCarta() {
-            const btn = document.getElementById('btnDescargarPDF');
-            btn.innerHTML = "⏳ Creando PDF..."; btn.disabled = true;
+            showLoading("Generando PDF Oficial...");
 
             try {
                 const rDiv = document.getElementById('renderContainer');
@@ -1532,11 +1648,11 @@
                     }
                 }
 
-                doc.save(`Inspection_${vueloData.tail}_${vueloData.vuelo}.pdf`); showToast("PDF generado exitosamente.");
-            } catch(e) { showCustomAlert("Error PDF", e.message, "error"); console.error(e); }
+                doc.save(`Inspection_${vueloData.tail}_${vueloData.vuelo}.pdf`); 
+                showToast("PDF generado exitosamente.");
+            } catch(e) { console.error(e); showCustomConfirm("Error PDF", "Ocurrió un error generando el PDF.", "OK", "var(--amerijet-red)", null); }
             finally { 
-                btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Bajar PDF Oficial`; 
-                btn.disabled = false; 
+                hideLoading(); 
             }
         }
 
