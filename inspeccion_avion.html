@@ -169,12 +169,12 @@
         .p-half { flex: 1; width: 100%; background: #E2E8F0; border: 1.5px solid #1E293B; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: #0F172A; cursor: pointer; transition: 0.1s; }
         .p-wide { flex: 2; }
         .p-cell:hover, .p-half:hover { background: #CBD5E1; }
-        .p-cell.selected, .p-half.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
+        .p-cell.selected, .p-half.selected, .p-wide.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
 
         /* PALETA INTERACTIVA DE LOCKS */
         .pallet-locks-container { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 30px 10px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
         .pallet-draw { position: relative; width: 400px; height: 220px; margin: 0 auto; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; }
-        .pallet-core-text { font-weight: 900; font-size: 40px; color: #0F172A; letter-spacing: 2px; }
+        .pallet-core-text { font-weight: 900; font-size: 40px; color: #0F172A; letter-spacing: 2px; text-align: center; width: 100%; display: flex; justify-content: center;}
         .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; }
         .hotspot:hover { background: #3B82F6; transform: scale(1.3); }
         .hotspot.active { background: var(--amerijet-red); transform: scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
@@ -407,15 +407,13 @@
                             <input type="text" id="desc_lower_fwd" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_fwd', 'lower_fwd')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_fwd"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -441,15 +439,13 @@
                             <input type="text" id="desc_lower_aft" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_lower_aft', 'lower_aft')">
                             </label>
                             <div class="photo-gallery" id="gal_lower_aft"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -475,15 +471,13 @@
                             <input type="text" id="desc_bulk" placeholder="Añada una descripción detallada..." oninput="marcarCambios()">
                             
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Tomar Foto
+                                📸 Tomar Foto
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_bulk', 'bulk')">
                             </label>
                             <div class="photo-gallery" id="gal_bulk"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -509,17 +503,14 @@
                             </select>
                             <input type="text" id="desc_md_fuselaje" placeholder="Ubicación y descripción..." oninput="marcarCambios()">
                             
-                            <!-- CORRECCIÓN DE BUG ID: gal_md_fuselaje -->
                             <label class="btn-camera">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Foto del Daño (MD)
+                                📸 Foto del Daño (MD)
                                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_md_fuselaje', 'md_fuselaje')">
                             </label>
                             <div class="photo-gallery" id="gal_md_fuselaje"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Pasar Hallazgo a Matriz
+                                📥 Pasar Hallazgo a Matriz
                             </button>
                         </div>
                     </div>
@@ -527,9 +518,8 @@
 
                 <!-- PANEL MAPEO CLS B767 -->
                 <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        Mapeo de Seguros (CLS)
+                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">
+                        ⚠️ Mapeo de Seguros (CLS)
                     </div>
                     
                     <div class="config-tabs">
@@ -550,7 +540,8 @@
                         <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:25px; text-align: left;">2. Selecciona el/los seguro(s) dañado(s) (Múltiple):</div>
                         
                         <div class="pallet-draw" id="palletBoxRenderHTML">
-                            <div class="pallet-core-text">A1R</div>
+                            <!-- AQUI ENTRA EN ACCIÓN LA DIVISIÓN DINÁMICA -->
+                            <div class="pallet-core-text">MD</div>
                             
                             <div class="hotspot t-c-l" onclick="toggleLock('Side Corner (Top Left)', this)"></div>
                             <div class="lock-label lbl-t-c-l">Side<br>Corner</div>
@@ -606,22 +597,20 @@
                             <option value="">-- Naturaleza del Daño --</option>
                             <option value="Golpe Directo Estructural">Golpe Directo Estructural</option>
                             <option value="Fricción Profunda / Rayón">Fricción Profunda / Rayón</option>
-                            <option value="Falta Pieza / Pin Operativo">Falta Pieza</option>
+                            <option value="Falta Pieza / Pin Operativo">Falta Pieza / Pin Operativo</option>
                             <option value="Pieza Dañada / Quebrada">Pieza Dañada / Quebrada</option>
                         </select>
                         
                         <input type="text" id="inpComentariosCLS" placeholder="Añadir comentarios o detalles adicionales (Opcional)..." oninput="marcarCambios()" style="width: 100%; padding: 12px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 600; background: white; margin-top: 8px; margin-bottom: 8px; outline: none; transition: 0.2s; color: var(--text-main);">
 
                         <label class="btn-camera" style="margin-top: 8px;">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            Tomar Foto del Seguro
+                            📸 Tomar Foto del Seguro
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_cls_map', 'cls_temp')">
                         </label>
                         <div class="photo-gallery" id="gal_cls_map"></div>
 
                         <button type="button" class="btn-add-matrix" style="margin-top:10px;" onclick="agregarLockAMatriz()">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Pasar Hallazgo a Matriz
+                            📥 Pasar Hallazgo a Matriz
                         </button>
                     </div>
                 </div>
@@ -658,14 +647,12 @@
                         <input type="text" id="desc_incidencia" placeholder="Descripción de la incidencia o nota general..." oninput="marcarCambios()">
                         
                         <label class="btn-camera">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            Tomar Foto (Opcional)
+                            📸 Tomar Foto (Opcional)
                             <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_incidencias', 'temp_incidencia')">
                         </label>
                         <div class="photo-gallery" id="gal_incidencias"></div>
                         <button type="button" class="btn-add-matrix" style="background:var(--warn-orange);" onclick="agregarIncidencia()">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Agregar Incidencia / Nota
+                            📥 Agregar Incidencia / Nota
                         </button>
                     </div>
                     
@@ -698,9 +685,8 @@
     <!-- MODALES DE EDICIÓN Y CONFIRMACIÓN -->
     <div class="modal-overlay" id="modalActualizar">
         <div class="modal-content">
-            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                Editar / Actualizar Daño
+            <h3 style="color: var(--amerijet-blue); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">
+                ✏️ Editar / Actualizar Daño
             </h3>
             <input type="hidden" id="modalIndex">
             
@@ -728,8 +714,7 @@
             <input type="text" id="modalNotas" placeholder="Notas adicionales de la actualización / reparación..." style="margin-bottom: 12px; padding: 10px;" oninput="marcarCambios()">
             
             <label class="btn-camera" style="margin-top: 5px;">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                Foto de Evidencia Adicional
+                📸 Foto de Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_update', 'modal_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_update"></div>
@@ -743,9 +728,8 @@
 
     <div class="modal-overlay" id="modalActualizarIncidencia">
         <div class="modal-content">
-            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                Editar Incidencia
+            <h3 style="color: var(--warn-orange); margin-bottom: 15px; font-weight: 900; text-transform: uppercase;">
+                ✏️ Editar Incidencia
             </h3>
             <input type="hidden" id="modalIncIndex">
             
@@ -766,8 +750,7 @@
             </div>
             
             <label class="btn-camera" style="margin-top: 5px; border-color: var(--warn-orange); color: var(--warn-orange);">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                Añadir Evidencia Adicional
+                📸 Añadir Evidencia Adicional
                 <input type="file" accept="image/*" capture="environment" style="display:none" onchange="capturarYComprimirFoto(this, 'gal_modal_inc', 'modal_inc_temp')">
             </label>
             <div class="photo-gallery" id="gal_modal_inc"></div>
@@ -782,9 +765,7 @@
     <!-- MODAL DE CONFIRMACIÓN -->
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 3000;">
         <div class="modal-content">
-            <div style="display:flex; justify-content:center; margin-bottom: 10px; color: var(--amerijet-red);">
-                <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            </div>
+            <div style="font-size: 45px; margin-bottom: 10px; color: var(--amerijet-red);">⚠️</div>
             <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;"></p>
             <div style="display: flex; gap: 10px; flex-direction:column;">
@@ -844,9 +825,7 @@
         function showToast(mensaje, type = 'success') {
             const container = document.getElementById('toast-container') || (function() { const c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); return c; })();
             const toast = document.createElement('div');
-            let icon = type === 'success' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'  
-                     : type === 'error' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'  
-                     : '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+            let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
             toast.className = `toast ${type}`; 
             toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
             container.appendChild(toast);
@@ -962,7 +941,6 @@
                         try {
                             const paquete = JSON.parse(notasBD.split('||_JSON_||')[1]);
                             incidenciasVuelo = paquete.incidencias || [];
-                            // Rehidratamos la base de datos de fotos con las que vienen de la Nube
                             incidenciasVuelo.forEach(inc => { fotosBanco[inc.idTracking] = inc.fotos || []; });
                         } catch(e) {}
                     }
@@ -980,7 +958,6 @@
                     selInspector.value = currentUser;
                 }
 
-                // Carga del historial del avión DESDE LA NUBE (Con sus fotos temporales si las hay)
                 const { data: danosBD } = await supabaseClient.from('avion_danos')
                     .select('*')
                     .eq('matricula_avion', vueloData.tail)
@@ -1010,7 +987,6 @@
                             vuelo_origen: d.vuelo_origen, 
                             esHistorico: esHistorico
                         });
-                        // Si vienen fotos temporales de la BD (cargadas durante este vuelo) las metemos en RAM
                         fotosBanco['hist_' + d.id] = ev.fotos || []; 
                     });
                 }
@@ -1064,20 +1040,16 @@
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
                         <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px; display:flex; align-items:center; gap:4px;">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> 
-                            Área: ${inc.area || 'General'}
+                            📍 Área: ${inc.area || 'General'}
                         </div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark); margin-bottom: 8px;">${inc.descripcion}</div>
                         ${htmlF}
                         <div style="margin-top: 15px; border-top: 1px dashed #FDE68A; padding-top: 15px;">
                             <button type="button" class="btn-update-matrix" style="background:var(--warn-orange); color:white; width:100%; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="abrirModalIncidencia('${inc.idTracking}')">
-                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                                Editar Incidencia
+                                ✏️ Editar Incidencia
                             </button>
                         </div>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
                     </div>
                 `;
             });
@@ -1186,6 +1158,31 @@
             }
         }
 
+        // --- ACTUALIZACIÓN DINÁMICA DE ETIQUETA EN PALLET ---
+        function updatePalletCoreText(selArray) {
+            const pct = document.querySelector('.pallet-core-text');
+            if (!pct) return;
+            if (selArray.length === 0) {
+                pct.innerHTML = "MD";
+            } else if (selArray.length === 1) {
+                pct.innerHTML = selArray[0];
+            } else if (selArray.length === 2) {
+                const pos1 = selArray[0];
+                const pos2 = selArray[1];
+                if ((pos1.includes('R') && pos2.includes('L')) || (pos1.includes('L') && pos2.includes('R'))) {
+                    // Celdas laterales (Izquierda / Derecha) -> Partir Horizontalmente
+                    const top = pos1.includes('R') ? pos1 : pos2;
+                    const bot = pos1.includes('L') ? pos1 : pos2;
+                    pct.innerHTML = `<div style="display:flex; flex-direction:column; line-height:1;"><div style="border-bottom: 2px dashed #0F172A; padding-bottom:5px; margin-bottom:5px;">${top}</div><div>${bot}</div></div>`;
+                } else {
+                    // Celdas frontales/traseras (Ej: 2L y 3L o P2 y P3) -> Partir Verticalmente
+                    pct.innerHTML = `<div style="display:flex; align-items:center; gap:10px;"><div>${pos1}</div><div style="border-left: 2px dashed #0F172A; height: 40px;"></div><div>${pos2}</div></div>`;
+                }
+            } else {
+                pct.innerHTML = `<div style="font-size: 22px; line-height: 1.2;">${selArray.join(' / ')}</div>`;
+            }
+        }
+
         // --- DIBUJADO DE PLANOS ---
         function dibujarPlanoAvionCSS(config, btnElem) {
             if(btnElem) { document.querySelectorAll('.tab-btn').forEach(b => { b.style.background = 'white'; b.style.color = '#475569'; }); btnElem.style.background = 'var(--amerijet-blue)'; btnElem.style.color = 'white';}
@@ -1199,12 +1196,17 @@
             else if (config === 'E') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=15; i++) { html += `<div class="p-cell" data-pos="E${i}" onclick="toggleCeldaPlano(this)">E${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
             else if (config === 'G') { html += `<div class="p-cell" style="flex: 1;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div><div class="p-cell" style="flex: 1;" data-pos="C2" onclick="toggleCeldaPlano(this)">C2</div><div class="p-cell p-wide" data-pos="G/P1" onclick="toggleCeldaPlano(this)">G/P1</div><div class="p-cell p-wide" data-pos="P2" onclick="toggleCeldaPlano(this)">P2</div><div class="p-cell p-wide" data-pos="P3" onclick="toggleCeldaPlano(this)">P3</div><div class="p-cell p-wide" data-pos="P4" onclick="toggleCeldaPlano(this)">P4</div><div class="p-cell p-wide" data-pos="P5" onclick="toggleCeldaPlano(this)">P5</div><div class="p-cell" style="flex: 1;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; }
             html += `</div>`; cont.innerHTML = html;
+            
+            updatePalletCoreText([]); // Resetea el texto central al cambiar config
+            document.getElementById('inpUbicacion').value = "";
         }
 
         function toggleCeldaPlano(element) {
             element.classList.toggle('selected');
-            const sel = []; document.querySelectorAll('.p-cell.selected, .p-half.selected').forEach(el => sel.push(el.dataset.pos));
+            const sel = []; 
+            document.querySelectorAll('.p-cell.selected, .p-half.selected, .p-wide.selected').forEach(el => sel.push(el.dataset.pos));
             document.getElementById('inpUbicacion').value = sel.join(', ');
+            updatePalletCoreText(sel);
             marcarCambios();
         }
 
@@ -1283,6 +1285,7 @@
                 document.getElementById('gal_cls_map').innerHTML = "";
                 document.getElementById('panelMapeoCLS').style.display = 'none';
                 document.getElementById('sel_main_deck').value = "OK";
+                updatePalletCoreText([]); // Reset texto central
                 
                 marcarCambios(); showToast("CLS agregado a la matriz.", "info");
                 renderizarMatrizDinamica(); 
@@ -1321,11 +1324,11 @@
 
             areasOrdenadas.forEach(area => {
                 if(gruposArea[area].length === 0) return; 
-                let areaHTML = `<div class="group-header"><span style="display:flex; align-items:center; gap:4px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
+                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
-                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">Heredado</span>` : `<span class="badge-status st-new">Daño Activo</span>`);
+                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
                     let htmlF = "";
                     if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
                         htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
@@ -1341,17 +1344,14 @@
                         <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
                         <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
                         <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
-                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Rep: ${fRep}</span> 
-                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.24l5.67-5.67"></path></svg> Upd: ${fUpd}</span>
+                            <span>📅 Rep: ${fRep}</span> 
+                            <span>🔄 Upd: ${fUpd}</span>
                         </div>
                         ${htmlF}
                         <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                            Editar / Actualizar Daño
+                            ✏️ Editar / Actualizar Daño
                         </button>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
                     </div>`;
                 });
                 
@@ -1427,7 +1427,6 @@
 
             try {
                 for (let h of matrizHallazgos) {
-                    // AHORA SÍ GUARDAMOS LAS FOTOS TEMPORALMENTE EN LA NUBE PARA QUE ESTÉN DISPONIBLES EN TIEMPO REAL
                     let ev = { 
                         tipo: h.tipo || 'COMPARTIMENTO', 
                         ubicacion: h.ubicacion || 'General',
@@ -1453,7 +1452,6 @@
                     }
                 }
 
-                // Las incidencias y sus fotos también se guardan en la nube de forma temporal
                 const paqueteTemporales = {
                     incidencias: incidenciasVuelo.map(inc => ({
                         idTracking: inc.idTracking, 
@@ -1495,11 +1493,13 @@
                     if (h.tipo === 'LOCKS' && (!h.imgAvion || !h.imgPaleta)) {
                         const guessedConfig = h.ubicacion.includes('P') ? 'G' : 'A';
                         dibujarPlanoAvionCSS(guessedConfig, null);
-                        const cells = (h.ubicacion || '').split(',').map(s => s.trim());
+                        const cells = (h.ubicacion || '').split(',').map(s => s.trim()).filter(s => s);
                         cells.forEach(c => {
                             const el = document.querySelector(`.p-cell[data-pos="${c}"], .p-half[data-pos="${c}"], .p-wide[data-pos="${c}"]`);
                             if (el) el.classList.add('selected');
                         });
+                        updatePalletCoreText(cells);
+
                         rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${guessedConfig}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
                         const cA = await html2canvas(rDiv, { scale: 1.5 }); 
                         h.imgAvion = cA.toDataURL('image/jpeg', 0.8);
@@ -1511,8 +1511,6 @@
                             const funcStr = el.getAttribute('onclick') || '';
                             locks.forEach(lockName => { if (funcStr.includes(`'${lockName}'`)) el.classList.add('active'); });
                         });
-                        const pct = document.querySelector('.pallet-core-text');
-                        if(pct) pct.innerText = cells.length > 0 ? cells[0] : 'MD';
 
                         rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:450px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div class="pallet-draw" style="display:block; margin: 0 auto; transform: scale(0.9);">${document.getElementById('palletBoxRenderHTML').innerHTML}</div></div>`;
                         const cP = await html2canvas(rDiv, { scale: 1.5 }); 
