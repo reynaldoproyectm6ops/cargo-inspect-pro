@@ -112,7 +112,7 @@
         .p-cell:hover, .p-half:hover { background: #CBD5E1; }
         .p-cell.selected, .p-half.selected, .p-wide.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
 
-        /* PALETA INTERACTIVA MODULAR (NUEVA LÓGICA MILIMÉTRICA) */
+        /* PALETA INTERACTIVA MODULAR (GEOMETRÍA PERFECTA) */
         .pallet-locks-container { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 45px 20px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
         
         #palletBoxRenderHTML {
@@ -137,19 +137,20 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        /* Hotspots rediseñados y precisos */
-        .hotspot { position: absolute; width: 10px; height: 10px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1.5px solid white;}
-        .hotspot:hover { background: #3B82F6; transform: translate(-50%, -50%) scale(1.3); }
-        .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); border-color: white;}
+        /* Puntos ajustados al estilo de ingeniería: grises oscuros, rojos al activarse */
+        .hotspot { position: absolute; width: 10px; height: 10px; background: #475569; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+        .hotspot:hover { background: #E11D48; transform: translate(-50%, -50%) scale(1.3); }
+        .hotspot.active { background: #E11D48; border-color: #0F172A; transform: translate(-50%, -50%) scale(1.4); box-shadow: 0 0 8px rgba(225,29,72,0.8);}
 
-        /* Etiquetas ultra-compactas con borde blanco invisible para garantizar legibilidad siempre */
-        .lock-label { position: absolute; font-size: 7.5px; font-weight: 900; color: #1E293B; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
+        /* Textos ultra-compactos y repelentes al borde */
+        .lock-label { position: absolute; font-size: 7px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
         .lock-label.red { color: #DC2626; z-index: 15; }
         
-        .lbl-top { transform: translate(-50%, -18px); }
-        .lbl-bot { transform: translate(-50%, 10px); }
-        .lbl-left { transform: translate(calc(-100% - 7px), -50%); text-align: right; }
-        .lbl-right { transform: translate(7px, -50%); text-align: left; }
+        /* Sistema inteligente de traslaciones para que el texto NUNCA monte los bordes ni otros textos */
+        .lbl-top { transform: translate(-50%, 8px); } /* Empuja hacia abajo, dentro del cuadro */
+        .lbl-bot { transform: translate(-50%, calc(-100% - 8px)); } /* Empuja hacia arriba, dentro del cuadro */
+        .lbl-left { transform: translate(8px, -50%); text-align: left; } /* Empuja hacia la derecha, dentro del cuadro */
+        .lbl-right { transform: translate(calc(-100% - 8px), -50%); text-align: right; } /* Empuja hacia la izquierda, dentro del cuadro */
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
@@ -1202,7 +1203,7 @@
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
                 container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
-                container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD")}</div>`;
+                container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD", {left:false,right:false,top:false,bottom:false,transLeft:false,transRight:false})}</div>`;
                 return;
             }
 
@@ -1227,7 +1228,6 @@
                 positionsMapped.push({ id: pos, col: col, row: row, isFullHeight: isFullHeight });
             });
 
-            // Siempre forzamos 2 filas si hay algún ULD Transversal para que se centre bien visualmente
             let maxRow = (hasL && hasR) ? 2 : 1;
             if (positionsMapped.some(p => p.isFullHeight)) {
                 maxRow = 2;
@@ -1235,7 +1235,6 @@
 
             const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
             
-            // Anchuras dinámicas por columna (140px para Transversales, 200px para Longitudinales)
             let gridCols = colsArray.map(colNum => {
                 const isTrans = positionsMapped.some(p => p.col === colNum && isTransversal(p.id));
                 return isTrans ? "140px" : "200px";
@@ -1244,7 +1243,7 @@
             container.style.display = "grid";
             container.style.gridTemplateRows = `repeat(${maxRow}, 140px)`;
             container.style.gridTemplateColumns = gridCols.join(" ");
-            container.style.gap = "0px"; // Sin gap, quedan pegados como en la imagen
+            container.style.gap = "0px"; 
 
             let htmlStr = "";
             
@@ -1252,25 +1251,47 @@
                 const colItems = positionsMapped.filter(p => p.col === colNum);
                 const hasFullHeight = colItems.some(p => p.isFullHeight);
                 
+                const isTransLeft = colsArray.includes(colNum - 1) && positionsMapped.some(p => p.col === colNum - 1 && isTransversal(p.id));
+                const isTransRight = colsArray.includes(colNum + 1) && positionsMapped.some(p => p.col === colNum + 1 && isTransversal(p.id));
+
                 if (maxRow === 2) {
                     if (hasFullHeight) {
                         const item = colItems.find(p => p.isFullHeight);
-                        // A1 ocupa el alto total, así que permitimos que el grid lo acomode
-                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1};">${generarUnidadPallet(item.id)}</div>`;
+                        const borders = { 
+                            left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false,
+                            transLeft: isTransLeft, transRight: isTransRight 
+                        };
+                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders)}</div>`;
                     } else {
                         const itemR = colItems.find(p => p.row === 1);
                         const itemL = colItems.find(p => p.row === 2);
 
                         if (itemR) {
-                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(itemR.id)}</div>`;
+                            const borders = {
+                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 1 || p.isFullHeight)),
+                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 1 || p.isFullHeight)),
+                                bottom: !!itemL, top: false,
+                                transLeft: isTransLeft, transRight: isTransRight
+                            };
+                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemR.id, borders)}</div>`;
                         }
                         if (itemL) {
-                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1};">${generarUnidadPallet(itemL.id)}</div>`;
+                            const borders = {
+                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 2 || p.isFullHeight)),
+                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 2 || p.isFullHeight)),
+                                top: !!itemR, bottom: false,
+                                transLeft: isTransLeft, transRight: isTransRight
+                            };
+                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemL.id, borders)}</div>`;
                         }
                     }
                 } else {
                     colItems.forEach(item => {
-                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(item.id)}</div>`;
+                        const borders = { 
+                            left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false,
+                            transLeft: isTransLeft, transRight: isTransRight
+                        };
+                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders)}</div>`;
                     });
                 }
             });
@@ -1289,13 +1310,16 @@
             container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
         }
 
-        function generarUnidadPallet(titulo) {
+        function generarUnidadPallet(titulo, borders) {
             const isTrans = isTransversal(titulo);
             
-            // Si es Transversal, ocupa el 100% de la celda del grid (2 filas = 280px de alto aprox).
-            // Si es Longitudinal, ocupa el 100% de su celda (1 fila = 140px de alto aprox).
             let styleStr = `position: relative; width: 100%; height: 100%; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
             
+            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1; margin-top: -3px;`;
+            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1; margin-bottom: -3px;`;
+            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; margin-right: -3px; z-index:2;`;
+            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1; margin-left: -3px;`;
+
             let html = `
             <div style="${styleStr}">
                 <div class="pallet-core-text" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:40px; color:#0F172A; pointer-events:none; z-index:1; opacity:0.15;">${titulo}</div>`;
@@ -1311,36 +1335,30 @@
 
             if (isTrans) {
                 // Transversal ULDs (A1, A13, D, E)
-                // Ocupan el 100% del alto de 2 filas, por lo que su Y (0% a 100%) cubre toda la cremallera.
-                
-                // Top/Bottom (88" sides) - 4 locks
                 html += addLock('Side Corner (Top L)', '15%', '0%', 'S.CNR', 'lbl-top');
-                html += addLock('Side NC 1', '38%', '0%', 'S.NC', 'lbl-top');
-                html += addLock('Side NC 2', '62%', '0%', 'S.NC', 'lbl-top');
+                html += addLock('Side NC 1', '38.33%', '0%', 'S.NC', 'lbl-top');
+                html += addLock('Side NC 2', '61.66%', '0%', 'S.NC', 'lbl-top');
                 html += addLock('Side Corner (Top R)', '85%', '0%', 'S.CNR', 'lbl-top');
 
                 html += addLock('Side Corner (Bot L)', '15%', '100%', 'S.CNR', 'lbl-bot');
-                html += addLock('Side NC 1', '38%', '100%', 'S.NC', 'lbl-bot');
-                html += addLock('Side NC 2', '62%', '100%', 'S.NC', 'lbl-bot');
+                html += addLock('Side NC 1', '38.33%', '100%', 'S.NC', 'lbl-bot');
+                html += addLock('Side NC 2', '61.66%', '100%', 'S.NC', 'lbl-bot');
                 html += addLock('Side Corner (Bot R)', '85%', '100%', 'S.CNR', 'lbl-bot');
 
-                // Left/Right (125" sides) - 5 locks
-                html += addLock('Fwd/Aft Corner (L Top)', '0%', '8.5%', 'F/A CNR', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '0%', '29%', 'F/A NC', 'lbl-left');
+                // Left/Right sides
+                html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
                 html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 3', '0%', '71%', 'F/A NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '0%', '91.5%', 'F/A CNR', 'lbl-left');
+                html += addLock('Fwd/Aft NC 3', '0%', '70%', 'F/A NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '0%', '90%', 'F/A CNR', 'lbl-left');
 
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '8.5%', 'F/A CNR', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '29%', 'F/A NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
                 html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 3', '100%', '71%', 'F/A NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '91.5%', 'F/A CNR', 'lbl-right');
+                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'F/A NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'F/A CNR', 'lbl-right');
             } else {
                 // Longitudinal ULDs (A2R, A2L, etc.)
-                const isTouchingTransversalLeft = ['A2R', 'A2L', 'B2R', 'B2L', 'C2', 'P2'].includes(titulo);
-                const isTouchingTransversalRight = ['A12R', 'A12L', 'B13R', 'B13L', 'C12', 'D16', 'E15', 'P5'].includes(titulo);
-                
                 const isR = titulo.includes('R') || titulo === 'C2' || titulo === 'P2';
                 const isL = titulo.includes('L');
                 const isTopCenterline = isL; 
@@ -1360,15 +1378,22 @@
                 html += addLock('Side Corner (Bot R)', '90%', '100%', 'S.CNR', 'lbl-bot');
 
                 // Left Edge
-                if (isTouchingTransversalLeft) {
+                if (borders.transLeft) {
                     if (isR) {
-                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '28.85%', 'F/A CNR', 'lbl-left');
-                        html += addLock('Fwd/Aft NC 1', '0%', '64%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A CNR', 'lbl-left');
+                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '20%', 'F/A CNR', 'lbl-left');
+                        html += addLock('Fwd/Aft NC 1', '0%', '60%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A CNR', 'lbl-left'); // Seam
                     } else if (isL) {
-                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A CNR', 'lbl-left');
-                        html += addLock('Fwd/Aft NC 1', '0%', '36%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '71.14%', 'F/A CNR', 'lbl-left');
+                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A CNR', 'lbl-left'); // Seam
+                        html += addLock('Fwd/Aft NC 1', '0%', '40%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '80%', 'F/A CNR', 'lbl-left');
+                    } else {
+                        // Full width pallet (C2, P2) touching transversal
+                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
+                        html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft NC 3', '0%', '70%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '90%', 'F/A CNR', 'lbl-left');
                     }
                 } else {
                     html += addLock('Fwd/Aft Corner (L Top)', '0%', '15%', 'F/A CNR', 'lbl-left');
@@ -1378,15 +1403,21 @@
                 }
 
                 // Right Edge
-                if (isTouchingTransversalRight) {
+                if (borders.transRight) {
                     if (isR) {
-                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '28.85%', 'F/A CNR', 'lbl-right');
-                        html += addLock('Fwd/Aft NC 1', '100%', '64%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A CNR', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '20%', 'F/A CNR', 'lbl-right');
+                        html += addLock('Fwd/Aft NC 1', '100%', '60%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A CNR', 'lbl-right'); // Seam
                     } else if (isL) {
-                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A CNR', 'lbl-right');
-                        html += addLock('Fwd/Aft NC 1', '100%', '36%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '71.14%', 'F/A CNR', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A CNR', 'lbl-right'); // Seam
+                        html += addLock('Fwd/Aft NC 1', '100%', '40%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'F/A CNR', 'lbl-right');
+                    } else {
+                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
+                        html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft NC 3', '100%', '70%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'F/A CNR', 'lbl-right');
                     }
                 } else {
                     html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'F/A CNR', 'lbl-right');
