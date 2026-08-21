@@ -1202,7 +1202,7 @@
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
                 container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
-                container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD", {left:false,right:false,top:false,bottom:false,transLeft:false,transRight:false})}</div>`;
+                container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD", {left:false,right:false,top:false,bottom:false,transLeft:false,transRight:false}, configActualGlobal)}</div>`;
                 return;
             }
 
@@ -1234,13 +1234,24 @@
 
             const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
             
+            // Asignar alto de fila base según configuración
+            let baseRowH = (configActualGlobal === 'C' || configActualGlobal === 'E' || configActualGlobal === 'G') ? 96 : 85;
+
+            // Asignar anchos de columna base
             let gridCols = colsArray.map(colNum => {
                 const isTrans = positionsMapped.some(p => p.col === colNum && isTransversal(p.id));
-                return isTrans ? "140px" : "200px";
+                if (configActualGlobal === 'G') {
+                    if (positionsMapped.some(p => p.col === colNum && p.id.startsWith('P'))) return "196px";
+                    return isTrans ? "96px" : "125px";
+                }
+                if (configActualGlobal === 'C' || configActualGlobal === 'E') {
+                    return isTrans ? "96px" : "125px";
+                }
+                return isTrans ? "85px" : "125px";
             });
 
             container.style.display = "grid";
-            container.style.gridTemplateRows = `repeat(${maxRow}, 140px)`;
+            container.style.gridTemplateRows = `repeat(${maxRow}, ${baseRowH}px)`;
             container.style.gridTemplateColumns = gridCols.join(" ");
             container.style.gap = "0px"; 
 
@@ -1260,7 +1271,7 @@
                             left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false,
                             transLeft: isTransLeft, transRight: isTransRight 
                         };
-                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders)}</div>`;
+                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     } else {
                         const itemR = colItems.find(p => p.row === 1);
                         const itemL = colItems.find(p => p.row === 2);
@@ -1272,7 +1283,7 @@
                                 bottom: !!itemL, top: false,
                                 transLeft: isTransLeft, transRight: isTransRight
                             };
-                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemR.id, borders)}</div>`;
+                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemR.id, borders, configActualGlobal)}</div>`;
                         }
                         if (itemL) {
                             const borders = {
@@ -1281,7 +1292,7 @@
                                 top: !!itemR, bottom: false,
                                 transLeft: isTransLeft, transRight: isTransRight
                             };
-                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemL.id, borders)}</div>`;
+                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemL.id, borders, configActualGlobal)}</div>`;
                         }
                     }
                 } else {
@@ -1290,7 +1301,7 @@
                             left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false,
                             transLeft: isTransLeft, transRight: isTransRight
                         };
-                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders)}</div>`;
+                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     });
                 }
             });
@@ -1298,7 +1309,7 @@
             container.innerHTML = htmlStr;
             
             let totalWidth = gridCols.reduce((acc, val) => acc + parseInt(val), 0);
-            let totalHeight = maxRow * 140;
+            let totalHeight = maxRow * baseRowH;
             let scale = 1;
             
             if (totalWidth > 400) scale = 400 / totalWidth;
@@ -1309,15 +1320,36 @@
             container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
         }
 
-        function generarUnidadPallet(titulo, borders) {
+        function generarUnidadPallet(titulo, borders, config) {
             const isTrans = isTransversal(titulo);
             
-            let styleStr = `position: relative; width: 100%; height: 100%; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
+            // 1. Dimensiones Reales Mapeadas
+            let w = 125, h = 85;
+            if (config === 'G') {
+                if (titulo.startsWith('P') || titulo === 'G/P1') { w = 196; h = 96; }
+                else if (titulo === 'C2') { w = 125; h = 96; }
+                else if (isTrans) { w = 96; h = 125; } 
+            } else if (config === 'C' || config === 'E') {
+                if (isTrans) { w = 96; h = 125; }
+                else { w = 125; h = 96; }
+            } else {
+                if (isTrans) { w = 85; h = 125; }
+                else { w = 125; h = 85; }
+            }
+
+            // 2. Lógica para EVITAR PUNTOS SUPERPUESTOS
+            // Si el borde es compartido, solo UNO de los dos pallets dibuja los puntos.
+            const drawTop = !borders.top;
+            const drawBottom = true;
+            const drawLeft = !borders.left; 
+            const drawRight = true;
+
+            let styleStr = `position: relative; width: ${w}px; height: ${h}px; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
             
-            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1; margin-top: -3px;`;
-            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1; margin-bottom: -3px;`;
-            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; margin-right: -3px; z-index:2;`;
-            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1; margin-left: -3px;`;
+            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1;`;
+            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1;`;
+            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; z-index:2;`;
+            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1;`;
 
             let html = `
             <div style="${styleStr}">
@@ -1333,96 +1365,101 @@
             };
 
             if (isTrans) {
-                // Transversal ULDs (A1, A13, D, E)
-                html += addLock('Side Corner (Top L)', '15%', '0%', 'S.CNR', 'lbl-top');
-                html += addLock('Side NC 1', '38.33%', '0%', 'S.NC', 'lbl-top');
-                html += addLock('Side NC 2', '61.66%', '0%', 'S.NC', 'lbl-top');
-                html += addLock('Side Corner (Top R)', '85%', '0%', 'S.CNR', 'lbl-top');
-
-                html += addLock('Side Corner (Bot L)', '15%', '100%', 'S.CNR', 'lbl-bot');
-                html += addLock('Side NC 1', '38.33%', '100%', 'S.NC', 'lbl-bot');
-                html += addLock('Side NC 2', '61.66%', '100%', 'S.NC', 'lbl-bot');
-                html += addLock('Side Corner (Bot R)', '85%', '100%', 'S.CNR', 'lbl-bot');
-
-                // Left/Right sides
-                html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 3', '0%', '70%', 'F/A NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '0%', '90%', 'F/A CNR', 'lbl-left');
-
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'F/A NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'F/A CNR', 'lbl-right');
+                if (drawTop) {
+                    html += addLock('Side Corner (Top L)', '15%', '0%', 'S.CNR', 'lbl-top');
+                    html += addLock('Side NC 1', '38.33%', '0%', 'S.NC', 'lbl-top');
+                    html += addLock('Side NC 2', '61.66%', '0%', 'S.NC', 'lbl-top');
+                    html += addLock('Side Corner (Top R)', '85%', '0%', 'S.CNR', 'lbl-top');
+                }
+                if (drawBottom) {
+                    html += addLock('Side Corner (Bot L)', '15%', '100%', 'S.CNR', 'lbl-bot');
+                    html += addLock('Side NC 1', '38.33%', '100%', 'S.NC', 'lbl-bot');
+                    html += addLock('Side NC 2', '61.66%', '100%', 'S.NC', 'lbl-bot');
+                    html += addLock('Side Corner (Bot R)', '85%', '100%', 'S.CNR', 'lbl-bot');
+                }
+                if (drawLeft) {
+                    html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 3', '0%', '70%', 'F/A NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '0%', '90%', 'F/A CNR', 'lbl-left');
+                }
+                if (drawRight) {
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 3', '100%', '70%', 'F/A NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'F/A CNR', 'lbl-right');
+                }
             } else {
-                // Longitudinal ULDs (A2R, A2L, etc.)
                 const isR = titulo.includes('R') || titulo === 'C2' || titulo === 'P2';
                 const isL = titulo.includes('L');
                 const isTopCenterline = isL; 
                 const isBotCenterline = isR; 
 
-                // Top/Bot (125" side) - 5 locks
-                html += addLock('Side Corner (Top L)', '10%', '0%', 'S.CNR', 'lbl-top');
-                html += addLock('Side NC 1', '30%', '0%', 'S.NC', 'lbl-top');
-                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '0%', isTopCenterline ? 'CTR LCK' : 'S.NC', 'lbl-top', isTopCenterline);
-                html += addLock('Side NC 3', '70%', '0%', 'S.NC', 'lbl-top');
-                html += addLock('Side Corner (Top R)', '90%', '0%', 'S.CNR', 'lbl-top');
-
-                html += addLock('Side Corner (Bot L)', '10%', '100%', 'S.CNR', 'lbl-bot');
-                html += addLock('Side NC 1', '30%', '100%', 'S.NC', 'lbl-bot');
-                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'CTR LCK' : 'S.NC', 'lbl-bot', isBotCenterline);
-                html += addLock('Side NC 3', '70%', '100%', 'S.NC', 'lbl-bot');
-                html += addLock('Side Corner (Bot R)', '90%', '100%', 'S.CNR', 'lbl-bot');
-
-                // Left Edge
-                if (borders.transLeft) {
-                    if (isR) {
-                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '20%', 'F/A CNR', 'lbl-left');
-                        html += addLock('Fwd/Aft NC 1', '0%', '60%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A CNR', 'lbl-left'); // Seam
-                    } else if (isL) {
-                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A CNR', 'lbl-left'); // Seam
-                        html += addLock('Fwd/Aft NC 1', '0%', '40%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '80%', 'F/A CNR', 'lbl-left');
-                    } else {
-                        // Full width pallet (C2, P2) touching transversal
-                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
-                        html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft NC 3', '0%', '70%', 'F/A NC', 'lbl-left');
-                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '90%', 'F/A CNR', 'lbl-left');
-                    }
-                } else {
-                    html += addLock('Fwd/Aft Corner (L Top)', '0%', '15%', 'F/A CNR', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 1', '0%', '38%', 'F/A NC', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 2', '0%', '62%', 'F/A NC', 'lbl-left');
-                    html += addLock('Fwd/Aft Corner (L Bot)', '0%', '85%', 'F/A CNR', 'lbl-left');
+                if (drawTop) {
+                    html += addLock('Side Corner (Top L)', '10%', '0%', 'S.CNR', 'lbl-top');
+                    html += addLock('Side NC 1', '30%', '0%', 'S.NC', 'lbl-top');
+                    html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '0%', isTopCenterline ? 'CTR LCK' : 'S.NC', 'lbl-top', isTopCenterline);
+                    html += addLock('Side NC 3', '70%', '0%', 'S.NC', 'lbl-top');
+                    html += addLock('Side Corner (Top R)', '90%', '0%', 'S.CNR', 'lbl-top');
+                }
+                if (drawBottom) {
+                    html += addLock('Side Corner (Bot L)', '10%', '100%', 'S.CNR', 'lbl-bot');
+                    html += addLock('Side NC 1', '30%', '100%', 'S.NC', 'lbl-bot');
+                    html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'CTR LCK' : 'S.NC', 'lbl-bot', isBotCenterline);
+                    html += addLock('Side NC 3', '70%', '100%', 'S.NC', 'lbl-bot');
+                    html += addLock('Side Corner (Bot R)', '90%', '100%', 'S.CNR', 'lbl-bot');
                 }
 
-                // Right Edge
-                if (borders.transRight) {
-                    if (isR) {
-                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '20%', 'F/A CNR', 'lbl-right');
-                        html += addLock('Fwd/Aft NC 1', '100%', '60%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A CNR', 'lbl-right'); // Seam
-                    } else if (isL) {
-                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A CNR', 'lbl-right'); // Seam
-                        html += addLock('Fwd/Aft NC 1', '100%', '40%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'F/A CNR', 'lbl-right');
+                if (drawLeft) {
+                    if (borders.transLeft) {
+                        if (isR) {
+                            html += addLock('Fwd/Aft Corner (L Top)', '0%', '20%', 'F/A CNR', 'lbl-left');
+                            html += addLock('Fwd/Aft NC 1', '0%', '60%', 'F/A NC', 'lbl-left');
+                            html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A CNR', 'lbl-left');
+                        } else if (isL) {
+                            html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A CNR', 'lbl-left');
+                            html += addLock('Fwd/Aft NC 1', '0%', '40%', 'F/A NC', 'lbl-left');
+                            html += addLock('Fwd/Aft Corner (L Bot)', '0%', '80%', 'F/A CNR', 'lbl-left');
+                        } else {
+                            html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
+                            html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
+                            html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A NC', 'lbl-left');
+                            html += addLock('Fwd/Aft NC 3', '0%', '70%', 'F/A NC', 'lbl-left');
+                            html += addLock('Fwd/Aft Corner (L Bot)', '0%', '90%', 'F/A CNR', 'lbl-left');
+                        }
                     } else {
-                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
-                        html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft NC 3', '100%', '70%', 'F/A NC', 'lbl-right');
-                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'F/A CNR', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (L Top)', '0%', '15%', 'F/A CNR', 'lbl-left');
+                        html += addLock('Fwd/Aft NC 1', '0%', '38%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft NC 2', '0%', '62%', 'F/A NC', 'lbl-left');
+                        html += addLock('Fwd/Aft Corner (L Bot)', '0%', '85%', 'F/A CNR', 'lbl-left');
                     }
-                } else {
-                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'F/A CNR', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 1', '100%', '38%', 'F/A NC', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 2', '100%', '62%', 'F/A NC', 'lbl-right');
-                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'F/A CNR', 'lbl-right');
+                }
+
+                if (drawRight) {
+                    if (borders.transRight) {
+                        if (isR) {
+                            html += addLock('Fwd/Aft Corner (R Top)', '100%', '20%', 'F/A CNR', 'lbl-right');
+                            html += addLock('Fwd/Aft NC 1', '100%', '60%', 'F/A NC', 'lbl-right');
+                            html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A CNR', 'lbl-right');
+                        } else if (isL) {
+                            html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A CNR', 'lbl-right');
+                            html += addLock('Fwd/Aft NC 1', '100%', '40%', 'F/A NC', 'lbl-right');
+                            html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'F/A CNR', 'lbl-right');
+                        } else {
+                            html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
+                            html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
+                            html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A NC', 'lbl-right');
+                            html += addLock('Fwd/Aft NC 3', '100%', '70%', 'F/A NC', 'lbl-right');
+                            html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'F/A CNR', 'lbl-right');
+                        }
+                    } else {
+                        html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'F/A CNR', 'lbl-right');
+                        html += addLock('Fwd/Aft NC 1', '100%', '38%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft NC 2', '100%', '62%', 'F/A NC', 'lbl-right');
+                        html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'F/A CNR', 'lbl-right');
+                    }
                 }
             }
 
