@@ -1271,7 +1271,12 @@
                             left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false,
                             transLeft: isTransLeft, transRight: isTransRight 
                         };
-                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
+                        
+                        let alignStyle = "align-items: center;";
+                        // Clave del centrado A1: Lo pegamos arriba y le damos padding para que cuadre exacto con los 5 puntos
+                        if (isTransversal(item.id)) alignStyle = "align-items: flex-start; padding-top: 22px;";
+                        
+                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     } else {
                         const itemR = colItems.find(p => p.row === 1);
                         const itemL = colItems.find(p => p.row === 2);
@@ -1301,7 +1306,9 @@
                             left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false,
                             transLeft: isTransLeft, transRight: isTransRight
                         };
-                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
+                        let alignStyle = "align-items: center;";
+                        if (isTransversal(item.id)) alignStyle = "align-items: flex-start; padding-top: 22px;";
+                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     });
                 }
             });
@@ -1337,19 +1344,25 @@
                 else { w = 125; h = 85; }
             }
 
-            // 2. Lógica para EVITAR PUNTOS SUPERPUESTOS
-            // Si el borde es compartido, solo UNO de los dos pallets dibuja los puntos.
-            const drawTop = !borders.top;
-            const drawBottom = true;
-            const drawLeft = !borders.left; 
-            const drawRight = true;
+            // 2. Lógica para EVITAR PUNTOS SUPERPUESTOS y DEJAR LOS DE A2R/A2L
+            let drawTop = !borders.top;
+            let drawBottom = true;
+            let drawLeft = !borders.left; 
+            let drawRight = !borders.right;
+
+            if (!isTrans) {
+                // Si soy longitudinal (Ej: A2R), dibujo mi borde si mi vecino es transversal (A1)
+                if (borders.transLeft) drawLeft = true;
+                if (borders.transRight) drawRight = true;
+            } 
+            // Si soy transversal (A1), mi drawLeft/drawRight será false automáticamente si hay vecino longitudinal
 
             let styleStr = `position: relative; width: ${w}px; height: ${h}px; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
             
             if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1;`;
             if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1;`;
-            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; z-index:2;`;
-            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1;`;
+            if (borders.right && !borders.transRight) styleStr += ` border-right: 3px dashed #CBD5E1; z-index:2;`;
+            if (borders.left && !borders.transLeft) styleStr += ` border-left: 3px dashed #CBD5E1;`;
 
             let html = `
             <div style="${styleStr}">
@@ -1414,14 +1427,17 @@
 
                 if (drawLeft) {
                     if (borders.transLeft) {
+                        // Aquí generamos exactamente 8 puntos distribuidos para que el A1 calce perfecto
                         if (isR) {
-                            html += addLock('Fwd/Aft Corner (L Top)', '0%', '20%', 'F/A CNR', 'lbl-left');
-                            html += addLock('Fwd/Aft NC 1', '0%', '60%', 'F/A NC', 'lbl-left');
-                            html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A CNR', 'lbl-left');
+                            html += addLock('F/A NC 1', '0%', '14%', 'F/A NC', 'lbl-left');
+                            html += addLock('F/A NC 2', '0%', '35%', 'F/A NC', 'lbl-left');
+                            html += addLock('F/A NC 3', '0%', '65%', 'F/A NC', 'lbl-left');
+                            html += addLock('F/A NC 4', '0%', '94%', 'F/A NC', 'lbl-left');
                         } else if (isL) {
-                            html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A CNR', 'lbl-left');
-                            html += addLock('Fwd/Aft NC 1', '0%', '40%', 'F/A NC', 'lbl-left');
-                            html += addLock('Fwd/Aft Corner (L Bot)', '0%', '80%', 'F/A CNR', 'lbl-left');
+                            html += addLock('F/A NC 5', '0%', '24%', 'F/A NC', 'lbl-left');
+                            html += addLock('F/A NC 6', '0%', '53%', 'F/A NC', 'lbl-left');
+                            html += addLock('F/A NC 7', '0%', '82%', 'F/A NC', 'lbl-left');
+                            html += addLock('F/A NC 8', '0%', '94%', 'F/A NC', 'lbl-left');
                         } else {
                             html += addLock('Fwd/Aft Corner (L Top)', '0%', '10%', 'F/A CNR', 'lbl-left');
                             html += addLock('Fwd/Aft NC 1', '0%', '30%', 'F/A NC', 'lbl-left');
@@ -1439,14 +1455,17 @@
 
                 if (drawRight) {
                     if (borders.transRight) {
+                        // Igual que transLeft pero en espejo para el A13 (cuando va atrás)
                         if (isR) {
-                            html += addLock('Fwd/Aft Corner (R Top)', '100%', '20%', 'F/A CNR', 'lbl-right');
-                            html += addLock('Fwd/Aft NC 1', '100%', '60%', 'F/A NC', 'lbl-right');
-                            html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A CNR', 'lbl-right');
+                            html += addLock('F/A NC 1', '100%', '14%', 'F/A NC', 'lbl-right');
+                            html += addLock('F/A NC 2', '100%', '35%', 'F/A NC', 'lbl-right');
+                            html += addLock('F/A NC 3', '100%', '65%', 'F/A NC', 'lbl-right');
+                            html += addLock('F/A NC 4', '100%', '94%', 'F/A NC', 'lbl-right');
                         } else if (isL) {
-                            html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A CNR', 'lbl-right');
-                            html += addLock('Fwd/Aft NC 1', '100%', '40%', 'F/A NC', 'lbl-right');
-                            html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'F/A CNR', 'lbl-right');
+                            html += addLock('F/A NC 5', '100%', '24%', 'F/A NC', 'lbl-right');
+                            html += addLock('F/A NC 6', '100%', '53%', 'F/A NC', 'lbl-right');
+                            html += addLock('F/A NC 7', '100%', '82%', 'F/A NC', 'lbl-right');
+                            html += addLock('F/A NC 8', '100%', '94%', 'F/A NC', 'lbl-right');
                         } else {
                             html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'F/A CNR', 'lbl-right');
                             html += addLock('Fwd/Aft NC 1', '100%', '30%', 'F/A NC', 'lbl-right');
