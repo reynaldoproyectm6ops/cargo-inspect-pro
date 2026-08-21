@@ -84,7 +84,7 @@
         .info-card select option { color: #333; }
 
         .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
-        .card-header { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 15px; text-transform: uppercase; }
+        .card-header { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 8px;}
 
         .comp-item { background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 18px; margin-bottom: 15px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
         .comp-title { font-weight: 900; font-size: 14px; color: var(--amerijet-blue-dark); margin-bottom: 12px; display: block; text-transform: uppercase;}
@@ -137,14 +137,13 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); }
+        .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 2px; }
         .hotspot:hover { background: #3B82F6; transform: translate(-50%, -50%) scale(1.3); }
         .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
 
         .lock-label { position: absolute; font-size: 10px; font-weight: 800; color: #1E293B; text-align: center; pointer-events: none; text-transform: uppercase; line-height: 1.1; white-space: nowrap; z-index: 5; }
-        .lock-label.red { color: #DC2626; }
+        .lock-label.red { color: #DC2626; z-index: 15; background: rgba(255,255,255,0.9); padding: 0 4px; border-radius: 4px; }
         
-        /* Ajuste de etiquetas para no superponerse a los puntos */
         .lbl-top { transform: translate(-50%, -25px); }
         .lbl-bot { transform: translate(-50%, 15px); }
         .lbl-left { transform: translate(-100%, -50%); padding-right: 12px; text-align: right; }
@@ -154,6 +153,17 @@
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
+        /* NUEVOS ESTILOS PARA CONTADORES STAT CARDS */
+        .stats-container { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); flex: 1; min-width: 140px; transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .stat-card.total { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue-dark); }
+        .stat-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #F1F5F9; color: var(--amerijet-blue); flex-shrink: 0; }
+        .stat-card.total .stat-icon { background: rgba(255,255,255,0.15); color: white; }
+        .stat-details { display: flex; flex-direction: column; }
+        .stat-label { font-size: 10px; font-weight: 800; text-transform: uppercase; opacity: 0.8; letter-spacing: 0.5px; }
+        .stat-value { font-size: 20px; font-weight: 900; line-height: 1; margin-top: 4px; }
+
         .matrix-container { margin-top: 15px; }
         .compartment-scroll { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 25px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px 15px 5px 15px; }
         .group-header { font-size: 13px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #CBD5E1; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;}
@@ -162,8 +172,8 @@
         .matrix-item.historical { border-left-color: var(--warn-orange); background: #FFFBEB; }
         .matrix-item.resolved { border-left-color: var(--success-green); background: #ECFDF5; opacity: 0.8; }
         
-        .badge-status { padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: 900; color: white; display: inline-block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .st-new { background: var(--amerijet-red); } .st-hist { background: var(--warn-orange); } .st-res { background: var(--success-green); }
+        .badge-status { padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: 900; color: white; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .st-new { background: var(--amerijet-red); } .st-hist { background: var(--warn-orange); } .st-res { background: var(--success-green); color: #064E3B; }
 
         .btn-update-matrix { background: var(--amerijet-blue); color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 11px; text-transform: uppercase; font-weight: 800; cursor: pointer; margin-top: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; width: 100%;}
         .btn-update-matrix:hover { background: var(--amerijet-blue-dark); }
@@ -318,7 +328,10 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">1. Inspección Estructural Básica</div>
+                    <div class="card-header">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        1. Inspección Estructural Básica
+                    </div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
                         Utilice esta sección únicamente para reportar daños. Al guardar, el panel se limpiará y el hallazgo bajará a la Matriz de Trazabilidad.
                     </p>
@@ -327,9 +340,9 @@
                     <div class="comp-item" id="c_lower_fwd">
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">[OK] Sin Novedad</option>
+                            <option value="HALLAZGO">[!] Reportar Daño Estructura</option>
+                            <option value="OTROS">[!] OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
@@ -361,9 +374,9 @@
                     <div class="comp-item" id="c_lower_aft">
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">[OK] Sin Novedad</option>
+                            <option value="HALLAZGO">[!] Reportar Daño Estructura</option>
+                            <option value="OTROS">[!] OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
@@ -395,9 +408,9 @@
                     <div class="comp-item" id="c_bulk">
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠️ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">[OK] Sin Novedad</option>
+                            <option value="HALLAZGO">[!] Reportar Daño Estructura</option>
+                            <option value="OTROS">[!] OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_bulk" class="hallazgo-panel">
@@ -429,10 +442,10 @@
                     <div class="comp-item" style="border: 2px solid var(--amerijet-blue); background: white;">
                         <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
                         <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="FUSELAJE">⚠️ Reportar Daño Estructura / Puerta MD</option>
-                            <option value="LOCKS">⚠️ Mapear Daño en Seguros de Piso (CLS)</option>
-                            <option value="OTROS">⚠️ OTROS (Rodos dañados, guías, etc.)</option>
+                            <option value="OK">[OK] Sin Novedad</option>
+                            <option value="FUSELAJE">[!] Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">[!] Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">[!] OTROS (Rodos dañados, guías, etc.)</option>
                         </select>
 
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
@@ -463,8 +476,9 @@
 
                 <!-- PANEL MAPEO CLS B767 -->
                 <div id="panelMapeoCLS" style="display: none; background: white; border: 2px solid var(--amerijet-blue); border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase;">
-                        ⚠️ Mapeo de Seguros (CLS)
+                    <div style="font-size: 16px; font-weight: 900; color: var(--amerijet-red); margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                        Mapeo de Seguros (CLS)
                     </div>
                     
                     <div class="config-tabs">
@@ -522,7 +536,10 @@
 
                 <!-- SECCIÓN 2: TRAZABILIDAD MATRIZ -->
                 <div class="card">
-                    <div class="card-header" style="margin-bottom: 5px;">2. Trazabilidad de Discrepancias</div>
+                    <div class="card-header" style="margin-bottom: 5px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        2. Trazabilidad de Discrepancias
+                    </div>
                     
                     <div id="matrixCounters" style="margin-bottom: 20px;">
                         <div style="font-size:12px; color:#64748B; font-weight: 600;">Cargando historial...</div>
@@ -535,7 +552,10 @@
 
                 <!-- SECCIÓN 3: INCIDENCIAS TEMPORALES DEL VUELO -->
                 <div class="card" style="margin-bottom: 20px; border: 2px solid var(--warn-orange);">
-                    <div class="card-header" style="color:var(--warn-orange);">3. Incidencias y Notas Generales del Vuelo</div>
+                    <div class="card-header" style="color:var(--warn-orange);">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        3. Incidencias y Notas Generales del Vuelo
+                    </div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
                         Estos reportes (y las notas) aplican SOLO para la operación actual y no manchan el historial permanente del avión.
                     </p>
@@ -679,8 +699,8 @@
             <div style="display:flex; justify-content:center; margin-bottom: 10px; color: var(--amerijet-red);">
                 <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             </div>
-            <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">Confirmar</h3>
-            <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;"></p>
+            <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase; text-align: center;">Confirmar</h3>
+            <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600; text-align: center;"></p>
             <div style="display: flex; gap: 10px; flex-direction:column;">
                 <button id="btnConfirmAction" style="background:var(--amerijet-red); color:white; border:none; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; text-transform: uppercase; transition: 0.2s;">Confirmar</button>
                 <button onclick="document.getElementById('customConfirmModal').style.display='none'" style="background:#F1F5F9; color:#475569; border:1px solid #E2E8F0; padding:14px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; font-size: 14px; text-transform: uppercase; transition: 0.2s;">Cancelar</button>
@@ -691,7 +711,6 @@
     <div id="renderContainer"></div>
 
     <script>
-        // ¡IMPORTANTE! Revisa que esta clave no haya expirado o haya sido rotada en Supabase.
         const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZG9mZ2lra3JrYndqcGp6dmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyOTc1MTQsImV4cCI6MjA5ODg3MzUxNH0.TM7Vr5B2Yfr9vGd935U3gAaB_sPdKkybUsrFlvvf0nI'; 
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -983,7 +1002,7 @@
                 cnt.innerHTML += `
                     <div class="matrix-item" style="border-left-color: var(--warn-orange);">
                         <div style="font-weight:900; color:#B45309; font-size: 11px; text-transform:uppercase; margin-bottom:5px; display:flex; align-items:center; gap:4px;">
-                            📍 Área: ${inc.area || 'General'}
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Área: ${inc.area || 'General'}
                         </div>
                         <div style="font-weight:bold; color:var(--amerijet-blue-dark); margin-bottom: 8px;">${inc.descripcion}</div>
                         ${htmlF}
@@ -993,7 +1012,7 @@
                                 Editar Incidencia
                             </button>
                         </div>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')">✖</button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarIncidencia('${inc.idTracking}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                     </div>
                 `;
             });
@@ -1292,52 +1311,58 @@
             };
 
             if (isTrans) {
-                html += addLock('Side Corner (Top L)', '15%', '-7px', 'Side<br>Corner', 'lbl-top');
-                html += addLock('Side NC 1', '38%', '-7px', 'Side<br>NC', 'lbl-top');
-                html += addLock('Side NC 2', '62%', '-7px', 'Side<br>NC', 'lbl-top');
-                html += addLock('Side Corner (Top R)', '85%', '-7px', 'Side<br>Corner', 'lbl-top');
+                // Transversal ULDs (A1, A13, D, E)
+                // Top/Bottom (88" sides) - 4 locks
+                html += addLock('Side Corner (Top L)', '15%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
+                html += addLock('Side NC 1', '38%', '-7px', 'SIDE<br>NC', 'lbl-top');
+                html += addLock('Side NC 2', '62%', '-7px', 'SIDE<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '85%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
 
-                html += addLock('Side Corner (Bot L)', '15%', '100%', 'Side<br>Corner', 'lbl-bot');
-                html += addLock('Side NC 1', '38%', '100%', 'Side<br>NC', 'lbl-bot');
-                html += addLock('Side NC 2', '62%', '100%', 'Side<br>NC', 'lbl-bot');
-                html += addLock('Side Corner (Bot R)', '85%', '100%', 'Side<br>Corner', 'lbl-bot');
+                html += addLock('Side Corner (Bot L)', '15%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
+                html += addLock('Side NC 1', '38%', '100%', 'SIDE<br>NC', 'lbl-bot');
+                html += addLock('Side NC 2', '62%', '100%', 'SIDE<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '85%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
 
-                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '10%', 'Fwd/Aft<br>Corner', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '-7px', '30%', 'Fwd/Aft<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'Fwd/Aft<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 3', '-7px', '70%', 'Fwd/Aft<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '90%', 'Fwd/Aft<br>Corner', 'lbl-left');
+                // Left/Right (125" sides) - 5 locks
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '10%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '30%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 3', '-7px', '70%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '90%', 'FWD/AFT<br>CORNER', 'lbl-left');
 
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'Fwd/Aft<br>Corner', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'Fwd/Aft<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'Fwd/Aft<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'Fwd/Aft<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'Fwd/Aft<br>Corner', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'FWD/AFT<br>CORNER', 'lbl-right');
             } else {
+                // Longitudinal ULDs (A2R, A2L, etc.)
                 const isTopCenterline = titulo.includes('L'); 
                 const isBotCenterline = titulo.includes('R'); 
 
-                html += addLock('Side Corner (Top L)', '10%', '-7px', 'Side<br>Corner', 'lbl-top');
-                html += addLock('Side NC 1', '30%', '-7px', 'Side<br>NC', 'lbl-top');
-                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'Centerline<br>Locks' : 'Side<br>NC', 'lbl-top', isTopCenterline);
-                html += addLock('Side NC 3', '70%', '-7px', 'Side<br>NC', 'lbl-top');
-                html += addLock('Side Corner (Top R)', '90%', '-7px', 'Side<br>Corner', 'lbl-top');
+                // Top/Bottom (125" sides) - 5 locks
+                html += addLock('Side Corner (Top L)', '10%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
+                html += addLock('Side NC 1', '30%', '-7px', 'SIDE<br>NC', 'lbl-top');
+                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'CENTERLINE<br>LOCKS' : 'SIDE<br>NC', 'lbl-top', isTopCenterline);
+                html += addLock('Side NC 3', '70%', '-7px', 'SIDE<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '90%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
 
-                html += addLock('Side Corner (Bot L)', '10%', '100%', 'Side<br>Corner', 'lbl-bot');
-                html += addLock('Side NC 1', '30%', '100%', 'Side<br>NC', 'lbl-bot');
-                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'Centerline<br>Locks' : 'Side<br>NC', 'lbl-bot', isBotCenterline);
-                html += addLock('Side NC 3', '70%', '100%', 'Side<br>NC', 'lbl-bot');
-                html += addLock('Side Corner (Bot R)', '90%', '100%', 'Side<br>Corner', 'lbl-bot');
+                html += addLock('Side Corner (Bot L)', '10%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
+                html += addLock('Side NC 1', '30%', '100%', 'SIDE<br>NC', 'lbl-bot');
+                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'CENTERLINE<br>LOCKS' : 'SIDE<br>NC', 'lbl-bot', isBotCenterline);
+                html += addLock('Side NC 3', '70%', '100%', 'SIDE<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '90%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
 
-                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'Fwd/Aft<br>Corner', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'Fwd/Aft<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'Fwd/Aft<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'Fwd/Aft<br>Corner', 'lbl-left');
+                // Left/Right (88" sides) - 4 locks
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'FWD/AFT<br>CORNER', 'lbl-left');
 
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'Fwd/Aft<br>Corner', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '38%', 'Fwd/Aft<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '62%', 'Fwd/Aft<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'Fwd/Aft<br>Corner', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '38%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '62%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'FWD/AFT<br>CORNER', 'lbl-right');
             }
 
             html += `</div>`;
@@ -1460,7 +1485,7 @@
             finally { hideLoading(); }
         }
 
-        // --- MATRIZ DINÁMICA ---
+        // --- MATRIZ DINÁMICA CON STAT CARDS REDISEÑADAS ---
         function renderizarMatrizDinamica() {
             const cntDinamico = document.getElementById('matrizDinamica');
             const cntCounters = document.getElementById('matrixCounters');
@@ -1479,12 +1504,50 @@
                 gruposArea[standardName].push(h);
             });
 
-            let countersHTML = `<div class="counter-badge total">Total Reportes: ${matrizHallazgos.length}</div>`;
-            if(gruposArea['MAIN DECK'].length > 0) countersHTML += `<div class="counter-badge">MD: ${gruposArea['MAIN DECK'].length}</div>`;
-            if(gruposArea['LOWER FORWARD'].length > 0) countersHTML += `<div class="counter-badge">FWD: ${gruposArea['LOWER FORWARD'].length}</div>`;
-            if(gruposArea['LOWER AFT'].length > 0) countersHTML += `<div class="counter-badge">AFT: ${gruposArea['LOWER AFT'].length}</div>`;
-            if(gruposArea['BULK'].length > 0) countersHTML += `<div class="counter-badge">BULK: ${gruposArea['BULK'].length}</div>`;
-            if(gruposArea['OTROS COMPARTIMIENTOS'].length > 0) countersHTML += `<div class="counter-badge">OTROS: ${gruposArea['OTROS COMPARTIMIENTOS'].length}</div>`;
+            // Generación de Stat Cards Modernas
+            let countersHTML = `<div class="stats-container">`;
+            countersHTML += `
+                <div class="stat-card total">
+                    <div class="stat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+                    <div class="stat-details"><span class="stat-label">Total Reportes</span><span class="stat-value">${matrizHallazgos.length}</span></div>
+                </div>`;
+            
+            if(gruposArea['MAIN DECK'].length > 0) {
+                countersHTML += `
+                <div class="stat-card">
+                    <div class="stat-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></div>
+                    <div class="stat-details"><span class="stat-label">Main Deck</span><span class="stat-value">${gruposArea['MAIN DECK'].length}</span></div>
+                </div>`;
+            }
+            if(gruposArea['LOWER FORWARD'].length > 0) {
+                countersHTML += `
+                <div class="stat-card">
+                    <div class="stat-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="stat-details"><span class="stat-label">FWD</span><span class="stat-value">${gruposArea['LOWER FORWARD'].length}</span></div>
+                </div>`;
+            }
+            if(gruposArea['LOWER AFT'].length > 0) {
+                countersHTML += `
+                <div class="stat-card">
+                    <div class="stat-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+                    <div class="stat-details"><span class="stat-label">AFT</span><span class="stat-value">${gruposArea['LOWER AFT'].length}</span></div>
+                </div>`;
+            }
+            if(gruposArea['BULK'].length > 0) {
+                countersHTML += `
+                <div class="stat-card">
+                    <div class="stat-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></div>
+                    <div class="stat-details"><span class="stat-label">BULK</span><span class="stat-value">${gruposArea['BULK'].length}</span></div>
+                </div>`;
+            }
+            if(gruposArea['OTROS COMPARTIMIENTOS'].length > 0) {
+                countersHTML += `
+                <div class="stat-card">
+                    <div class="stat-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                    <div class="stat-details"><span class="stat-label">OTROS</span><span class="stat-value">${gruposArea['OTROS COMPARTIMIENTOS'].length}</span></div>
+                </div>`;
+            }
+            countersHTML += `</div>`;
             cntCounters.innerHTML = countersHTML;
 
             const areasOrdenadas = Object.keys(gruposArea).sort((a, b) => getSortWeight(a) - getSortWeight(b));
@@ -1495,7 +1558,7 @@
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
-                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res">✓ Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist">⏳ Heredado</span>` : `<span class="badge-status st-new">⚠️ Daño Activo</span>`);
+                    let b = h.estado_actual === 'REPARADO' ? `<span class="badge-status st-res"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Reparado/Cerrado</span>` : (h.esHistorico ? `<span class="badge-status st-hist"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Heredado</span>` : `<span class="badge-status st-new"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Daño Activo</span>`);
                     let htmlF = "";
                     if(fotosBanco[h.idTracking] && fotosBanco[h.idTracking].length > 0) {
                         htmlF = `<div class="photo-gallery">`; fotosBanco[h.idTracking].forEach(u => htmlF += `<img src="${u}" class="photo-thumb">`); htmlF += `</div>`;
