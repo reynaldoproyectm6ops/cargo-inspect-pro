@@ -340,9 +340,9 @@
                     <div class="comp-item" id="c_lower_fwd">
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠ OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">( ✓ ) Sin Novedad</option>
+                            <option value="HALLAZGO">( ! ) Reportar Daño Estructura</option>
+                            <option value="OTROS">( ! ) OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
@@ -374,9 +374,9 @@
                     <div class="comp-item" id="c_lower_aft">
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠ OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">( ✓ ) Sin Novedad</option>
+                            <option value="HALLAZGO">( ! ) Reportar Daño Estructura</option>
+                            <option value="OTROS">( ! ) OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
@@ -408,9 +408,9 @@
                     <div class="comp-item" id="c_bulk">
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="HALLAZGO">⚠ Reportar Daño Estructura</option>
-                            <option value="OTROS">⚠ OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">( ✓ ) Sin Novedad</option>
+                            <option value="HALLAZGO">( ! ) Reportar Daño Estructura</option>
+                            <option value="OTROS">( ! ) OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_bulk" class="hallazgo-panel">
@@ -442,10 +442,10 @@
                     <div class="comp-item" style="border: 2px solid var(--amerijet-blue); background: white;">
                         <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
                         <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
-                            <option value="OK">✓ Sin Novedad</option>
-                            <option value="FUSELAJE">⚠ Reportar Daño Estructura / Puerta MD</option>
-                            <option value="LOCKS">⚠ Mapear Daño en Seguros de Piso (CLS)</option>
-                            <option value="OTROS">⚠ OTROS (Rodos dañados, guías, etc.)</option>
+                            <option value="OK">( ✓ ) Sin Novedad</option>
+                            <option value="FUSELAJE">( ! ) Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">( ! ) Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">( ! ) OTROS (Rodos dañados, guías, etc.)</option>
                         </select>
 
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
@@ -1332,21 +1332,23 @@
                 // Left/Right (125" sides) - 5 locks
                 html += addLock('Fwd/Aft Corner (L Top)', '-7px', '10%', 'FWD/AFT<br>CORNER', 'lbl-left');
                 html += addLock('Fwd/Aft NC 1', '-7px', '30%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'FWD/AFT<br>CORNER', 'lbl-left');
                 html += addLock('Fwd/Aft NC 3', '-7px', '70%', 'FWD/AFT<br>NC', 'lbl-left');
                 html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '90%', 'FWD/AFT<br>CORNER', 'lbl-left');
 
                 html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'FWD/AFT<br>CORNER', 'lbl-right');
                 html += addLock('Fwd/Aft NC 1', '100%', '30%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'FWD/AFT<br>CORNER', 'lbl-right');
                 html += addLock('Fwd/Aft NC 3', '100%', '70%', 'FWD/AFT<br>NC', 'lbl-right');
                 html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'FWD/AFT<br>CORNER', 'lbl-right');
             } else {
                 // Longitudinal ULDs (A2R, A2L, etc.)
-                const isTopCenterline = titulo.includes('L'); 
-                const isBotCenterline = titulo.includes('R'); 
+                const isR = titulo.includes('R');
+                const isL = titulo.includes('L');
+                const isTopCenterline = isL; 
+                const isBotCenterline = isR; 
 
-                // Top/Bottom (125" sides) - 5 locks
+                // Top/Bot (125" side) - 5 locks
                 html += addLock('Side Corner (Top L)', '10%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
                 html += addLock('Side NC 1', '30%', '-7px', 'SIDE<br>NC', 'lbl-top');
                 html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'CENTERLINE<br>LOCKS' : 'SIDE<br>NC', 'lbl-top', isTopCenterline);
@@ -1360,15 +1362,39 @@
                 html += addLock('Side Corner (Bot R)', '90%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
 
                 // Left/Right (88" sides) - 4 locks
-                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'FWD/AFT<br>CORNER', 'lbl-left');
-
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '38%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '62%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                if (isR) {
+                    // R pallets: zippers to upper half of A1
+                    html += addLock('Fwd/Aft Corner (L Top)', '-7px', '20%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '-7px', '60%', 'FWD/AFT<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '-7px', '80%', 'FWD/AFT<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '100%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '20%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '60%', 'FWD/AFT<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '80%', 'FWD/AFT<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                } else if (isL) {
+                    // L pallets: zippers to lower half of A1
+                    html += addLock('Fwd/Aft Corner (L Top)', '-7px', '0%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '-7px', '20%', 'FWD/AFT<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '-7px', '40%', 'FWD/AFT<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '80%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '20%', 'FWD/AFT<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '40%', 'FWD/AFT<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                } else {
+                    html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'FWD/AFT<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'FWD/AFT<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '38%', 'FWD/AFT<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '62%', 'FWD/AFT<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                }
             }
 
             html += `</div>`;
