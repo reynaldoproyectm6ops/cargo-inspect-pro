@@ -137,9 +137,9 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 2px; }
+        .hotspot { position: absolute; width: 14px; height: 14px; background: #1E293B; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.2); border: 2px solid white;}
         .hotspot:hover { background: #3B82F6; transform: translate(-50%, -50%) scale(1.3); }
-        .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
+        .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); border-color: white;}
 
         .lock-label { position: absolute; font-size: 10px; font-weight: 800; color: #1E293B; text-align: center; pointer-events: none; text-transform: uppercase; line-height: 1.1; white-space: nowrap; z-index: 5; }
         .lock-label.red { color: #DC2626; z-index: 15; background: rgba(255,255,255,0.9); padding: 0 4px; border-radius: 4px; }
@@ -341,8 +341,8 @@
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
                             <option value="OK">( ✓ ) Sin Novedad</option>
-                            <option value="HALLAZGO">( ! ) Reportar Daño Estructura</option>
-                            <option value="OTROS">( ! ) OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="HALLAZGO">( ⚠ ) Reportar Daño Estructura</option>
+                            <option value="OTROS">( ⚠ ) OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
@@ -375,8 +375,8 @@
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
                             <option value="OK">( ✓ ) Sin Novedad</option>
-                            <option value="HALLAZGO">( ! ) Reportar Daño Estructura</option>
-                            <option value="OTROS">( ! ) OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="HALLAZGO">( ⚠ ) Reportar Daño Estructura</option>
+                            <option value="OTROS">( ⚠ ) OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
@@ -409,8 +409,8 @@
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
                             <option value="OK">( ✓ ) Sin Novedad</option>
-                            <option value="HALLAZGO">( ! ) Reportar Daño Estructura</option>
-                            <option value="OTROS">( ! ) OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="HALLAZGO">( ⚠ ) Reportar Daño Estructura</option>
+                            <option value="OTROS">( ⚠ ) OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_bulk" class="hallazgo-panel">
@@ -443,9 +443,9 @@
                         <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
                         <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
                             <option value="OK">( ✓ ) Sin Novedad</option>
-                            <option value="FUSELAJE">( ! ) Reportar Daño Estructura / Puerta MD</option>
-                            <option value="LOCKS">( ! ) Mapear Daño en Seguros de Piso (CLS)</option>
-                            <option value="OTROS">( ! ) OTROS (Rodos dañados, guías, etc.)</option>
+                            <option value="FUSELAJE">( ⚠ ) Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">( ⚠ ) Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">( ⚠ ) OTROS (Rodos dañados, guías, etc.)</option>
                         </select>
 
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
@@ -1200,7 +1200,7 @@
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
                 container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
-                container.innerHTML = generarUnidadPallet("MD", {top:false, right:false, bottom:false, left:false});
+                container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD")}</div>`;
                 return;
             }
 
@@ -1225,19 +1225,24 @@
                 positionsMapped.push({ id: pos, col: col, row: row, isFullHeight: isFullHeight });
             });
 
-            const maxRow = (hasL && hasR) ? 2 : 1;
+            // Siempre forzamos 2 filas si hay algún ULD Transversal para que se centre bien visualmente
+            let maxRow = (hasL && hasR) ? 2 : 1;
+            if (positionsMapped.some(p => p.isFullHeight)) {
+                maxRow = 2;
+            }
+
             const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
             
-            // Anchuras dinámicas por columna para respetar proporción visual 88x125
+            // Anchuras dinámicas por columna (140px para Transversales, 200px para Longitudinales)
             let gridCols = colsArray.map(colNum => {
                 const isTrans = positionsMapped.some(p => p.col === colNum && isTransversal(p.id));
-                return isTrans ? "200px" : "280px";
+                return isTrans ? "140px" : "200px";
             });
 
             container.style.display = "grid";
             container.style.gridTemplateRows = `repeat(${maxRow}, 140px)`;
             container.style.gridTemplateColumns = gridCols.join(" ");
-            container.style.gap = "0px";
+            container.style.gap = "0px"; // Sin gap, quedan pegados como en la imagen
 
             let htmlStr = "";
             
@@ -1248,33 +1253,22 @@
                 if (maxRow === 2) {
                     if (hasFullHeight) {
                         const item = colItems.find(p => p.isFullHeight);
-                        const borders = { left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false };
-                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1};">${generarUnidadPallet(item.id, borders)}</div>`;
+                        // Se le añade un flex wrapper a la celda para que centre el A1 verticalmente (ya que mide 200px y las 2 filas suman 280px)
+                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id)}</div>`;
                     } else {
                         const itemR = colItems.find(p => p.row === 1);
                         const itemL = colItems.find(p => p.row === 2);
 
                         if (itemR) {
-                            const borders = {
-                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 1 || p.isFullHeight)),
-                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 1 || p.isFullHeight)),
-                                bottom: !!itemL, top: false
-                            };
-                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(itemR.id, borders)}</div>`;
+                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemR.id)}</div>`;
                         }
                         if (itemL) {
-                            const borders = {
-                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 2 || p.isFullHeight)),
-                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 2 || p.isFullHeight)),
-                                top: !!itemR, bottom: false
-                            };
-                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1};">${generarUnidadPallet(itemL.id, borders)}</div>`;
+                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(itemL.id)}</div>`;
                         }
                     }
                 } else {
                     colItems.forEach(item => {
-                        const borders = { left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false };
-                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(item.id, borders)}</div>`;
+                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; align-items:center; justify-content:center;">${generarUnidadPallet(item.id)}</div>`;
                     });
                 }
             });
@@ -1293,15 +1287,15 @@
             container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
         }
 
-        function generarUnidadPallet(titulo, borders) {
-            let styleStr = `position: relative; width: 100%; height: 100%; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box;`;
-            
-            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1; margin-top: -3px;`;
-            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1; margin-bottom: -3px;`;
-            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; margin-right: -3px; z-index:2;`;
-            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1; margin-left: -3px;`;
-
+        function generarUnidadPallet(titulo) {
             const isTrans = isTransversal(titulo);
+            
+            // Tamaños fijos matemáticos
+            let baseWidth = isTrans ? 140 : 200;
+            let baseHeight = isTrans ? 200 : 140;
+
+            // Todos con bordes sólidos y definidos como en la imagen final
+            let styleStr = `position: relative; width: ${baseWidth}px; height: ${baseHeight}px; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
             
             let html = `
             <div style="${styleStr}">
@@ -1317,8 +1311,8 @@
             };
 
             if (isTrans) {
-                // Transversal ULDs (A1, A13, D, E)
-                // Top/Bottom (88" sides) - 4 locks
+                // Transversal ULDs (A1, A13, D, E) -> 140w x 200h
+                // Top/Bottom (88" sides) - 4 locks -> 15%, 38%, 62%, 85%
                 html += addLock('Side Corner (Top L)', '15%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
                 html += addLock('Side NC 1', '38%', '-7px', 'SIDE<br>NC', 'lbl-top');
                 html += addLock('Side NC 2', '62%', '-7px', 'SIDE<br>NC', 'lbl-top');
@@ -1329,26 +1323,26 @@
                 html += addLock('Side NC 2', '62%', '100%', 'SIDE<br>NC', 'lbl-bot');
                 html += addLock('Side Corner (Bot R)', '85%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
 
-                // Left/Right (125" sides) - 5 locks
-                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '10%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '-7px', '30%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                html += addLock('Fwd/Aft NC 3', '-7px', '70%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '90%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                // Left/Right (125" sides) - 5 locks -> 0%, 25%, 50%, 75%, 100%
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '0%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '25%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 3', '-7px', '75%', 'FWD/AFT<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '100%', 'FWD/AFT<br>CORNER', 'lbl-left');
 
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '25%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 3', '100%', '75%', 'FWD/AFT<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'FWD/AFT<br>CORNER', 'lbl-right');
             } else {
-                // Longitudinal ULDs (A2R, A2L, etc.)
+                // Longitudinal ULDs (A2R, A2L, etc.) -> 200w x 140h
                 const isR = titulo.includes('R');
                 const isL = titulo.includes('L');
                 const isTopCenterline = isL; 
                 const isBotCenterline = isR; 
 
-                // Top/Bot (125" side) - 5 locks
+                // Top/Bot (125" side) - 5 locks (10%, 30%, 50%, 70%, 90%)
                 html += addLock('Side Corner (Top L)', '10%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
                 html += addLock('Side NC 1', '30%', '-7px', 'SIDE<br>NC', 'lbl-top');
                 html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'CENTERLINE<br>LOCKS' : 'SIDE<br>NC', 'lbl-top', isTopCenterline);
@@ -1361,9 +1355,9 @@
                 html += addLock('Side NC 3', '70%', '100%', 'SIDE<br>NC', 'lbl-bot');
                 html += addLock('Side Corner (Bot R)', '90%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
 
-                // Left/Right (88" sides) - 4 locks
+                // Left/Right (88" sides) - 4 locks -> CREMALLERA ZIPPER (Alineación con el Transversal)
                 if (isR) {
-                    // R pallets: zippers to upper half of A1
+                    // Right Pallets (e.g., A2R): Las de la izquierda se alinean con la mitad superior de A1 (0 a 100% de A2R corresponde a 0 a 50% de A1 visualmente en el DOM)
                     html += addLock('Fwd/Aft Corner (L Top)', '-7px', '20%', 'FWD/AFT<br>CORNER', 'lbl-left');
                     html += addLock('Fwd/Aft NC 1', '-7px', '60%', 'FWD/AFT<br>NC', 'lbl-left');
                     html += addLock('Fwd/Aft NC 2', '-7px', '80%', 'FWD/AFT<br>NC', 'lbl-left');
@@ -1374,7 +1368,7 @@
                     html += addLock('Fwd/Aft NC 2', '100%', '80%', 'FWD/AFT<br>NC', 'lbl-right');
                     html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'FWD/AFT<br>CORNER', 'lbl-right');
                 } else if (isL) {
-                    // L pallets: zippers to lower half of A1
+                    // Left Pallets (e.g., A2L): Las de la izquierda se alinean con la mitad inferior de A1
                     html += addLock('Fwd/Aft Corner (L Top)', '-7px', '0%', 'FWD/AFT<br>CORNER', 'lbl-left');
                     html += addLock('Fwd/Aft NC 1', '-7px', '20%', 'FWD/AFT<br>NC', 'lbl-left');
                     html += addLock('Fwd/Aft NC 2', '-7px', '40%', 'FWD/AFT<br>NC', 'lbl-left');
@@ -1385,6 +1379,7 @@
                     html += addLock('Fwd/Aft NC 2', '100%', '40%', 'FWD/AFT<br>NC', 'lbl-right');
                     html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'FWD/AFT<br>CORNER', 'lbl-right');
                 } else {
+                    // Standard if something weird happens (fallback)
                     html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'FWD/AFT<br>CORNER', 'lbl-left');
                     html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'FWD/AFT<br>NC', 'lbl-left');
                     html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'FWD/AFT<br>NC', 'lbl-left');
