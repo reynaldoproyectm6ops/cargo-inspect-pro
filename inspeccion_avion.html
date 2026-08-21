@@ -35,85 +35,31 @@
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent;}
         
         /* =========================================
-           SIDEBAR OSCURO PROFESIONAL (ANIMADO)
+           SIDEBAR OSCURO PROFESIONAL
         ========================================= */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: var(--amerijet-blue-dark);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-            flex-shrink: 0;
-        }
-
+        .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); flex-shrink: 0; }
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px; cursor: pointer;}
         .sidebar-header span { font-weight: 900; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
-
         .sidebar-user { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .user-avatar { width: 40px; height: 40px; background: #38BDF8; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #051529; flex-shrink: 0;}
         .user-info-text { display: flex; flex-direction: column; overflow: hidden; }
         .user-info-text strong { font-size: 14px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .badge-rol { background: rgba(56,189,248,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 800; color: #38BDF8; margin-top: 4px; width: fit-content;}
-
         .sidebar-nav { flex: 1; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
         
-        @keyframes iconBounce {
-            0% { transform: scale(1) translateY(0); }
-            50% { transform: scale(1.15) translateY(-3px); }
-            100% { transform: scale(1.1) translateY(-1px); }
-        }
-
-        .nav-link {
-            padding: 12px 15px;
-            text-decoration: none;
-            color: #94A3B8;
-            font-weight: 700;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-        }
-        
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: #38BDF8;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-            border-radius: 0 4px 4px 0;
-        }
-
+        @keyframes iconBounce { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.15) translateY(-3px); } 100% { transform: scale(1.1) translateY(-1px); } }
+        .nav-link { padding: 12px 15px; text-decoration: none; color: #94A3B8; font-weight: 700; border-radius: 8px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 12px; display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 0.5px; position: relative; overflow: hidden; border: none; background: transparent; cursor: pointer; text-align: left; width: 100%; }
+        .nav-link::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: #38BDF8; transform: scaleY(0); transition: transform 0.3s ease; border-radius: 0 4px 4px 0; }
         .nav-link:hover { background: rgba(56, 189, 248, 0.08); color: white; transform: translateX(4px); }
         .nav-link:hover::before { transform: scaleY(1); }
         .nav-link svg { transition: color 0.3s ease; flex-shrink: 0; }
         .nav-link:hover svg { animation: iconBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; color: #38BDF8; }
-
         .nav-link.active { background: #38BDF8; color: #0F172A; box-shadow: 0 4px 15px rgba(56,189,248,0.3); font-weight: 900; transform: translateX(0); }
         .nav-link.active::before { display: none; }
         .nav-link.active svg { color: #0F172A; animation: none; transform: none; }
-
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .version-badge { text-align: center; color: #64748B; font-size: 11px; margin-bottom: 12px; font-weight: 800; letter-spacing: 1px; }
-
         .btn-logout { background-color: transparent; color: #F87171; border: 1px solid rgba(248,113,113,0.3); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 800; transition: 0.2s; font-size: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase;}
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
@@ -129,15 +75,10 @@
         .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; width: 100%; flex: 1; }
         
-        /* Ajuste Mobile para tarjeta de información */
         .info-card { background: var(--amerijet-blue-dark); padding: 20px 25px; border-radius: 12px; color: white; display: flex; flex-direction: column; align-items: flex-start; box-shadow: 0 4px 15px rgba(26,54,93,0.15); gap: 15px;}
-        @media (min-width: 768px) {
-            .info-card { flex-direction: row; justify-content: space-between; align-items: center; }
-            .info-card .inspector-group { align-items: flex-end; }
-        }
+        @media (min-width: 768px) { .info-card { flex-direction: row; justify-content: space-between; align-items: center; } .info-card .inspector-group { align-items: flex-end; } }
         .inspector-group { display: flex; flex-direction: column; width: 100%; }
         @media (min-width: 768px) { .inspector-group { width: auto; } }
-
         .info-card h1 { font-size: 28px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
         .info-card select { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; width: 100%;}
         .info-card select option { color: #333; }
@@ -171,30 +112,48 @@
         .p-cell:hover, .p-half:hover { background: #CBD5E1; }
         .p-cell.selected, .p-half.selected, .p-wide.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
 
-        /* PALETA INTERACTIVA DE LOCKS MODULAR */
-        .pallet-locks-container { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 30px 10px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
+        /* =========================================
+           PALETA INTERACTIVA MODULAR (NUEVA LÓGICA)
+        ========================================= */
+        .pallet-locks-container { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 45px 20px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
         
         #palletBoxRenderHTML {
-            display: grid;
-            gap: 0;
+            position: relative;
             margin: 0 auto;
-            justify-content: center;
             transition: all 0.3s;
+            /* width y height se inyectan via JS */
         }
 
-        .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; }
-        .hotspot:hover { background: #3B82F6; transform: scale(1.3); }
-        .hotspot.active { background: var(--amerijet-red); transform: scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
+        .pallet-box-unit {
+            position: absolute;
+            background: white;
+            border: 3px solid #1E293B;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        .lock-label { position: absolute; font-size: 9px; font-weight: 800; color: #1E293B; text-align: center; width: 80px; transform: translateX(-50%); pointer-events: none; text-transform: uppercase;}
+        .pallet-core-text {
+            font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
+        }
+
+        .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); }
+        .hotspot:hover { background: #3B82F6; transform: translate(-50%, -50%) scale(1.3); }
+        .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
+
+        .lock-label { position: absolute; font-size: 10px; font-weight: 800; color: #1E293B; text-align: center; pointer-events: none; text-transform: uppercase; line-height: 1.1; white-space: nowrap; z-index: 5; }
         .lock-label.red { color: #DC2626; }
+        
+        /* Ajuste de etiquetas para no superponerse a los puntos */
+        .lbl-top { transform: translate(-50%, -25px); }
+        .lbl-bot { transform: translate(-50%, 15px); }
+        .lbl-left { transform: translate(-100%, -50%); padding-right: 12px; text-align: right; }
+        .lbl-right { transform: translate(0%, -50%); padding-left: 12px; text-align: left; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
-
-        .counter-badge { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E3A8A; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 8px; margin-right: 6px; text-transform: uppercase;}
-        .counter-badge.total { background: #1E3A8A; color: white; border-color: #1E3A8A; }
 
         .matrix-container { margin-top: 15px; }
         .compartment-scroll { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 25px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px 15px 5px 15px; }
@@ -219,25 +178,14 @@
         .btn-pdf { background: #10B981; box-shadow: 0 4px 10px rgba(16,185,129,0.15); }
         .btn-pdf:hover { background: #059669; transform: translateY(-1px);}
 
-        /* MODALES Y TOAST */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px;}
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;}
-
-        /* LOADING OVERLAY */
-        #loadingOverlay {
-            flex-direction: column;
-            color: white;
-            z-index: 9999;
-        }
-        .spinner {
-            width: 50px; height: 50px;
-            animation: spin 1s linear infinite;
-        }
+        
+        #loadingOverlay { flex-direction: column; color: white; z-index: 9999; }
+        .spinner { width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        #renderContainer { position: absolute; left: -9999px; top: 0; width: 800px; z-index: -100; background: white; }
+        #renderContainer { position: absolute; left: -9999px; top: 0; width: 1200px; z-index: -100; background: white; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
-
         #toast-container { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none; }
         .toast { padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideUp 0.3s ease-out forwards; display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
         .toast.success { background: #10B981; color: white; border: 1px solid #059669;}
@@ -253,10 +201,7 @@
             .menu-toggle { display: block; }
             .container { padding: 15px; }
             .bottom-bar { left: 0; padding: 12px 15px; }
-            
-            .header-info-mobile {
-                display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-            }
+            .header-info-mobile { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
         }
     </style>
 </head>
@@ -310,23 +255,6 @@
                 </svg>
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </button>
-
-            <button class="nav-link" onclick="navegarA('admin_panel.html')" id="btnAdminPanel" style="display: none;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-                <span>PANEL DE CONTROL</span>
-            </button>
-
-            <button class="nav-link" onclick="navegarA('reporte_vuelos.html')" id="btnReportesHistoricos" style="display: none;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                    <path d="M3 3v5h5"></path>
-                    <path d="M12 7v5l4 2"></path>
-                </svg>
-                <span>HISTORIAL DE VUELOS</span>
-            </button>
         </nav>
 
         <div class="sidebar-footer">
@@ -348,7 +276,7 @@
                 <div class="header-title">Inspección Aeronave<span>Reporte Estructural</span></div>
             </div>
             
-            <div class="header-info-mobile" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
+            <div class="header-info-mobile">
                 <div style="font-size: 11px; font-weight: 900; background: #EFF6FF; color: var(--amerijet-blue); padding: 6px 12px; border-radius: 6px; border: 1px solid #BFDBFE; white-space: nowrap;" id="lblTailHead">---</div>
                 <button class="btn-volver-top" onclick="navegarA('dashboard.html')">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -360,7 +288,6 @@
         <main class="main-content">
             <div class="container">
                 
-                <!-- TARJETA AZUL SUPERIOR CON SELECTOR DINÁMICO -->
                 <div class="info-card">
                     <div>
                         <div style="font-size: 11px; opacity: 0.9; font-weight: 800; text-transform: uppercase;">Vuelo Operativo</div>
@@ -374,7 +301,6 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 1: INSPECCIÓN BÁSICA -->
                 <div class="card">
                     <div class="card-header">1. Inspección Estructural Básica</div>
                     <p style="font-size:12px; color:#64748B; margin-bottom:15px; font-weight: 600;">
@@ -542,9 +468,9 @@
                     <div id="wrapperPaletaLocks" class="pallet-locks-container" style="display:block;">
                         <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:25px; text-align: left;">2. Selecciona el/los seguro(s) dañado(s) (Múltiple):</div>
                         
-                        <!-- AQUI ENTRA LA LÓGICA MODULAR DE CAJAS DINÁMICAS (CSS GRID) -->
+                        <!-- AQUI ENTRA EL MOTOR DE GRID DINÁMICO ABSOLUTO -->
                         <div id="palletBoxRenderHTML">
-                            <!-- El grid y las cajas individuales se renderizan via JS -->
+                            <!-- El lienzo de cajas se inyecta via JS -->
                         </div>
                     </div>
 
@@ -552,7 +478,7 @@
                         <div style="font-size:12px; font-weight:800; color:var(--amerijet-blue); margin-bottom:10px; text-transform:uppercase;">3. Detalles y Evidencia</div>
                         <div style="display:flex; flex-direction:column; gap:8px; margin-bottom: 12px;">
                             <input type="text" id="inpUbicacion" placeholder="Celdas (Ej: A1, C2)" style="width:100%; font-weight:bold; background: #EFF6FF;" readonly>
-                            <input type="text" id="inpComponente" placeholder="Seguros (Ej: Side Corner, Centerline)" style="width:100%; font-weight:bold; background: #FFF1F2;" readonly>
+                            <input type="text" id="inpComponente" placeholder="Seguros" style="width:100%; font-weight:bold; background: #FFF1F2;" readonly>
                         </div>
                         <select id="selDanoSeveridad" onchange="marcarCambios()">
                             <option value="">-- Naturaleza del Daño --</option>
@@ -734,7 +660,9 @@
     <!-- MODAL DE CONFIRMACIÓN -->
     <div class="modal-overlay" id="customConfirmModal" style="z-index: 3000;">
         <div class="modal-content">
-            <div style="font-size: 45px; margin-bottom: 10px; color: var(--amerijet-red);">⚠️</div>
+            <div style="display:flex; justify-content:center; margin-bottom: 10px; color: var(--amerijet-red);">
+                <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
             <h3 id="confirmTitle" style="font-weight: 900; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">Confirmar</h3>
             <p id="confirmMessage" style="font-size: 13px; color: #475569; margin-bottom: 25px; line-height: 1.5; font-weight: 600;"></p>
             <div style="display: flex; gap: 10px; flex-direction:column;">
@@ -1129,12 +1057,107 @@
                 pFus.style.display = 'block'; pLocks.style.display = 'none';
             } else if (sel.value === 'LOCKS') {
                 pFus.style.display = 'none'; pLocks.style.display = 'block';
+                // Reseteamos el mapa al abrir
+                dibujarPlanoAvionCSS(configActualGlobal, null);
+                document.getElementById('inpUbicacion').value = "";
+                document.getElementById('inpComponente').value = "";
             } else {
                 pFus.style.display = 'none'; pLocks.style.display = 'none';
             }
         }
 
-        // --- FUNCIÓN CENTRAL: GENERADOR DE CAJAS DINÁMICAS (MAPEO MODULAR) ---
+        // =========================================
+        // MOTOR DE DIBUJO ESTRUCTURAL (EL ROMPECABEZAS)
+        // =========================================
+
+        // Generador maestro de coordenadas del avión
+        const planeData = {};
+        function buildPlaneCoordinates() {
+            // Config A
+            let xA = 0; planeData['A'] = {};
+            planeData['A']['A1'] = {x: xA, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xA += 140;
+            for(let i=2; i<=12; i++) {
+                planeData['A']['A'+i+'R'] = {x: xA, y: 0, w: 200, h: 130, o: 'LONG', c: 'R'};
+                planeData['A']['A'+i+'L'] = {x: xA, y: 130, w: 200, h: 130, o: 'LONG', c: 'L'};
+                xA += 200;
+            }
+            planeData['A']['A13'] = {x: xA, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+
+            // Config B
+            let xB = 0; planeData['B'] = {};
+            planeData['B']['B1'] = {x: xB, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xB += 140;
+            for(let i=2; i<=13; i++) {
+                planeData['B']['B'+i+'R'] = {x: xB, y: 0, w: 200, h: 130, o: 'LONG', c: 'R'};
+                planeData['B']['B'+i+'L'] = {x: xB, y: 130, w: 200, h: 130, o: 'LONG', c: 'L'};
+                xB += 200;
+            }
+            planeData['B']['B14'] = {x: xB, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+
+            // Config C
+            let xC = 0; planeData['C'] = {};
+            planeData['C']['A1'] = {x: xC, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xC += 140;
+            for(let i=2; i<=12; i++) {
+                planeData['C']['C'+i] = {x: xC, y: 45, w: 200, h: 170, o: 'LONG', c: 'C'};
+                xC += 200;
+            }
+            planeData['C']['A13'] = {x: xC, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+
+            // Config D
+            let xD = 0; planeData['D'] = {};
+            planeData['D']['A1'] = {x: xD, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xD += 140;
+            for(let i=2; i<=16; i++) {
+                planeData['D']['D'+i] = {x: xD, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+                xD += 140;
+            }
+            planeData['D']['A13'] = {x: xD, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+
+            // Config E
+            let xE = 0; planeData['E'] = {};
+            planeData['E']['A1'] = {x: xE, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xE += 140;
+            for(let i=2; i<=15; i++) {
+                planeData['E']['E'+i] = {x: xE, y: 0, w: 150, h: 260, o: 'TRANS', c: 'C'};
+                xE += 150;
+            }
+            planeData['E']['A13'] = {x: xE, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+
+            // Config G
+            let xG = 0; planeData['G'] = {};
+            planeData['G']['A1'] = {x: xG, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xG += 140;
+            planeData['G']['C2'] = {x: xG, y: 45, w: 200, h: 170, o: 'LONG', c: 'C'}; xG += 200;
+            planeData['G']['G/P1'] = {x: xG, y: 0, w: 300, h: 260, o: 'LONG', c: 'C'}; xG += 300;
+            for(let i=2; i<=5; i++) {
+                planeData['G']['P'+i] = {x: xG, y: 0, w: 300, h: 260, o: 'LONG', c: 'C'};
+                xG += 300;
+            }
+            planeData['G']['A13'] = {x: xG, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
+        }
+        buildPlaneCoordinates();
+
+        // --- CREADOR DE PUNTOS HOTSPOTS (18 x CAJA) ---
+        function renderHotspot(idTrackingBox, edge, index, isCorner, isCenterline, px, py, isFwdAft) {
+            let label = ""; let colorCls = ""; let nameForTracking = "";
+            
+            if (isCenterline) {
+                label = "Centerline<br>Lock"; colorCls = "red"; nameForTracking = `Centerline (${edge} ${index+1})`;
+            } else if (isCorner) {
+                label = isFwdAft ? "Fwd/Aft<br>Corner" : "Side<br>Corner"; nameForTracking = isFwdAft ? `Fwd/Aft Corner (${edge} ${index+1})` : `Side Corner (${edge} ${index+1})`;
+            } else {
+                label = isFwdAft ? "Fwd/Aft<br>Non-Corner" : "Side<br>Non-Corner"; nameForTracking = isFwdAft ? `Fwd/Aft Non-Corner (${edge} ${index+1})` : `Side Non-Corner (${edge} ${index+1})`;
+            }
+
+            let lblClass = "";
+            if (edge === 'T') lblClass = 'lbl-top';
+            if (edge === 'B') lblClass = 'lbl-bot';
+            if (edge === 'L') lblClass = 'lbl-left';
+            if (edge === 'R') lblClass = 'lbl-right';
+
+            return `
+            <div class="hotspot" style="left: ${px}; top: ${py};" onclick="toggleLock('${idTrackingBox} - ${nameForTracking}', this)"></div>
+            <div class="lock-label ${lblClass} ${colorCls}" style="left: ${px}; top: ${py};">${label}</div>
+            `;
+        }
+
+        // --- EL MOTOR DE ENSAMBLAJE (El Rompecabezas) ---
         function renderizarBloqueDinamicoPallets(posicionesSeleccionadas) {
             const container = document.getElementById('palletBoxRenderHTML');
             if (!container) return;
@@ -1142,163 +1165,135 @@
             container.innerHTML = "";
             
             if (posicionesSeleccionadas.length === 0) {
-                // Estado por defecto (Vacío)
-                container.style.gridTemplateColumns = "250px";
-                container.style.gridTemplateRows = "150px";
-                container.style.transform = "scale(1)";
-                container.innerHTML = generarUnidadPallet("MD", {top:false, right:false, bottom:false, left:false});
+                container.style.width = "250px"; container.style.height = "150px";
+                container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
+                container.innerHTML = `<div class="pallet-box-unit" style="width:100%; height:100%;"><div class="pallet-core-text">MD</div></div>`;
                 return;
             }
 
-            // 1. Extraer filas y columnas para definir la matriz
-            let rows = new Set();
-            let cols = new Set();
-            let hasL = false; let hasR = false;
-            let isP = false;
+            const currentConfigData = planeData[configActualGlobal];
+            if (!currentConfigData) return;
 
-            let positionsMapped = [];
+            // Extraer cajas seleccionadas con sus coordenadas maestras
+            let boxes = [];
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 
             posicionesSeleccionadas.forEach(pos => {
-                let row = 1, col = 1, isFullWidth = false;
-                let match = pos.match(/([A-Z]+)(\d+)([A-Z]*)/);
-                if (match) {
-                    row = parseInt(match[2]);
-                    if (match[3] === 'L') { col = 2; hasL = true; cols.add(2); }
-                    else if (match[3] === 'R') { col = 1; hasR = true; cols.add(1); }
-                    else { isFullWidth = true; cols.add(1); cols.add(2); }
-                    rows.add(row);
-                } else if (pos.startsWith('P') || pos.includes('/P')) {
-                     isP = true;
-                     row = parseInt(pos.replace(/\D/g, '')) || 1;
-                     isFullWidth = true;
-                     rows.add(row);
-                     cols.add(1);
+                const boxData = currentConfigData[pos];
+                if(boxData) {
+                    let b = { id: pos, ...boxData };
+                    boxes.push(b);
+                    if(b.x < minX) minX = b.x;
+                    if(b.y < minY) minY = b.y;
+                    if(b.x + b.w > maxX) maxX = b.x + b.w;
+                    if(b.y + b.h > maxY) maxY = b.y + b.h;
                 }
-                positionsMapped.push({ id: pos, row: row, col: col, isFullWidth: isFullWidth });
             });
 
-            // Si es P, las filas numéricas en realidad son columnas una tras otra.
-            if (isP) {
-                positionsMapped.sort((a,b) => a.row - b.row);
-                positionsMapped.forEach((p, idx) => { p.row = 1; p.col = idx + 1; });
-                hasR = true; hasL = true; 
-            }
+            const totalW = maxX - minX;
+            const totalH = maxY - minY;
 
-            let maxCol = (hasL && hasR) ? 2 : (isP ? positionsMapped.length : 1);
-            if(positionsMapped.some(p => p.col === 2) && maxCol < 2) maxCol = 2;
-
-            const rowsSet = [...new Set(positionsMapped.map(p => p.row))].sort((a,b)=>a-b);
-            
-            container.style.display = "grid";
-            container.style.gridTemplateColumns = `repeat(${maxCol}, 280px)`;
-            container.style.gridTemplateRows = `repeat(${rowsSet.length}, 160px)`;
-            container.style.gap = "0px";
+            container.style.width = `${totalW}px`;
+            container.style.height = `${totalH}px`;
 
             let htmlStr = "";
 
-            rowsSet.forEach((rowNum, rowIndex) => {
-                const rowItems = positionsMapped.filter(p => p.row === rowNum);
+            boxes.forEach(box => {
+                // Coordenadas relativas dentro del contenedor
+                const relX = box.x - minX;
+                const relY = box.y - minY;
+
+                // Verificación de vecinos para eliminar bordes y evitar seguros duplicados
+                const hasNeighborBottom = boxes.some(n => n.y === box.y + box.h && n.x < box.x + box.w && n.x + n.w > box.x);
+                const hasNeighborRight = boxes.some(n => n.x === box.x + box.w && n.y < box.y + box.h && n.y + n.h > box.y);
+                const hasNeighborTop = boxes.some(n => n.y + n.h === box.y && n.x < box.x + box.w && n.x + n.w > box.x);
+                const hasNeighborLeft = boxes.some(n => n.x + n.w === box.x && n.y < box.y + box.h && n.y + n.h > box.y);
+
+                let boxStyle = `left: ${relX}px; top: ${relY}px; width: ${box.w}px; height: ${box.h}px;`;
                 
-                if (isP) {
-                     for (let c = 1; c <= maxCol; c++) {
-                         const item = rowItems.find(p => p.col === c);
-                         if (item) {
-                             const borders = { top: false, bottom: false, left: c > 1, right: c < maxCol };
-                             htmlStr += `<div style="grid-row:${rowIndex+1}; grid-column:${c};">${generarUnidadPallet(item.id, borders)}</div>`;
-                         }
-                     }
-                } else {
-                    const hasFullWidth = rowItems.some(p => p.isFullWidth);
-                    
-                    if (maxCol === 2) {
-                        if (hasFullWidth) {
-                            const item = rowItems.find(p => p.isFullWidth);
-                            const borders = { top: rowsSet.includes(rowNum - 1), bottom: rowsSet.includes(rowNum + 1), left: false, right: false };
-                            htmlStr += `<div style="grid-row:${rowIndex+1}; grid-column:1 / span 2;">${generarUnidadPallet(item.id, borders)}</div>`;
-                        } else {
-                            const itemR = rowItems.find(p => p.col === 1);
-                            const itemL = rowItems.find(p => p.col === 2);
+                if (hasNeighborBottom) boxStyle += ` border-bottom: 3px dashed #CBD5E1; z-index: 2; margin-bottom: -3px;`;
+                if (hasNeighborRight) boxStyle += ` border-right: 3px dashed #CBD5E1; z-index: 2; margin-right: -3px;`;
+                if (hasNeighborTop) boxStyle += ` border-top: none;`;
+                if (hasNeighborLeft) boxStyle += ` border-left: none;`;
 
-                            if (itemR) {
-                                const borders = {
-                                    top: positionsMapped.some(p => p.row === rowNum - 1 && (p.col === 1 || p.isFullWidth)),
-                                    bottom: positionsMapped.some(p => p.row === rowNum + 1 && (p.col === 1 || p.isFullWidth)),
-                                    right: !!itemL, left: false
-                                };
-                                htmlStr += `<div style="grid-row:${rowIndex+1}; grid-column:1;">${generarUnidadPallet(itemR.id, borders)}</div>`;
-                            }
+                let boxHtml = `<div class="pallet-box-unit" style="${boxStyle}"><div class="pallet-core-text">${box.id}</div>`;
 
-                            if (itemL) {
-                                const borders = {
-                                    top: positionsMapped.some(p => p.row === rowNum - 1 && (p.col === 2 || p.isFullWidth)),
-                                    bottom: positionsMapped.some(p => p.row === rowNum + 1 && (p.col === 2 || p.isFullWidth)),
-                                    left: !!itemR, right: false
-                                };
-                                htmlStr += `<div style="grid-row:${rowIndex+1}; grid-column:2;">${generarUnidadPallet(itemL.id, borders)}</div>`;
-                            }
-                        }
-                    } else {
-                        rowItems.forEach(item => {
-                            const borders = { top: rowsSet.includes(rowNum - 1), bottom: rowsSet.includes(rowNum + 1), left: false, right: false };
-                            htmlStr += `<div style="grid-row:${rowIndex+1}; grid-column:1;">${generarUnidadPallet(item.id, borders)}</div>`;
-                        });
+                // Construcción de los 18 Puntos (Basado en Orientación)
+                if (box.o === 'LONG') {
+                    // TOP (5 locks) -> Solo dibujar si no tiene vecino arriba
+                    if (!hasNeighborTop) {
+                        const isCenter = box.c === 'L'; // Si es la L, su borde Top es Centerline
+                        boxHtml += renderHotspot(box.id, 'T', 0, true, isCenter, '10%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 1, false, isCenter, '30%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 2, false, isCenter, '50%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 3, false, isCenter, '70%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 4, true, isCenter, '90%', '0%', false);
                     }
+                    // BOTTOM (5 locks) -> Siempre dibujar (se superpondrá o será el final)
+                    const isCenterB = box.c === 'R'; // Si es R, su borde Bot es Centerline
+                    boxHtml += renderHotspot(box.id, 'B', 0, true, isCenterB, '10%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 1, false, isCenterB, '30%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 2, false, isCenterB, '50%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 3, false, isCenterB, '70%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 4, true, isCenterB, '90%', '100%', false);
+                    
+                    // LEFT (4 locks) -> Solo dibujar si no tiene vecino izquierdo
+                    if (!hasNeighborLeft) {
+                        boxHtml += renderHotspot(box.id, 'L', 0, true, false, '0%', '15%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 1, false, false, '0%', '38%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 2, false, false, '0%', '62%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 3, true, false, '0%', '85%', true);
+                    }
+                    // RIGHT (4 locks)
+                    boxHtml += renderHotspot(box.id, 'R', 0, true, false, '100%', '15%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 1, false, false, '100%', '38%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 2, false, false, '100%', '62%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 3, true, false, '100%', '85%', true);
+                } 
+                else { // TRANSVERSAL
+                    // TOP (4 locks) -> Side
+                    if (!hasNeighborTop) {
+                        boxHtml += renderHotspot(box.id, 'T', 0, true, false, '15%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 1, false, false, '38%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 2, false, false, '62%', '0%', false);
+                        boxHtml += renderHotspot(box.id, 'T', 3, true, false, '85%', '0%', false);
+                    }
+                    // BOTTOM (4 locks) -> Side
+                    boxHtml += renderHotspot(box.id, 'B', 0, true, false, '15%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 1, false, false, '38%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 2, false, false, '62%', '100%', false);
+                    boxHtml += renderHotspot(box.id, 'B', 3, true, false, '85%', '100%', false);
+                    
+                    // LEFT (5 locks) -> Fwd/Aft
+                    if (!hasNeighborLeft) {
+                        boxHtml += renderHotspot(box.id, 'L', 0, true, false, '0%', '10%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 1, false, false, '0%', '30%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 2, false, false, '0%', '50%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 3, false, false, '0%', '70%', true);
+                        boxHtml += renderHotspot(box.id, 'L', 4, true, false, '0%', '90%', true);
+                    }
+                    // RIGHT (5 locks) -> Fwd/Aft
+                    boxHtml += renderHotspot(box.id, 'R', 0, true, false, '100%', '10%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 1, false, false, '100%', '30%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 2, false, false, '100%', '50%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 3, false, false, '100%', '70%', true);
+                    boxHtml += renderHotspot(box.id, 'R', 4, true, false, '100%', '90%', true);
                 }
+
+                boxHtml += `</div>`;
+                htmlStr += boxHtml;
             });
 
             container.innerHTML = htmlStr;
             
-            // Auto Scale para que quepa visualmente sin romper
-            let totalWidth = maxCol * 280;
-            let totalHeight = rowsSet.length * 160;
+            // Auto Scale visual (Para que quepa perfecto en la pantalla sin romper)
             let scale = 1;
-            
-            if (totalWidth > 400) scale = 400 / totalWidth;
-            if (totalHeight * scale > 350) scale = 350 / totalHeight; 
+            if (totalW > 350) scale = 350 / totalW;
+            if (totalH * scale > 300) scale = 300 / totalH; 
 
             container.style.transform = `scale(${scale})`;
             container.style.transformOrigin = "top center";
-            container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
-        }
-
-        function generarUnidadPallet(titulo, borders) {
-            let styleStr = `position: relative; width: 100%; height: 100%; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box;`;
-            
-            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1; margin-top: -3px;`;
-            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1; margin-bottom: -3px;`;
-            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; margin-right: -3px; z-index:2;`;
-            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1; margin-left: -3px;`;
-
-            return `
-            <div style="${styleStr}">
-                <div class="pallet-core-text" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:35px; color:#0F172A; pointer-events:none; z-index:1;">${titulo}</div>
-                
-                <!-- TOP EDGE -->
-                <div class="hotspot t-c-l" style="top:-7px; left:10%;" onclick="toggleLock('${titulo} - Side Corner (Top Left)', this)"></div>
-                <div class="hotspot t-nc-1" style="top:-7px; left:30%;" onclick="toggleLock('${titulo} - Side Non-Corner (Top 1)', this)"></div>
-                <div class="hotspot t-nc-2" style="top:-7px; left:50%;" onclick="toggleLock('${titulo} - Side Non-Corner (Top 2)', this)"></div>
-                <div class="hotspot t-nc-3" style="top:-7px; left:70%;" onclick="toggleLock('${titulo} - Side Non-Corner (Top 3)', this)"></div>
-                <div class="hotspot t-c-r" style="top:-7px; left:90%;" onclick="toggleLock('${titulo} - Side Corner (Top Right)', this)"></div>
-
-                <!-- BOTTOM EDGE -->
-                <div class="hotspot b-c-l" style="bottom:-7px; left:10%;" onclick="toggleLock('${titulo} - Side Corner (Bot Left)', this)"></div>
-                <div class="hotspot b-nc-1" style="bottom:-7px; left:30%;" onclick="toggleLock('${titulo} - Centerline (Bot 1)', this)"></div>
-                <div class="hotspot b-nc-2" style="bottom:-7px; left:50%;" onclick="toggleLock('${titulo} - Centerline (Bot 2)', this)"></div>
-                <div class="hotspot b-nc-3" style="bottom:-7px; left:70%;" onclick="toggleLock('${titulo} - Centerline (Bot 3)', this)"></div>
-                <div class="hotspot b-c-r" style="bottom:-7px; left:90%;" onclick="toggleLock('${titulo} - Side Corner (Bot Right)', this)"></div>
-
-                <!-- LEFT EDGE -->
-                <div class="hotspot l-c-t" style="top:10%; left:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Corner (L Top)', this)"></div>
-                <div class="hotspot l-nc-1" style="top:35%; left:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Non-Corner (L 1)', this)"></div>
-                <div class="hotspot l-nc-2" style="top:65%; left:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Non-Corner (L 2)', this)"></div>
-                <div class="hotspot l-c-b" style="top:90%; left:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Corner (L Bot)', this)"></div>
-
-                <!-- RIGHT EDGE -->
-                <div class="hotspot r-c-t" style="top:10%; right:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Corner (R Top)', this)"></div>
-                <div class="hotspot r-nc-1" style="top:35%; right:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Non-Corner (R 1)', this)"></div>
-                <div class="hotspot r-nc-2" style="top:65%; right:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Non-Corner (R 2)', this)"></div>
-                <div class="hotspot r-c-b" style="top:90%; right:-7px;" onclick="toggleLock('${titulo} - Fwd/Aft Corner (R Bot)', this)"></div>
-            </div>`;
+            container.style.marginBottom = `${(totalH * scale) - totalH}px`; 
         }
 
         // --- DIBUJADO DE PLANOS SUPERIOR ---
@@ -1315,8 +1310,9 @@
             else if (config === 'G') { html += `<div class="p-cell" style="flex: 1;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div><div class="p-cell" style="flex: 1;" data-pos="C2" onclick="toggleCeldaPlano(this)">C2</div><div class="p-cell p-wide" data-pos="G/P1" onclick="toggleCeldaPlano(this)">G/P1</div><div class="p-cell p-wide" data-pos="P2" onclick="toggleCeldaPlano(this)">P2</div><div class="p-cell p-wide" data-pos="P3" onclick="toggleCeldaPlano(this)">P3</div><div class="p-cell p-wide" data-pos="P4" onclick="toggleCeldaPlano(this)">P4</div><div class="p-cell p-wide" data-pos="P5" onclick="toggleCeldaPlano(this)">P5</div><div class="p-cell" style="flex: 1;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; }
             html += `</div>`; cont.innerHTML = html;
             
-            renderizarBloqueDinamicoPallets([]); // Resetea el grid de abajo
+            renderizarBloqueDinamicoPallets([]); 
             document.getElementById('inpUbicacion').value = "";
+            document.getElementById('inpComponente').value = "";
         }
 
         function toggleCeldaPlano(element) {
@@ -1384,7 +1380,7 @@
                 
                 const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                 const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
-                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.85);">${gridHtml}</div></div>`;
+                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
                 
                 const cP = await html2canvas(rDiv, { scale: 1.5 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
                 rDiv.innerHTML = "";
@@ -1449,7 +1445,7 @@
 
             areasOrdenadas.forEach(area => {
                 if(gruposArea[area].length === 0) return; 
-                let areaHTML = `<div class="group-header"><span style="display:flex; align-items:center; gap:4px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
+                let areaHTML = `<div class="group-header"><span>📍 ${area}</span> <span style="color:#64748B; font-size:12px;">${gruposArea[area].length} items</span></div>`;
                 areaHTML += `<div class="compartment-scroll">`;
 
                 gruposArea[area].forEach(h => {
@@ -1648,7 +1644,7 @@
 
                         const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                         const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
-                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.85);">${gridHtml}</div></div>`;
+                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
                         
                         const cP = await html2canvas(rDiv, { scale: 1.5 }); 
                         h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
@@ -1741,7 +1737,6 @@
                             doc.setFont("Helvetica", "bold"); doc.text("CLS Maps Evidence:", 15, cy); cy += 4;
                             doc.addImage(h.imgAvion, 'JPEG', 15, cy, 180, 25); cy += 30;
                             
-                            // Ajuste dinámico de tamaño si la imagen de la paleta es muy ancha (ej: 4 pallets)
                             const propsPaleta = doc.getImageProperties(h.imgPaleta);
                             const ratioPaleta = Math.min(180 / propsPaleta.width, 60 / propsPaleta.height);
                             const wP = propsPaleta.width * ratioPaleta;
