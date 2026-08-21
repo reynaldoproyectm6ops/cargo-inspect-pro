@@ -137,19 +137,19 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        /* Puntos ajustados al estilo de ingeniería: rojos con borde visible */
-        .hotspot { position: absolute; width: 10px; height: 10px; background: #E11D48; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #1E293B; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
-        .hotspot:hover { background: #3B82F6; border-color: white; transform: translate(-50%, -50%) scale(1.3); }
-        .hotspot.active { background: #10B981; border-color: white; transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(16,185,129,0.8);}
+        /* Puntos ajustados al estilo de ingeniería: MÁS GRANDES (14px) */
+        .hotspot { position: absolute; width: 14px; height: 14px; background: #E11D48; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #1E293B; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+        .hotspot:hover { background: #3B82F6; border-color: white; transform: translate(-50%, -50%) scale(1.2); }
+        .hotspot.active { background: #10B981; border-color: white; transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 8px rgba(16,185,129,0.8);}
 
-        /* Etiquetas ultra-compactas que apuntan SIEMPRE HACIA ADENTRO del contenedor */
-        .lock-label { position: absolute; font-size: 7px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
+        /* Etiquetas ultra-compactas legibles (8px) */
+        .lock-label { position: absolute; font-size: 8px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
         .lock-label.red { color: #DC2626; z-index: 15; }
         
-        .lbl-top { transform: translate(-50%, 8px); } 
-        .lbl-bot { transform: translate(-50%, -100%); margin-top: -8px; } 
-        .lbl-left { transform: translate(12px, -50%); text-align: left; } 
-        .lbl-right { transform: translate(calc(-100% - 12px), -50%); text-align: right; }
+        .lbl-top { transform: translate(-50%, 10px); } 
+        .lbl-bot { transform: translate(-50%, -100%); margin-top: -10px; } 
+        .lbl-left { transform: translate(14px, -50%); text-align: left; } 
+        .lbl-right { transform: translate(calc(-100% - 14px), -50%); text-align: right; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
@@ -1201,7 +1201,7 @@
             
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
-                container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
+                container.style.transform = "scale(1.4)"; container.style.marginBottom = "0px";
                 container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD", {left:false,right:false,top:false,bottom:false,transLeft:false,transRight:false}, configActualGlobal)}</div>`;
                 return;
             }
@@ -1272,10 +1272,8 @@
                             transLeft: isTransLeft, transRight: isTransRight 
                         };
                         
+                        // Centrado absoluto nativo mediante Flexbox: encaja exactamente con la costura
                         let alignStyle = "align-items: center;";
-                        // Clave del centrado A1: Lo pegamos arriba y le damos padding para que cuadre exacto con los 5 puntos
-                        if (isTransversal(item.id)) alignStyle = "align-items: flex-start; padding-top: 22px;";
-                        
                         htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     } else {
                         const itemR = colItems.find(p => p.row === 1);
@@ -1307,7 +1305,6 @@
                             transLeft: isTransLeft, transRight: isTransRight
                         };
                         let alignStyle = "align-items: center;";
-                        if (isTransversal(item.id)) alignStyle = "align-items: flex-start; padding-top: 22px;";
                         htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     });
                 }
@@ -1317,10 +1314,12 @@
             
             let totalWidth = gridCols.reduce((acc, val) => acc + parseInt(val), 0);
             let totalHeight = maxRow * baseRowH;
-            let scale = 1;
             
-            if (totalWidth > 400) scale = 400 / totalWidth;
-            if (totalHeight * scale > 350) scale = 350 / totalHeight; 
+            // Ampliando la escala base para hacerlo notoriamente más grande y amigable a los clics
+            let scale = 1.4; 
+            
+            if (totalWidth * scale > 750) scale = 750 / totalWidth;
+            if (totalHeight * scale > 450) scale = 450 / totalHeight; 
 
             container.style.transform = `scale(${scale})`;
             container.style.transformOrigin = "top center";
@@ -1344,23 +1343,30 @@
                 else { w = 125; h = 85; }
             }
 
-            // 2. Lógica para EVITAR PUNTOS SUPERPUESTOS y DEJAR LOS DE A2R/A2L
+            // 2. Lógica para EVITAR PUNTOS SUPERPUESTOS y MANTENER LOS DE EN MEDIO
             let drawTop = !borders.top;
             let drawBottom = true;
             let drawLeft = !borders.left; 
-            let drawRight = !borders.right;
+            
+            // Modificación Clave: ¡Todos dibujan la derecha, dejando que el de la derecha la esconda!
+            let drawRight = true; 
 
-            if (!isTrans) {
-                // Si soy longitudinal (Ej: A2R), dibujo mi borde si mi vecino es transversal (A1)
+            if (isTrans) {
+                // Si el transversal tiene alguien a la derecha, debe ocultar su lado para que la costura de 8 puntos mande
+                if (borders.right) drawRight = false;
+                if (borders.left) drawLeft = false;
+            } else {
+                // Si el longitudinal se pega con un transversal, él (el longitudinal) fuerza dibujar el borde con los 8 puntos
                 if (borders.transLeft) drawLeft = true;
                 if (borders.transRight) drawRight = true;
-            } 
-            // Si soy transversal (A1), mi drawLeft/drawRight será false automáticamente si hay vecino longitudinal
+            }
 
             let styleStr = `position: relative; width: ${w}px; height: ${h}px; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
             
             if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1;`;
             if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1;`;
+            
+            // Si el borde se dibuja intermitente internamente:
             if (borders.right && !borders.transRight) styleStr += ` border-right: 3px dashed #CBD5E1; z-index:2;`;
             if (borders.left && !borders.transLeft) styleStr += ` border-left: 3px dashed #CBD5E1;`;
 
@@ -1427,7 +1433,7 @@
 
                 if (drawLeft) {
                     if (borders.transLeft) {
-                        // Aquí generamos exactamente 8 puntos distribuidos para que el A1 calce perfecto
+                        // 8 PUNTOS A LA IZQUIERDA PARA UNIRSE CON A1
                         if (isR) {
                             html += addLock('F/A NC 1', '0%', '14%', 'F/A NC', 'lbl-left');
                             html += addLock('F/A NC 2', '0%', '35%', 'F/A NC', 'lbl-left');
@@ -1455,7 +1461,7 @@
 
                 if (drawRight) {
                     if (borders.transRight) {
-                        // Igual que transLeft pero en espejo para el A13 (cuando va atrás)
+                        // 8 PUNTOS A LA DERECHA PARA UNIRSE CON A13
                         if (isR) {
                             html += addLock('F/A NC 1', '100%', '14%', 'F/A NC', 'lbl-right');
                             html += addLock('F/A NC 2', '100%', '35%', 'F/A NC', 'lbl-right');
@@ -1570,7 +1576,8 @@
                 const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
                 rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
                 
-                const cP = await html2canvas(rDiv, { scale: 1.5 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
+                // PDF resolution rendering increased
+                const cP = await html2canvas(rDiv, { scale: 2 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
                 rDiv.innerHTML = "";
 
                 matrizHallazgos.push({
@@ -1869,9 +1876,9 @@
 
                         const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                         const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
-                        rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
+                        rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(1);">${gridHtml}</div></div>`;
                         
-                        const cP = await html2canvas(rDiv, { scale: 1.5 }); 
+                        const cP = await html2canvas(rDiv, { scale: 2 }); 
                         h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
                         rDiv.innerHTML = ""; renderizarBloqueDinamicoPallets([]);
                     }
