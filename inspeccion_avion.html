@@ -691,6 +691,7 @@
     <div id="renderContainer"></div>
 
     <script>
+        // ¡IMPORTANTE! Revisa que esta clave no haya expirado o haya sido rotada en Supabase.
         const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZG9mZ2lra3JrYndqcGp6dmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyOTc1MTQsImV4cCI6MjA5ODg3MzUxNH0.TM7Vr5B2Yfr9vGd935U3gAaB_sPdKkybUsrFlvvf0nI'; 
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -785,6 +786,7 @@
             document.getElementById('customConfirmModal').style.display = 'flex';
         }
 
+        // --- INICIALIZACIÓN BLINDADA (ERROR CATCHING MEJORADO) ---
         async function inicializar() {
             showLoading("Conectando con la base de datos...");
             try {
@@ -820,6 +822,7 @@
                     return;
                 }
 
+                // Obtener Info del Vuelo
                 const { data: op, error: errOp } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, ruta, estacion_registro').eq('id', operacionId).single();
                 if (errOp) throw new Error("No se pudo obtener el vuelo: " + errOp.message);
                 if (!op) throw new Error("El vuelo seleccionado ya no existe en la base de datos.");
@@ -850,6 +853,7 @@
                     selInspector.innerHTML = '<option value="">Error al cargar personal</option>';
                 }
 
+                // Cargar Inspecciones Anteriores
                 const { data: logGuardado, error: errLog } = await supabaseClient.from('avion_inspecciones')
                     .select('notas_adicionales, inspector_nombre')
                     .eq('vuelo_operacion_id', operacionId)
@@ -882,6 +886,7 @@
                     selInspector.value = currentUser;
                 }
 
+                // Cargar Daños Previos
                 const { data: danosBD, error: errDanos } = await supabaseClient.from('avion_danos')
                     .select('*')
                     .eq('matricula_avion', vueloData.tail)
@@ -932,6 +937,7 @@
             }
         }
 
+        // --- SISTEMA DE INCIDENCIAS TEMPORALES ---
         function agregarIncidencia() {
             const areaInc = document.getElementById('sel_incidencia_area').value;
             const desc = document.getElementById('desc_incidencia').value.trim();
@@ -1038,6 +1044,7 @@
             marcarCambios(); renderizarIncidencias();
         }
 
+        // --- SISTEMA DE PANELES DE INPUT ---
         function togglePanelHallazgo(idCaja, sel) { 
             document.getElementById('panel_' + idCaja).style.display = (sel.value === 'HALLAZGO' || sel.value === 'OTROS') ? 'block' : 'none'; 
         }
@@ -1101,6 +1108,9 @@
             }
         }
 
+        // =========================================
+        // MOTOR DE DIBUJO ESTRUCTURAL (EL ROMPECABEZAS)
+        // =========================================
         const planeData = {};
         function buildPlaneCoordinates() {
             let xA = 0; planeData['A'] = {};
@@ -1171,104 +1181,167 @@
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
                 container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
-                container.innerHTML = `<div class="pallet-box-unit" style="width:100%; height:100%; border:3px solid #1E293B;"><div class="pallet-core-text" style="opacity:0.2;">MD</div></div>`;
+                container.innerHTML = generarUnidadPallet("MD", {top:false, right:false, bottom:false, left:false});
                 return;
             }
 
-            const currentConfigData = planeData[configActualGlobal];
-            if (!currentConfigData) return;
+            let colsSet = new Set();
+            let hasR = false, hasL = false;
+            let positionsMapped = [];
 
-            let boxes = []; let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
             posicionesSeleccionadas.forEach(pos => {
-                const boxData = currentConfigData[pos];
-                if(boxData) {
-                    let b = { id: pos, ...boxData };
-                    boxes.push(b);
-                    if(b.x < minX) minX = b.x; if(b.y < minY) minY = b.y;
-                    if(b.x + b.w > maxX) maxX = b.x + b.w; if(b.y + b.h > maxY) maxY = b.y + b.h;
+                let col = 1, row = 1, isFullHeight = false;
+                let match = pos.match(/([A-Z]+)(\d+)([A-Z]*)/);
+                if (match && !pos.startsWith('P')) {
+                    col = parseInt(match[2]);
+                    if (match[3] === 'R') { row = 1; hasR = true; }
+                    else if (match[3] === 'L') { row = 2; hasL = true; }
+                    else { isFullHeight = true; }
+                    colsSet.add(col);
+                } else if (pos.startsWith('P') || pos.includes('/P')) {
+                    col = parseInt(pos.replace(/\D/g, '')) || 1;
+                    isFullHeight = true;
+                    colsSet.add(col);
                 }
+                positionsMapped.push({ id: pos, col: col, row: row, isFullHeight: isFullHeight });
             });
 
-            const totalW = maxX - minX; const totalH = maxY - minY;
-            container.style.width = `${totalW}px`; container.style.height = `${totalH}px`;
+            const maxRow = (hasL && hasR) ? 2 : 1;
+            const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
+            
+            container.style.display = "grid";
+            container.style.gridTemplateRows = `repeat(${maxRow}, 160px)`;
+            container.style.gridTemplateColumns = `repeat(${colsArray.length}, 280px)`;
+            container.style.gap = "0px";
+
             let htmlStr = "";
+            
+            colsArray.forEach((colNum, colIndex) => {
+                const colItems = positionsMapped.filter(p => p.col === colNum);
+                const hasFullHeight = colItems.some(p => p.isFullHeight);
+                
+                if (maxRow === 2) {
+                    if (hasFullHeight) {
+                        const item = colItems.find(p => p.isFullHeight);
+                        const borders = { left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false };
+                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1};">${generarUnidadPallet(item.id, borders)}</div>`;
+                    } else {
+                        const itemR = colItems.find(p => p.row === 1);
+                        const itemL = colItems.find(p => p.row === 2);
 
-            boxes.forEach(box => {
-                const relX = box.x - minX; const relY = box.y - minY;
-                const hasNeighborBottom = boxes.some(n => n.y === box.y + box.h && n.x < box.x + box.w && n.x + n.w > box.x);
-                const hasNeighborRight = boxes.some(n => n.x === box.x + box.w && n.y < box.y + box.h && n.y + n.h > box.y);
-                const hasNeighborTop = boxes.some(n => n.y + n.h === box.y && n.x < box.x + box.w && n.x + n.w > box.x);
-                const hasNeighborLeft = boxes.some(n => n.x + n.w === box.x && n.y < box.y + box.h && n.y + n.h > box.y);
-
-                let boxStyle = `left: ${relX}px; top: ${relY}px; width: ${box.w}px; height: ${box.h}px;`;
-                if (hasNeighborBottom) boxStyle += ` border-bottom: 3px dashed #CBD5E1; z-index: 2; margin-bottom: -3px;`;
-                if (hasNeighborRight) boxStyle += ` border-right: 3px dashed #CBD5E1; z-index: 2; margin-right: -3px;`;
-                if (hasNeighborTop) boxStyle += ` border-top: none;`;
-                if (hasNeighborLeft) boxStyle += ` border-left: none;`;
-
-                let boxHtml = `<div class="pallet-box-unit" style="${boxStyle}"><div class="pallet-core-text">${box.id}</div>`;
-
-                if (box.o === 'LONG') {
-                    if (!hasNeighborTop) {
-                        const isCenter = box.c === 'L'; 
-                        boxHtml += renderHotspot(box.id, 'T', 0, true, isCenter, '10%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 1, false, isCenter, '30%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 2, false, isCenter, '50%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 3, false, isCenter, '70%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 4, true, isCenter, '90%', '0%', false);
+                        if (itemR) {
+                            const borders = {
+                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 1 || p.isFullHeight)),
+                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 1 || p.isFullHeight)),
+                                bottom: !!itemL, top: false
+                            };
+                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(itemR.id, borders)}</div>`;
+                        }
+                        if (itemL) {
+                            const borders = {
+                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 2 || p.isFullHeight)),
+                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 2 || p.isFullHeight)),
+                                top: !!itemR, bottom: false
+                            };
+                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1};">${generarUnidadPallet(itemL.id, borders)}</div>`;
+                        }
                     }
-                    const isCenterB = box.c === 'R'; 
-                    boxHtml += renderHotspot(box.id, 'B', 0, true, isCenterB, '10%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 1, false, isCenterB, '30%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 2, false, isCenterB, '50%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 3, false, isCenterB, '70%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 4, true, isCenterB, '90%', '100%', false);
-                    
-                    if (!hasNeighborLeft) {
-                        boxHtml += renderHotspot(box.id, 'L', 0, true, false, '0%', '15%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 1, false, false, '0%', '38%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 2, false, false, '0%', '62%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 3, true, false, '0%', '85%', true);
-                    }
-                    boxHtml += renderHotspot(box.id, 'R', 0, true, false, '100%', '15%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 1, false, false, '100%', '38%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 2, false, false, '100%', '62%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 3, true, false, '100%', '85%', true);
-                } else { 
-                    if (!hasNeighborTop) {
-                        boxHtml += renderHotspot(box.id, 'T', 0, true, false, '15%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 1, false, false, '38%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 2, false, false, '62%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 3, true, false, '85%', '0%', false);
-                    }
-                    boxHtml += renderHotspot(box.id, 'B', 0, true, false, '15%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 1, false, false, '38%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 2, false, false, '62%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 3, true, false, '85%', '100%', false);
-                    
-                    if (!hasNeighborLeft) {
-                        boxHtml += renderHotspot(box.id, 'L', 0, true, false, '0%', '10%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 1, false, false, '0%', '30%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 2, false, false, '0%', '50%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 3, false, false, '0%', '70%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 4, true, false, '0%', '90%', true);
-                    }
-                    boxHtml += renderHotspot(box.id, 'R', 0, true, false, '100%', '10%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 1, false, false, '100%', '30%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 2, false, false, '100%', '50%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 3, false, false, '100%', '70%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 4, true, false, '100%', '90%', true);
+                } else {
+                    colItems.forEach(item => {
+                        const borders = { left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false };
+                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(item.id, borders)}</div>`;
+                    });
                 }
-                boxHtml += `</div>`; htmlStr += boxHtml;
             });
+
             container.innerHTML = htmlStr;
             
+            let totalWidth = colsArray.length * 280;
+            let totalHeight = maxRow * 160;
             let scale = 1;
-            if (totalW > 350) scale = 350 / totalW;
-            if (totalH * scale > 300) scale = 300 / totalH; 
+            
+            if (totalWidth > 400) scale = 400 / totalWidth;
+            if (totalHeight * scale > 350) scale = 350 / totalHeight; 
+
             container.style.transform = `scale(${scale})`;
             container.style.transformOrigin = "top center";
-            container.style.marginBottom = `${(totalH * scale) - totalH}px`; 
+            container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
+        }
+
+        function generarUnidadPallet(titulo, borders) {
+            let styleStr = `position: relative; width: 100%; height: 100%; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box;`;
+            
+            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1; margin-top: -3px;`;
+            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1; margin-bottom: -3px;`;
+            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; margin-right: -3px; z-index:2;`;
+            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1; margin-left: -3px;`;
+
+            const isTrans = isTransversal(titulo);
+            
+            let html = `
+            <div style="${styleStr}">
+                <div class="pallet-core-text" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:40px; color:#0F172A; pointer-events:none; z-index:1; opacity:0.15;">${titulo}</div>`;
+
+            const addLock = (name, x, y, labelTxt, lblClass, isCenterline) => {
+                const cleanName = `${titulo} - ${name}`;
+                const colorClass = isCenterline ? 'red' : '';
+                return `
+                <div class="hotspot" style="left:${x}; top:${y};" onclick="toggleLock('${cleanName}', this)"></div>
+                <div class="lock-label ${lblClass} ${colorClass}" style="left:${x}; top:${y};">${labelTxt}</div>
+                `;
+            };
+
+            if (isTrans) {
+                html += addLock('Side Corner (Top L)', '15%', '-7px', 'Side<br>Corner', 'lbl-top');
+                html += addLock('Side NC 1', '38%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock('Side NC 2', '62%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '85%', '-7px', 'Side<br>Corner', 'lbl-top');
+
+                html += addLock('Side Corner (Bot L)', '15%', '100%', 'Side<br>Corner', 'lbl-bot');
+                html += addLock('Side NC 1', '38%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock('Side NC 2', '62%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '85%', '100%', 'Side<br>Corner', 'lbl-bot');
+
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '10%', 'Fwd/Aft<br>Corner', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '30%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 3', '-7px', '70%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '90%', 'Fwd/Aft<br>Corner', 'lbl-left');
+
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'Fwd/Aft<br>Corner', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'Fwd/Aft<br>Corner', 'lbl-right');
+            } else {
+                const isTopCenterline = titulo.includes('L'); 
+                const isBotCenterline = titulo.includes('R'); 
+
+                html += addLock('Side Corner (Top L)', '10%', '-7px', 'Side<br>Corner', 'lbl-top');
+                html += addLock('Side NC 1', '30%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'Centerline<br>Locks' : 'Side<br>NC', 'lbl-top', isTopCenterline);
+                html += addLock('Side NC 3', '70%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '90%', '-7px', 'Side<br>Corner', 'lbl-top');
+
+                html += addLock('Side Corner (Bot L)', '10%', '100%', 'Side<br>Corner', 'lbl-bot');
+                html += addLock('Side NC 1', '30%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'Centerline<br>Locks' : 'Side<br>NC', 'lbl-bot', isBotCenterline);
+                html += addLock('Side NC 3', '70%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '90%', '100%', 'Side<br>Corner', 'lbl-bot');
+
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'Fwd/Aft<br>Corner', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'Fwd/Aft<br>Corner', 'lbl-left');
+
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'Fwd/Aft<br>Corner', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '38%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '62%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'Fwd/Aft<br>Corner', 'lbl-right');
+            }
+
+            html += `</div>`;
+            return html;
         }
 
         function dibujarPlanoAvionCSS(config, btnElem) {
