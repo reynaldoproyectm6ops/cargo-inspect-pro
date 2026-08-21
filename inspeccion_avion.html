@@ -137,20 +137,19 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        /* Puntos ajustados al estilo de ingeniería: grises oscuros, rojos al activarse */
-        .hotspot { position: absolute; width: 10px; height: 10px; background: #475569; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
-        .hotspot:hover { background: #E11D48; transform: translate(-50%, -50%) scale(1.3); }
-        .hotspot.active { background: #E11D48; border-color: #0F172A; transform: translate(-50%, -50%) scale(1.4); box-shadow: 0 0 8px rgba(225,29,72,0.8);}
+        /* Puntos ajustados al estilo de ingeniería: rojos con borde visible */
+        .hotspot { position: absolute; width: 10px; height: 10px; background: #E11D48; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #1E293B; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+        .hotspot:hover { background: #3B82F6; border-color: white; transform: translate(-50%, -50%) scale(1.3); }
+        .hotspot.active { background: #10B981; border-color: white; transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(16,185,129,0.8);}
 
-        /* Textos ultra-compactos y repelentes al borde */
+        /* Etiquetas ultra-compactas que apuntan SIEMPRE HACIA ADENTRO del contenedor */
         .lock-label { position: absolute; font-size: 7px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
         .lock-label.red { color: #DC2626; z-index: 15; }
         
-        /* Sistema inteligente de traslaciones para que el texto NUNCA monte los bordes ni otros textos */
-        .lbl-top { transform: translate(-50%, 8px); } /* Empuja hacia abajo, dentro del cuadro */
-        .lbl-bot { transform: translate(-50%, calc(-100% - 8px)); } /* Empuja hacia arriba, dentro del cuadro */
-        .lbl-left { transform: translate(8px, -50%); text-align: left; } /* Empuja hacia la derecha, dentro del cuadro */
-        .lbl-right { transform: translate(calc(-100% - 8px), -50%); text-align: right; } /* Empuja hacia la izquierda, dentro del cuadro */
+        .lbl-top { transform: translate(-50%, 8px); } 
+        .lbl-bot { transform: translate(-50%, -100%); margin-top: -8px; } 
+        .lbl-left { transform: translate(12px, -50%); text-align: left; } 
+        .lbl-right { transform: translate(calc(-100% - 12px), -50%); text-align: right; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
