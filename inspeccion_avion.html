@@ -112,44 +112,28 @@
         .p-cell:hover, .p-half:hover { background: #CBD5E1; }
         .p-cell.selected, .p-half.selected, .p-wide.selected { background: var(--amerijet-red) !important; color: white !important; border-color: #9F1239 !important; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);}
 
-        /* =========================================
-           PALETA INTERACTIVA MODULAR (NUEVA LÓGICA)
-        ========================================= */
+        /* PALETA INTERACTIVA MODULAR (NUEVA LÓGICA) */
         .pallet-locks-container { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 45px 20px; margin-bottom: 15px; overflow-x: auto; display: none; text-align: center; }
         
         #palletBoxRenderHTML {
-            position: relative;
+            display: grid;
+            gap: 0;
             margin: 0 auto;
-            transition: all 0.3s;
-            /* width y height se inyectan via JS */
-        }
-
-        .pallet-box-unit {
-            position: absolute;
-            background: white;
-            border: 3px solid #1E293B;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
             justify-content: center;
-        }
-
-        .pallet-core-text {
-            font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
+            transition: all 0.3s;
         }
 
         .hotspot { position: absolute; width: 14px; height: 14px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); }
         .hotspot:hover { background: #3B82F6; transform: translate(-50%, -50%) scale(1.3); }
         .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); }
 
-        .lock-label { position: absolute; font-size: 10px; font-weight: 800; color: #1E293B; text-align: center; pointer-events: none; text-transform: uppercase; line-height: 1.1; white-space: nowrap; z-index: 5; }
+        .lock-label { position: absolute; font-size: 9px; font-weight: 800; color: #1E293B; text-align: center; pointer-events: none; text-transform: uppercase; line-height: 1; white-space: nowrap; z-index: 5; }
         .lock-label.red { color: #DC2626; }
         
-        /* Ajuste de etiquetas para no superponerse a los puntos */
-        .lbl-top { transform: translate(-50%, -25px); }
-        .lbl-bot { transform: translate(-50%, 15px); }
-        .lbl-left { transform: translate(-100%, -50%); padding-right: 12px; text-align: right; }
-        .lbl-right { transform: translate(0%, -50%); padding-left: 12px; text-align: left; }
+        .lbl-top { transform: translate(-50%, -22px); }
+        .lbl-bot { transform: translate(-50%, 12px); }
+        .lbl-left { transform: translate(-100%, -50%); padding-right: 8px; text-align: right; }
+        .lbl-right { transform: translate(0%, -50%); padding-left: 8px; text-align: left; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
@@ -178,9 +162,10 @@
         .btn-pdf { background: #10B981; box-shadow: 0 4px 10px rgba(16,185,129,0.15); }
         .btn-pdf:hover { background: #059669; transform: translateY(-1px);}
 
+        /* MODALES Y TOAST */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px;}
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;}
-        
+
         #loadingOverlay { flex-direction: column; color: white; z-index: 9999; }
         .spinner { width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -335,7 +320,7 @@
                             <div class="photo-gallery" id="gal_lower_fwd"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Forward', 'lower_fwd')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                 Pasar Hallazgo a Matriz
                             </button>
                         </div>
@@ -369,7 +354,7 @@
                             <div class="photo-gallery" id="gal_lower_aft"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Lower Aft', 'lower_aft')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                 Pasar Hallazgo a Matriz
                             </button>
                         </div>
@@ -403,7 +388,7 @@
                             <div class="photo-gallery" id="gal_bulk"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Bulk', 'bulk')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                 Pasar Hallazgo a Matriz
                             </button>
                         </div>
@@ -438,7 +423,7 @@
                             <div class="photo-gallery" id="gal_md_fuselaje"></div>
                             
                             <button type="button" class="btn-add-matrix" onclick="pasarAMatrizComp('Main Deck', 'md_fuselaje', 'sel_main_deck')">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                 Pasar Hallazgo a Matriz
                             </button>
                         </div>
@@ -555,7 +540,7 @@
         
         <div class="bottom-bar">
             <button type="button" class="btn-panel btn-save" id="btnGuardarBD" onclick="guardarProgresoEnBD()">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line></svg>
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 Guardar Nube
             </button>
             <button type="button" class="btn-panel btn-pdf" id="btnDescargarPDF" onclick="generarPDFCarta()">
@@ -722,7 +707,9 @@
         function showToast(mensaje, type = 'success') {
             const container = document.getElementById('toast-container') || (function() { const c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); return c; })();
             const toast = document.createElement('div');
-            let icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            let icon = type === 'success' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'  
+                     : type === 'error' ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'  
+                     : '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
             toast.className = `toast ${type}`; 
             toast.innerHTML = `<span>${icon}</span> <span>${mensaje}</span>`;
             container.appendChild(toast);
@@ -770,31 +757,38 @@
 
         // --- INICIALIZACIÓN ---
         async function inicializar() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) { window.location.href = 'index.html'; return; }
-
-            const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre, estacion_base').eq('id', session.user.id).single();
-            if (perfil) {
-                currentUser = perfil.nombre || "Usuario";
-                currentStation = perfil.estacion_base || "SAL";
-                document.getElementById('lblUserName').innerText = currentUser;
-                document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
-                
-                if(['admin', 'supervisor', 'supervisor_local'].includes(String(perfil.rol).toLowerCase())) {
-                    document.getElementById('btnReportesHistoricos').style.display = 'flex';
-                }
-                if(String(perfil.rol).toLowerCase() === 'admin' || String(perfil.rol).toLowerCase() === 'supervisor') {
-                    document.getElementById('lblUldMenuText').innerText = "INVENTARIO MAESTRO ULD";
-                } else { 
-                    document.getElementById('lblUldMenuText').innerText = "INVENTARIO LOCAL ULD"; 
-                }
-                if(String(perfil.rol).toLowerCase() === 'admin') {
-                    document.getElementById('btnAdminPanel').style.display = 'flex';
-                }
-            }
-
-            if(!operacionId) return;
+            showLoading("Conectando con la base de datos...");
             try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) { window.location.href = 'index.html'; return; }
+
+                const { data: perfil } = await supabaseClient.from('perfiles').select('rol, nombre, estacion_base').eq('id', session.user.id).single();
+                if (perfil) {
+                    currentUser = perfil.nombre || "Usuario";
+                    currentStation = perfil.estacion_base || "SAL";
+                    document.getElementById('lblUserName').innerText = currentUser;
+                    document.getElementById('lblUserRol').innerText = String(perfil.rol).toUpperCase();
+                    
+                    if(['admin', 'supervisor', 'supervisor_local'].includes(String(perfil.rol).toLowerCase())) {
+                        document.getElementById('btnReportesHistoricos').style.display = 'flex';
+                    }
+                    if(String(perfil.rol).toLowerCase() === 'admin' || String(perfil.rol).toLowerCase() === 'supervisor') {
+                        document.getElementById('lblUldMenuText').innerText = "INVENTARIO MAESTRO ULD";
+                    } else { 
+                        document.getElementById('lblUldMenuText').innerText = "INVENTARIO LOCAL ULD"; 
+                    }
+                    if(String(perfil.rol).toLowerCase() === 'admin') {
+                        document.getElementById('btnAdminPanel').style.display = 'flex';
+                    }
+                }
+
+                if(!operacionId) {
+                    hideLoading();
+                    showCustomAlert("Error de Navegación", "No se detectó un Vuelo activo. Por favor, selecciona un vuelo desde el Centro de Vuelos.", "error");
+                    setTimeout(() => navegarA('dashboard.html'), 3000);
+                    return;
+                }
+
                 const { data: op } = await supabaseClient.from('vuelos_operaciones').select('vuelo_id, matricula_avion, ruta, estacion_registro').eq('id', operacionId).single();
                 if(op) {
                     vueloData.vuelo = op.vuelo_id; 
@@ -891,7 +885,12 @@
                 dibujarPlanoAvionCSS('A');
                 renderizarMatrizDinamica();
                 renderizarIncidencias();
-            } catch(e) { console.error("Error de inicialización", e); }
+            } catch(e) { 
+                console.error("Error de inicialización:", e);
+                document.getElementById('matrixCounters').innerHTML = '<div style="color:var(--amerijet-red); font-weight:bold;">Error de conexión.</div>';
+            } finally {
+                hideLoading();
+            }
         }
 
         // --- SISTEMA DE INCIDENCIAS TEMPORALES ---
@@ -1057,10 +1056,7 @@
                 pFus.style.display = 'block'; pLocks.style.display = 'none';
             } else if (sel.value === 'LOCKS') {
                 pFus.style.display = 'none'; pLocks.style.display = 'block';
-                // Reseteamos el mapa al abrir
                 dibujarPlanoAvionCSS(configActualGlobal, null);
-                document.getElementById('inpUbicacion').value = "";
-                document.getElementById('inpComponente').value = "";
             } else {
                 pFus.style.display = 'none'; pLocks.style.display = 'none';
             }
@@ -1070,10 +1066,8 @@
         // MOTOR DE DIBUJO ESTRUCTURAL (EL ROMPECABEZAS)
         // =========================================
 
-        // Generador maestro de coordenadas del avión
         const planeData = {};
         function buildPlaneCoordinates() {
-            // Config A
             let xA = 0; planeData['A'] = {};
             planeData['A']['A1'] = {x: xA, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xA += 140;
             for(let i=2; i<=12; i++) {
@@ -1083,7 +1077,6 @@
             }
             planeData['A']['A13'] = {x: xA, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
 
-            // Config B
             let xB = 0; planeData['B'] = {};
             planeData['B']['B1'] = {x: xB, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xB += 140;
             for(let i=2; i<=13; i++) {
@@ -1093,7 +1086,6 @@
             }
             planeData['B']['B14'] = {x: xB, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
 
-            // Config C
             let xC = 0; planeData['C'] = {};
             planeData['C']['A1'] = {x: xC, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xC += 140;
             for(let i=2; i<=12; i++) {
@@ -1102,7 +1094,6 @@
             }
             planeData['C']['A13'] = {x: xC, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
 
-            // Config D
             let xD = 0; planeData['D'] = {};
             planeData['D']['A1'] = {x: xD, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xD += 140;
             for(let i=2; i<=16; i++) {
@@ -1111,7 +1102,6 @@
             }
             planeData['D']['A13'] = {x: xD, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
 
-            // Config E
             let xE = 0; planeData['E'] = {};
             planeData['E']['A1'] = {x: xE, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xE += 140;
             for(let i=2; i<=15; i++) {
@@ -1120,7 +1110,6 @@
             }
             planeData['E']['A13'] = {x: xE, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'};
 
-            // Config G
             let xG = 0; planeData['G'] = {};
             planeData['G']['A1'] = {x: xG, y: 0, w: 140, h: 260, o: 'TRANS', c: 'C'}; xG += 140;
             planeData['G']['C2'] = {x: xG, y: 45, w: 200, h: 170, o: 'LONG', c: 'C'}; xG += 200;
@@ -1133,170 +1122,183 @@
         }
         buildPlaneCoordinates();
 
-        // --- CREADOR DE PUNTOS HOTSPOTS (18 x CAJA) ---
-        function renderHotspot(idTrackingBox, edge, index, isCorner, isCenterline, px, py, isFwdAft) {
-            let label = ""; let colorCls = ""; let nameForTracking = "";
-            
-            if (isCenterline) {
-                label = "Centerline<br>Lock"; colorCls = "red"; nameForTracking = `Centerline (${edge} ${index+1})`;
-            } else if (isCorner) {
-                label = isFwdAft ? "Fwd/Aft<br>Corner" : "Side<br>Corner"; nameForTracking = isFwdAft ? `Fwd/Aft Corner (${edge} ${index+1})` : `Side Corner (${edge} ${index+1})`;
-            } else {
-                label = isFwdAft ? "Fwd/Aft<br>Non-Corner" : "Side<br>Non-Corner"; nameForTracking = isFwdAft ? `Fwd/Aft Non-Corner (${edge} ${index+1})` : `Side Non-Corner (${edge} ${index+1})`;
-            }
-
-            let lblClass = "";
-            if (edge === 'T') lblClass = 'lbl-top';
-            if (edge === 'B') lblClass = 'lbl-bot';
-            if (edge === 'L') lblClass = 'lbl-left';
-            if (edge === 'R') lblClass = 'lbl-right';
-
-            return `
-            <div class="hotspot" style="left: ${px}; top: ${py};" onclick="toggleLock('${idTrackingBox} - ${nameForTracking}', this)"></div>
-            <div class="lock-label ${lblClass} ${colorCls}" style="left: ${px}; top: ${py};">${label}</div>
-            `;
+        function isTransversal(pos) {
+            if (pos.startsWith('D') || pos.startsWith('E')) return true;
+            if (['A1', 'A13', 'B1', 'B14'].includes(pos)) return true;
+            return false;
         }
 
-        // --- EL MOTOR DE ENSAMBLAJE (El Rompecabezas) ---
         function renderizarBloqueDinamicoPallets(posicionesSeleccionadas) {
             const container = document.getElementById('palletBoxRenderHTML');
             if (!container) return;
-            
             container.innerHTML = "";
             
             if (posicionesSeleccionadas.length === 0) {
-                container.style.width = "250px"; container.style.height = "150px";
+                container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
                 container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
-                container.innerHTML = `<div class="pallet-box-unit" style="width:100%; height:100%;"><div class="pallet-core-text">MD</div></div>`;
+                container.innerHTML = generarUnidadPallet("MD", {top:false, right:false, bottom:false, left:false});
                 return;
             }
 
-            const currentConfigData = planeData[configActualGlobal];
-            if (!currentConfigData) return;
-
-            // Extraer cajas seleccionadas con sus coordenadas maestras
-            let boxes = [];
-            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            let colsSet = new Set();
+            let hasR = false, hasL = false;
+            let positionsMapped = [];
 
             posicionesSeleccionadas.forEach(pos => {
-                const boxData = currentConfigData[pos];
-                if(boxData) {
-                    let b = { id: pos, ...boxData };
-                    boxes.push(b);
-                    if(b.x < minX) minX = b.x;
-                    if(b.y < minY) minY = b.y;
-                    if(b.x + b.w > maxX) maxX = b.x + b.w;
-                    if(b.y + b.h > maxY) maxY = b.y + b.h;
+                let col = 1, row = 1, isFullHeight = false;
+                let match = pos.match(/([A-Z]+)(\d+)([A-Z]*)/);
+                if (match && !pos.startsWith('P')) {
+                    col = parseInt(match[2]);
+                    if (match[3] === 'R') { row = 1; hasR = true; }
+                    else if (match[3] === 'L') { row = 2; hasL = true; }
+                    else { isFullHeight = true; }
+                    colsSet.add(col);
+                } else if (pos.startsWith('P') || pos.includes('/P')) {
+                    col = parseInt(pos.replace(/\D/g, '')) || 1;
+                    isFullHeight = true;
+                    colsSet.add(col);
                 }
+                positionsMapped.push({ id: pos, col: col, row: row, isFullHeight: isFullHeight });
             });
 
-            const totalW = maxX - minX;
-            const totalH = maxY - minY;
-
-            container.style.width = `${totalW}px`;
-            container.style.height = `${totalH}px`;
+            const maxRow = (hasL && hasR) ? 2 : 1;
+            const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
+            
+            container.style.display = "grid";
+            container.style.gridTemplateRows = `repeat(${maxRow}, 160px)`;
+            container.style.gridTemplateColumns = `repeat(${colsArray.length}, 280px)`;
+            container.style.gap = "0px";
 
             let htmlStr = "";
-
-            boxes.forEach(box => {
-                // Coordenadas relativas dentro del contenedor
-                const relX = box.x - minX;
-                const relY = box.y - minY;
-
-                // Verificación de vecinos para eliminar bordes y evitar seguros duplicados
-                const hasNeighborBottom = boxes.some(n => n.y === box.y + box.h && n.x < box.x + box.w && n.x + n.w > box.x);
-                const hasNeighborRight = boxes.some(n => n.x === box.x + box.w && n.y < box.y + box.h && n.y + n.h > box.y);
-                const hasNeighborTop = boxes.some(n => n.y + n.h === box.y && n.x < box.x + box.w && n.x + n.w > box.x);
-                const hasNeighborLeft = boxes.some(n => n.x + n.w === box.x && n.y < box.y + box.h && n.y + n.h > box.y);
-
-                let boxStyle = `left: ${relX}px; top: ${relY}px; width: ${box.w}px; height: ${box.h}px;`;
+            
+            colsArray.forEach((colNum, colIndex) => {
+                const colItems = positionsMapped.filter(p => p.col === colNum);
+                const hasFullHeight = colItems.some(p => p.isFullHeight);
                 
-                if (hasNeighborBottom) boxStyle += ` border-bottom: 3px dashed #CBD5E1; z-index: 2; margin-bottom: -3px;`;
-                if (hasNeighborRight) boxStyle += ` border-right: 3px dashed #CBD5E1; z-index: 2; margin-right: -3px;`;
-                if (hasNeighborTop) boxStyle += ` border-top: none;`;
-                if (hasNeighborLeft) boxStyle += ` border-left: none;`;
+                if (maxRow === 2) {
+                    if (hasFullHeight) {
+                        const item = colItems.find(p => p.isFullHeight);
+                        const borders = { left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false };
+                        htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1};">${generarUnidadPallet(item.id, borders)}</div>`;
+                    } else {
+                        const itemR = colItems.find(p => p.row === 1);
+                        const itemL = colItems.find(p => p.row === 2);
 
-                let boxHtml = `<div class="pallet-box-unit" style="${boxStyle}"><div class="pallet-core-text">${box.id}</div>`;
-
-                // Construcción de los 18 Puntos (Basado en Orientación)
-                if (box.o === 'LONG') {
-                    // TOP (5 locks) -> Solo dibujar si no tiene vecino arriba
-                    if (!hasNeighborTop) {
-                        const isCenter = box.c === 'L'; // Si es la L, su borde Top es Centerline
-                        boxHtml += renderHotspot(box.id, 'T', 0, true, isCenter, '10%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 1, false, isCenter, '30%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 2, false, isCenter, '50%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 3, false, isCenter, '70%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 4, true, isCenter, '90%', '0%', false);
+                        if (itemR) {
+                            const borders = {
+                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 1 || p.isFullHeight)),
+                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 1 || p.isFullHeight)),
+                                bottom: !!itemL, top: false
+                            };
+                            htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(itemR.id, borders)}</div>`;
+                        }
+                        if (itemL) {
+                            const borders = {
+                                left: positionsMapped.some(p => p.col === colNum - 1 && (p.row === 2 || p.isFullHeight)),
+                                right: positionsMapped.some(p => p.col === colNum + 1 && (p.row === 2 || p.isFullHeight)),
+                                top: !!itemR, bottom: false
+                            };
+                            htmlStr += `<div style="grid-row:2; grid-column:${colIndex+1};">${generarUnidadPallet(itemL.id, borders)}</div>`;
+                        }
                     }
-                    // BOTTOM (5 locks) -> Siempre dibujar (se superpondrá o será el final)
-                    const isCenterB = box.c === 'R'; // Si es R, su borde Bot es Centerline
-                    boxHtml += renderHotspot(box.id, 'B', 0, true, isCenterB, '10%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 1, false, isCenterB, '30%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 2, false, isCenterB, '50%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 3, false, isCenterB, '70%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 4, true, isCenterB, '90%', '100%', false);
-                    
-                    // LEFT (4 locks) -> Solo dibujar si no tiene vecino izquierdo
-                    if (!hasNeighborLeft) {
-                        boxHtml += renderHotspot(box.id, 'L', 0, true, false, '0%', '15%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 1, false, false, '0%', '38%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 2, false, false, '0%', '62%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 3, true, false, '0%', '85%', true);
-                    }
-                    // RIGHT (4 locks)
-                    boxHtml += renderHotspot(box.id, 'R', 0, true, false, '100%', '15%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 1, false, false, '100%', '38%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 2, false, false, '100%', '62%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 3, true, false, '100%', '85%', true);
-                } 
-                else { // TRANSVERSAL
-                    // TOP (4 locks) -> Side
-                    if (!hasNeighborTop) {
-                        boxHtml += renderHotspot(box.id, 'T', 0, true, false, '15%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 1, false, false, '38%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 2, false, false, '62%', '0%', false);
-                        boxHtml += renderHotspot(box.id, 'T', 3, true, false, '85%', '0%', false);
-                    }
-                    // BOTTOM (4 locks) -> Side
-                    boxHtml += renderHotspot(box.id, 'B', 0, true, false, '15%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 1, false, false, '38%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 2, false, false, '62%', '100%', false);
-                    boxHtml += renderHotspot(box.id, 'B', 3, true, false, '85%', '100%', false);
-                    
-                    // LEFT (5 locks) -> Fwd/Aft
-                    if (!hasNeighborLeft) {
-                        boxHtml += renderHotspot(box.id, 'L', 0, true, false, '0%', '10%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 1, false, false, '0%', '30%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 2, false, false, '0%', '50%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 3, false, false, '0%', '70%', true);
-                        boxHtml += renderHotspot(box.id, 'L', 4, true, false, '0%', '90%', true);
-                    }
-                    // RIGHT (5 locks) -> Fwd/Aft
-                    boxHtml += renderHotspot(box.id, 'R', 0, true, false, '100%', '10%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 1, false, false, '100%', '30%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 2, false, false, '100%', '50%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 3, false, false, '100%', '70%', true);
-                    boxHtml += renderHotspot(box.id, 'R', 4, true, false, '100%', '90%', true);
+                } else {
+                    colItems.forEach(item => {
+                        const borders = { left: colsArray.includes(colNum - 1), right: colsArray.includes(colNum + 1), top: false, bottom: false };
+                        htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1};">${generarUnidadPallet(item.id, borders)}</div>`;
+                    });
                 }
-
-                boxHtml += `</div>`;
-                htmlStr += boxHtml;
             });
 
             container.innerHTML = htmlStr;
             
-            // Auto Scale visual (Para que quepa perfecto en la pantalla sin romper)
+            let totalWidth = colsArray.length * 280;
+            let totalHeight = maxRow * 160;
             let scale = 1;
-            if (totalW > 350) scale = 350 / totalW;
-            if (totalH * scale > 300) scale = 300 / totalH; 
+            
+            if (totalWidth > 400) scale = 400 / totalWidth;
+            if (totalHeight * scale > 350) scale = 350 / totalHeight; 
 
             container.style.transform = `scale(${scale})`;
             container.style.transformOrigin = "top center";
-            container.style.marginBottom = `${(totalH * scale) - totalH}px`; 
+            container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
         }
 
-        // --- DIBUJADO DE PLANOS SUPERIOR ---
+        function generarUnidadPallet(titulo, borders) {
+            let styleStr = `position: relative; width: 100%; height: 100%; background: white; border: 3px solid #1E293B; display: flex; align-items: center; justify-content: center; box-sizing: border-box;`;
+            
+            if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1; margin-top: -3px;`;
+            if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1; margin-bottom: -3px;`;
+            if (borders.right) styleStr += ` border-right: 3px dashed #CBD5E1; margin-right: -3px; z-index:2;`;
+            if (borders.left) styleStr += ` border-left: 3px dashed #CBD5E1; margin-left: -3px;`;
+
+            const isTrans = isTransversal(titulo);
+            
+            let html = `
+            <div style="${styleStr}">
+                <div class="pallet-core-text" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:40px; color:#0F172A; pointer-events:none; z-index:1; opacity:0.15;">${titulo}</div>`;
+
+            const addLock = (name, x, y, labelTxt, lblClass, isCenterline) => {
+                const cleanName = `${titulo} - ${name}`;
+                const colorClass = isCenterline ? 'red' : '';
+                return `
+                <div class="hotspot" style="left:${x}; top:${y};" onclick="toggleLock('${cleanName}', this)"></div>
+                <div class="lock-label ${lblClass} ${colorClass}" style="left:${x}; top:${y};">${labelTxt}</div>
+                `;
+            };
+
+            if (isTrans) {
+                html += addLock('Side Corner (Top L)', '15%', '-7px', 'Side<br>Corner', 'lbl-top');
+                html += addLock('Side NC 1', '38%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock('Side NC 2', '62%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '85%', '-7px', 'Side<br>Corner', 'lbl-top');
+
+                html += addLock('Side Corner (Bot L)', '15%', '100%', 'Side<br>Corner', 'lbl-bot');
+                html += addLock('Side NC 1', '38%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock('Side NC 2', '62%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '85%', '100%', 'Side<br>Corner', 'lbl-bot');
+
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '10%', 'Fwd/Aft<br>Corner', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '30%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 3', '-7px', '70%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '90%', 'Fwd/Aft<br>Corner', 'lbl-left');
+
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '10%', 'Fwd/Aft<br>Corner', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '30%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 3', '100%', '70%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '90%', 'Fwd/Aft<br>Corner', 'lbl-right');
+            } else {
+                const isTopCenterline = titulo.includes('L'); 
+                const isBotCenterline = titulo.includes('R'); 
+
+                html += addLock('Side Corner (Top L)', '10%', '-7px', 'Side<br>Corner', 'lbl-top');
+                html += addLock('Side NC 1', '30%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'Centerline<br>Locks' : 'Side<br>NC', 'lbl-top', isTopCenterline);
+                html += addLock('Side NC 3', '70%', '-7px', 'Side<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '90%', '-7px', 'Side<br>Corner', 'lbl-top');
+
+                html += addLock('Side Corner (Bot L)', '10%', '100%', 'Side<br>Corner', 'lbl-bot');
+                html += addLock('Side NC 1', '30%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'Centerline<br>Locks' : 'Side<br>NC', 'lbl-bot', isBotCenterline);
+                html += addLock('Side NC 3', '70%', '100%', 'Side<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '90%', '100%', 'Side<br>Corner', 'lbl-bot');
+
+                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'Fwd/Aft<br>Corner', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'Fwd/Aft<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'Fwd/Aft<br>Corner', 'lbl-left');
+
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'Fwd/Aft<br>Corner', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '38%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '62%', 'Fwd/Aft<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'Fwd/Aft<br>Corner', 'lbl-right');
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
         function dibujarPlanoAvionCSS(config, btnElem) {
             if(btnElem) { document.querySelectorAll('.tab-btn').forEach(b => { b.style.background = 'white'; b.style.color = '#475569'; }); btnElem.style.background = 'var(--amerijet-blue)'; btnElem.style.color = 'white';}
             configActualGlobal = config;
@@ -1321,7 +1323,6 @@
             document.querySelectorAll('.p-cell.selected, .p-half.selected, .p-wide.selected').forEach(el => sel.push(el.dataset.pos));
             document.getElementById('inpUbicacion').value = sel.join(', ');
             
-            // Reconstruye el panel de abajo basado en lo seleccionado arriba
             renderizarBloqueDinamicoPallets(sel);
             marcarCambios();
         }
@@ -1380,7 +1381,7 @@
                 
                 const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                 const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
-                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
+                rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.85);">${gridHtml}</div></div>`;
                 
                 const cP = await html2canvas(rDiv, { scale: 1.5 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
                 rDiv.innerHTML = "";
@@ -1400,7 +1401,7 @@
                 document.getElementById('inpUbicacion').value = ""; document.getElementById('inpComponente').value = ""; 
                 document.getElementById('selDanoSeveridad').value = ""; document.getElementById('inpComentariosCLS').value = "";
                 document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected')); 
-                renderizarBloqueDinamicoPallets([]); // Limpia la cuadricula de abajo
+                renderizarBloqueDinamicoPallets([]); 
                 document.getElementById('gal_cls_map').innerHTML = "";
                 document.getElementById('panelMapeoCLS').style.display = 'none';
                 document.getElementById('sel_main_deck').value = "OK";
@@ -1465,17 +1466,14 @@
                         <div style="font-size:12px; margin-top:4px;"><b>Comp:</b> ${h.componente}</div>
                         <div style="font-size:12px; color:var(--amerijet-red); font-weight:bold; margin-bottom: 8px;"><b>Daño:</b> ${h.descripcion}</div>
                         <div style="font-size:11px; color:#64748B; margin-bottom: 8px; font-weight:600; display:flex; gap:10px;">
-                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Rep: ${fRep}</span> 
-                            <span style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.24l5.67-5.67"></path></svg> Upd: ${fUpd}</span>
+                            <span>📅 Rep: ${fRep}</span> 
+                            <span>🔄 Upd: ${fUpd}</span>
                         </div>
                         ${htmlF}
                         <button type="button" class="btn-update-matrix" onclick="abrirModalActualizacionPorIdTracking('${h.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                            Editar / Actualizar Daño
+                            ✏️ Editar / Actualizar Daño
                         </button>
-                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+                        <button type="button" class="btn-del-matrix" onclick="eliminarHallazgoPorId('${h.idTracking}')">✖</button>
                     </div>`;
                 });
                 
@@ -1631,7 +1629,6 @@
                         h.imgAvion = cA.toDataURL('image/jpeg', 0.8);
                         document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected'));
 
-                        // Renderizar las cajas dinamicas de la paleta abajo
                         renderizarBloqueDinamicoPallets(cells);
                         const locks = (h.componente || '').split('|').map(s => s.trim());
                         
@@ -1644,7 +1641,7 @@
 
                         const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                         const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
-                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
+                        rDiv.innerHTML = `<div style="background:white; padding:30px 10px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:20px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.85);">${gridHtml}</div></div>`;
                         
                         const cP = await html2canvas(rDiv, { scale: 1.5 }); 
                         h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
