@@ -137,23 +137,25 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        .hotspot { position: absolute; width: 14px; height: 14px; background: #1E293B; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.2); border: 2px solid white;}
+        /* Hotspots ajustados para no tapar bordes */
+        .hotspot { position: absolute; width: 10px; height: 10px; background: #0F172A; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1.5px solid white;}
         .hotspot:hover { background: #3B82F6; transform: translate(-50%, -50%) scale(1.3); }
         .hotspot.active { background: var(--amerijet-red); transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(225,29,72,0.8); border-color: white;}
 
-        .lock-label { position: absolute; font-size: 10px; font-weight: 800; color: #1E293B; text-align: center; pointer-events: none; text-transform: uppercase; line-height: 1.1; white-space: nowrap; z-index: 5; }
-        .lock-label.red { color: #DC2626; z-index: 15; background: rgba(255,255,255,0.9); padding: 0 4px; border-radius: 4px; }
+        /* Etiquetas compactas y elegantes para evitar "todo montado" */
+        .lock-label { position: absolute; font-size: 8px; font-weight: 900; color: #1E293B; text-align: center; pointer-events: none; line-height: 1.1; white-space: nowrap; z-index: 5; letter-spacing: -0.2px; text-shadow: 1px 1px 0px #fff, -1px -1px 0px #fff, 1px -1px 0px #fff, -1px 1px 0px #fff;}
+        .lock-label.red { color: #DC2626; z-index: 15; }
         
-        .lbl-top { transform: translate(-50%, -25px); }
-        .lbl-bot { transform: translate(-50%, 15px); }
-        .lbl-left { transform: translate(-100%, -50%); padding-right: 12px; text-align: right; }
-        .lbl-right { transform: translate(0%, -50%); padding-left: 12px; text-align: left; }
+        .lbl-top { transform: translate(-50%, -18px); }
+        .lbl-bot { transform: translate(-50%, 18px); }
+        .lbl-left { transform: translate(calc(-100% - 10px), -50%); text-align: right; }
+        .lbl-right { transform: translate(10px, -50%); text-align: left; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
         .tab-btn.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
-        /* NUEVOS ESTILOS PARA CONTADORES STAT CARDS */
+        /* ESTILOS PARA CONTADORES STAT CARDS */
         .stats-container { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
         .stat-card { background: white; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); flex: 1; min-width: 140px; transition: transform 0.2s; }
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
@@ -1312,29 +1314,29 @@
 
             if (isTrans) {
                 // Transversal ULDs (A1, A13, D, E) -> 140w x 200h
-                // Top/Bottom (88" sides) - 4 locks -> 15%, 38%, 62%, 85%
-                html += addLock('Side Corner (Top L)', '15%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
-                html += addLock('Side NC 1', '38%', '-7px', 'SIDE<br>NC', 'lbl-top');
-                html += addLock('Side NC 2', '62%', '-7px', 'SIDE<br>NC', 'lbl-top');
-                html += addLock('Side Corner (Top R)', '85%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
+                // Top/Bottom (88" sides) - 4 locks -> 15%, 38.3%, 61.6%, 85%
+                html += addLock('Side Corner (Top L)', '15%', '0%', 'SIDE<br>CNR', 'lbl-top');
+                html += addLock('Side NC 1', '38.3%', '0%', 'SIDE<br>NC', 'lbl-top');
+                html += addLock('Side NC 2', '61.6%', '0%', 'SIDE<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '85%', '0%', 'SIDE<br>CNR', 'lbl-top');
 
-                html += addLock('Side Corner (Bot L)', '15%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
-                html += addLock('Side NC 1', '38%', '100%', 'SIDE<br>NC', 'lbl-bot');
-                html += addLock('Side NC 2', '62%', '100%', 'SIDE<br>NC', 'lbl-bot');
-                html += addLock('Side Corner (Bot R)', '85%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
+                html += addLock('Side Corner (Bot L)', '15%', '100%', 'SIDE<br>CNR', 'lbl-bot');
+                html += addLock('Side NC 1', '38.3%', '100%', 'SIDE<br>NC', 'lbl-bot');
+                html += addLock('Side NC 2', '61.6%', '100%', 'SIDE<br>NC', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '85%', '100%', 'SIDE<br>CNR', 'lbl-bot');
 
                 // Left/Right (125" sides) - 5 locks -> 0%, 25%, 50%, 75%, 100%
-                html += addLock('Fwd/Aft Corner (L Top)', '-7px', '0%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                html += addLock('Fwd/Aft NC 1', '-7px', '25%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 2', '-7px', '50%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft NC 3', '-7px', '75%', 'FWD/AFT<br>NC', 'lbl-left');
-                html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '100%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A<br>CNR', 'lbl-left');
+                html += addLock('Fwd/Aft NC 1', '0%', '25%', 'F/A<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 2', '0%', '50%', 'F/A<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft NC 3', '0%', '75%', 'F/A<br>NC', 'lbl-left');
+                html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A<br>CNR', 'lbl-left');
 
-                html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                html += addLock('Fwd/Aft NC 1', '100%', '25%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft NC 3', '100%', '75%', 'FWD/AFT<br>NC', 'lbl-right');
-                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A<br>CNR', 'lbl-right');
+                html += addLock('Fwd/Aft NC 1', '100%', '25%', 'F/A<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 2', '100%', '50%', 'F/A<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft NC 3', '100%', '75%', 'F/A<br>NC', 'lbl-right');
+                html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A<br>CNR', 'lbl-right');
             } else {
                 // Longitudinal ULDs (A2R, A2L, etc.) -> 200w x 140h
                 const isR = titulo.includes('R');
@@ -1343,52 +1345,49 @@
                 const isBotCenterline = isR; 
 
                 // Top/Bot (125" side) - 5 locks (10%, 30%, 50%, 70%, 90%)
-                html += addLock('Side Corner (Top L)', '10%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
-                html += addLock('Side NC 1', '30%', '-7px', 'SIDE<br>NC', 'lbl-top');
-                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '-7px', isTopCenterline ? 'CENTERLINE<br>LOCKS' : 'SIDE<br>NC', 'lbl-top', isTopCenterline);
-                html += addLock('Side NC 3', '70%', '-7px', 'SIDE<br>NC', 'lbl-top');
-                html += addLock('Side Corner (Top R)', '90%', '-7px', 'SIDE<br>CORNER', 'lbl-top');
+                html += addLock('Side Corner (Top L)', '10%', '0%', 'SIDE<br>CNR', 'lbl-top');
+                html += addLock('Side NC 1', '30%', '0%', 'SIDE<br>NC', 'lbl-top');
+                html += addLock(isTopCenterline ? 'Centerline 1' : 'Side NC 2', '50%', '0%', isTopCenterline ? 'CTR<br>LOCK' : 'SIDE<br>NC', 'lbl-top', isTopCenterline);
+                html += addLock('Side NC 3', '70%', '0%', 'SIDE<br>NC', 'lbl-top');
+                html += addLock('Side Corner (Top R)', '90%', '0%', 'SIDE<br>CNR', 'lbl-top');
 
-                html += addLock('Side Corner (Bot L)', '10%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
+                html += addLock('Side Corner (Bot L)', '10%', '100%', 'SIDE<br>CNR', 'lbl-bot');
                 html += addLock('Side NC 1', '30%', '100%', 'SIDE<br>NC', 'lbl-bot');
-                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'CENTERLINE<br>LOCKS' : 'SIDE<br>NC', 'lbl-bot', isBotCenterline);
+                html += addLock(isBotCenterline ? 'Centerline 2' : 'Side NC 2', '50%', '100%', isBotCenterline ? 'CTR<br>LOCK' : 'SIDE<br>NC', 'lbl-bot', isBotCenterline);
                 html += addLock('Side NC 3', '70%', '100%', 'SIDE<br>NC', 'lbl-bot');
-                html += addLock('Side Corner (Bot R)', '90%', '100%', 'SIDE<br>CORNER', 'lbl-bot');
+                html += addLock('Side Corner (Bot R)', '90%', '100%', 'SIDE<br>CNR', 'lbl-bot');
 
-                // Left/Right (88" sides) - 4 locks -> CREMALLERA ZIPPER (Alineación con el Transversal)
+                // Left/Right (88" sides) - 4 locks -> CREMALLERA ZIPPER (Alineación exacta con el Transversal)
                 if (isR) {
-                    // Right Pallets (e.g., A2R): Las de la izquierda se alinean con la mitad superior de A1 (0 a 100% de A2R corresponde a 0 a 50% de A1 visualmente en el DOM)
-                    html += addLock('Fwd/Aft Corner (L Top)', '-7px', '20%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 1', '-7px', '60%', 'FWD/AFT<br>NC', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 2', '-7px', '80%', 'FWD/AFT<br>NC', 'lbl-left');
-                    html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '100%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A<br>CNR', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '0%', '28.57%', 'F/A<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '0%', '64.28%', 'F/A<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A<br>CNR', 'lbl-left');
                     
-                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '20%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 1', '100%', '60%', 'FWD/AFT<br>NC', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 2', '100%', '80%', 'FWD/AFT<br>NC', 'lbl-right');
-                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A<br>CNR', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '28.57%', 'F/A<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '64.28%', 'F/A<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A<br>CNR', 'lbl-right');
                 } else if (isL) {
-                    // Left Pallets (e.g., A2L): Las de la izquierda se alinean con la mitad inferior de A1
-                    html += addLock('Fwd/Aft Corner (L Top)', '-7px', '0%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 1', '-7px', '20%', 'FWD/AFT<br>NC', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 2', '-7px', '40%', 'FWD/AFT<br>NC', 'lbl-left');
-                    html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '80%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A<br>CNR', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '0%', '35.71%', 'F/A<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '0%', '71.42%', 'F/A<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A<br>CNR', 'lbl-left');
                     
-                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 1', '100%', '20%', 'FWD/AFT<br>NC', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 2', '100%', '40%', 'FWD/AFT<br>NC', 'lbl-right');
-                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '80%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A<br>CNR', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '35.71%', 'F/A<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '71.42%', 'F/A<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A<br>CNR', 'lbl-right');
                 } else {
-                    // Standard if something weird happens (fallback)
-                    html += addLock('Fwd/Aft Corner (L Top)', '-7px', '15%', 'FWD/AFT<br>CORNER', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 1', '-7px', '38%', 'FWD/AFT<br>NC', 'lbl-left');
-                    html += addLock('Fwd/Aft NC 2', '-7px', '62%', 'FWD/AFT<br>NC', 'lbl-left');
-                    html += addLock('Fwd/Aft Corner (L Bot)', '-7px', '85%', 'FWD/AFT<br>CORNER', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Top)', '0%', '0%', 'F/A<br>CNR', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 1', '0%', '33.3%', 'F/A<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft NC 2', '0%', '66.6%', 'F/A<br>NC', 'lbl-left');
+                    html += addLock('Fwd/Aft Corner (L Bot)', '0%', '100%', 'F/A<br>CNR', 'lbl-left');
                     
-                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '15%', 'FWD/AFT<br>CORNER', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 1', '100%', '38%', 'FWD/AFT<br>NC', 'lbl-right');
-                    html += addLock('Fwd/Aft NC 2', '100%', '62%', 'FWD/AFT<br>NC', 'lbl-right');
-                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '85%', 'FWD/AFT<br>CORNER', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Top)', '100%', '0%', 'F/A<br>CNR', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 1', '100%', '33.3%', 'F/A<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft NC 2', '100%', '66.6%', 'F/A<br>NC', 'lbl-right');
+                    html += addLock('Fwd/Aft Corner (R Bot)', '100%', '100%', 'F/A<br>CNR', 'lbl-right');
                 }
             }
 
