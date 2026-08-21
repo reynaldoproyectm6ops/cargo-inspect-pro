@@ -137,19 +137,19 @@
             font-weight: 900; font-size: 45px; color: #0F172A; letter-spacing: 2px; text-align: center; pointer-events: none; opacity: 0.15;
         }
 
-        /* Puntos ajustados al estilo de ingeniería: MÁS GRANDES (14px) */
+        /* Puntos ajustados a 8px exactos */
         .hotspot { position: absolute; width: 8px; height: 8px; background: #E11D48; cursor: pointer; transition: 0.2s; z-index: 10; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #1E293B; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
-        .hotspot:hover { background: #3B82F6; border-color: white; transform: translate(-50%, -50%) scale(1.2); }
-        .hotspot.active { background: #10B981; border-color: white; transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 8px rgba(16,185,129,0.8);}
+        .hotspot:hover { background: #3B82F6; border-color: white; transform: translate(-50%, -50%) scale(1.4); }
+        .hotspot.active { background: #10B981; border-color: white; transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 8px rgba(16,185,129,0.8);}
 
-        /* Etiquetas ultra-compactas legibles (8px) */
-        .lock-label { position: absolute; font-size: 8px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
+        /* Etiquetas ultra-compactas legibles (7px) separadas para evitar Overlap */
+        .lock-label { position: absolute; font-size: 7px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
         .lock-label.red { color: #DC2626; z-index: 15; }
         
         .lbl-top { transform: translate(-50%, 10px); } 
         .lbl-bot { transform: translate(-50%, -100%); margin-top: -10px; } 
-        .lbl-left { transform: translate(14px, -50%); text-align: left; } 
-        .lbl-right { transform: translate(calc(-100% - 14px), -50%); text-align: right; }
+        .lbl-left { transform: translate(12px, -50%); text-align: left; } 
+        .lbl-right { transform: translate(calc(-100% - 12px), -50%); text-align: right; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
@@ -1199,9 +1199,11 @@
             if (!container) return;
             container.innerHTML = "";
             
+            let mapScale = 2.2; // Escala aumentada para editor grande
+            
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
-                container.style.transform = "scale(1.4)"; container.style.marginBottom = "0px";
+                container.style.transform = "scale(1)"; container.style.marginBottom = "0px";
                 container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD", {left:false,right:false,top:false,bottom:false,transLeft:false,transRight:false}, configActualGlobal)}</div>`;
                 return;
             }
@@ -1234,20 +1236,25 @@
 
             const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
             
-            // Asignar alto de fila base según configuración
-            let baseRowH = (configActualGlobal === 'C' || configActualGlobal === 'E' || configActualGlobal === 'G') ? 96 : 85;
+            let baseRowH = (configActualGlobal === 'C' || configActualGlobal === 'E' || configActualGlobal === 'G') ? (96 * mapScale) : (88 * mapScale);
 
-            // Asignar anchos de columna base
             let gridCols = colsArray.map(colNum => {
                 const isTrans = positionsMapped.some(p => p.col === colNum && isTransversal(p.id));
+                if (configActualGlobal === 'B') {
+                    return isTrans ? (88 * mapScale) + "px" : (108 * mapScale) + "px";
+                }
                 if (configActualGlobal === 'G') {
-                    if (positionsMapped.some(p => p.col === colNum && p.id.startsWith('P'))) return "196px";
-                    return isTrans ? "96px" : "125px";
+                    if (positionsMapped.some(p => p.col === colNum && p.id.startsWith('P'))) return (196 * mapScale) + "px";
+                    if (positionsMapped.some(p => p.col === colNum && p.id.startsWith('G/P'))) return (188 * mapScale) + "px";
+                    return isTrans ? (88 * mapScale) + "px" : (125 * mapScale) + "px";
                 }
                 if (configActualGlobal === 'C' || configActualGlobal === 'E') {
-                    return isTrans ? "96px" : "125px";
+                    return isTrans ? (88 * mapScale) + "px" : (125 * mapScale) + "px";
                 }
-                return isTrans ? "85px" : "125px";
+                if (configActualGlobal === 'D') {
+                    return (88 * mapScale) + "px";
+                }
+                return isTrans ? (88 * mapScale) + "px" : (125 * mapScale) + "px";
             });
 
             container.style.display = "grid";
@@ -1272,8 +1279,9 @@
                             transLeft: isTransLeft, transRight: isTransRight 
                         };
                         
-                        // Centrado absoluto nativo mediante Flexbox: encaja exactamente con la costura
                         let alignStyle = "align-items: center;";
+                        if (isTransversal(item.id)) alignStyle = `align-items: flex-start; padding-top: ${15 * mapScale}px;`;
+                        
                         htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     } else {
                         const itemR = colItems.find(p => p.row === 1);
@@ -1305,58 +1313,53 @@
                             transLeft: isTransLeft, transRight: isTransRight
                         };
                         let alignStyle = "align-items: center;";
+                        if (isTransversal(item.id)) alignStyle = `align-items: flex-start; padding-top: ${15 * mapScale}px;`;
                         htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     });
                 }
             });
 
             container.innerHTML = htmlStr;
-            
-            let totalWidth = gridCols.reduce((acc, val) => acc + parseInt(val), 0);
-            let totalHeight = maxRow * baseRowH;
-            
-            // Ampliando la escala base para hacerlo notoriamente más grande y amigable a los clics
-            let scale = 1.4; 
-            
-            if (totalWidth * scale > 750) scale = 750 / totalWidth;
-            if (totalHeight * scale > 450) scale = 450 / totalHeight; 
-
-            container.style.transform = `scale(${scale})`;
+            container.style.transform = `scale(1)`;
             container.style.transformOrigin = "top center";
-            container.style.marginBottom = `${(totalHeight * scale) - totalHeight}px`; 
+            container.style.marginBottom = `0px`; 
         }
 
         function generarUnidadPallet(titulo, borders, config) {
             const isTrans = isTransversal(titulo);
+            let mapScale = 2.2; 
             
-            // 1. Dimensiones Reales Mapeadas
-            let w = 125, h = 85;
-            if (config === 'G') {
-                if (titulo.startsWith('P') || titulo === 'G/P1') { w = 196; h = 96; }
-                else if (titulo === 'C2') { w = 125; h = 96; }
-                else if (isTrans) { w = 96; h = 125; } 
-            } else if (config === 'C' || config === 'E') {
-                if (isTrans) { w = 96; h = 125; }
-                else { w = 125; h = 96; }
-            } else {
-                if (isTrans) { w = 85; h = 125; }
-                else { w = 125; h = 85; }
+            let w = 125 * mapScale, h = 88 * mapScale;
+            if (config === 'B') {
+                if (isTrans) { w = 88 * mapScale; h = 108 * mapScale; }
+                else { w = 108 * mapScale; h = 88 * mapScale; }
+            } else if (config === 'G') {
+                if (titulo.startsWith('P')) { w = 196 * mapScale; h = 96 * mapScale; }
+                else if (titulo === 'G/P1') { w = 188 * mapScale; h = 96 * mapScale; }
+                else if (titulo === 'C2') { w = 125 * mapScale; h = 96 * mapScale; }
+                else if (isTrans) { w = 88 * mapScale; h = 125 * mapScale; } 
+            } else if (config === 'C') {
+                if (isTrans) { w = 88 * mapScale; h = 125 * mapScale; }
+                else { w = 125 * mapScale; h = 96 * mapScale; }
+            } else if (config === 'D') {
+                w = 88 * mapScale; h = 125 * mapScale;
+            } else if (config === 'E') {
+                if (titulo === 'A1' || titulo === 'A13') { w = 88 * mapScale; h = 125 * mapScale; }
+                else { w = 96 * mapScale; h = 125 * mapScale; }
+            } else { // Config A
+                if (isTrans) { w = 88 * mapScale; h = 125 * mapScale; }
+                else { w = 125 * mapScale; h = 88 * mapScale; }
             }
 
-            // 2. Lógica para EVITAR PUNTOS SUPERPUESTOS y MANTENER LOS DE EN MEDIO
             let drawTop = !borders.top;
             let drawBottom = true;
             let drawLeft = !borders.left; 
-            
-            // Modificación Clave: ¡Todos dibujan la derecha, dejando que el de la derecha la esconda!
             let drawRight = true; 
 
             if (isTrans) {
-                // Si el transversal tiene alguien a la derecha, debe ocultar su lado para que la costura de 8 puntos mande
                 if (borders.right) drawRight = false;
                 if (borders.left) drawLeft = false;
             } else {
-                // Si el longitudinal se pega con un transversal, él (el longitudinal) fuerza dibujar el borde con los 8 puntos
                 if (borders.transLeft) drawLeft = true;
                 if (borders.transRight) drawRight = true;
             }
@@ -1365,8 +1368,6 @@
             
             if (borders.top) styleStr += ` border-top: 3px dashed #CBD5E1;`;
             if (borders.bottom) styleStr += ` border-bottom: 3px dashed #CBD5E1;`;
-            
-            // Si el borde se dibuja intermitente internamente:
             if (borders.right && !borders.transRight) styleStr += ` border-right: 3px dashed #CBD5E1; z-index:2;`;
             if (borders.left && !borders.transLeft) styleStr += ` border-left: 3px dashed #CBD5E1;`;
 
@@ -1433,7 +1434,6 @@
 
                 if (drawLeft) {
                     if (borders.transLeft) {
-                        // 8 PUNTOS A LA IZQUIERDA PARA UNIRSE CON A1
                         if (isR) {
                             html += addLock('F/A NC 1', '0%', '14%', 'F/A NC', 'lbl-left');
                             html += addLock('F/A NC 2', '0%', '35%', 'F/A NC', 'lbl-left');
@@ -1461,7 +1461,6 @@
 
                 if (drawRight) {
                     if (borders.transRight) {
-                        // 8 PUNTOS A LA DERECHA PARA UNIRSE CON A13
                         if (isR) {
                             html += addLock('F/A NC 1', '100%', '14%', 'F/A NC', 'lbl-right');
                             html += addLock('F/A NC 2', '100%', '35%', 'F/A NC', 'lbl-right');
@@ -1497,12 +1496,12 @@
             configActualGlobal = config;
             const cont = document.getElementById('capturePlanoHTML'); let html = `<div class="plane-shape border-${config}">`;
             
-            if (config === 'A') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=12; i++) { html += `<div class="p-col"><div class="p-half" data-pos="A${i}R" onclick="toggleCeldaPlano(this)">A${i}R</div><div class="p-half" data-pos="A${i}L" onclick="toggleCeldaPlano(this)">A${i}L</div></div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
-            else if (config === 'B') { html += `<div class="p-cell" data-pos="B1" onclick="toggleCeldaPlano(this)">B1</div>`; for(let i=2; i<=13; i++) { html += `<div class="p-col"><div class="p-half" data-pos="B${i}R" onclick="toggleCeldaPlano(this)">B${i}R</div><div class="p-half" data-pos="B${i}L" onclick="toggleCeldaPlano(this)">B${i}L</div></div>`; } html += `<div class="p-cell" data-pos="B14" onclick="toggleCeldaPlano(this)">B14</div>`; } 
-            else if (config === 'C') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=12; i++) { html += `<div class="p-cell" data-pos="C${i}" onclick="toggleCeldaPlano(this)">C${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
-            else if (config === 'D') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=16; i++) { html += `<div class="p-cell" data-pos="D${i}" onclick="toggleCeldaPlano(this)">D${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
-            else if (config === 'E') { html += `<div class="p-cell" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=15; i++) { html += `<div class="p-cell" data-pos="E${i}" onclick="toggleCeldaPlano(this)">E${i}</div>`; } html += `<div class="p-cell" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
-            else if (config === 'G') { html += `<div class="p-cell" style="flex: 1;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div><div class="p-cell" style="flex: 1;" data-pos="C2" onclick="toggleCeldaPlano(this)">C2</div><div class="p-cell p-wide" data-pos="G/P1" onclick="toggleCeldaPlano(this)">G/P1</div><div class="p-cell p-wide" data-pos="P2" onclick="toggleCeldaPlano(this)">P2</div><div class="p-cell p-wide" data-pos="P3" onclick="toggleCeldaPlano(this)">P3</div><div class="p-cell p-wide" data-pos="P4" onclick="toggleCeldaPlano(this)">P4</div><div class="p-cell p-wide" data-pos="P5" onclick="toggleCeldaPlano(this)">P5</div><div class="p-cell" style="flex: 1;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; }
+            if (config === 'A') { html += `<div class="p-cell" style="flex: 0.88;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=12; i++) { html += `<div class="p-col" style="flex: 1.25;"><div class="p-half" data-pos="A${i}R" onclick="toggleCeldaPlano(this)">A${i}R</div><div class="p-half" data-pos="A${i}L" onclick="toggleCeldaPlano(this)">A${i}L</div></div>`; } html += `<div class="p-cell" style="flex: 0.88;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'B') { html += `<div class="p-cell" style="flex: 0.88;" data-pos="B1" onclick="toggleCeldaPlano(this)">B1</div>`; for(let i=2; i<=13; i++) { html += `<div class="p-col" style="flex: 1.08;"><div class="p-half" data-pos="B${i}R" onclick="toggleCeldaPlano(this)">B${i}R</div><div class="p-half" data-pos="B${i}L" onclick="toggleCeldaPlano(this)">B${i}L</div></div>`; } html += `<div class="p-cell" style="flex: 0.88;" data-pos="B14" onclick="toggleCeldaPlano(this)">B14</div>`; } 
+            else if (config === 'C') { html += `<div class="p-cell" style="flex: 0.88;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=12; i++) { html += `<div class="p-cell" style="flex: 1.25;" data-pos="C${i}" onclick="toggleCeldaPlano(this)">C${i}</div>`; } html += `<div class="p-cell" style="flex: 0.88;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'D') { html += `<div class="p-cell" style="flex: 0.88;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=16; i++) { html += `<div class="p-cell" style="flex: 0.88;" data-pos="D${i}" onclick="toggleCeldaPlano(this)">D${i}</div>`; } html += `<div class="p-cell" style="flex: 0.88;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'E') { html += `<div class="p-cell" style="flex: 0.88;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div>`; for(let i=2; i<=15; i++) { html += `<div class="p-cell" style="flex: 0.96;" data-pos="E${i}" onclick="toggleCeldaPlano(this)">E${i}</div>`; } html += `<div class="p-cell" style="flex: 0.88;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; } 
+            else if (config === 'G') { html += `<div class="p-cell" style="flex: 0.88;" data-pos="A1" onclick="toggleCeldaPlano(this)">A1</div><div class="p-cell" style="flex: 1.25;" data-pos="C2" onclick="toggleCeldaPlano(this)">C2</div><div class="p-cell p-wide" style="flex: 1.88; margin-left:8px;" data-pos="G/P1" onclick="toggleCeldaPlano(this)">G/P1</div><div class="p-cell p-wide" style="flex: 1.96;" data-pos="P2" onclick="toggleCeldaPlano(this)">P2</div><div class="p-cell p-wide" style="flex: 1.96;" data-pos="P3" onclick="toggleCeldaPlano(this)">P3</div><div class="p-cell p-wide" style="flex: 1.96;" data-pos="P4" onclick="toggleCeldaPlano(this)">P4</div><div class="p-cell p-wide" style="flex: 1.96;" data-pos="P5" onclick="toggleCeldaPlano(this)">P5</div><div class="p-cell" style="flex: 0.88; margin-left:8px;" data-pos="A13" onclick="toggleCeldaPlano(this)">A13</div>`; }
             html += `</div>`; cont.innerHTML = html;
             
             renderizarBloqueDinamicoPallets([]); 
@@ -1574,7 +1573,7 @@
                 
                 const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                 const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
-                rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(0.9);">${gridHtml}</div></div>`;
+                rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle}; transform: scale(1);">${gridHtml}</div></div>`;
                 
                 // PDF resolution rendering increased
                 const cP = await html2canvas(rDiv, { scale: 2 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
