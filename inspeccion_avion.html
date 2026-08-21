@@ -340,9 +340,9 @@
                     <div class="comp-item" id="c_lower_fwd">
                         <span class="comp-title">Lower Forward Deck</span>
                         <select id="sel_lower_fwd" onchange="togglePanelHallazgo('lower_fwd', this); marcarCambios();">
-                            <option value="OK">[OK] Sin Novedad</option>
-                            <option value="HALLAZGO">[!] Reportar Daño Estructura</option>
-                            <option value="OTROS">[!] OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠ OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_fwd" class="hallazgo-panel">
@@ -374,9 +374,9 @@
                     <div class="comp-item" id="c_lower_aft">
                         <span class="comp-title">Lower Aft Deck</span>
                         <select id="sel_lower_aft" onchange="togglePanelHallazgo('lower_aft', this); marcarCambios();">
-                            <option value="OK">[OK] Sin Novedad</option>
-                            <option value="HALLAZGO">[!] Reportar Daño Estructura</option>
-                            <option value="OTROS">[!] OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠ OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_lower_aft" class="hallazgo-panel">
@@ -408,9 +408,9 @@
                     <div class="comp-item" id="c_bulk">
                         <span class="comp-title">Bulk Compartment</span>
                         <select id="sel_bulk" onchange="togglePanelHallazgo('bulk', this); marcarCambios();">
-                            <option value="OK">[OK] Sin Novedad</option>
-                            <option value="HALLAZGO">[!] Reportar Daño Estructura</option>
-                            <option value="OTROS">[!] OTROS (Rodos, seguros rotos, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="HALLAZGO">⚠ Reportar Daño Estructura</option>
+                            <option value="OTROS">⚠ OTROS (Rodos, seguros rotos, etc.)</option>
                         </select>
 
                         <div id="panel_bulk" class="hallazgo-panel">
@@ -442,10 +442,10 @@
                     <div class="comp-item" style="border: 2px solid var(--amerijet-blue); background: white;">
                         <span class="comp-title" style="font-size: 15px;">Main Deck (Cabina Principal)</span>
                         <select id="sel_main_deck" onchange="evaluarMainDeck(this); marcarCambios();">
-                            <option value="OK">[OK] Sin Novedad</option>
-                            <option value="FUSELAJE">[!] Reportar Daño Estructura / Puerta MD</option>
-                            <option value="LOCKS">[!] Mapear Daño en Seguros de Piso (CLS)</option>
-                            <option value="OTROS">[!] OTROS (Rodos dañados, guías, etc.)</option>
+                            <option value="OK">✓ Sin Novedad</option>
+                            <option value="FUSELAJE">⚠ Reportar Daño Estructura / Puerta MD</option>
+                            <option value="LOCKS">⚠ Mapear Daño en Seguros de Piso (CLS)</option>
+                            <option value="OTROS">⚠ OTROS (Rodos dañados, guías, etc.)</option>
                         </select>
 
                         <div id="panel_md_fuselaje" class="hallazgo-panel">
@@ -1228,9 +1228,15 @@
             const maxRow = (hasL && hasR) ? 2 : 1;
             const colsArray = Array.from(colsSet).sort((a,b)=>a-b);
             
+            // Anchuras dinámicas por columna para respetar proporción visual 88x125
+            let gridCols = colsArray.map(colNum => {
+                const isTrans = positionsMapped.some(p => p.col === colNum && isTransversal(p.id));
+                return isTrans ? "200px" : "280px";
+            });
+
             container.style.display = "grid";
-            container.style.gridTemplateRows = `repeat(${maxRow}, 160px)`;
-            container.style.gridTemplateColumns = `repeat(${colsArray.length}, 280px)`;
+            container.style.gridTemplateRows = `repeat(${maxRow}, 140px)`;
+            container.style.gridTemplateColumns = gridCols.join(" ");
             container.style.gap = "0px";
 
             let htmlStr = "";
@@ -1275,8 +1281,8 @@
 
             container.innerHTML = htmlStr;
             
-            let totalWidth = colsArray.length * 280;
-            let totalHeight = maxRow * 160;
+            let totalWidth = gridCols.reduce((acc, val) => acc + parseInt(val), 0);
+            let totalHeight = maxRow * 140;
             let scale = 1;
             
             if (totalWidth > 400) scale = 400 / totalWidth;
