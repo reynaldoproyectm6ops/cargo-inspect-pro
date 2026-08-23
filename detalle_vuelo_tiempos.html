@@ -74,10 +74,10 @@
         /* WIZARD PROGRESS BAR */
         .wizard-header { background: white; padding: 15px 25px; border-radius: 12px; border: 1px solid #E2E8F0; display: flex; flex-direction: column; gap: 15px;}
         .progress-container { width: 100%; background: #F1F5F9; border-radius: 10px; height: 8px; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--amerijet-blue); transition: width 0.3s ease; width: 25%; }
+        .progress-bar { height: 100%; background: var(--amerijet-blue); transition: width 0.3s ease; width: 20%; }
         
         .wizard-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .w-tab { flex: 1; min-width: 100px; padding: 10px; text-align: center; font-size: 11px; font-weight: 800; color: #64748B; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+        .w-tab { flex: 1; min-width: 120px; padding: 10px; text-align: center; font-size: 11px; font-weight: 800; color: #64748B; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
         .w-tab.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
         /* WIZARD PASOS */
@@ -113,11 +113,17 @@
         .zulu-badge { background: var(--amerijet-blue-dark); color: #38BDF8; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; height: 42px; box-sizing: border-box;}
 
         /* CALCULOS ALERTAS */
-        .calc-box { background: var(--excel-yellow); border: 1px solid #FACC15; padding: 15px 20px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;}
+        .calc-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;}
+        @media (min-width: 768px) { .calc-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .calc-box { background: white; border: 1px solid #E2E8F0; padding: 15px 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
         .calc-box.alert { background: #FEF2F2; border-color: #FECACA; }
-        .calc-title { font-size: 12px; font-weight: 800; color: #854D0E; text-transform: uppercase; }
+        .calc-box.highlight { background: var(--excel-yellow); border-color: #FACC15; }
+        .calc-title { font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; }
+        .calc-box.highlight .calc-title { color: #854D0E; }
         .calc-box.alert .calc-title { color: #BE123C; }
-        .calc-value { font-size: 18px; font-weight: 900; color: #713F12; }
+        .calc-value { font-size: 22px; font-weight: 900; color: var(--amerijet-blue); }
+        .calc-box.highlight .calc-value { color: #713F12; }
         .calc-box.alert .calc-value { color: #9F1239; }
 
         .delay-section { display: none; margin-top: 15px; animation: fadeIn 0.3s ease; }
@@ -201,7 +207,7 @@
                 <button class="menu-toggle" onclick="toggleSidebar()">
                     <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
-                <div class="header-title">Reporte Operativo<span>Tiempos de Vuelo y Demoras</span></div>
+                <div class="header-title">Reporte Operativo<span>Análisis de Tiempos</span></div>
             </div>
             <div class="header-info-mobile">
                 <div style="font-size: 11px; font-weight: 900; background: #EFF6FF; color: var(--amerijet-blue); padding: 6px 12px; border-radius: 6px; border: 1px solid #BFDBFE;" id="lblTailHead">---</div>
@@ -224,9 +230,10 @@
                     <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
                     <div class="wizard-tabs">
                         <button class="w-tab active" id="tab_1" onclick="goToStep(1)">1. LLEGADA</button>
-                        <button class="w-tab" id="tab_2" onclick="goToStep(2)">2. CARGA</button>
-                        <button class="w-tab" id="tab_3" onclick="goToStep(3)">3. SERVICIOS</button>
-                        <button class="w-tab" id="tab_4" onclick="goToStep(4)">4. SALIDA</button>
+                        <button class="w-tab" id="tab_2" onclick="goToStep(2)">2. MAIN DECK</button>
+                        <button class="w-tab" id="tab_3" onclick="goToStep(3)">3. LOWER DECK</button>
+                        <button class="w-tab" id="tab_4" onclick="goToStep(4)">4. SERVICIOS</button>
+                        <button class="w-tab" id="tab_5" onclick="goToStep(5)">5. SALIDA</button>
                     </div>
                 </div>
 
@@ -235,23 +242,23 @@
                     <div class="step-card">
                         <div class="step-card-header">
                             <div class="step-number">1</div>
-                            <div class="step-title">ARRIVAL & RECEIVING / LLEGADA</div>
-                        </div>
-                        
-                        <div class="time-row">
-                            <div>
-                                <label class="time-label">FINAL WEIGHTS GIVEN / ENVIO HOJA DE PESOS</label>
-                                <div class="time-controls">
-                                    <input type="datetime-local" id="t_weights" onchange="calcZAndDurations('t_weights')">
-                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_weights')" title="Capturar hora local actual">
-                                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                    </button>
-                                    <span class="zulu-badge" id="z_t_weights">--:-- Z</span>
-                                </div>
-                            </div>
-                            <div><label class="time-label">Notes / Notas</label><input type="text" id="n_weights" placeholder="Opcional..." oninput="marcarCambios()"></div>
+                            <div class="step-title">ARRIVAL & SETUP / LLEGADA</div>
                         </div>
 
+                        <div class="time-row">
+                            <div>
+                                <label class="time-label">TOUCHDOWN TIME / ATERRIZAJE</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_touchdown" onchange="calcZAndDurations('t_touchdown')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_touchdown')" title="Capturar hora actual">
+                                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    </button>
+                                    <span class="zulu-badge" id="z_t_touchdown">--:-- Z</span>
+                                </div>
+                            </div>
+                            <div><label class="time-label">Notes / Notas</label><input type="text" id="n_touchdown" placeholder="..." oninput="marcarCambios()"></div>
+                        </div>
+                        
                         <div class="time-row highlight-yellow">
                             <div>
                                 <label class="time-label">AIRCRAFT BLOCK TIME / PARQUEO DEL AVION</label>
@@ -263,7 +270,21 @@
                                     <span class="zulu-badge" id="z_t_block">--:-- Z</span>
                                 </div>
                             </div>
-                            <div><label class="time-label">Notes / Notas</label><input type="text" id="n_block" placeholder="Ej: Arrival Time 15:54 Z" oninput="marcarCambios()"></div>
+                            <div><label class="time-label">Notes / Notas</label><input type="text" id="n_block" placeholder="..." oninput="marcarCambios()"></div>
+                        </div>
+
+                        <div class="time-row">
+                            <div>
+                                <label class="time-label">FINAL WEIGHTS GIVEN / ENVIO HOJA DE PESOS</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_weights" onchange="calcZAndDurations('t_weights')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_weights')">
+                                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    </button>
+                                    <span class="zulu-badge" id="z_t_weights">--:-- Z</span>
+                                </div>
+                            </div>
+                            <div><label class="time-label">Notes / Notas</label><input type="text" id="n_weights" placeholder="..." oninput="marcarCambios()"></div>
                         </div>
 
                         <div class="time-row">
@@ -287,17 +308,17 @@
 
                         <div class="wizard-nav">
                             <div></div>
-                            <button class="btn-wiz btn-next" onclick="goToStep(2)">Continuar: Área de Carga <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                            <button class="btn-wiz btn-next" onclick="goToStep(2)">Continuar: Main Deck <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- PASO 2: OFF/UP LOAD -->
+                <!-- PASO 2: OFF/UP LOAD MAIN DECK -->
                 <div class="step-section" id="sec_2">
                     <div class="step-card">
                         <div class="step-card-header">
                             <div class="step-number">2</div>
-                            <div class="step-title">OFFLOAD & UPLOAD / ÁREA DE CARGA</div>
+                            <div class="step-title">MAIN DECK / CARGA PRINCIPAL</div>
                         </div>
 
                         <div class="time-row">
@@ -309,7 +330,7 @@
                                     <span class="zulu-badge" id="z_t_start_offload">--:-- Z</span>
                                 </div>
                             </div>
-                            <div><label class="time-label">Notes (Import)</label><input type="text" id="n_start_offload" placeholder="Ej: 4 PMC + 18 PAG... LBS IMPORT" oninput="marcarCambios()"></div>
+                            <div><label class="time-label">Notes</label><input type="text" id="n_start_offload" placeholder="Ej: 4 PMC + 18 PAG..." oninput="marcarCambios()"></div>
                         </div>
 
                         <div class="time-row">
@@ -348,24 +369,98 @@
                             <div><label class="time-label">Notes</label><input type="text" id="n_fin_upload" placeholder="..." oninput="marcarCambios()"></div>
                         </div>
 
-                        <!-- CALCULO COMBINADO -->
-                        <div class="calc-box" id="calc_combined">
-                            <span class="calc-title">COMBINED OFFLOAD & LOAD TIME / TIEMPO COMBINADO</span>
-                            <span class="calc-value" id="val_combined">00h 00m</span>
+                        <div class="calc-grid">
+                            <div class="calc-box">
+                                <span class="calc-title">TOTAL OFFLOAD TIME</span>
+                                <span class="calc-value" id="val_offload_time">00h 00m</span>
+                            </div>
+                            <div class="calc-box">
+                                <span class="calc-title">TOTAL UPLOAD TIME</span>
+                                <span class="calc-value" id="val_upload_time">00h 00m</span>
+                            </div>
                         </div>
 
                         <div class="wizard-nav">
                             <button class="btn-wiz btn-prev" onclick="goToStep(1)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Atrás</button>
-                            <button class="btn-wiz btn-next" onclick="goToStep(3)">Continuar: Servicios <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                            <button class="btn-wiz btn-next" onclick="goToStep(3)">Continuar: Lower Deck <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- PASO 3: SERVICIOS -->
+                <!-- PASO 3: LOWER DECK (NUEVA SECCIÓN COMPARTIMENTOS) -->
                 <div class="step-section" id="sec_3">
                     <div class="step-card">
                         <div class="step-card-header">
                             <div class="step-number">3</div>
+                            <div class="step-title">LOWER DECK COMPARTMENTS / BARRIGAS</div>
+                        </div>
+
+                        <!-- FWD -->
+                        <div class="time-row">
+                            <div>
+                                <label class="time-label" style="color:#0284C7;">FWD OFFLOAD / UPLOAD START</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_fwd_start" onchange="calcZAndDurations('t_fwd_start')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_fwd_start')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="time-label" style="color:#0284C7;">FWD OFFLOAD / UPLOAD FINISH</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_fwd_fin" onchange="calcZAndDurations('t_fwd_fin')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_fwd_fin')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AFT -->
+                        <div class="time-row">
+                            <div>
+                                <label class="time-label" style="color:#0284C7;">AFT OFFLOAD / UPLOAD START</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_aft_start" onchange="calcZAndDurations('t_aft_start')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_aft_start')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="time-label" style="color:#0284C7;">AFT OFFLOAD / UPLOAD FINISH</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_aft_fin" onchange="calcZAndDurations('t_aft_fin')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_aft_fin')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BULK -->
+                        <div class="time-row">
+                            <div>
+                                <label class="time-label" style="color:#0284C7;">BULK OFFLOAD / UPLOAD START</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_bulk_start" onchange="calcZAndDurations('t_bulk_start')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_bulk_start')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="time-label" style="color:#0284C7;">BULK OFFLOAD / UPLOAD FINISH</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_bulk_fin" onchange="calcZAndDurations('t_bulk_fin')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_bulk_fin')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="btn-wiz btn-prev" onclick="goToStep(2)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Atrás</button>
+                            <button class="btn-wiz btn-next" onclick="goToStep(4)">Continuar: Servicios <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 4: SERVICIOS -->
+                <div class="step-section" id="sec_4">
+                    <div class="step-card">
+                        <div class="step-card-header">
+                            <div class="step-number">4</div>
                             <div class="step-title">SERVICES & DOCS / SERVICIOS</div>
                         </div>
 
@@ -435,17 +530,17 @@
                         </div>
 
                         <div class="wizard-nav">
-                            <button class="btn-wiz btn-prev" onclick="goToStep(2)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Atrás</button>
-                            <button class="btn-wiz btn-next" onclick="goToStep(4)">Continuar: Cierre y Salida <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                            <button class="btn-wiz btn-prev" onclick="goToStep(3)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Atrás</button>
+                            <button class="btn-wiz btn-next" onclick="goToStep(5)">Continuar: Salida <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- PASO 4: SALIDA & DEMORAS -->
-                <div class="step-section" id="sec_4">
+                <!-- PASO 5: SALIDA & DEMORAS -->
+                <div class="step-section" id="sec_5">
                     <div class="step-card">
                         <div class="step-card-header">
-                            <div class="step-number">4</div>
+                            <div class="step-number">5</div>
                             <div class="step-title">DEPARTURE & DELAYS / SALIDA Y DEMORAS</div>
                         </div>
 
@@ -475,27 +570,46 @@
 
                         <div class="time-row">
                             <div>
-                                <label class="time-label">GENEVA DEPARTURE TIME / HORA DE SALIDA GENEVA</label>
+                                <label class="time-label">AIRBORNE TIME / DESPEGUE (WHEELS UP)</label>
+                                <div class="time-controls">
+                                    <input type="datetime-local" id="t_airborne" onchange="calcZAndDurations('t_airborne')">
+                                    <button type="button" class="btn-ahora-icon" onclick="setNow('t_airborne')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                    <span class="zulu-badge" id="z_t_airborne">--:-- Z</span>
+                                </div>
+                            </div>
+                            <div><label class="time-label">Notes</label><input type="text" id="n_airborne" placeholder="..." oninput="marcarCambios()"></div>
+                        </div>
+
+                        <div class="time-row">
+                            <div>
+                                <label class="time-label">GENEVA DEPARTURE TIME / HORA SALIDA GENEVA</label>
                                 <div class="time-controls">
                                     <input type="datetime-local" id="t_geneva" onchange="calcZAndDurations('t_geneva')">
                                     <button type="button" class="btn-ahora-icon" onclick="setNow('t_geneva')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
                                     <span class="zulu-badge" id="z_t_geneva">--:-- Z</span>
                                 </div>
                             </div>
-                            <div><label class="time-label">Departure Notes</label><input type="text" id="n_geneva" placeholder="Ej: DEPARTURE TIME: 18:49 Z" oninput="marcarCambios()"></div>
+                            <div><label class="time-label">Notes</label><input type="text" id="n_geneva" placeholder="..." oninput="marcarCambios()"></div>
                         </div>
 
-                        <!-- CALCULO TOTAL DE RAMPA Y DELAY (ALERTA ROJA) -->
-                        <div class="calc-box" id="calc_total_ramp">
-                            <span class="calc-title">TOTAL TIME ON RAMP (BLOCK TO PUSHBACK)</span>
-                            <span class="calc-value" id="val_total_ramp">00h 00m</span>
+                        <!-- CALCULOS PRINCIPALES DE VUELO -->
+                        <div class="calc-grid">
+                            <div class="calc-box highlight" id="calc_total_ramp">
+                                <span class="calc-title">TOTAL TIME ON RAMP (BLOCK TO PUSHBACK)</span>
+                                <span class="calc-value" id="val_total_ramp">00h 00m</span>
+                            </div>
+                            <div class="calc-box">
+                                <span class="calc-title">TOTAL GROUND TIME (TOUCHDOWN TO AIRBORNE)</span>
+                                <span class="calc-value" id="val_total_ground">00h 00m</span>
+                            </div>
                         </div>
 
+                        <!-- PANEL DE ALERTA DE DELAY AUTOMATICO -->
                         <div class="delay-section" id="delay_panel">
                             <div style="background: #FEF2F2; padding: 15px; border-radius: 8px; border: 1px dashed #FECACA; margin-top:15px;">
                                 <label class="time-label" style="color: #BE123C; display:flex; align-items:center; gap:5px;">
                                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                                    DELAY REPORTED / REPORTE DE ATRASO (> 1h 30m)
+                                    DELAY REPORTED / REPORTE DE ATRASO (> 90 MIN)
                                 </label>
                                 <input type="text" id="t_delay_time" placeholder="Calculado automáticamente..." readonly style="background:#FFE4E6; color:#9F1239; font-weight:900; margin-bottom:10px;">
                                 <label class="time-label" style="color: #BE123C;">DELAY REASON / RAZÓN DE LA DEMORA</label>
@@ -504,7 +618,7 @@
                         </div>
 
                         <div class="wizard-nav">
-                            <button class="btn-wiz btn-prev" onclick="goToStep(3)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Atrás</button>
+                            <button class="btn-wiz btn-prev" onclick="goToStep(4)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Atrás</button>
                             <button class="btn-wiz btn-next" style="background:#10B981;" onclick="guardarProgresoEnBD()">✔ Finalizar y Guardar</button>
                         </div>
                     </div>
@@ -520,7 +634,7 @@
             </button>
             <button type="button" class="btn-panel btn-pdf" onclick="generarPDF()">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                Bajar PDF Oficial
+                Generar PDF Report
             </button>
         </div>
     </div>
@@ -552,11 +666,13 @@
         let vueloData = { vuelo: '', tail: '', ruta: '', estacion: '', fecha: '' };
         let currentUser = "Usuario"; let dbRecordId = null;
 
-        // Lista completa de los campos ordenados
+        // Lista completa de campos
         const timeFields = [
-            't_weights', 't_block', 't_loadmaster', 't_start_offload', 't_fin_offload',
-            't_start_upload', 't_fin_upload', 't_fuel_start', 't_fuel_fin', 't_ams',
-            't_ease', 't_docs', 't_door', 't_pushback', 't_geneva'
+            't_touchdown', 't_block', 't_weights', 't_loadmaster', 
+            't_start_offload', 't_fin_offload', 't_start_upload', 't_fin_upload', 
+            't_fwd_start', 't_fwd_fin', 't_aft_start', 't_aft_fin', 't_bulk_start', 't_bulk_fin',
+            't_fuel_start', 't_fuel_fin', 't_ams', 't_ease', 't_docs', 
+            't_door', 't_pushback', 't_airborne', 't_geneva'
         ];
 
         let hayCambiosSinGuardar = false;
@@ -565,7 +681,6 @@
         function showLoading(txt) { document.getElementById('loadingText').innerText=txt; document.getElementById('loadingOverlay').style.display='flex'; }
         function hideLoading() { document.getElementById('loadingOverlay').style.display='none'; }
         
-        // Iconos standard neutros
         const iconSuccess = `<svg width="45" height="45" fill="none" stroke="#10B981" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
         const iconError = `<svg width="45" height="45" fill="none" stroke="#E11D48" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
         const iconInfo = `<svg width="45" height="45" fill="none" stroke="#0A2540" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
@@ -592,20 +707,14 @@
         // LÓGICA WIZARD (PASOS)
         // =======================
         function goToStep(stepNumber) {
-            // Ocultar todas las secciones
             document.querySelectorAll('.step-section').forEach(el => el.classList.remove('active'));
-            // Quitar clase active a todos los tabs
             document.querySelectorAll('.w-tab').forEach(el => el.classList.remove('active'));
             
-            // Activar paso y tab correspondientes
             document.getElementById('sec_' + stepNumber).classList.add('active');
             document.getElementById('tab_' + stepNumber).classList.add('active');
             
-            // Actualizar barra de progreso (25%, 50%, 75%, 100%)
-            const w = stepNumber * 25;
+            const w = stepNumber * 20; // 5 pasos = 20% c/u
             document.getElementById('progressBar').style.width = w + '%';
-            
-            // Scroll arriba suave
             document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -635,22 +744,36 @@
             if(el) { el.value = localStr; calcZAndDurations(id); }
         }
 
+        function formatMinsToText(totalMins) {
+            const h = Math.floor(totalMins / 60); const m = totalMins % 60;
+            return `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m`;
+        }
+
+        function calcDuration(idStart, idEnd, idLabel) {
+            const start = document.getElementById(idStart); const end = document.getElementById(idEnd); const lbl = document.getElementById(idLabel);
+            if(start && end && start.value && end.value) {
+                const d1 = new Date(start.value); const d2 = new Date(end.value);
+                const diffMins = Math.max(0, Math.floor((d2 - d1) / 60000));
+                if(lbl) lbl.innerText = formatMinsToText(diffMins);
+            } else { if(lbl) lbl.innerText = "00h 00m"; }
+        }
+
         function calcZAndDurations(id) {
             const el = document.getElementById(id);
             const val = el ? el.value : "";
             const badge = document.getElementById(`z_${id}`);
             if(badge) badge.innerText = val ? getZuluString(new Date(val)) : "--:-- Z";
+            
+            // Recalcular todo en vivo
             calcularCombinado();
             calcularDemora();
+            calcDuration('t_start_offload', 't_fin_offload', 'val_offload_time');
+            calcDuration('t_start_upload', 't_fin_upload', 'val_upload_time');
             marcarCambios();
         }
 
-        function formatMinsToText(totalMins) {
-            const h = Math.floor(totalMins / 60); const m = totalMins % 60;
-            return `${String(h).padStart(2,'0')} Hora ${String(m).padStart(2,'0')} Minutos`;
-        }
-
         function calcularCombinado() {
+            // Segun excel, tiempo entre start offload y fin upload.
             const elStart = document.getElementById('t_start_offload');
             const elFin = document.getElementById('t_fin_upload');
             const lbl = document.getElementById('val_combined');
@@ -659,36 +782,52 @@
                 const d1 = new Date(elStart.value); const d2 = new Date(elFin.value);
                 const diffMins = Math.max(0, Math.floor((d2 - d1) / 60000));
                 if(lbl) lbl.innerText = formatMinsToText(diffMins);
-            } else { if(lbl) lbl.innerText = "00 Hora 00 Minutos"; }
+            } else { if(lbl) lbl.innerText = "00h 00m"; }
         }
 
         function calcularDemora() {
             const elBlock = document.getElementById('t_block');
             const elPush = document.getElementById('t_pushback');
-            const lblTotal = document.getElementById('val_total_ramp');
+            const elTouch = document.getElementById('t_touchdown');
+            const elAir = document.getElementById('t_airborne');
+            
+            const lblTotalRamp = document.getElementById('val_total_ramp');
+            const lblTotalGround = document.getElementById('val_total_ground');
+
             const panel = document.getElementById('delay_panel');
-            const calcBox = document.getElementById('calc_total_ramp');
+            const calcBoxRamp = document.getElementById('calc_total_ramp');
             const inDelay = document.getElementById('t_delay_time');
 
+            // 1. Calc Total Rampa (Block to Pushback)
             if(elBlock && elPush && elBlock.value && elPush.value) {
                 const d1 = new Date(elBlock.value); const d2 = new Date(elPush.value);
                 const diffMins = Math.max(0, Math.floor((d2 - d1) / 60000));
-                if(lblTotal) lblTotal.innerText = formatMinsToText(diffMins);
+                if(lblTotalRamp) lblTotalRamp.innerText = formatMinsToText(diffMins);
 
+                // Regla 90 min (Aplica sobre tiempo de rampa usualmente)
                 if(diffMins > 90) {
-                    if(calcBox) calcBox.classList.add('alert');
+                    if(calcBoxRamp) calcBoxRamp.classList.add('alert');
                     if(panel) panel.style.display = 'block';
                     const extra = diffMins - 90;
-                    if(inDelay) inDelay.value = `${extra} Minutos Mas`;
+                    if(inDelay) inDelay.value = `+ ${extra} Minutos sobre límite`;
                 } else {
-                    if(calcBox) calcBox.classList.remove('alert');
+                    if(calcBoxRamp) calcBoxRamp.classList.remove('alert');
                     if(panel) panel.style.display = 'none';
                     if(inDelay) inDelay.value = "";
                 }
             } else { 
-                if(lblTotal) lblTotal.innerText = "00 Hora 00 Minutos"; 
-                if(calcBox) calcBox.classList.remove('alert'); 
+                if(lblTotalRamp) lblTotalRamp.innerText = "00h 00m"; 
+                if(calcBoxRamp) calcBoxRamp.classList.remove('alert'); 
                 if(panel) panel.style.display = 'none';
+            }
+
+            // 2. Calc Total Ground (Touchdown to Airborne)
+            if(elTouch && elAir && elTouch.value && elAir.value) {
+                const d3 = new Date(elTouch.value); const d4 = new Date(elAir.value);
+                const gMins = Math.max(0, Math.floor((d4 - d3) / 60000));
+                if(lblTotalGround) lblTotalGround.innerText = formatMinsToText(gMins);
+            } else {
+                if(lblTotalGround) lblTotalGround.innerText = "00h 00m";
             }
         }
 
@@ -710,7 +849,6 @@
 
                 if(!operacionId) { window.location.href = 'dashboard.html'; return; }
 
-                // Info vuelo
                 const { data: op, error: errOp } = await supabaseClient.from('vuelos_operaciones').select('*').eq('id', operacionId).single();
                 if (errOp || !op) throw new Error("Vuelo no encontrado.");
                 vueloData = { vuelo: op.vuelo_id, tail: op.matricula_avion, ruta: op.ruta, estacion: op.estacion_registro, fecha: op.fecha };
@@ -757,10 +895,7 @@
                 let payloadJSON = {};
                 timeFields.forEach(f => {
                     const elInput = document.getElementById(f);
-                    if (elInput) {
-                        const val = elInput.value;
-                        if(val) payloadJSON[f] = new Date(val).toISOString();
-                    }
+                    if (elInput && elInput.value) { payloadJSON[f] = new Date(elInput.value).toISOString(); }
                     const elNota = document.getElementById('n_' + f);
                     if (elNota) payloadJSON['n_'+f] = elNota.value.trim();
                 });
@@ -797,90 +932,117 @@
         }
 
         // =======================
-        // GENERADOR DE PDF EXACTO A EXCEL
+        // GENERADOR DE PDF PROFESIONAL
         // =======================
         function generarPDF() {
             try {
                 const { jsPDF } = window.jspdf;
-                // Formato CARTA exacto
                 const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
                 
-                // HEADER corporativo e imagen de la empresa
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
-                doc.text(`Traffic Agent: ${currentUser}`, 15, 12);
-                
-                // Construir la mini-tabla de la esquina superior derecha
-                doc.autoTable({
-                    startY: 10,
-                    margin: { left: 110, right: 15 },
-                    body: [
-                        ['FLIGHT DATE / FECHA DE VUELO', vueloData.fecha || new Date().toLocaleDateString()],
-                        ['FLIGHT # / VUELO', vueloData.vuelo],
-                        ['TAIL # / MATRICULA', vueloData.tail],
-                        ['FLIGHT ROUTE / RUTA', vueloData.ruta]
-                    ],
-                    theme: 'grid',
-                    styles: { fontSize: 8, cellPadding: 2, fontStyle: 'italic', halign: 'center' },
-                    columnStyles: { 0: { fillColor: [226, 232, 240], fontStyle: 'bold', cellWidth: 50 }, 1: { cellWidth: 40.9 } }
-                });
+                doc.setFillColor(10, 37, 64); doc.rect(0, 0, 215.9, 25, "F");
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(255, 255, 255);
+                doc.text("AMERIJET INTERNATIONAL AIRLINES", 10, 12);
+                doc.setFontSize(10); doc.setFont("Helvetica", "normal");
+                doc.text("FLIGHT TURNAROUND ANALYTICS REPORT", 10, 18);
 
-                // Funciones auxiliares para PDF de forma blindada
+                doc.setTextColor(33, 33, 33); doc.setDrawColor(203, 213, 225); doc.setFillColor(248, 250, 252); 
+                doc.roundedRect(10, 30, 195.9, 28, 3, 3, "FD"); 
+                
+                doc.setFont("Helvetica", "bold"); doc.text("FLIGHT DETAILS", 15, 37);
+                doc.setFont("Helvetica", "normal"); 
+                doc.text(`Flight: ${vueloData.vuelo}`, 15, 43);
+                doc.text(`Tail: ${vueloData.tail}`, 15, 48); 
+                doc.text(`Route: ${vueloData.ruta}`, 15, 53);
+                
+                doc.setFont("Helvetica", "bold"); doc.text("REPORT INFO", 115, 37);
+                doc.setFont("Helvetica", "normal"); 
+                doc.text(`Date: ${vueloData.fecha || new Date().toLocaleDateString()}`, 115, 43);
+                doc.text(`Traffic Agent: ${currentUser}`, 115, 48);
+
                 const getV = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
                 const getZ = (id) => getV(id) ? getZuluString(new Date(getV(id))) : " ";
-                const safeNotes = (val) => String(val || '').replace(/([^\s]{20})(?=[^\s])/g, "$1 "); // Anti-roturas
+                const safeNotes = (val) => String(val || '').replace(/([^\s]{25})(?=[^\s])/g, "$1 "); // Anti-break
 
-                const elCombined = document.getElementById('val_combined');
-                const valCombined = elCombined ? elCombined.innerText : "";
+                const tRamp = document.getElementById('val_total_ramp').innerText;
+                const tGround = document.getElementById('val_total_ground').innerText;
 
-                const elTotal = document.getElementById('val_total_ramp');
-                const valTotal = elTotal ? elTotal.innerText : "";
+                // KPI BOXES EN EL PDF
+                doc.setFillColor(254, 240, 138); doc.roundedRect(10, 62, 95, 18, 2, 2, "FD");
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(133, 77, 14);
+                doc.text("TOTAL RAMP TIME (Block to Pushback):", 15, 70);
+                doc.setFontSize(12); doc.setTextColor(113, 63, 18); doc.text(tRamp, 15, 76);
 
-                // Tabla principal paso a paso (Orden Exacto al del usuario)
+                doc.setFillColor(241, 245, 249); doc.roundedRect(110.9, 62, 95, 18, 2, 2, "FD");
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(71, 85, 105);
+                doc.text("TOTAL GROUND TIME (Touchdown to Air):", 115.9, 70);
+                doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(tGround, 115.9, 76);
+
+                // TABLA DE TIEMPOS
                 const tableData = [
-                    ['FINAL WEIGHTS GIVEN / ENVIO HOJA DE PESOS', getZ('t_weights'), safeNotes(getV('n_weights'))],
-                    ['AIRCRAFT BLOCK TIME / PARQUEO DEL AVION', getZ('t_block'), safeNotes(getV('n_block'))],
-                    ['LOADMASTER RECEIVING FREIGHT / ENTREGA CARGUE POR PARTE DEL LOADMASTER', getZ('t_loadmaster'), safeNotes(getV('n_loadmaster'))],
-                    ['PAYLOAD & TOTAL EXPORT AND IMPORT PALLETS / PESO Y CANTIDAD DE PALLETS EXPORT Y IMPORT', '/////////', safeNotes(getV('n_payload'))],
-                    ['START OFFLOAD TIME / INICIA DESCARGUE', getZ('t_start_offload'), safeNotes(getV('n_start_offload'))],
-                    ['FINISH OFFLOAD TIME / FINALIZA DESCARGUE', getZ('t_fin_offload'), safeNotes(getV('n_fin_offload'))],
-                    ['START UPLOAD TIME / INICIO CARGUE', getZ('t_start_upload'), safeNotes(getV('n_start_upload'))],
-                    ['FINISH UPLOAD TIME / FINALIZA CARGUE', getZ('t_fin_upload'), safeNotes(getV('n_fin_upload'))],
-                    ['COMBINED OFFLOAD & LOAD TIME / TIEMPO COMBINADO DE CARGUE Y DESCARGUE', valCombined, ''],
+                    ['TOUCHDOWN TIME', getZ('t_touchdown'), safeNotes(getV('n_touchdown'))],
+                    ['FINAL WEIGHTS GIVEN', getZ('t_weights'), safeNotes(getV('n_weights'))],
+                    ['AIRCRAFT BLOCK TIME', getZ('t_block'), safeNotes(getV('n_block'))],
+                    ['LOADMASTER RECEIVING FREIGHT', getZ('t_loadmaster'), safeNotes(getV('n_loadmaster'))],
+                    ['PAYLOAD & TOTAL PALLETS', '---', safeNotes(getV('n_payload'))],
+                    
+                    ['--- MAIN DECK ---', '---', '---'],
+                    ['START OFFLOAD TIME', getZ('t_start_offload'), safeNotes(getV('n_start_offload'))],
+                    ['FINISH OFFLOAD TIME', getZ('t_fin_offload'), safeNotes(getV('n_fin_offload'))],
+                    ['START UPLOAD TIME', getZ('t_start_upload'), safeNotes(getV('n_start_upload'))],
+                    ['FINISH UPLOAD TIME', getZ('t_fin_upload'), safeNotes(getV('n_fin_upload'))],
+                    ['COMBINED OFFLOAD & LOAD TIME', document.getElementById('val_combined').innerText, ''],
+                    
+                    ['--- LOWER COMPARTMENTS ---', '---', '---'],
+                    ['FWD OFFLOAD/UPLOAD START', getZ('t_fwd_start'), ''],
+                    ['FWD OFFLOAD/UPLOAD FINISH', getZ('t_fwd_fin'), ''],
+                    ['AFT OFFLOAD/UPLOAD START', getZ('t_aft_start'), ''],
+                    ['AFT OFFLOAD/UPLOAD FINISH', getZ('t_aft_fin'), ''],
+                    ['BULK OFFLOAD/UPLOAD START', getZ('t_bulk_start'), ''],
+                    ['BULK OFFLOAD/UPLOAD FINISH', getZ('t_bulk_fin'), ''],
+
+                    ['--- SERVICES & DOCS ---', '---', '---'],
                     ['FUELING STARTED', getZ('t_fuel_start'), safeNotes(getV('n_fuel_start'))],
                     ['FUELING FINISHED', getZ('t_fuel_fin'), safeNotes(getV('n_fuel_fin'))],
-                    ['TIME AMS SENT BY STATION / ENVIO DE AMS POR ESTACION', getZ('t_ams'), safeNotes(getV('n_ams'))],
-                    ['RELEASE GIVEN BY MIA / RELEASE ENVIADO POR MIA', getZ('t_ease'), safeNotes(getV('n_ease'))],
-                    ['CARGO DOCUMENTATION ON BOARD / DOCUMENTOS DE CARGA A BORDO', getZ('t_docs'), safeNotes(getV('n_docs'))],
-                    ['CABIN DOOR CLOSED / PUERTA DE CABINA CERRADA', getZ('t_door'), safeNotes(getV('n_door'))],
-                    ['PUSHBACK / RETROCEDER', getZ('t_pushback'), safeNotes(getV('n_pushback'))],
+                    ['TIME AMS SENT BY STATION', getZ('t_ams'), safeNotes(getV('n_ams'))],
+                    ['RELEASE GIVEN BY MIA', getZ('t_ease'), safeNotes(getV('n_ease'))],
+                    ['CARGO DOCUMENTATION ON BOARD', getZ('t_docs'), safeNotes(getV('n_docs'))],
                     ['CUSTOMS OVERTIME', 'N/A', safeNotes(getV('n_customs'))],
-                    ['GENEVA DEPARTURE TIME / HORA DE SALIDA GENEVA', getZ('t_geneva'), safeNotes(getV('n_geneva'))]
+
+                    ['--- DEPARTURE ---', '---', '---'],
+                    ['CABIN DOOR CLOSED', getZ('t_door'), safeNotes(getV('n_door'))],
+                    ['PUSHBACK / RETROCEDER', getZ('t_pushback'), safeNotes(getV('n_pushback'))],
+                    ['AIRBORNE TIME (WHEELS UP)', getZ('t_airborne'), safeNotes(getV('n_airborne'))],
+                    ['GENEVA DEPARTURE TIME', getZ('t_geneva'), safeNotes(getV('n_geneva'))]
                 ];
 
-                // Generar Tabla Principal
                 doc.autoTable({ 
-                    startY: doc.lastAutoTable.finalY + 2, 
-                    margin: { left: 15, right: 15 },
-                    head: [['DETAILS OF FLIGHT / DETALLES DEL VUELO', 'TIME / HORA (Z)', 'NOTES / NOTA']], 
+                    startY: 85, 
+                    margin: { left: 10, right: 10 },
+                    head: [['FLIGHT METRIC / EVENT', 'TIME (ZULU)', 'NOTES / DETAILS']], 
                     body: tableData, 
                     theme: 'grid', 
-                    headStyles: { fillColor: [148, 163, 184], textColor: [15, 23, 42], fontStyle: 'bolditalic', halign: 'center' }, 
-                    styles: { fontSize: 8.5, cellPadding: 3, overflow: 'linebreak', fontStyle: 'bolditalic', textColor: [0,0,0] },
+                    headStyles: { fillColor: [10, 37, 64], halign: 'center' }, 
+                    styles: { fontSize: 8.5, cellPadding: 2.5, overflow: 'linebreak' },
                     columnStyles: {
-                        0: { cellWidth: 85, halign: 'right' },
-                        1: { cellWidth: 30, halign: 'center' },
-                        2: { cellWidth: 70.9, halign: 'center' } // 85+30+70.9 = 185.9mm (Ancho perfecto)
+                        0: { cellWidth: 70, fontStyle: 'bold' },
+                        1: { cellWidth: 35, halign: 'center' },
+                        2: { cellWidth: 90.9 }
                     },
                     didParseCell: function(data) {
                         if(data.section === 'body') {
                             const val = data.row.raw[0];
-                            // Pintar las celdas amarillas del Excel
-                            if (val === 'AIRCRAFT BLOCK TIME / PARQUEO DEL AVION' || 
-                                val === 'PUSHBACK / RETROCEDER' || 
-                                val === 'COMBINED OFFLOAD & LOAD TIME / TIEMPO COMBINADO DE CARGUE Y DESCARGUE') {
+                            // Headers de sub-sección
+                            if (val.startsWith('---')) {
+                                data.cell.styles.fillColor = [226, 232, 240];
+                                data.cell.styles.fontStyle = 'bold';
+                                data.cell.styles.textColor = [15, 23, 42];
+                                data.cell.styles.halign = 'center';
+                            }
+                            // Celdas Amarillas Críticas
+                            if (val === 'AIRCRAFT BLOCK TIME' || val === 'PUSHBACK / RETROCEDER' || val === 'COMBINED OFFLOAD & LOAD TIME') {
                                 if(data.column.index === 0 || data.column.index === 1) {
-                                    data.cell.styles.fillColor = [255, 255, 0]; // Amarillo puro
-                                    data.cell.styles.textColor = [0, 0, 0];
+                                    data.cell.styles.fillColor = [254, 240, 138];
+                                    data.cell.styles.textColor = [133, 77, 14];
                                 }
                             }
                         }
@@ -890,26 +1052,25 @@
                 let finalY = doc.lastAutoTable.finalY;
 
                 // Anexar la tabla de Delay si existe
-                const calcBox = document.getElementById('calc_total_ramp');
-                if (calcBox && calcBox.classList.contains('alert')) {
+                if (document.getElementById('calc_total_ramp').classList.contains('alert')) {
                     doc.autoTable({
-                        startY: finalY,
-                        margin: { left: 15, right: 15 },
+                        startY: finalY + 5,
+                        margin: { left: 10, right: 10 },
                         body: [
-                            ['DELAY REPORTED / REPORTE DE ATRASO', getV('t_delay_time'), safeNotes(getV('t_delay_reason'))]
+                            ['DELAY REPORTED (>90m)', getV('t_delay_time'), safeNotes(getV('t_delay_reason'))]
                         ],
                         theme: 'grid',
-                        styles: { fontSize: 8.5, cellPadding: 3, fontStyle: 'bolditalic', textColor: [0,0,0], overflow: 'linebreak' },
+                        styles: { fontSize: 9, cellPadding: 3, fontStyle: 'bold', textColor: [159, 18, 57], overflow: 'linebreak' },
                         columnStyles: { 
-                            0: { cellWidth: 85, halign: 'right', fillColor: [255, 255, 0] }, 
-                            1: { cellWidth: 30, halign: 'center', fillColor: [255, 255, 0] },
-                            2: { cellWidth: 70.9, halign: 'center', fillColor: [255, 255, 0] } 
+                            0: { cellWidth: 70, fillColor: [254, 226, 226] }, 
+                            1: { cellWidth: 35, halign: 'center', fillColor: [254, 226, 226] },
+                            2: { cellWidth: 90.9, fillColor: [254, 226, 226] } 
                         }
                     });
                 }
 
-                doc.save(`Tiempos_${vueloData.vuelo}_${vueloData.tail}.pdf`);
-                showAlert("Descarga Completada", "El reporte PDF ha sido generado exitosamente.", "success");
+                doc.save(`Turnaround_Analytics_${vueloData.vuelo}_${vueloData.tail}.pdf`);
+                showAlert("Descarga Completada", "El reporte PDF analítico ha sido generado exitosamente.", "success");
             } catch (e) {
                 showAlert("Error en PDF", "No se pudo generar el documento: " + e.message, 'error');
             }
