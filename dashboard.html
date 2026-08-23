@@ -325,7 +325,9 @@
         
         .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: nowrap; }
         .header-left-side { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
-        .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        
+        /* PREVENCIÓN DE QUIEBRE DE TARJETA EN LA WEB */
+        .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; word-break: break-word; overflow-wrap: break-word;}
         .header-badges-wrapper { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
         
         .vuelo-tail { background: rgba(255,255,255,0.15); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;}
@@ -343,9 +345,11 @@
         .ctrl-btn.ctrl-delete:hover { background: #E11D48; color: white; border-color: #E11D48; }
         
         .vuelo-card-body { padding: 20px; flex-grow: 1; background: white; width: 100%; box-sizing: border-box;}
+        
+        /* PREVENCIÓN DE QUIEBRE EN DATOS INFERIORES */
         .vuelo-meta-info { display: flex; justify-content: space-between; font-size: 11px; color: #64748B; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; text-transform: uppercase; }
         .vuelo-meta-info div { display: flex; flex-direction: column; gap: 2px;}
-        .vuelo-meta-info strong { color: var(--amerijet-blue-dark); font-size: 14px; font-weight: 800;}
+        .vuelo-meta-info strong { color: var(--amerijet-blue-dark); font-size: 14px; font-weight: 800; word-break: break-word; overflow-wrap: break-word;}
 
         /* TOGGLES MEJORADOS */
         .toggle-group { display: flex; gap: 10px; margin-bottom: 20px; border-top: 1px solid #E2E8F0; padding-top: 15px;}
@@ -450,7 +454,6 @@
         </div>
 
         <nav class="sidebar-nav">
-            <!-- CENTRO DE VUELOS (Grid Perfectly Aligned) -->
             <a href="dashboard.html" class="nav-link active">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"></rect>
@@ -461,7 +464,6 @@
                 <span>CENTRO DE VUELOS</span>
             </a>
 
-            <!-- ESTADO DE FLOTA (Document + Airplane) - NUEVA REGLA: VISIBLE PARA TODOS -->
             <a href="estado_flota.html" class="nav-link" id="btnEstadoFlota">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -472,7 +474,6 @@
                 <span>ESTADO DE FLOTA</span>
             </a>
 
-            <!-- INVENTARIO ULD (Stacked Boxes +) -->
             <a href="uld_gestion.html" class="nav-link" id="btnUldMenu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 21V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v16"></path>
@@ -483,16 +484,14 @@
                 <span id="lblUldMenuText">INVENTARIO ULD</span>
             </a>
 
-            <!-- PANEL DE CONTROL (Gear) -->
             <a href="admin_panel.html" id="btnAdminPanel" class="nav-link" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
                 <span>PANEL DE CONTROL</span>
             </a>
 
-            <!-- HISTORIAL DE VUELOS (Clock History) -->
             <a href="reporte_vuelos.html" class="nav-link" id="btnReportesHistoricos" style="display: none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
@@ -941,6 +940,14 @@
                     const displayMsgExport = exportActivo ? 'none' : 'block';
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
+                    // Lógica del botón de despacho (Para que solo se pulse 1 vez)
+                    let btnDespacharHtml = '';
+                    if (currentStatus === 'DESPACHADO' || currentStatus === 'EN IMPORTACION') {
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>✅ Vuelo Despachado</button>`;
+                    } else {
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
+                    }
+
                     const card = document.createElement('div'); card.className = 'vuelo-card';
                     card.innerHTML = `
                         <div class="vuelo-card-header">
@@ -993,7 +1000,8 @@
                                 </div>
                                 <div class="actions-subgrid">
                                     <a href="inspeccion_avion.html?id=${v.id}" class="action-btn btn-inspect">Inspección Física</a>
-                                    <a href="com106.html?id=${v.id}" class="action-btn btn-com">Vista COM-106</a>
+                                    <!-- AQUI SE REEMPLAZÓ EL COM-106 POR EL NUEVO DETALLE DE VUELO -->
+                                    <a href="detalle_vuelo_tiempos.html?id=${v.id}" class="action-btn btn-com">Detalle de Vuelo Tiempos</a>
                                     <a href="gse_equipos.html?id=${v.id}" class="action-btn btn-gse">Equipos GSE</a>
                                 </div>
                             </div>
@@ -1004,7 +1012,7 @@
                                     <div class="step-number">3</div>
                                     <div class="step-title">Salida de Aeronave</div>
                                 </div>
-                                <button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>
+                                ${btnDespacharHtml}
                             </div>
 
                             <!-- PASO 4 -->
@@ -1063,8 +1071,12 @@
 
         async function irAlArmado(idVuelo) { try { await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); window.location.href = `tiempo_armado.html?id=${idVuelo}`; } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } }
         
-        async function limpiarFotosInspeccion(idVuelo, matriculaAvion) {
+        // ==========================================
+        // LA NUEVA FUNCIÓN PARA ELIMINAR LAS FOTOS
+        // ==========================================
+        async function limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo) {
             try {
+                // 1. Limpiar fotos de incidencias temporales
                 const { data: logs } = await supabaseClient.from('avion_inspecciones')
                     .select('id, notas_adicionales')
                     .eq('vuelo_operacion_id', idVuelo)
@@ -1083,6 +1095,28 @@
                         
                         const nuevoNotas = textoBase + "||_JSON_||" + JSON.stringify(paquete);
                         await supabaseClient.from('avion_inspecciones').update({ notas_adicionales: nuevoNotas }).eq('id', reg.id);
+                    }
+                }
+
+                // 2. Limpiar fotos de daños estructurales reportados en ESTE vuelo específico
+                const { data: danos } = await supabaseClient.from('avion_danos')
+                    .select('id, evidencia')
+                    .eq('matricula_avion', matriculaAvion)
+                    .eq('vuelo_origen', numeroVuelo);
+
+                if (danos && danos.length > 0) {
+                    for (let d of danos) {
+                        if (d.evidencia) {
+                            try {
+                                let ev = JSON.parse(d.evidencia);
+                                // Vaciamos todas las fotos
+                                ev.fotos = [];
+                                ev.imgAvion = null;
+                                ev.imgPaleta = null;
+                                // Actualizamos la base de datos solo guardando el texto
+                                await supabaseClient.from('avion_danos').update({ evidencia: JSON.stringify(ev) }).eq('id', d.id);
+                            } catch(e) {}
+                        }
                     }
                 }
             } catch (e) { console.error("Error limpiando cache fotográfico:", e); }
@@ -1136,19 +1170,23 @@
         function confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
             showCustomConfirm(
                 "Despachar Outbound", 
-                `Se confirmará el despacho del vuelo <b>${numeroVuelo}</b>.<br><br><i>NOTA LOGÍSTICA: La memoria fotográfica temporal será limpiada y <b>los ULDs armados pasarán a estado IN TRANSIT hacia sus destinos correspondientes</b>.</i>`, 
+                `Se confirmará el despacho del vuelo <b>${numeroVuelo}</b>.<br><br><i>NOTA LOGÍSTICA: La memoria fotográfica temporal será limpiada para liberar espacio en la base de datos y <b>los ULDs armados pasarán a estado IN TRANSIT hacia sus destinos correspondientes</b>.</i>`, 
                 "Ejecutar Despacho", 
                 "var(--amerijet-blue)",
                 async () => {
                     try {
-                        await limpiarFotosInspeccion(idVuelo, matriculaAvion);
+                        // 1. Borramos las fotos dejando solo el texto del reporte.
+                        await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
+                        
+                        // 2. Transferimos los ULDs.
                         await transferirULDsAlDespachar(idVuelo, ruta);
 
+                        // 3. Cambiamos el estatus a despachado para bloquear el botón.
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'DESPACHADO' }).eq('id', idVuelo);
                         if(error) throw error;
                         
                         cargarVuelosActivos();
-                        showCustomAlert("Proceso Completado", "Outbound finalizado y manifiestos de red transferidos.", "success");
+                        showCustomAlert("Proceso Completado", "Vuelo despachado, memoria fotográfica purgada y ULDs en tránsito.", "success");
                     } catch(e) { showCustomAlert("Fallo de Despacho", e.message, "error"); }
                 }
             );
@@ -1172,19 +1210,19 @@
         function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) { 
             showCustomConfirm(
                 "Cierre Total de Operación", 
-                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">El proceso de despacho de unidades se ejecutará si no se realizó previamente.</span>`, 
+                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">Si olvidaste despachar el vuelo, el sistema ejecutará el despacho y borrado de fotos automáticamente ahora.</span>`, 
                 "Finalizar Operación", 
                 "var(--amerijet-red)",
                 async () => {
                     try { 
-                        if (estadoActual !== 'DESPACHADO') {
-                            await limpiarFotosInspeccion(idVuelo, matriculaAvion);
+                        if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION') {
+                            await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
                             await transferirULDsAlDespachar(idVuelo, ruta);
                         }
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
                         if (error) throw error;
                         cargarVuelosActivos(); 
-                        showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada.`, "success");
+                        showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
                     } catch(e) { showCustomAlert("Error de Cierre", e.message, "error"); }
                 }
             );
