@@ -1570,7 +1570,7 @@
                 showLoading("Mapeando daños visuales...");
                 const rDiv = document.getElementById('renderContainer');
                 rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${configActualGlobal}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
-                const cA = await html2canvas(rDiv, { scale: 1.5 }); iAvion = cA.toDataURL('image/jpeg', 0.85);
+                const cA = await html2canvas(rDiv, { scale: 2 }); iAvion = cA.toDataURL('image/jpeg', 0.85);
                 
                 const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                 const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
@@ -1859,7 +1859,7 @@
                         });
                         
                         rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${guessedConfig}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
-                        const cA = await html2canvas(rDiv, { scale: 1.5 }); 
+                        const cA = await html2canvas(rDiv, { scale: 2 }); 
                         h.imgAvion = cA.toDataURL('image/jpeg', 0.85);
                         document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected'));
 
@@ -1877,7 +1877,7 @@
                         const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
                         rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle};">${gridHtml}</div></div>`;
                         
-                        const cP = await html2canvas(rDiv, { scale: 2 }); 
+                        const cP = await html2canvas(rDiv, { scale: 2.5 }); 
                         h.imgPaleta = cP.toDataURL('image/jpeg', 0.85); 
                         rDiv.innerHTML = ""; renderizarBloqueDinamicoPallets([]);
                     }
@@ -1914,8 +1914,8 @@
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                         
                         // Protección Anti-Rompe Tablas (Inserta zero-width space en textos enormes sin espacio)
-                        const sComp = String(h.componente).replace(/([^\s]{20})/g, "$1\u200B");
-                        const sDesc = String(h.descripcion).replace(/([^\s]{30})/g, "$1\u200B");
+                        const sComp = String(h.componente).replace(/([^\s]{20})(?=[^\s])/g, "$1 ");
+                        const sDesc = String(h.descripcion).replace(/([^\s]{30})(?=[^\s])/g, "$1 ");
 
                         return [ i+1, h.estado_actual, h.area, sComp, sDesc, fRep ];
                     });
@@ -1966,8 +1966,10 @@
                         
                         doc.setTextColor(51, 65, 85); doc.setFontSize(10); doc.setFont("Helvetica", "bold");
                         
-                        const safeC = String(h.componente).replace(/([^\s]{35})/g, "$1\u200B");
-                        doc.text(`FINDING: ${safeC.toUpperCase()}`, 15, cy); cy += 5;
+                        const safeC = String(h.componente).replace(/([^\s]{35})(?=[^\s])/g, "$1 ");
+                        const splitComp = doc.splitTextToSize(`FINDING: ${safeC.toUpperCase()}`, 180);
+                        doc.text(splitComp, 15, cy); 
+                        cy += (splitComp.length * 4.5) + 1;
                         
                         doc.setFont("Helvetica", "normal");
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
@@ -1979,14 +1981,18 @@
                         doc.setFont("Helvetica", "bold"); doc.text(`Damage:`, 15, cy); 
                         doc.setFont("Helvetica", "normal"); 
 
-                        const safeDesc = String(h.descripcion).replace(/([^\s]{40})/g, "$1\u200B");
-                        const splitDesc = doc.splitTextToSize(safeDesc, 130); doc.text(splitDesc, 33, cy); cy += (splitDesc.length * 4.5) + 2; 
+                        const safeDesc = String(h.descripcion).replace(/([^\s]{40})(?=[^\s])/g, "$1 ");
+                        const splitDesc = doc.splitTextToSize(safeDesc, 130); 
+                        doc.text(splitDesc, 33, cy); 
+                        cy += (splitDesc.length * 4.5) + 2; 
                         
                         if(h.nota_solucion) {
                             doc.setFont("Helvetica", "bold"); doc.text(`Notes:`, 15, cy); 
                             doc.setFont("Helvetica", "normal"); 
-                            const safeNote = String(h.nota_solucion).replace(/([^\s]{40})/g, "$1\u200B");
-                            const splitNotes = doc.splitTextToSize(safeNote, 130); doc.text(splitNotes, 28, cy); cy += (splitNotes.length * 4.5) + 2;
+                            const safeNote = String(h.nota_solucion).replace(/([^\s]{40})(?=[^\s])/g, "$1 ");
+                            const splitNotes = doc.splitTextToSize(safeNote, 130); 
+                            doc.text(splitNotes, 28, cy); 
+                            cy += (splitNotes.length * 4.5) + 2;
                         }
                         cy += 2;
 
@@ -2040,8 +2046,10 @@
                             if(cy > 250) { doc.addPage(); cy = 20; }
                             doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.text(`Incident:`, 15, cy); doc.setFont("Helvetica", "normal");
                             
-                            const safeInc = String(inc.descripcion).replace(/([^\s]{40})/g, "$1\u200B");
-                            const splitInc = doc.splitTextToSize(safeInc, 130); doc.text(splitInc, 32, cy); cy += (splitInc.length * 4.5) + 2;
+                            const safeInc = String(inc.descripcion).replace(/([^\s]{40})(?=[^\s])/g, "$1 ");
+                            const splitInc = doc.splitTextToSize(safeInc, 130); 
+                            doc.text(splitInc, 32, cy); 
+                            cy += (splitInc.length * 4.5) + 2;
 
                             if (fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
                                 let fx = 15; let rowHeight = 0;
