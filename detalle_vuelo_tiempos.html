@@ -286,7 +286,7 @@
                         </div>
 
                         <div class="wizard-nav">
-                            <div></div> <!-- Espacio para alinear a la derecha -->
+                            <div></div>
                             <button class="btn-wiz btn-next" onclick="goToStep(2)">Continuar: Área de Carga <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
                         </div>
                     </div>
@@ -482,7 +482,7 @@
                                     <span class="zulu-badge" id="z_t_geneva">--:-- Z</span>
                                 </div>
                             </div>
-                            <div><label class="time-label">Notes</label><input type="text" id="n_geneva" placeholder="Ej: DEPARTURE TIME: 18:49 Z" oninput="marcarCambios()"></div>
+                            <div><label class="time-label">Departure Notes</label><input type="text" id="n_geneva" placeholder="Ej: DEPARTURE TIME: 18:49 Z" oninput="marcarCambios()"></div>
                         </div>
 
                         <!-- CALCULO TOTAL DE RAMPA Y DELAY (ALERTA ROJA) -->
@@ -631,13 +631,15 @@
         function setNow(id) {
             const now = new Date();
             const localStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-            document.getElementById(id).value = localStr;
-            calcZAndDurations(id);
+            const el = document.getElementById(id);
+            if(el) { el.value = localStr; calcZAndDurations(id); }
         }
 
         function calcZAndDurations(id) {
-            const val = document.getElementById(id).value;
-            document.getElementById(`z_${id}`).innerText = val ? getZuluString(new Date(val)) : "--:-- Z";
+            const el = document.getElementById(id);
+            const val = el ? el.value : "";
+            const badge = document.getElementById(`z_${id}`);
+            if(badge) badge.innerText = val ? getZuluString(new Date(val)) : "--:-- Z";
             calcularCombinado();
             calcularDemora();
             marcarCambios();
@@ -649,44 +651,44 @@
         }
 
         function calcularCombinado() {
-            const tStartOff = document.getElementById('t_start_offload').value;
-            const tFinUp = document.getElementById('t_fin_upload').value;
+            const elStart = document.getElementById('t_start_offload');
+            const elFin = document.getElementById('t_fin_upload');
             const lbl = document.getElementById('val_combined');
             
-            if(tStartOff && tFinUp) {
-                const d1 = new Date(tStartOff); const d2 = new Date(tFinUp);
+            if(elStart && elFin && elStart.value && elFin.value) {
+                const d1 = new Date(elStart.value); const d2 = new Date(elFin.value);
                 const diffMins = Math.max(0, Math.floor((d2 - d1) / 60000));
-                lbl.innerText = formatMinsToText(diffMins);
-            } else { lbl.innerText = "00 Hora 00 Minutos"; }
+                if(lbl) lbl.innerText = formatMinsToText(diffMins);
+            } else { if(lbl) lbl.innerText = "00 Hora 00 Minutos"; }
         }
 
         function calcularDemora() {
-            const tBlock = document.getElementById('t_block').value;
-            const tPush = document.getElementById('t_pushback').value;
+            const elBlock = document.getElementById('t_block');
+            const elPush = document.getElementById('t_pushback');
             const lblTotal = document.getElementById('val_total_ramp');
             const panel = document.getElementById('delay_panel');
             const calcBox = document.getElementById('calc_total_ramp');
             const inDelay = document.getElementById('t_delay_time');
 
-            if(tBlock && tPush) {
-                const d1 = new Date(tBlock); const d2 = new Date(tPush);
+            if(elBlock && elPush && elBlock.value && elPush.value) {
+                const d1 = new Date(elBlock.value); const d2 = new Date(elPush.value);
                 const diffMins = Math.max(0, Math.floor((d2 - d1) / 60000));
-                lblTotal.innerText = formatMinsToText(diffMins);
+                if(lblTotal) lblTotal.innerText = formatMinsToText(diffMins);
 
                 if(diffMins > 90) {
-                    calcBox.classList.add('alert');
-                    panel.style.display = 'block';
+                    if(calcBox) calcBox.classList.add('alert');
+                    if(panel) panel.style.display = 'block';
                     const extra = diffMins - 90;
-                    inDelay.value = `${extra} Minutos Mas`;
+                    if(inDelay) inDelay.value = `${extra} Minutos Mas`;
                 } else {
-                    calcBox.classList.remove('alert');
-                    panel.style.display = 'none';
-                    inDelay.value = "";
+                    if(calcBox) calcBox.classList.remove('alert');
+                    if(panel) panel.style.display = 'none';
+                    if(inDelay) inDelay.value = "";
                 }
             } else { 
-                lblTotal.innerText = "00 Hora 00 Minutos"; 
-                calcBox.classList.remove('alert'); 
-                panel.style.display = 'none';
+                if(lblTotal) lblTotal.innerText = "00 Hora 00 Minutos"; 
+                if(calcBox) calcBox.classList.remove('alert'); 
+                if(panel) panel.style.display = 'none';
             }
         }
 
@@ -725,19 +727,27 @@
                     const d = reporte.datos_json;
                     
                     timeFields.forEach(f => {
-                        if(d[f]) { document.getElementById(f).value = formatToLocalInput(d[f]); calcZAndDurations(f); }
-                        if(d['n_'+f]) document.getElementById('n_'+f).value = d['n_'+f];
+                        const el = document.getElementById(f);
+                        if(el && d[f]) { el.value = formatToLocalInput(d[f]); calcZAndDurations(f); }
+                        
+                        const nEl = document.getElementById('n_'+f);
+                        if(nEl && d['n_'+f]) nEl.value = d['n_'+f];
                     });
 
-                    if(d.n_payload) document.getElementById('n_payload').value = d.n_payload;
-                    if(d.n_customs) document.getElementById('n_customs').value = d.n_customs;
-                    if(d.t_delay_reason) document.getElementById('t_delay_reason').value = d.t_delay_reason;
+                    const nPayload = document.getElementById('n_payload');
+                    if(nPayload && d.n_payload) nPayload.value = d.n_payload;
+                    
+                    const nCustoms = document.getElementById('n_customs');
+                    if(nCustoms && d.n_customs) nCustoms.value = d.n_customs;
+                    
+                    const tDelayR = document.getElementById('t_delay_reason');
+                    if(tDelayR && d.t_delay_reason) tDelayR.value = d.t_delay_reason;
                 }
 
                 hayCambiosSinGuardar = false;
 
             } catch (e) {
-                // Registro vacio
+                // Registro vacio - sin problema
             } finally { hideLoading(); }
         }
 
@@ -746,13 +756,23 @@
             try {
                 let payloadJSON = {};
                 timeFields.forEach(f => {
-                    const val = document.getElementById(f).value;
-                    if(val) payloadJSON[f] = new Date(val).toISOString();
-                    payloadJSON['n_'+f] = document.getElementById('n_'+f).value.trim();
+                    const elInput = document.getElementById(f);
+                    if (elInput) {
+                        const val = elInput.value;
+                        if(val) payloadJSON[f] = new Date(val).toISOString();
+                    }
+                    const elNota = document.getElementById('n_' + f);
+                    if (elNota) payloadJSON['n_'+f] = elNota.value.trim();
                 });
-                payloadJSON.n_payload = document.getElementById('n_payload').value.trim();
-                payloadJSON.n_customs = document.getElementById('n_customs').value.trim();
-                payloadJSON.t_delay_reason = document.getElementById('t_delay_reason').value.trim();
+
+                const elPayload = document.getElementById('n_payload');
+                if (elPayload) payloadJSON.n_payload = elPayload.value.trim();
+                
+                const elCustoms = document.getElementById('n_customs');
+                if (elCustoms) payloadJSON.n_customs = elCustoms.value.trim();
+                
+                const elDelayR = document.getElementById('t_delay_reason');
+                if (elDelayR) payloadJSON.t_delay_reason = elDelayR.value.trim();
 
                 const dbPayload = {
                     vuelo_operacion_id: operacionId,
@@ -804,10 +824,16 @@
                     columnStyles: { 0: { fillColor: [226, 232, 240], fontStyle: 'bold', cellWidth: 50 }, 1: { cellWidth: 40.9 } }
                 });
 
-                // Funciones auxiliares para PDF
-                const getV = (id) => document.getElementById(id).value;
+                // Funciones auxiliares para PDF de forma blindada
+                const getV = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
                 const getZ = (id) => getV(id) ? getZuluString(new Date(getV(id))) : " ";
                 const safeNotes = (val) => String(val || '').replace(/([^\s]{20})(?=[^\s])/g, "$1 "); // Anti-roturas
+
+                const elCombined = document.getElementById('val_combined');
+                const valCombined = elCombined ? elCombined.innerText : "";
+
+                const elTotal = document.getElementById('val_total_ramp');
+                const valTotal = elTotal ? elTotal.innerText : "";
 
                 // Tabla principal paso a paso (Orden Exacto al del usuario)
                 const tableData = [
@@ -819,7 +845,7 @@
                     ['FINISH OFFLOAD TIME / FINALIZA DESCARGUE', getZ('t_fin_offload'), safeNotes(getV('n_fin_offload'))],
                     ['START UPLOAD TIME / INICIO CARGUE', getZ('t_start_upload'), safeNotes(getV('n_start_upload'))],
                     ['FINISH UPLOAD TIME / FINALIZA CARGUE', getZ('t_fin_upload'), safeNotes(getV('n_fin_upload'))],
-                    ['COMBINED OFFLOAD & LOAD TIME / TIEMPO COMBINADO DE CARGUE Y DESCARGUE', document.getElementById('val_combined').innerText, ''],
+                    ['COMBINED OFFLOAD & LOAD TIME / TIEMPO COMBINADO DE CARGUE Y DESCARGUE', valCombined, ''],
                     ['FUELING STARTED', getZ('t_fuel_start'), safeNotes(getV('n_fuel_start'))],
                     ['FUELING FINISHED', getZ('t_fuel_fin'), safeNotes(getV('n_fuel_fin'))],
                     ['TIME AMS SENT BY STATION / ENVIO DE AMS POR ESTACION', getZ('t_ams'), safeNotes(getV('n_ams'))],
@@ -864,7 +890,8 @@
                 let finalY = doc.lastAutoTable.finalY;
 
                 // Anexar la tabla de Delay si existe
-                if (document.getElementById('calc_total_ramp').classList.contains('alert')) {
+                const calcBox = document.getElementById('calc_total_ramp');
+                if (calcBox && calcBox.classList.contains('alert')) {
                     doc.autoTable({
                         startY: finalY,
                         margin: { left: 15, right: 15 },
