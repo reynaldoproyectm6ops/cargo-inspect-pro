@@ -943,7 +943,7 @@
                     // Lógica del botón de despacho (Para que solo se pulse 1 vez)
                     let btnDespacharHtml = '';
                     if (currentStatus === 'DESPACHADO' || currentStatus === 'EN IMPORTACION') {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>✅ Vuelo Despachado</button>`;
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>Vuelo Despachado</button>`;
                     } else {
                         btnDespacharHtml = `<button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
                     }
