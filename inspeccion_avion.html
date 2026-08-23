@@ -122,7 +122,7 @@
             justify-content: center;
             /* CLAVE PARA EL SCROLL EN CELULARES: */
             width: max-content; 
-            padding: 30px; /* Espacio de respiro para que no se corten las etiquetas de los bordes */
+            padding: 30px; 
         }
 
         .pallet-box-unit {
@@ -144,14 +144,14 @@
         .hotspot:hover { background: #0284C7; border-color: white; transform: translate(-50%, -50%) scale(1.3); }
         .hotspot.active { background: #E11D48; border-color: white; transform: translate(-50%, -50%) scale(1.4); box-shadow: 0 0 8px rgba(225,29,72,0.8);}
 
-        /* Etiquetas ultra-compactas legibles (8px) SEPARADAS para evitar Overlap */
-        .lock-label { position: absolute; font-size: 8px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
+        /* Etiquetas ultra-compactas legibles (7.5px) SEPARADAS para evitar Overlap */
+        .lock-label { position: absolute; font-size: 7.5px; font-weight: 900; color: #0F172A; text-align: center; pointer-events: none; line-height: 1; white-space: nowrap; z-index: 5; letter-spacing: -0.3px; text-shadow: 1px 1px 0px rgba(255,255,255,0.9), -1px -1px 0px rgba(255,255,255,0.9), 1px -1px 0px rgba(255,255,255,0.9), -1px 1px 0px rgba(255,255,255,0.9);}
         .lock-label.red { color: #DC2626; z-index: 15; }
         
-        .lbl-top { transform: translate(-50%, 15px); } 
-        .lbl-bot { transform: translate(-50%, -100%); margin-top: -15px; } 
-        .lbl-left { transform: translate(18px, -50%); text-align: left; } 
-        .lbl-right { transform: translate(calc(-100% - 18px), -50%); text-align: right; }
+        .lbl-top { transform: translate(-50%, 14px); } 
+        .lbl-bot { transform: translate(-50%, -100%); margin-top: -14px; } 
+        .lbl-left { transform: translate(16px, -50%); text-align: left; } 
+        .lbl-right { transform: translate(calc(-100% - 16px), -50%); text-align: right; }
 
         .config-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 8px 15px; border: 1px solid #CBD5E1; background: white; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #475569; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: 0.2s;}
@@ -1201,10 +1201,11 @@
             if (!container) return;
             container.innerHTML = "";
             
-            let mapScale = 2.4; // Escala gigante interna
+            let mapScale = 2.4; // Escala aumentada para editor grande
             
             if (posicionesSeleccionadas.length === 0) {
                 container.style.gridTemplateColumns = "250px"; container.style.gridTemplateRows = "150px";
+                container.style.transform = "none"; container.style.marginBottom = "0px";
                 container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center;">${generarUnidadPallet("MD", {left:false,right:false,top:false,bottom:false,transLeft:false,transRight:false}, configActualGlobal)}</div>`;
                 return;
             }
@@ -1263,6 +1264,8 @@
             container.style.gridTemplateRows = `repeat(${maxRow}, ${baseRowH}px)`;
             container.style.gridTemplateColumns = gridCols.join(" ");
             container.style.gap = "0px"; 
+            container.style.transform = "none"; 
+            container.style.marginBottom = "0px"; 
 
             let htmlStr = "";
             
@@ -1282,12 +1285,7 @@
                         };
                         
                         let alignStyle = "align-items: center;";
-                        if (isTransversal(item.id)) {
-                            let tH = 125; if (configActualGlobal === 'B') tH = 108;
-                            let lH = 88 * 2; if (configActualGlobal === 'C' || configActualGlobal === 'E' || configActualGlobal === 'G') lH = 96 * 2;
-                            let pad = (lH - tH) / 2;
-                            alignStyle = `align-items: flex-start; padding-top: ${pad * mapScale}px;`;
-                        }
+                        if (isTransversal(item.id)) alignStyle = `align-items: flex-start; padding-top: ${25.5 * mapScale}px;`;
                         
                         htmlStr += `<div style="grid-row:1 / span 2; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     } else {
@@ -1320,6 +1318,7 @@
                             transLeft: isTransLeft, transRight: isTransRight
                         };
                         let alignStyle = "align-items: center;";
+                        if (isTransversal(item.id)) alignStyle = `align-items: flex-start; padding-top: ${25.5 * mapScale}px;`;
                         htmlStr += `<div style="grid-row:1; grid-column:${colIndex+1}; display:flex; ${alignStyle} justify-content:center;">${generarUnidadPallet(item.id, borders, configActualGlobal)}</div>`;
                     });
                 }
@@ -1570,13 +1569,13 @@
                 showLoading("Mapeando daños visuales...");
                 const rDiv = document.getElementById('renderContainer');
                 rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${configActualGlobal}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
-                const cA = await html2canvas(rDiv, { scale: 1.5 }); iAvion = cA.toDataURL('image/jpeg', 0.8);
+                const cA = await html2canvas(rDiv, { scale: 2 }); iAvion = cA.toDataURL('image/jpeg', 0.85);
                 
                 const gridHtml = document.getElementById('palletBoxRenderHTML').innerHTML;
                 const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
                 rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${comp}</div><div id="palletBoxRenderHTML" style="${gridStyle};">${gridHtml}</div></div>`;
                 
-                const cP = await html2canvas(rDiv, { scale: 2 }); iPaleta = cP.toDataURL('image/jpeg', 0.8); 
+                const cP = await html2canvas(rDiv, { scale: 2.5 }); iPaleta = cP.toDataURL('image/jpeg', 0.85); 
                 rDiv.innerHTML = "";
 
                 matrizHallazgos.push({
@@ -1859,8 +1858,8 @@
                         });
                         
                         rDiv.innerHTML = `<div style="background:white; padding:15px; width:800px; text-align:center;"><div style="font-size:16px; font-weight:bold; color:#0A2540; margin-bottom:10px;">CONFIG: ${guessedConfig}</div>${document.getElementById('capturePlanoHTML').innerHTML}</div>`;
-                        const cA = await html2canvas(rDiv, { scale: 1.5 }); 
-                        h.imgAvion = cA.toDataURL('image/jpeg', 0.8);
+                        const cA = await html2canvas(rDiv, { scale: 2 }); 
+                        h.imgAvion = cA.toDataURL('image/jpeg', 0.85);
                         document.querySelectorAll('.p-cell, .p-half, .p-wide').forEach(c => c.classList.remove('selected'));
 
                         renderizarBloqueDinamicoPallets(cells);
@@ -1877,8 +1876,8 @@
                         const gridStyle = document.getElementById('palletBoxRenderHTML').getAttribute('style') || "";
                         rDiv.innerHTML = `<div style="background:white; padding:45px 20px; width:800px; text-align:center; margin:0 auto;"><div style="font-size:16px; font-weight:bold; color:#E11D48; margin-bottom:40px;">${h.componente}</div><div id="palletBoxRenderHTML" style="${gridStyle};">${gridHtml}</div></div>`;
                         
-                        const cP = await html2canvas(rDiv, { scale: 2 }); 
-                        h.imgPaleta = cP.toDataURL('image/jpeg', 0.8); 
+                        const cP = await html2canvas(rDiv, { scale: 2.5 }); 
+                        h.imgPaleta = cP.toDataURL('image/jpeg', 0.85); 
                         rDiv.innerHTML = ""; renderizarBloqueDinamicoPallets([]);
                     }
                 }
@@ -1914,7 +1913,24 @@
                         const fRep = h.fechaReporte || h.creado_at ? new Date(h.fechaReporte || h.creado_at).toLocaleDateString() : 'N/A';
                         return [ i+1, h.estado_actual, h.area, h.componente, h.descripcion, fRep ];
                     });
-                    doc.autoTable({ startY: cy + 4, head: [['#', 'Status', 'Area', 'Component', 'Damage', 'Reported']], body: tData, theme: 'grid', headStyles: { fillColor: [10, 37, 64] }, styles: { fontSize: 8, cellPadding: 3 } });
+                    
+                    // ESTA PARTE EVITA QUE LA TABLA SE ROMPA CON TEXTOS LARGOS:
+                    doc.autoTable({ 
+                        startY: cy + 4, 
+                        head: [['#', 'Status', 'Area', 'Component', 'Damage', 'Reported']], 
+                        body: tData, 
+                        theme: 'grid', 
+                        headStyles: { fillColor: [10, 37, 64] }, 
+                        styles: { fontSize: 8, cellPadding: 3, overflow: 'linebreak' },
+                        columnStyles: {
+                            0: { cellWidth: 8 },
+                            1: { cellWidth: 20 },
+                            2: { cellWidth: 30 },
+                            3: { cellWidth: 35 },
+                            4: { cellWidth: 70 }, // Obliga a la columna de daños a tener un ancho máximo, forzando salto de línea
+                            5: { cellWidth: 22 }
+                        }
+                    });
                     cy = doc.lastAutoTable.finalY + 15;
                 } else { 
                     cy += 8; doc.setFont("Helvetica", "italic"); doc.setFontSize(10); doc.text("No structure discrepancies reported for this aircraft.", 15, cy); cy += 15; 
@@ -1966,13 +1982,13 @@
                         if (h.tipo === 'LOCKS' && h.imgAvion && h.imgPaleta) {
                             if(cy > 150) { doc.addPage(); cy = 20; }
                             doc.setFont("Helvetica", "bold"); doc.text("CLS Maps Evidence:", 15, cy); cy += 4;
-                            doc.addImage(h.imgAvion, 'JPEG', 15, cy, 180, 25); cy += 30;
+                            doc.addImage(h.imgAvion, 'JPEG', 15, cy, 185, 28); cy += 33;
                             
                             const propsPaleta = doc.getImageProperties(h.imgPaleta);
-                            const ratioPaleta = Math.min(180 / propsPaleta.width, 60 / propsPaleta.height);
+                            const ratioPaleta = Math.min(185 / propsPaleta.width, 85 / propsPaleta.height);
                             const wP = propsPaleta.width * ratioPaleta;
                             const hP = propsPaleta.height * ratioPaleta;
-                            const xP = 15 + (180 - wP) / 2;
+                            const xP = 15 + (185 - wP) / 2;
                             doc.addImage(h.imgPaleta, 'JPEG', xP, cy, wP, hP); cy += hP + 5;
                         }
 
@@ -1980,11 +1996,11 @@
                             doc.setFont("Helvetica", "bold"); doc.text("Photographic Evidence:", 15, cy); cy += 4;
                             let fx = 15; let rowHeight = 0;
                             fotosBanco[h.idTracking].forEach((b64) => {
-                                if (fx > 130) { fx = 15; cy += 65; } if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
-                                const props = doc.getImageProperties(b64); const maxW = 85; const maxH = 60;
+                                if (fx > 110) { fx = 15; cy += 75; } if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
+                                const props = doc.getImageProperties(b64); const maxW = 90; const maxH = 70;
                                 const ratio = Math.min(maxW / props.width, maxH / props.height); const w = props.width * ratio; const h_img = props.height * ratio;
                                 const xOffset = fx + (maxW - w) / 2; const yOffset = cy + (maxH - h_img) / 2;
-                                doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); fx += 90; rowHeight = 60;
+                                doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); fx += 95; rowHeight = 70;
                             });
                             cy += rowHeight + 10;
                         } else { cy += 5; }
@@ -2017,11 +2033,11 @@
                             if (fotosBanco[inc.idTracking] && fotosBanco[inc.idTracking].length > 0) {
                                 let fx = 15; let rowHeight = 0;
                                 fotosBanco[inc.idTracking].forEach((b64) => {
-                                    if (fx > 130) { fx = 15; cy += 65; } if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
-                                    const props = doc.getImageProperties(b64); const maxW = 85; const maxH = 60;
+                                    if (fx > 110) { fx = 15; cy += 75; } if (cy > 210) { doc.addPage(); cy = 20; fx=15; }
+                                    const props = doc.getImageProperties(b64); const maxW = 90; const maxH = 70;
                                     const ratio = Math.min(maxW / props.width, maxH / props.height); const w = props.width * ratio; const h_img = props.height * ratio;
                                     const xOffset = fx + (maxW - w) / 2; const yOffset = cy + (maxH - h_img) / 2;
-                                    doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); fx += 90; rowHeight = 60;
+                                    doc.addImage(b64, 'JPEG', xOffset, yOffset, w, h_img); fx += 95; rowHeight = 70;
                                 });
                                 cy += rowHeight + 5;
                             } else { cy += 2; }
