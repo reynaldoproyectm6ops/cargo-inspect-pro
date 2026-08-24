@@ -154,8 +154,15 @@
         .btn-pdf { background: #10B981; }
         .btn-pdf:hover { background: #059669; transform: translateY(-1px);}
 
-        /* MODALES NEUTROS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 15px; box-sizing: border-box;}
+        /* MODALES NEUTROS Y CARGANDO TRANSLUCIDO */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; 
+            z-index: 2000; padding: 15px; box-sizing: border-box;
+        }
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15);}
         .spinner { width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -844,7 +851,7 @@
 
     <!-- MODALES GLOBALES -->
     <div class="modal-overlay" id="loadingOverlay">
-        <div style="display:flex; flex-direction: column; align-items:center; color: white;">
+        <div style="display:flex; flex-direction: column; align-items:center; color: var(--amerijet-blue);">
             <svg class="spinner" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" stroke-dasharray="90, 150"></circle></svg>
             <div id="loadingText" style="margin-top: 15px; font-weight: 800; font-size: 14px; text-transform: uppercase;">Procesando...</div>
         </div>
@@ -1169,7 +1176,8 @@
                         if(!expStr && expUlds.length > 0) expStr = `${expUlds.length} ULDs`;
                         else if(!expStr) expStr = "0 ULDs";
                         
-                        const payloadStr = `EXPORT: ${expStr} | PESO = \nIMPORT: | PESO = `;
+                        const payloadStr = `EXPORT: ${expStr} | PESO = 
+IMPORT: | PESO = `;
                         setValSafe('n_payload', payloadStr);
                     }
                 } catch(e) {
@@ -1388,14 +1396,17 @@
                     columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' }, 1: { cellWidth: 40, halign: 'center' }, 2: { cellWidth: 85.9 } },
                     didParseCell: function(data) {
                         if(data.section === 'body') {
-                            const val = data.row.raw[0];
-                            if (val === 'AIRCRAFT BLOCK TIME / PARQUEO' || val === 'PUSHBACK / RETROCEDER') {
+                            let val = data.row.raw[0];
+                            // Extraemos el texto de forma segura por si es un Objeto (colSpan)
+                            let textVal = typeof val === 'object' && val !== null ? (val.content || '') : String(val || '');
+
+                            if (textVal === 'AIRCRAFT BLOCK TIME / PARQUEO' || textVal === 'PUSHBACK / RETROCEDER') {
                                 if(data.column.index === 0 || data.column.index === 1) {
                                     data.cell.styles.fillColor = [226, 232, 240];
                                     data.cell.styles.textColor = [15, 23, 42];
                                 }
                             }
-                            if (val.includes('NIL')) {
+                            if (textVal.includes('NIL')) {
                                 if(data.column.index === 1) {
                                     data.cell.styles.textColor = [225, 29, 72];
                                     data.cell.styles.fontStyle = 'bold';
@@ -1420,6 +1431,7 @@
                 doc.save(`Turnaround_Analytics_${vueloData.vuelo}_${vueloData.tail}.pdf`);
                 showAlert("Descarga Completada", "El reporte PDF analítico ha sido generado exitosamente.", "success");
             } catch (e) {
+                console.error(e);
                 showAlert("Error en PDF", "No se pudo generar el documento: " + e.message, 'error');
             }
         }
