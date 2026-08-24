@@ -21,6 +21,8 @@
             --border-radius: 12px;
             --sidebar-width: 260px;
             --success-green: #10B981; 
+            --warn-orange: #F59E0B;
+            --excel-yellow: #FEF08A; 
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
@@ -32,7 +34,7 @@
 
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent;}
         
-        /* SIDEBAR (INTACTO) */
+        /* SIDEBAR */
         .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); flex-shrink: 0; }
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor:pointer;}
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px;}
@@ -64,6 +66,7 @@
         .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto; width: 100%; flex: 1; }
         
+        /* INFO VUELO */
         .info-card { background: var(--amerijet-blue-dark); padding: 20px 25px; border-radius: 12px; color: white; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 15px rgba(26,54,93,0.15);}
         @media (min-width: 768px) { .info-card { flex-direction: row; justify-content: space-between; align-items: center; } }
         .info-card h1 { font-size: 26px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
@@ -77,11 +80,10 @@
         .w-tab { flex: 1; min-width: 120px; padding: 10px; text-align: center; font-size: 11px; font-weight: 800; color: #64748B; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
         .w-tab.active { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
 
+        /* WIZARD PASOS */
         .step-section { display: none; animation: fadeIn 0.3s ease;}
         .step-section.active { display: block; }
-        @keyframes fadeIn { from {opacity: 0; transform: translateY(-10px);} to {opacity: 1; transform: translateY(0);} }
 
-        /* WIZARD CARDS & SECTIONS */
         .step-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 20px;}
         .step-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 15px;}
         .step-card-header-left { display: flex; align-items: center; gap: 12px; }
@@ -123,7 +125,7 @@
         textarea.full-width { width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-weight: 600; outline: none; resize: vertical; margin-top: 15px;}
         textarea.full-width:focus { border-color: #38BDF8; }
 
-        /* CALCULOS Y ALERTAS (ELEGANTES, NO AMARILLOS FEOS) */
+        /* CALCULOS Y ALERTAS */
         .calc-panel { background: white; border: 1px solid #E2E8F0; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .calc-panel.alert { background: #FEF2F2; border-color: #FECACA; }
         .calc-title { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; }
@@ -697,7 +699,7 @@
     <script>
         // === CONEXIÓN SUPABASE ===
         const supabaseUrl = 'https://pedofgikkrkbwjpjzvac.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZG9mZ2lra3JrYndqcGp6dmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyOTc1MTQsImV4cCI6MjA5ODg3MzUxNH0.TM7Vr5B2Yfr9vGd935U3gAaB_sPdKkybUsrFlvvf0nI'; 
+        const supabaseKey = 'sb_publishable_fFvJtjHlJezPpNVTIUivsA_2CZY86e7'; 
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         const operacionId = new URLSearchParams(window.location.search).get('id');
         
@@ -809,6 +811,8 @@
             const val = el ? el.value : "";
             const badge = document.getElementById(`z_${id}`);
             if(badge) badge.innerText = val ? getZuluString(new Date(val)) : "(00:00 Z)";
+            
+            // Recalcular todo en vivo
             calcularDemora();
             marcarCambios();
         }
@@ -865,10 +869,11 @@
         async function inicializar() {
             showLoading("Cargando reporte de tiempos...");
             try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
+                const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+                if (sessionError) throw new Error("Error de sesión: " + sessionError.message);
                 if (!session) { window.location.href = 'index.html'; return; }
 
-                const { data: perfil } = await supabaseClient.from('perfiles').select('nombre, rol').eq('id', session.user.id).single();
+                const { data: perfil, error: errPerfil } = await supabaseClient.from('perfiles').select('nombre, rol').eq('id', session.user.id).single();
                 if (perfil) {
                     currentUser = perfil.nombre || "Usuario";
                     document.getElementById('lblUserName').innerText = currentUser;
@@ -889,10 +894,17 @@
                     }
                 }
 
-                if(!operacionId) { window.location.href = 'dashboard.html'; return; }
+                if(!operacionId) { 
+                    showAlert("Error", "Falta el ID del vuelo en la URL.", "error");
+                    return; 
+                }
 
                 const { data: op, error: errOp } = await supabaseClient.from('vuelos_operaciones').select('*').eq('id', operacionId).single();
-                if (errOp || !op) throw new Error("Vuelo no encontrado.");
+                if (errOp || !op) {
+                    showAlert("Error de Conexión", "No se encontró la información base de este vuelo.", "error");
+                    return;
+                }
+
                 vueloData = { vuelo: op.vuelo_id, tail: op.matricula_avion, ruta: op.ruta, estacion: op.estacion_registro, fecha: op.fecha };
                 
                 document.getElementById('lblVuelo').innerText = `${vueloData.vuelo} - ${vueloData.tail}`;
@@ -900,32 +912,37 @@
                 document.getElementById('lblTailHead').innerText = vueloData.tail;
 
                 // Cargar tabla de reporte JSONB
-                const { data: reporte } = await supabaseClient.from('vuelos_tiempos_reporte').select('*').eq('vuelo_operacion_id', operacionId).single();
-                
-                if (reporte && reporte.datos_json) {
-                    dbRecordId = reporte.id;
-                    const d = reporte.datos_json;
-                    
-                    timeFields.forEach(f => {
-                        const el = document.getElementById(f);
-                        if(el && d[f]) { el.value = formatToLocalInput(d[f]); calcZAndDurations(f); }
-                    });
+                try {
+                    const { data: reporte } = await supabaseClient.from('vuelos_tiempos_reporte').select('*').eq('vuelo_operacion_id', operacionId).single();
+                    if (reporte && reporte.datos_json) {
+                        dbRecordId = reporte.id;
+                        const d = reporte.datos_json;
+                        
+                        timeFields.forEach(f => {
+                            const el = document.getElementById(f);
+                            if(el && d[f]) { el.value = formatToLocalInput(d[f]); calcZAndDurations(f); }
+                        });
 
-                    // Checkboxes
-                    if(d.chk_md_empty) { document.getElementById('chk_md_empty').checked = true; toggleEmpty('md'); }
-                    if(d.chk_fwd_empty) { document.getElementById('chk_fwd_empty').checked = true; toggleEmpty('fwd'); }
-                    if(d.chk_aft_empty) { document.getElementById('chk_aft_empty').checked = true; toggleEmpty('aft'); }
-                    if(d.chk_bulk_empty) { document.getElementById('chk_bulk_empty').checked = true; toggleEmpty('bulk'); }
+                        // Checkboxes
+                        if(d.chk_md_empty) { document.getElementById('chk_md_empty').checked = true; toggleEmpty('md'); }
+                        if(d.chk_fwd_empty) { document.getElementById('chk_fwd_empty').checked = true; toggleEmpty('fwd'); }
+                        if(d.chk_aft_empty) { document.getElementById('chk_aft_empty').checked = true; toggleEmpty('aft'); }
+                        if(d.chk_bulk_empty) { document.getElementById('chk_bulk_empty').checked = true; toggleEmpty('bulk'); }
 
-                    // Texts
-                    if(d.n_payload) document.getElementById('n_payload').value = d.n_payload;
-                    if(d.n_customs) document.getElementById('n_customs').value = d.n_customs;
-                    if(d.t_delay_reason) document.getElementById('t_delay_reason').value = d.t_delay_reason;
+                        // Texts
+                        if(d.n_payload) document.getElementById('n_payload').value = d.n_payload;
+                        if(d.n_customs) document.getElementById('n_customs').value = d.n_customs;
+                        if(d.t_delay_reason) document.getElementById('t_delay_reason').value = d.t_delay_reason;
+                    }
+                } catch(e2) {
+                    console.log("No existe un reporte guardado previamente, cargando campos limpios.");
                 }
+
                 hayCambiosSinGuardar = false;
 
             } catch (e) {
-                // No problem
+                console.error("Error inicializando:", e);
+                showAlert("Error", e.message, "error");
             } finally { hideLoading(); }
         }
 
@@ -970,7 +987,7 @@
         }
 
         // =======================
-        // GENERADOR DE PDF PROFESIONAL
+        // GENERADOR DE PDF PROFESIONAL / ELEGANTE
         // =======================
         function generarPDF() {
             try {
@@ -1128,6 +1145,18 @@
             } catch (e) {
                 showAlert("Error en PDF", "No se pudo generar el documento: " + e.message, 'error');
             }
+        }
+
+        function goToStep(stepNumber) {
+            document.querySelectorAll('.step-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.w-tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('sec_' + stepNumber).classList.add('active');
+            document.getElementById('tab_' + stepNumber).classList.add('active');
+            
+            const w = stepNumber * 20; 
+            document.getElementById('progressBar').style.width = w + '%';
+            document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         inicializar();
