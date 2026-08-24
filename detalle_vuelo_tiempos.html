@@ -31,7 +31,7 @@
 
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent;}
         
-        /* SIDEBAR */
+        /* SIDEBAR (Con Roles Intactos) */
         .sidebar { width: var(--sidebar-width); background-color: var(--amerijet-blue-dark); color: white; display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.1); flex-shrink: 0; }
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor:pointer;}
         .sidebar-header img { height: 32px; background: white; padding: 4px; border-radius: 8px;}
@@ -63,6 +63,7 @@
         .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 120px;} 
         .container { padding: 25px; display: flex; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto; width: 100%; flex: 1; }
         
+        /* INFO VUELO */
         .info-card { background: var(--amerijet-blue-dark); padding: 20px 25px; border-radius: 12px; color: white; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 15px rgba(26,54,93,0.15);}
         @media (min-width: 768px) { .info-card { flex-direction: row; justify-content: space-between; align-items: center; } }
         .info-card h1 { font-size: 26px; font-weight: 900; margin-top: 4px; letter-spacing: -0.5px;}
@@ -87,18 +88,18 @@
         .step-number { background: var(--amerijet-blue); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; flex-shrink: 0;}
         .step-title { font-size: 15px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase;}
 
-        /* SWITCH PARA MARCAR VACÍO (NIL) - 2 POR COMPARTIMIENTO */
-        .switches-group { display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-end;}
-        .switch-container { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; color: #64748B; cursor: pointer; text-transform: uppercase;}
-        .switch { position: relative; display: inline-block; width: 34px; height: 20px; flex-shrink:0;}
+        /* SWITCH PARA MARCAR VACÍO (NIL) */
+        .switch-container { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; color: #64748B; cursor: pointer; text-transform: uppercase;}
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink:0;}
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #CBD5E1; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--amerijet-blue); }
-        input:checked + .slider:before { transform: translateX(14px); }
+        input:checked + .slider:before { transform: translateX(18px); }
 
-        /* INPUTS Y DISEÑO */
+        /* INPUTS Y DISEÑO (Elegante y Formal) */
         .compartment-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 20px; margin-bottom: 20px; transition: 0.3s;}
+        .compartment-box.is-nil { opacity: 0.5; pointer-events: none; background: #F1F5F9; border-style: dashed;}
         
         .grid-2col { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 15px;}
         @media (min-width: 768px) { .grid-2col { grid-template-columns: 1fr 1fr; } }
@@ -115,12 +116,14 @@
         
         .btn-now { background: #EFF6FF; color: var(--amerijet-blue); border: 1px solid #BFDBFE; border-radius: 8px; padding: 0 14px; height: 40px; font-weight: 900; font-size: 11px; cursor: pointer; transition: 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 6px;}
         .btn-now:hover { background: #DBEAFE; border-color: #93C5FD;}
+        .btn-now svg { flex-shrink: 0; }
+        
         .tf-zulu { font-size: 11px; color: #0284C7; font-weight: 900; margin-top: 6px; padding-left: 2px;}
 
         textarea.full-width { width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-weight: 600; outline: none; resize: vertical; margin-top: 15px;}
         textarea.full-width:focus { border-color: #38BDF8; }
 
-        /* CALCULOS Y ALERTAS (KPIs) */
+        /* CALCULOS Y ALERTAS (KPIs Profesionales) */
         .calc-panel { background: white; border: 1px solid #E2E8F0; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); flex-wrap: wrap; gap: 10px;}
         .calc-panel.alert { background: #FEF2F2; border-color: #FECACA; border-left: 4px solid #E11D48;}
         .calc-title { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; }
@@ -160,14 +163,14 @@
             .bottom-bar { left: 0; padding: 12px 15px; }
             .header-info-mobile { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
             .step-card-header { flex-direction: column; align-items: flex-start; }
-            .switches-group { justify-content: flex-start; margin-top: 5px;}
+            .switch-container { align-self: flex-end; margin-top: -10px;}
             .btn-now { flex: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MENÚ LATERAL (Se respeta la lógica de roles) -->
+    <!-- MENÚ LATERAL -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header" onclick="navegarA('dashboard.html')">
@@ -241,7 +244,14 @@
 
         <main class="main-content">
             <div class="container">
-                
+                <div class="info-card">
+                    <div>
+                        <div style="font-size: 11px; opacity: 0.9; font-weight: 800; text-transform: uppercase;">Flight Details</div>
+                        <h1 id="lblVuelo">Cargando...</h1>
+                        <div style="font-size: 12px; margin-top: 5px; opacity: 0.9;" id="lblRuta">---</div>
+                    </div>
+                </div>
+
                 <!-- PROGRESS BAR & TABS -->
                 <div class="wizard-header">
                     <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
@@ -355,11 +365,12 @@
                             </div>
                             <div class="switches-group">
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_md_no_imp" onchange="toggleImportExport('md', 'imp')"><span class="slider"></span></label>
+                                    <input type="checkbox" id="chk_md_empty" onchange="toggleEmpty('md')" style="display:none;">
+                                    <label class="switch"><input type="checkbox" id="chk_md_no_imp" onchange="toggleEmpty('md')"><span class="slider"></span></label>
                                     NO IMPORT (NIL)
                                 </label>
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_md_no_exp" onchange="toggleImportExport('md', 'exp')"><span class="slider"></span></label>
+                                    <label class="switch"><input type="checkbox" id="chk_md_no_exp" onchange="toggleEmpty('md')"><span class="slider"></span></label>
                                     NO EXPORT (NIL)
                                 </label>
                             </div>
@@ -371,7 +382,7 @@
                                     <label class="tf-label">START OFFLOAD / <span>INICIA DESCARGA</span></label>
                                     <div class="tf-controls">
                                         <input type="datetime-local" id="t_md_start_off" onchange="calcZAndDurations('t_md_start_off')">
-                                        <button type="button" class="btn-now" onclick="setNow('t_md_start_off')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                        <button type="button" class="btn-now" onclick="setNow('t_md_start_off')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> HORA</button>
                                     </div>
                                     <div class="tf-zulu" id="z_t_md_start_off">(00:00 Z)</div>
                                 </div>
@@ -379,7 +390,7 @@
                                     <label class="tf-label">FINISH OFFLOAD / <span>FINALIZA DESCARGA</span></label>
                                     <div class="tf-controls">
                                         <input type="datetime-local" id="t_md_fin_off" onchange="calcZAndDurations('t_md_fin_off')">
-                                        <button type="button" class="btn-now" onclick="setNow('t_md_fin_off')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                        <button type="button" class="btn-now" onclick="setNow('t_md_fin_off')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> HORA</button>
                                     </div>
                                     <div class="tf-zulu" id="z_t_md_fin_off">(00:00 Z)</div>
                                 </div>
@@ -387,7 +398,7 @@
                                     <label class="tf-label">START UPLOAD / <span>INICIO CARGUE</span></label>
                                     <div class="tf-controls">
                                         <input type="datetime-local" id="t_md_start_up" onchange="calcZAndDurations('t_md_start_up')">
-                                        <button type="button" class="btn-now" onclick="setNow('t_md_start_up')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                        <button type="button" class="btn-now" onclick="setNow('t_md_start_up')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> HORA</button>
                                     </div>
                                     <div class="tf-zulu" id="z_t_md_start_up">(00:00 Z)</div>
                                 </div>
@@ -395,7 +406,7 @@
                                     <label class="tf-label">FINISH UPLOAD / <span>FINALIZA CARGUE</span></label>
                                     <div class="tf-controls">
                                         <input type="datetime-local" id="t_md_fin_up" onchange="calcZAndDurations('t_md_fin_up')">
-                                        <button type="button" class="btn-now" onclick="setNow('t_md_fin_up')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button>
+                                        <button type="button" class="btn-now" onclick="setNow('t_md_fin_up')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> HORA</button>
                                     </div>
                                     <div class="tf-zulu" id="z_t_md_fin_up">(00:00 Z)</div>
                                 </div>
@@ -420,14 +431,15 @@
                         <div class="step-card-header">
                             <div class="step-card-header-left">
                                 <div class="step-number">3</div>
-                                <div class="step-title">FWD COMPARTMENT / COMP. DELANTERO</div>
+                                <div class="step-title">LOWER FORWARD / COMP. DELANTERO</div>
                             </div>
                             <div class="switches-group">
+                                <input type="checkbox" id="chk_fwd_empty" style="display:none;">
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_fwd_no_imp" onchange="toggleImportExport('fwd', 'imp')"><span class="slider"></span></label> NO IMPORT
+                                    <label class="switch"><input type="checkbox" id="chk_fwd_no_imp" onchange="toggleEmpty('fwd')"><span class="slider"></span></label> NO IMPORT
                                 </label>
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_fwd_no_exp" onchange="toggleImportExport('fwd', 'exp')"><span class="slider"></span></label> NO EXPORT
+                                    <label class="switch"><input type="checkbox" id="chk_fwd_no_exp" onchange="toggleEmpty('fwd')"><span class="slider"></span></label> NO EXPORT
                                 </label>
                             </div>
                         </div>
@@ -475,14 +487,15 @@
                         <div class="step-card-header">
                             <div class="step-card-header-left">
                                 <div class="step-number"></div>
-                                <div class="step-title">AFT COMPARTMENT / COMP. TRASERO</div>
+                                <div class="step-title">LOWER AFT / COMP. TRASERO</div>
                             </div>
                             <div class="switches-group">
+                                <input type="checkbox" id="chk_aft_empty" style="display:none;">
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_aft_no_imp" onchange="toggleImportExport('aft', 'imp')"><span class="slider"></span></label> NO IMPORT
+                                    <label class="switch"><input type="checkbox" id="chk_aft_no_imp" onchange="toggleEmpty('aft')"><span class="slider"></span></label> NO IMPORT
                                 </label>
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_aft_no_exp" onchange="toggleImportExport('aft', 'exp')"><span class="slider"></span></label> NO EXPORT
+                                    <label class="switch"><input type="checkbox" id="chk_aft_no_exp" onchange="toggleEmpty('aft')"><span class="slider"></span></label> NO EXPORT
                                 </label>
                             </div>
                         </div>
@@ -533,11 +546,12 @@
                                 <div class="step-title">BULK COMPARTMENT / BODEGA GRANEL</div>
                             </div>
                             <div class="switches-group">
+                                <input type="checkbox" id="chk_bulk_empty" style="display:none;">
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_bulk_no_imp" onchange="toggleImportExport('bulk', 'imp')"><span class="slider"></span></label> NO IMPORT
+                                    <label class="switch"><input type="checkbox" id="chk_bulk_no_imp" onchange="toggleEmpty('bulk')"><span class="slider"></span></label> NO IMPORT
                                 </label>
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_bulk_no_exp" onchange="toggleImportExport('bulk', 'exp')"><span class="slider"></span></label> NO EXPORT
+                                    <label class="switch"><input type="checkbox" id="chk_bulk_no_exp" onchange="toggleEmpty('bulk')"><span class="slider"></span></label> NO EXPORT
                                 </label>
                             </div>
                         </div>
@@ -645,7 +659,6 @@
                                 </div>
                             </div>
                             <textarea class="full-width" id="n_customs" rows="1" placeholder="Customs Overtime / Tiempos extras de aduana (N/A si no aplica)..." oninput="marcarCambios()"></textarea>
-                            <textarea class="full-width" id="n_services" rows="1" placeholder="General Services Notes..." oninput="marcarCambios()"></textarea>
                         </div>
 
                         <div class="wizard-nav">
@@ -694,7 +707,7 @@
                                     <div class="tf-zulu" id="z_t_airborne">(00:00 Z)</div>
                                 </div>
                                 <div class="tf-wrapper">
-                                    <label class="tf-label">GENEVA DEPARTURE / <span>SALIDA GENEVA</span></label>
+                                    <label class="tf-label">GENEVA DEPARTURE / <span>HORA SALIDA (Opcional)</span></label>
                                     <div class="tf-controls">
                                         <input type="datetime-local" id="t_geneva" onchange="calcZAndDurations('t_geneva')">
                                         <button type="button" class="btn-now" onclick="setNow('t_geneva')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> HORA</button>
@@ -754,6 +767,7 @@
         let vueloData = { vuelo: '', tail: '', ruta: '', estacion: '', fecha: '' };
         let currentUser = "Usuario"; let dbRecordId = null;
 
+        // Lista completa de campos
         const timeFields = [
             't_touchdown', 't_block', 't_weights', 't_loadmaster', 
             't_md_start_off', 't_md_fin_off', 't_md_start_up', 't_md_fin_up',
@@ -775,26 +789,44 @@
         const iconInfo = `<svg width="45" height="45" fill="none" stroke="#0A2540" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
 
         function showAlert(title, msg, type = 'info') {
-            document.getElementById('alertTitle').innerText = title;
-            document.getElementById('alertMessage').innerText = msg;
+            const tEl = document.getElementById('alertTitle');
+            const mEl = document.getElementById('alertMessage');
+            if(tEl) tEl.innerText = title;
+            if(mEl) mEl.innerText = msg;
+            
             let color = 'var(--amerijet-blue)'; let svg = iconInfo;
             if(type === 'error') { color = 'var(--amerijet-red)'; svg = iconError; }
             if(type === 'success') { color = 'var(--success-green)'; svg = iconSuccess; }
-            document.getElementById('alertTitle').style.color = color;
-            document.getElementById('alertIcon').innerHTML = svg;
-            document.getElementById('alertBtn').style.background = color;
-            document.getElementById('customAlertModal').style.display = 'flex';
+            
+            if(tEl) tEl.style.color = color;
+            const icEl = document.getElementById('alertIcon'); if(icEl) icEl.innerHTML = svg;
+            const bEl = document.getElementById('alertBtn'); if(bEl) bEl.style.background = color;
+            
+            const mod = document.getElementById('customAlertModal'); if(mod) mod.style.display = 'flex';
         }
 
         function navegarA(url) { window.location.href = url; }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+        function toggleSidebar() { 
+            const sb = document.getElementById('sidebar'); 
+            const ov = document.getElementById('sidebarOverlay');
+            if(sb) sb.classList.toggle('active'); 
+            if(ov) ov.classList.toggle('active'); 
+        }
         async function logoutSeguro() { localStorage.removeItem('cargo_current_station'); await supabaseClient.auth.signOut(); window.location.href='index.html'; }
+
+        // MÉTODOS SEGUROS DE SET/GET
+        function setTextSafe(id, text) { const el = document.getElementById(id); if(el) el.innerText = text; }
+        function setValSafe(id, val) { const el = document.getElementById(id); if(el) el.value = val; }
+        function getValSafe(id) { const el = document.getElementById(id); return el ? el.value : ""; }
 
         // =======================
         // UTILIDADES Y LÓGICA UI
         // =======================
         function toggleImportExport(comp, action) {
-            const isChecked = document.getElementById(`chk_${comp}_no_${action}`).checked;
+            const chk = document.getElementById(`chk_${comp}_no_${action}`);
+            if(!chk) return;
+            const isChecked = chk.checked;
+            
             const startId = `t_${comp}_start_${action === 'imp' ? 'off' : 'up'}`;
             const finId = `t_${comp}_fin_${action === 'imp' ? 'off' : 'up'}`;
             
@@ -804,27 +836,41 @@
             if(isChecked) {
                 if(wStart) wStart.classList.add('disabled-box');
                 if(wFin) wFin.classList.add('disabled-box');
-                document.getElementById(startId).value = "";
-                document.getElementById(finId).value = "";
-                document.getElementById(`z_${startId}`).innerText = "(00:00 Z)";
-                document.getElementById(`z_${finId}`).innerText = "(00:00 Z)";
+                setValSafe(startId, ""); setValSafe(finId, "");
+                setTextSafe(`z_${startId}`, "(00:00 Z)"); setTextSafe(`z_${finId}`, "(00:00 Z)");
             } else {
                 if(wStart) wStart.classList.remove('disabled-box');
                 if(wFin) wFin.classList.remove('disabled-box');
             }
-            calcZAndDurations('t_block'); // Forzar recalculo general
+            calcZAndDurations('t_block'); 
+        }
+
+        function toggleEmpty(comp) {
+            const chkImp = document.getElementById(`chk_${comp}_no_imp`);
+            const chkExp = document.getElementById(`chk_${comp}_no_exp`);
+            const box = document.getElementById(`box_${comp}`);
+            if(!chkImp || !chkExp || !box) return;
+
+            if(chkImp.checked && chkExp.checked) {
+                box.classList.add('is-nil');
+            } else {
+                box.classList.remove('is-nil');
+            }
         }
 
         function toggleFueling() {
-            const isChecked = document.getElementById('chk_no_fuel').checked;
+            const chk = document.getElementById('chk_no_fuel'); if(!chk) return;
+            const isChecked = chk.checked;
             const wStart = document.getElementById('wrap_fuel_start');
             const wFin = document.getElementById('wrap_fuel_fin');
             if(isChecked) {
-                wStart.classList.add('disabled-box'); wFin.classList.add('disabled-box');
-                document.getElementById('t_fuel_start').value = ""; document.getElementById('t_fuel_fin').value = "";
-                document.getElementById('z_t_fuel_start').innerText = "(00:00 Z)"; document.getElementById('z_t_fuel_fin').innerText = "(00:00 Z)";
+                if(wStart) wStart.classList.add('disabled-box'); 
+                if(wFin) wFin.classList.add('disabled-box');
+                setValSafe('t_fuel_start', ""); setValSafe('t_fuel_fin', "");
+                setTextSafe('z_t_fuel_start', "(00:00 Z)"); setTextSafe('z_t_fuel_fin', "(00:00 Z)");
             } else {
-                wStart.classList.remove('disabled-box'); wFin.classList.remove('disabled-box');
+                if(wStart) wStart.classList.remove('disabled-box'); 
+                if(wFin) wFin.classList.remove('disabled-box');
             }
             marcarCambios();
         }
@@ -861,8 +907,8 @@
         function setNow(id) {
             const now = new Date();
             const localStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-            const el = document.getElementById(id);
-            if(el) { el.value = localStr; calcZAndDurations(id); }
+            setValSafe(id, localStr);
+            calcZAndDurations(id);
         }
 
         function formatMinsToText(totalMins) {
@@ -873,7 +919,7 @@
         function getEarliestTime(ids) {
             let earliest = null;
             ids.forEach(id => {
-                const val = document.getElementById(id)?.value;
+                const val = getValSafe(id);
                 if(val) {
                     const d = new Date(val);
                     if(!earliest || d < earliest) earliest = d;
@@ -885,7 +931,7 @@
         function getLatestTime(ids) {
             let latest = null;
             ids.forEach(id => {
-                const val = document.getElementById(id)?.value;
+                const val = getValSafe(id);
                 if(val) {
                     const d = new Date(val);
                     if(!latest || d > latest) latest = d;
@@ -895,74 +941,64 @@
         }
 
         function calcZAndDurations(id) {
-            const el = document.getElementById(id);
-            const val = el ? el.value : "";
-            const badge = document.getElementById(`z_${id}`);
-            if(badge) badge.innerText = val ? getZuluString(new Date(val)) : "(00:00 Z)";
-            
+            const val = getValSafe(id);
+            setTextSafe(`z_${id}`, val ? getZuluString(new Date(val)) : "(00:00 Z)");
             calcularCombinado();
             calcularDemora();
             marcarCambios();
         }
 
         function calcularCombinado() {
-            // Buscamos el inicio mas temprano de cualquier offload
             const earliestOffload = getEarliestTime(['t_md_start_off', 't_fwd_start_off', 't_aft_start_off', 't_bulk_start_off']);
-            // Buscamos el final mas tardio de cualquier upload
             const latestUpload = getLatestTime(['t_md_fin_up', 't_fwd_fin_up', 't_aft_fin_up', 't_bulk_fin_up']);
             
-            const lbl = document.getElementById('val_combined');
             if(earliestOffload && latestUpload && earliestOffload <= latestUpload) {
                 const diffMins = Math.floor((latestUpload - earliestOffload) / 60000);
-                if(lbl) lbl.innerText = formatMinsToText(diffMins);
+                setTextSafe('val_combined', formatMinsToText(diffMins));
             } else { 
-                if(lbl) lbl.innerText = "00h 00m"; 
+                setTextSafe('val_combined', "00h 00m"); 
             }
         }
 
         function calcularDemora() {
-            const elBlock = document.getElementById('t_block');
-            const elPush = document.getElementById('t_pushback');
-            const elTouch = document.getElementById('t_touchdown');
-            const elAir = document.getElementById('t_airborne');
+            const vBlock = getValSafe('t_block');
+            const vPush = getValSafe('t_pushback');
+            const vTouch = getValSafe('t_touchdown');
+            const vAir = getValSafe('t_airborne');
             
-            const lblTotalRamp = document.getElementById('val_total_ramp');
-            const lblTotalGround = document.getElementById('val_total_ground');
-
             const panel = document.getElementById('delay_panel');
             const calcBoxRamp = document.getElementById('calc_total_ramp');
-            const inDelay = document.getElementById('t_delay_time');
 
             // 1. Calc Total Rampa (Block to Pushback)
-            if(elBlock && elPush && elBlock.value && elPush.value) {
-                const d1 = new Date(elBlock.value); const d2 = new Date(elPush.value);
+            if(vBlock && vPush) {
+                const d1 = new Date(vBlock); const d2 = new Date(vPush);
                 const diffMins = Math.max(0, Math.floor((d2 - d1) / 60000));
-                if(lblTotalRamp) lblTotalRamp.innerText = formatMinsToText(diffMins);
+                setTextSafe('val_total_ramp', formatMinsToText(diffMins));
 
                 // Regla 90 min
                 if(diffMins > 90) {
                     if(calcBoxRamp) calcBoxRamp.classList.add('alert');
                     if(panel) panel.style.display = 'block';
                     const extra = diffMins - 90;
-                    if(inDelay) inDelay.value = `+ ${extra} Minutos sobre límite`;
+                    setValSafe('t_delay_time', `+ ${extra} Minutos sobre límite`);
                 } else {
                     if(calcBoxRamp) calcBoxRamp.classList.remove('alert');
                     if(panel) panel.style.display = 'none';
-                    if(inDelay) inDelay.value = "";
+                    setValSafe('t_delay_time', "");
                 }
             } else { 
-                if(lblTotalRamp) lblTotalRamp.innerText = "00h 00m"; 
+                setTextSafe('val_total_ramp', "00h 00m"); 
                 if(calcBoxRamp) calcBoxRamp.classList.remove('alert'); 
                 if(panel) panel.style.display = 'none';
             }
 
             // 2. Calc Total Ground (Touchdown to Airborne)
-            if(elTouch && elAir && elTouch.value && elAir.value) {
-                const d3 = new Date(elTouch.value); const d4 = new Date(elAir.value);
+            if(vTouch && vAir) {
+                const d3 = new Date(vTouch); const d4 = new Date(vAir);
                 const gMins = Math.max(0, Math.floor((d4 - d3) / 60000));
-                if(lblTotalGround) lblTotalGround.innerText = formatMinsToText(gMins);
+                setTextSafe('val_total_ground', formatMinsToText(gMins));
             } else {
-                if(lblTotalGround) lblTotalGround.innerText = "00h 00m";
+                setTextSafe('val_total_ground', "00h 00m");
             }
         }
 
@@ -976,11 +1012,11 @@
                 if (sessionError) throw new Error("Error de sesión: " + sessionError.message);
                 if (!session) { window.location.href = 'index.html'; return; }
 
-                const { data: perfil, error: errPerfil } = await supabaseClient.from('perfiles').select('nombre, rol').eq('id', session.user.id).single();
+                const { data: perfil } = await supabaseClient.from('perfiles').select('nombre, rol').eq('id', session.user.id).single();
                 if (perfil) {
                     currentUser = perfil.nombre || "Usuario";
-                    document.getElementById('lblUserName').innerText = currentUser;
-                    document.getElementById('lblUserRol').innerText = String(perfil.rol).replace('_', ' ').toUpperCase();
+                    setTextSafe('lblUserName', currentUser);
+                    setTextSafe('lblUserRol', String(perfil.rol).replace('_', ' ').toUpperCase());
                     
                     const miRol = String(perfil.rol).toLowerCase();
                     const btnReportes = document.getElementById('btnReportesHistoricos');
@@ -990,11 +1026,7 @@
                     
                     const lblUld = document.getElementById('lblUldMenuText');
                     if(lblUld) {
-                        if(miRol === 'admin' || miRol === 'supervisor') {
-                            lblUld.innerText = "INVENTARIO MAESTRO ULD";
-                        } else { 
-                            lblUld.innerText = "INVENTARIO LOCAL ULD"; 
-                        }
+                        lblUld.innerText = (miRol === 'admin' || miRol === 'supervisor') ? "INVENTARIO MAESTRO ULD" : "INVENTARIO LOCAL ULD"; 
                     }
                     
                     const btnAdmin = document.getElementById('btnAdminPanel');
@@ -1016,11 +1048,11 @@
 
                 vueloData = { vuelo: op.vuelo_id, tail: op.matricula_avion, ruta: op.ruta, estacion: op.estacion_registro, fecha: op.fecha };
                 
-                document.getElementById('lblVuelo').innerText = `${vueloData.vuelo} - ${vueloData.tail}`;
-                document.getElementById('lblRuta').innerText = `Ruta: ${vueloData.ruta} | Op: ${vueloData.fecha}`;
-                document.getElementById('lblTailHead').innerText = vueloData.tail;
+                setTextSafe('lblVuelo', `${vueloData.vuelo} - ${vueloData.tail}`);
+                setTextSafe('lblRuta', `Ruta: ${vueloData.ruta} | Op: ${vueloData.fecha}`);
+                setTextSafe('lblTailHead', vueloData.tail);
 
-                // Cargar tabla de reporte
+                // Cargar tabla de reporte JSONB
                 try {
                     const { data: reporte } = await supabaseClient.from('vuelos_tiempos_reporte').select('*').eq('vuelo_operacion_id', operacionId).single();
                     if (reporte && reporte.datos_json) {
@@ -1028,26 +1060,21 @@
                         const d = reporte.datos_json;
                         
                         timeFields.forEach(f => {
-                            const el = document.getElementById(f);
-                            if(el && d[f]) { el.value = formatToLocalInput(d[f]); calcZAndDurations(f); }
+                            if(d[f]) { setValSafe(f, formatToLocalInput(d[f])); calcZAndDurations(f); }
                         });
 
-                        // Checkboxes (NIL)
+                        // Checkboxes (NIL) - Seguros
                         ['md','fwd','aft','bulk'].forEach(comp => {
-                            if(d[`chk_${comp}_no_imp`]) { document.getElementById(`chk_${comp}_no_imp`).checked = true; toggleImportExport(comp, 'imp'); }
-                            if(d[`chk_${comp}_no_exp`]) { document.getElementById(`chk_${comp}_no_exp`).checked = true; toggleImportExport(comp, 'exp'); }
+                            if(d[`chk_${comp}_no_imp`]) { const c = document.getElementById(`chk_${comp}_no_imp`); if(c) { c.checked=true; toggleImportExport(comp, 'imp'); } }
+                            if(d[`chk_${comp}_no_exp`]) { const c = document.getElementById(`chk_${comp}_no_exp`); if(c) { c.checked=true; toggleImportExport(comp, 'exp'); } }
                         });
                         
-                        if(d.chk_no_fuel) { document.getElementById('chk_no_fuel').checked = true; toggleFueling(); }
+                        if(d.chk_no_fuel) { const c = document.getElementById('chk_no_fuel'); if(c) { c.checked = true; toggleFueling(); } }
 
-                        // Texts Notes
-                        ['md','fwd','aft','bulk','departure'].forEach(comp => {
-                            if(d[`n_${comp}`]) document.getElementById(`n_${comp}`).value = d[`n_${comp}`];
-                        });
-                        
-                        if(d.n_payload) document.getElementById('n_payload').value = d.n_payload;
-                        if(d.n_customs) document.getElementById('n_customs').value = d.n_customs;
-                        if(d.t_delay_reason) document.getElementById('t_delay_reason').value = d.t_delay_reason;
+                        // Texts
+                        if(d.n_payload) setValSafe('n_payload', d.n_payload);
+                        if(d.n_customs) setValSafe('n_customs', d.n_customs);
+                        if(d.t_delay_reason) setValSafe('t_delay_reason', d.t_delay_reason);
                     }
                 } catch(e2) {
                     console.log("No existe un reporte previo, se carga en blanco.");
@@ -1066,21 +1093,23 @@
             try {
                 let payloadJSON = {};
                 timeFields.forEach(f => {
-                    const elInput = document.getElementById(f);
-                    if (elInput && elInput.value) { payloadJSON[f] = new Date(elInput.value).toISOString(); }
+                    const val = getValSafe(f);
+                    if (val) { payloadJSON[f] = new Date(val).toISOString(); }
                 });
 
                 ['md','fwd','aft','bulk'].forEach(comp => {
-                    payloadJSON[`chk_${comp}_no_imp`] = document.getElementById(`chk_${comp}_no_imp`).checked;
-                    payloadJSON[`chk_${comp}_no_exp`] = document.getElementById(`chk_${comp}_no_exp`).checked;
-                    payloadJSON[`n_${comp}`] = document.getElementById(`n_${comp}`).value.trim();
+                    const cImp = document.getElementById(`chk_${comp}_no_imp`);
+                    const cExp = document.getElementById(`chk_${comp}_no_exp`);
+                    if(cImp) payloadJSON[`chk_${comp}_no_imp`] = cImp.checked;
+                    if(cExp) payloadJSON[`chk_${comp}_no_exp`] = cExp.checked;
                 });
                 
-                payloadJSON.chk_no_fuel = document.getElementById('chk_no_fuel').checked;
-                payloadJSON.n_departure = document.getElementById('n_departure').value.trim();
-                payloadJSON.n_payload = document.getElementById('n_payload').value.trim();
-                payloadJSON.n_customs = document.getElementById('n_customs').value.trim();
-                payloadJSON.t_delay_reason = document.getElementById('t_delay_reason').value.trim();
+                const cFuel = document.getElementById('chk_no_fuel');
+                if(cFuel) payloadJSON.chk_no_fuel = cFuel.checked;
+
+                payloadJSON.n_payload = getValSafe('n_payload').trim();
+                payloadJSON.n_customs = getValSafe('n_customs').trim();
+                payloadJSON.t_delay_reason = getValSafe('t_delay_reason').trim();
 
                 const dbPayload = {
                     vuelo_operacion_id: operacionId,
@@ -1105,7 +1134,7 @@
         }
 
         // =======================
-        // GENERADOR DE PDF PROFESIONAL (NIVEL EJECUTIVO Y PROTEGIDO)
+        // GENERADOR DE PDF (Elegante & Seguro)
         // =======================
         function generarPDF() {
             try {
@@ -1132,12 +1161,14 @@
                 doc.text(`Date: ${vueloData.fecha || new Date().toLocaleDateString()}`, 115, 43);
                 doc.text(`Traffic Agent: ${currentUser}`, 115, 48);
 
-                const getV = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
-                const safeNotes = (val) => String(val || '').replace(/([^\s]{35})(?=[^\s])/g, "$1 "); // Súper Anti-break para PDF
+                const getV = (id) => getValSafe(id);
+                const safeNotes = (val) => String(val || '').replace(/([^\s]{25})(?=[^\s])/g, "$1 ");
 
-                const tRamp = document.getElementById('val_total_ramp').innerText;
-                const tGround = document.getElementById('val_total_ground').innerText;
-                const tCombined = document.getElementById('val_combined').innerText;
+                // SAFE READ KPIs
+                let tRamp = "00h 00m"; let tGround = "00h 00m"; let tCombined = "00h 00m";
+                const elRamp = document.getElementById('val_total_ramp'); if(elRamp) tRamp = elRamp.innerText;
+                const elGround = document.getElementById('val_total_ground'); if(elGround) tGround = elGround.innerText;
+                const elComb = document.getElementById('val_combined'); if(elComb) tCombined = elComb.innerText;
 
                 // KPI BOXES EN EL PDF
                 doc.setFillColor(254, 240, 138); doc.roundedRect(10, 62, 60, 18, 2, 2, "FD");
@@ -1155,16 +1186,17 @@
                 doc.text("COMBINED CARGO OPS", 143, 70);
                 doc.setFontSize(12); doc.text(tCombined, 143, 76);
 
-                // Función auxiliar constructora de bloques de tabla Cargo
+                // Función auxiliar para bloques de tabla Cargo
                 const buildCargoBlock = (title, compId) => {
-                    const noImp = document.getElementById(`chk_${compId}_no_imp`).checked;
-                    const noExp = document.getElementById(`chk_${compId}_no_exp`).checked;
+                    const cImp = document.getElementById(`chk_${compId}_no_imp`);
+                    const cExp = document.getElementById(`chk_${compId}_no_exp`);
+                    const noImp = cImp ? cImp.checked : false;
+                    const noExp = cExp ? cExp.checked : false;
                     
                     let impStr = noImp ? "NIL (NO IMPORT)" : getSafeCombinedTimeFormat(`t_${compId}_start_off`) + "\n" + getSafeCombinedTimeFormat(`t_${compId}_fin_off`);
                     let expStr = noExp ? "NIL (NO EXPORT)" : getSafeCombinedTimeFormat(`t_${compId}_start_up`) + "\n" + getSafeCombinedTimeFormat(`t_${compId}_fin_up`);
-                    let note = safeNotes(getV(`n_${compId}`));
 
-                    return [[title, impStr, expStr, note]];
+                    return [[title, impStr, expStr]];
                 };
 
                 let curY = 88;
@@ -1196,37 +1228,38 @@
 
                 doc.autoTable({ 
                     startY: curY, margin: { left: 10, right: 10 },
-                    head: [['CARGO OPERATIONS', 'IMPORT (Start / Finish)', 'EXPORT (Start / Finish)', 'NOTES']], 
+                    head: [['CARGO OPERATIONS', 'IMPORT (Start / Finish)', 'EXPORT (Start / Finish)']], 
                     body: cargoData, 
                     theme: 'grid', 
                     headStyles: { fillColor: [10, 37, 64], halign: 'center' }, 
                     styles: { fontSize: 8, cellPadding: 2.5, overflow: 'linebreak' },
-                    columnStyles: { 0: { cellWidth: 35, fontStyle: 'bold' }, 1: { cellWidth: 45, halign: 'center' }, 2: { cellWidth: 45, halign: 'center' } }
+                    columnStyles: { 0: { cellWidth: 50, fontStyle: 'bold' }, 1: { cellWidth: 72.9, halign: 'center' }, 2: { cellWidth: 73, halign: 'center' } }
                 });
                 curY = doc.lastAutoTable.finalY + 5;
 
                 // 3. SERVICES & DEPARTURE
-                const noFuel = document.getElementById('chk_no_fuel').checked;
+                const chkFuel = document.getElementById('chk_no_fuel');
+                const noFuel = chkFuel ? chkFuel.checked : false;
                 const fuelStr = noFuel ? "NIL (NO SERVICE)" : getSafeCombinedTimeFormat('t_fuel_start') + "\n" + getSafeCombinedTimeFormat('t_fuel_fin');
 
                 doc.autoTable({ 
                     startY: curY, margin: { left: 10, right: 10 },
-                    head: [['SERVICES & DEPARTURE', 'TIME (ZULU / LOCAL)', 'NOTES']], 
+                    head: [['SERVICES & DEPARTURE', 'TIME (ZULU / LOCAL)']], 
                     body: [
-                        ['FUELING (START/FINISH)', fuelStr, ''],
-                        ['TIME AMS SENT BY STATION', getSafeCombinedTimeFormat('t_ams'), ''],
-                        ['RELEASE GIVEN BY MIA', getSafeCombinedTimeFormat('t_ease'), ''],
-                        ['CARGO DOCUMENTATION ON BOARD', getSafeCombinedTimeFormat('t_docs'), ''],
-                        ['CUSTOMS OVERTIME / TIEMPO EXTRA', '---', safeNotes(getV('n_customs'))],
-                        ['CABIN DOOR CLOSED', getSafeCombinedTimeFormat('t_door'), safeNotes(getV('n_departure'))],
-                        ['PUSHBACK / RETROCEDER', getSafeCombinedTimeFormat('t_pushback'), ''],
-                        ['AIRBORNE TIME (WHEELS UP)', getSafeCombinedTimeFormat('t_airborne'), ''],
-                        ['GENEVA DEPARTURE TIME', getSafeCombinedTimeFormat('t_geneva'), '']
+                        ['FUELING (START/FINISH)', fuelStr],
+                        ['TIME AMS SENT BY STATION', getSafeCombinedTimeFormat('t_ams')],
+                        ['RELEASE GIVEN BY MIA', getSafeCombinedTimeFormat('t_ease')],
+                        ['CARGO DOCUMENTATION ON BOARD', getSafeCombinedTimeFormat('t_docs')],
+                        ['CUSTOMS OVERTIME / TIEMPO EXTRA', safeNotes(getV('n_customs'))],
+                        ['CABIN DOOR CLOSED', getSafeCombinedTimeFormat('t_door')],
+                        ['PUSHBACK / RETROCEDER', getSafeCombinedTimeFormat('t_pushback')],
+                        ['AIRBORNE TIME (WHEELS UP)', getSafeCombinedTimeFormat('t_airborne')],
+                        ['GENEVA DEPARTURE TIME', getSafeCombinedTimeFormat('t_geneva')]
                     ], 
                     theme: 'grid', 
                     headStyles: { fillColor: [10, 37, 64], halign: 'center' }, 
                     styles: { fontSize: 8.5, cellPadding: 2.5, overflow: 'linebreak' },
-                    columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' }, 1: { cellWidth: 45, halign: 'center' } }
+                    columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' }, 1: { cellWidth: 125.9, halign: 'center' } }
                 });
 
                 // Anexar la tabla de Delay si existe la alerta roja
