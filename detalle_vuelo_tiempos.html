@@ -80,7 +80,7 @@
         .step-section.active { display: block; }
         @keyframes fadeIn { from {opacity: 0; transform: translateY(-10px);} to {opacity: 1; transform: translateY(0);} }
 
-        /* WIZARD CARDS & SECTIONS */
+        /* WIZARD CARDS */
         .step-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 20px;}
         .step-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #F1F5F9; padding-bottom: 15px; flex-wrap: wrap;}
         .step-card-header-left { display: flex; align-items: center; gap: 12px; }
@@ -99,7 +99,7 @@
 
         /* INPUTS Y DISEÑO */
         .compartment-box { background: transparent; transition: 0.3s;}
-        .disabled-box { opacity: 0.35; pointer-events: none; filter: grayscale(100%); background: #F1F5F9; border-radius: 8px;}
+        .disabled-box { opacity: 0.4; pointer-events: none; filter: grayscale(100%); background: #F1F5F9; border-radius: 8px;}
         
         .time-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; background: #F8FAFC; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; align-items: center;}
         @media (min-width: 768px) { .time-row { grid-template-columns: 1.2fr 1fr; } }
@@ -110,16 +110,17 @@
         .tf-label { font-size: 10px; font-weight: 900; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: 0.5px;}
         .tf-controls { display: flex; gap: 8px; align-items: center; width: 100%;}
         
-        input[type="datetime-local"], input[type="text"], textarea { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text-main); width: 100%; box-sizing: border-box; outline: none; background: white; transition: 0.2s;}
+        input[type="datetime-local"], input[type="text"], textarea { padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text-main); width: 100%; box-sizing: border-box; outline: none; background: white; transition: 0.2s;}
         input[type="datetime-local"]:focus, input[type="text"]:focus, textarea:focus { border-color: #38BDF8; box-shadow: 0 0 0 3px rgba(56,189,248,0.1); }
-
-        /* BOTÓN RELOJ NATIVO OPTIMIZADO */
+        
+        /* BOTÓN RELOJ NATIVO OPTIMIZADO PARA MÓVIL */
         .btn-now-icon { 
             background: #EFF6FF; color: var(--amerijet-blue); border: 1px solid #BFDBFE; 
-            width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; 
+            width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.2s; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .btn-now-icon:hover { background: #DBEAFE; border-color: #93C5FD; transform: translateY(-1px); }
+        .btn-now-icon:active { transform: translateY(1px); }
         .btn-now-icon svg { width: 16px; height: 16px; }
         
         .tf-zulu { font-size: 11px; color: #0284C7; font-weight: 900; margin-top: 2px; padding-left: 2px;}
@@ -168,7 +169,8 @@
             .header-info-mobile { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
             .step-card-header { flex-direction: column; align-items: flex-start; }
             .switches-group { justify-content: flex-start; margin-top: 5px;}
-            .btn-now-icon { flex: 1; } /* En celular el boton toma más ancho para ser facil de tocar */
+            /* Botón del reloj mantiene tamaño exacto para no comer espacio */
+            .btn-now-icon { width: 42px; height: 42px; }
         }
     </style>
 </head>
@@ -319,10 +321,7 @@
                                     </div>
                                     <div class="tf-zulu" id="z_t_touchdown">(00:00 Z)</div>
                                 </div>
-                                <div class="tf-right">
-                                    <label class="tf-label">NOTA / DETALLE</label>
-                                    <input type="text" id="n_touchdown" placeholder="Opcional..." oninput="marcarCambios()">
-                                </div>
+                                <div class="tf-right"><label class="tf-label">NOTA / DETALLE</label><input type="text" id="n_touchdown" placeholder="Opcional..." oninput="marcarCambios()"></div>
                             </div>
                             
                             <div class="time-row" id="row_block">
@@ -334,10 +333,7 @@
                                     </div>
                                     <div class="tf-zulu" id="z_t_block">(00:00 Z)</div>
                                 </div>
-                                <div class="tf-right">
-                                    <label class="tf-label">NOTA / DETALLE</label>
-                                    <input type="text" id="n_block" placeholder="Ej: Arrival Time 15:54 Z" oninput="marcarCambios()">
-                                </div>
+                                <div class="tf-right"><label class="tf-label">NOTA / DETALLE</label><input type="text" id="n_block" placeholder="Ej: Arrival Time 15:54 Z" oninput="marcarCambios()"></div>
                             </div>
 
                             <div class="time-row" id="row_weights">
@@ -349,10 +345,7 @@
                                     </div>
                                     <div class="tf-zulu" id="z_t_weights">(00:00 Z)</div>
                                 </div>
-                                <div class="tf-right">
-                                    <label class="tf-label">NOTA / DETALLE</label>
-                                    <input type="text" id="n_weights" placeholder="Opcional..." oninput="marcarCambios()">
-                                </div>
+                                <div class="tf-right"><label class="tf-label">NOTA / DETALLE</label><input type="text" id="n_weights" placeholder="Opcional..." oninput="marcarCambios()"></div>
                             </div>
 
                             <div class="time-row" id="row_loadmaster">
@@ -364,10 +357,7 @@
                                     </div>
                                     <div class="tf-zulu" id="z_t_loadmaster">(00:00 Z)</div>
                                 </div>
-                                <div class="tf-right">
-                                    <label class="tf-label">NOTA / DETALLE</label>
-                                    <input type="text" id="n_loadmaster" placeholder="Opcional..." oninput="marcarCambios()">
-                                </div>
+                                <div class="tf-right"><label class="tf-label">NOTA / DETALLE</label><input type="text" id="n_loadmaster" placeholder="Opcional..." oninput="marcarCambios()"></div>
                             </div>
 
                             <div style="background: #F8FAFC; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; margin-top:15px;">
@@ -375,7 +365,7 @@
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> 
                                     PAYLOAD & TOTAL PALLETS (AUTO-GENERADO DESDE ARMADO)
                                 </label>
-                                <textarea class="full-width" id="n_payload" rows="2" placeholder="Cargando ULDs desde el sistema de armado... Espere..." oninput="marcarCambios()" style="margin-top:0; border-color:#BFDBFE; background:#EFF6FF; color:#1D4ED8; font-weight:800;"></textarea>
+                                <textarea class="full-width" id="n_payload" rows="3" placeholder="Cargando ULDs desde el sistema de armado... Espere..." oninput="marcarCambios()" style="margin-top:0; border-color:#BFDBFE; background:#EFF6FF; color:#1D4ED8; font-weight:800;"></textarea>
                             </div>
                         </div>
 
@@ -398,18 +388,15 @@
                             </div>
                             <div class="switches-group">
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_md_no_imp" onchange="toggleImportExport('md', 'imp')"><span class="slider"></span></label>
-                                    NO IMPORT (NIL)
+                                    <label class="switch"><input type="checkbox" id="chk_md_no_imp" onchange="toggleImportExport('md', 'imp')"><span class="slider"></span></label> NO IMPORT
                                 </label>
                                 <label class="switch-container">
-                                    <label class="switch"><input type="checkbox" id="chk_md_no_exp" onchange="toggleImportExport('md', 'exp')"><span class="slider"></span></label>
-                                    NO EXPORT (NIL)
+                                    <label class="switch"><input type="checkbox" id="chk_md_no_exp" onchange="toggleImportExport('md', 'exp')"><span class="slider"></span></label> NO EXPORT
                                 </label>
                             </div>
                         </div>
 
                         <div class="compartment-box" id="box_md">
-                            <!-- IMPORT (OFFLOAD) -->
                             <div id="wrap_md_imp">
                                 <div class="time-row" id="row_md_start_off">
                                     <div class="tf-left">
@@ -420,10 +407,7 @@
                                         </div>
                                         <div class="tf-zulu" id="z_t_md_start_off">(00:00 Z)</div>
                                     </div>
-                                    <div class="tf-right">
-                                        <label class="tf-label">NOTA / DETALLE</label>
-                                        <input type="text" id="n_md_start_off" placeholder="Ej: 4 PMC..." oninput="marcarCambios()">
-                                    </div>
+                                    <div class="tf-right"><label class="tf-label">NOTA</label><input type="text" id="n_md_start_off" oninput="marcarCambios()"></div>
                                 </div>
                                 <div class="time-row" id="row_md_fin_off">
                                     <div class="tf-left">
@@ -434,15 +418,10 @@
                                         </div>
                                         <div class="tf-zulu" id="z_t_md_fin_off">(00:00 Z)</div>
                                     </div>
-                                    <div class="tf-right">
-                                        <label class="tf-label">NOTA / DETALLE</label>
-                                        <input type="text" id="n_md_fin_off" placeholder="..." oninput="marcarCambios()">
-                                    </div>
+                                    <div class="tf-right"><label class="tf-label">NOTA</label><input type="text" id="n_md_fin_off" oninput="marcarCambios()"></div>
                                 </div>
                             </div>
-
-                            <!-- EXPORT (UPLOAD) -->
-                            <div id="wrap_md_exp" style="margin-top:25px; border-top:2px dashed #E2E8F0; padding-top:15px;">
+                            <div id="wrap_md_exp" style="margin-top:20px; border-top:2px dashed #E2E8F0; padding-top:15px;">
                                 <div class="time-row" id="row_md_start_up">
                                     <div class="tf-left">
                                         <label class="tf-label">START UPLOAD / INICIO CARGUE</label>
@@ -452,10 +431,7 @@
                                         </div>
                                         <div class="tf-zulu" id="z_t_md_start_up">(00:00 Z)</div>
                                     </div>
-                                    <div class="tf-right">
-                                        <label class="tf-label">NOTA / DETALLE</label>
-                                        <input type="text" id="n_md_start_up" placeholder="..." oninput="marcarCambios()">
-                                    </div>
+                                    <div class="tf-right"><label class="tf-label">NOTA</label><input type="text" id="n_md_start_up" oninput="marcarCambios()"></div>
                                 </div>
                                 <div class="time-row" id="row_md_fin_up">
                                     <div class="tf-left">
@@ -466,10 +442,7 @@
                                         </div>
                                         <div class="tf-zulu" id="z_t_md_fin_up">(00:00 Z)</div>
                                     </div>
-                                    <div class="tf-right">
-                                        <label class="tf-label">NOTA / DETALLE</label>
-                                        <input type="text" id="n_md_fin_up" placeholder="..." oninput="marcarCambios()">
-                                    </div>
+                                    <div class="tf-right"><label class="tf-label">NOTA</label><input type="text" id="n_md_fin_up" oninput="marcarCambios()"></div>
                                 </div>
                             </div>
                         </div>
@@ -896,6 +869,7 @@
         let vueloData = { vuelo: '', tail: '', ruta: '', estacion: '', fecha: '' };
         let currentUser = "Usuario"; let dbRecordId = null;
 
+        // Lista completa de campos
         const timeFields = [
             't_touchdown', 't_block', 't_weights', 't_loadmaster', 
             't_md_start_off', 't_md_fin_off', 't_md_start_up', 't_md_fin_up',
@@ -970,10 +944,6 @@
                 if(wFin) wFin.classList.remove('disabled-box');
             }
             calcZAndDurations('t_block'); 
-        }
-
-        function toggleEmpty(comp) {
-            // Elimina logic
         }
 
         function toggleFueling() {
@@ -1199,7 +1169,7 @@
                         if(!expStr && expUlds.length > 0) expStr = `${expUlds.length} ULDs`;
                         else if(!expStr) expStr = "0 ULDs";
                         
-                        const payloadStr = `EXPORT: ${expStr} | PESO = \nIMPORT: `;
+                        const payloadStr = `EXPORT: ${expStr} | PESO = \nIMPORT: | PESO = `;
                         setValSafe('n_payload', payloadStr);
                     }
                 } catch(e) {
@@ -1226,7 +1196,7 @@
                         
                         if(d.chk_no_fuel) { const c = document.getElementById('chk_no_fuel'); if(c) { c.checked = true; toggleFueling(); } }
 
-                        // Notas Generales (Sobrescribe si hay dato)
+                        // Notas Generales (Sobrescribe si hay dato guardado)
                         if(d.n_payload) setValSafe('n_payload', d.n_payload);
                         if(d.n_customs) setValSafe('n_customs', d.n_customs);
                         if(d.t_delay_reason) setValSafe('t_delay_reason', d.t_delay_reason);
@@ -1291,7 +1261,7 @@
         }
 
         // =======================
-        // GENERADOR DE PDF PROFESIONAL (NIVEL EJECUTIVO Y PROTEGIDO)
+        // GENERADOR DE PDF PROFESIONAL LÍNEA DE TIEMPO
         // =======================
         function generarPDF() {
             try {
@@ -1319,7 +1289,8 @@
                 doc.text(`Traffic Agent: ${currentUser}`, 115, 48);
 
                 const getV = (id) => getValSafe(id);
-                const safeNotes = (val) => String(val || '').replace(/([^\s]{25})(?=[^\s])/g, "$1 "); // Anti-break
+                // Safe notes protector anti colapso
+                const safeNotes = (val) => String(val || '').replace(/([^\s]{35})(?=[^\s])/g, "$1 "); 
 
                 // SAFE READ KPIs
                 let tRamp = "00h 00m"; let tGround = "00h 00m"; let tCombined = "00h 00m";
@@ -1327,11 +1298,11 @@
                 const elGround = document.getElementById('val_total_ground'); if(elGround) tGround = elGround.innerText;
                 const elComb = document.getElementById('val_combined'); if(elComb) tCombined = elComb.innerText;
 
-                // KPI BOXES EN EL PDF (Elegantes)
+                // KPI BOXES EN EL PDF
                 doc.setFillColor(226, 232, 240); doc.roundedRect(10, 62, 60, 18, 2, 2, "FD");
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(15, 23, 42);
                 doc.text("TOTAL RAMP TIME", 13, 70);
-                doc.setFontSize(12); doc.setTextColor(10, 37, 64); doc.text(tRamp, 13, 76);
+                doc.setFontSize(12); doc.text(tRamp, 13, 76);
 
                 doc.setFillColor(241, 245, 249); doc.roundedRect(75, 62, 60, 18, 2, 2, "FD");
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
@@ -1343,118 +1314,88 @@
                 doc.text("COMBINED CARGO OPS", 143, 70);
                 doc.setFontSize(12); doc.text(tCombined, 143, 76);
 
-                // Función auxiliar constructora de bloques de tabla Cargo
-                const buildCargoBlock = (title, compId) => {
+                const tableData = [];
+
+                const addSection = (title) => {
+                    tableData.push([{content: title, colSpan: 3, styles: {fillColor: [226, 232, 240], fontStyle: 'bold', halign: 'center', textColor: [15, 23, 42]}}]);
+                };
+
+                const addRow = (label, timeId, noteId) => {
+                    tableData.push([label, getSafeCombinedTimeFormat(timeId), safeNotes(getV(noteId))]);
+                };
+
+                const addCompBlock = (title, compId) => {
+                    addSection(`--- ${title} ---`);
                     const cImp = document.getElementById(`chk_${compId}_no_imp`);
                     const cExp = document.getElementById(`chk_${compId}_no_exp`);
                     const noImp = cImp ? cImp.checked : false;
                     const noExp = cExp ? cExp.checked : false;
-                    
-                    let impStr = noImp ? "NIL (NO IMPORT)" : getSafeCombinedTimeFormat(`t_${compId}_start_off`) + "\n" + getSafeCombinedTimeFormat(`t_${compId}_fin_off`);
-                    let expStr = noExp ? "NIL (NO EXPORT)" : getSafeCombinedTimeFormat(`t_${compId}_start_up`) + "\n" + getSafeCombinedTimeFormat(`t_${compId}_fin_up`);
 
-                    // Unimos las notas para el PDF
-                    let noteImp = getV(`n_${compId}_start_off`) || getV(`n_${compId}_fin_off`) ? `IMP: ${getV(`n_${compId}_start_off`)} ${getV(`n_${compId}_fin_off`)}` : "";
-                    let noteExp = getV(`n_${compId}_start_up`) || getV(`n_${compId}_fin_up`) ? `EXP: ${getV(`n_${compId}_start_up`)} ${getV(`n_${compId}_fin_up`)}` : "";
-                    let noteFinal = safeNotes([noteImp, noteExp].filter(Boolean).join(" | "));
+                    if (noImp) {
+                        tableData.push(['IMPORT OPERATIONS', 'NIL (NO IMPORT)', '']);
+                    } else {
+                        addRow('START OFFLOAD (IMPORT)', `t_${compId}_start_off`, `n_${compId}_start_off`);
+                        addRow('FINISH OFFLOAD (IMPORT)', `t_${compId}_fin_off`, `n_${compId}_fin_off`);
+                    }
 
-                    return [[title, impStr, expStr, noteFinal]];
+                    if (noExp) {
+                        tableData.push(['EXPORT OPERATIONS', 'NIL (NO EXPORT)', '']);
+                    } else {
+                        addRow('START UPLOAD (EXPORT)', `t_${compId}_start_up`, `n_${compId}_start_up`);
+                        addRow('FINISH UPLOAD (EXPORT)', `t_${compId}_fin_up`, `n_${compId}_fin_up`);
+                    }
                 };
 
-                let curY = 88;
+                // Llenar datos Linea de Tiempo
+                addSection('--- ARRIVAL PHASE ---');
+                addRow('TOUCHDOWN TIME / ATERRIZAJE', 't_touchdown', 'n_touchdown');
+                addRow('AIRCRAFT BLOCK TIME / PARQUEO', 't_block', 'n_block');
+                addRow('FINAL WEIGHTS GIVEN', 't_weights', 'n_weights');
+                addRow('LOADMASTER RECEIVING', 't_loadmaster', 'n_loadmaster');
+                tableData.push(['PAYLOAD & TOTAL PALLETS', '---', safeNotes(getV('n_payload'))]);
 
-                // 1. ARRIVAL PHASE
-                doc.autoTable({ 
-                    startY: curY, margin: { left: 10, right: 10 },
-                    head: [['ARRIVAL PHASE', 'TIME (ZULU / LOCAL)', 'NOTES']], 
-                    body: [
-                        ['TOUCHDOWN TIME / ATERRIZAJE', getSafeCombinedTimeFormat('t_touchdown'), safeNotes(getV('n_touchdown'))],
-                        ['AIRCRAFT BLOCK TIME / PARQUEO AVION', getSafeCombinedTimeFormat('t_block'), safeNotes(getV('n_block'))],
-                        ['FINAL WEIGHTS GIVEN / HOJA PESOS', getSafeCombinedTimeFormat('t_weights'), safeNotes(getV('n_weights'))],
-                        ['LOADMASTER RECEIVING / ENTREGA CARGUE', getSafeCombinedTimeFormat('t_loadmaster'), safeNotes(getV('n_loadmaster'))],
-                        ['PAYLOAD & TOTAL PALLETS', '---', safeNotes(getV('n_payload'))]
-                    ], 
-                    theme: 'grid', 
-                    headStyles: { fillColor: [10, 37, 64], halign: 'center' }, 
-                    styles: { fontSize: 8.5, cellPadding: 2.5, overflow: 'linebreak' },
-                    columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' }, 1: { cellWidth: 40, halign: 'center' }, 2: { cellWidth: 85.9 } },
-                    didParseCell: function(data) {
-                        if(data.section === 'body') {
-                            const valStr = String(data.row.raw[0] || "");
-                            if (valStr === 'AIRCRAFT BLOCK TIME / PARQUEO AVION') {
-                                if(data.column.index === 0 || data.column.index === 1) {
-                                    data.cell.styles.fillColor = [226, 232, 240];
-                                    data.cell.styles.textColor = [15, 23, 42];
-                                }
-                            }
-                        }
-                    }
-                });
-                curY = doc.lastAutoTable.finalY + 5;
+                addCompBlock('MAIN DECK / CABINA PRINCIPAL', 'md');
+                addCompBlock('LOWER FORWARD / DELANTERO', 'fwd');
+                addCompBlock('LOWER AFT / TRASERO', 'aft');
+                addCompBlock('BULK COMPARTMENT / GRANEL', 'bulk');
 
-                // 2. CARGO OPERATIONS
-                let cargoData = [];
-                cargoData = cargoData.concat(buildCargoBlock('MAIN DECK', 'md'));
-                cargoData = cargoData.concat(buildCargoBlock('LOWER FORWARD', 'fwd'));
-                cargoData = cargoData.concat(buildCargoBlock('LOWER AFT', 'aft'));
-                cargoData = cargoData.concat(buildCargoBlock('BULK', 'bulk'));
+                addSection('--- SERVICES & DOCS ---');
+                const cFuel = document.getElementById('chk_no_fuel');
+                if(cFuel && cFuel.checked) {
+                    tableData.push(['FUELING OPERATIONS', 'NIL (NO SERVICE)', '']);
+                } else {
+                    addRow('FUELING STARTED', 't_fuel_start', 'n_fuel_start');
+                    addRow('FUELING FINISHED', 't_fuel_fin', 'n_fuel_fin');
+                }
+                addRow('TIME AMS SENT', 't_ams', 'n_ams');
+                addRow('RELEASE GIVEN BY MIA', 't_ease', 'n_ease');
+                addRow('CARGO DOCS ON BOARD', 't_docs', 'n_docs');
+                tableData.push(['CUSTOMS OVERTIME / TIEMPO EXTRA', 'N/A', safeNotes(getV('n_customs'))]);
+
+                addSection('--- DEPARTURE ---');
+                addRow('CABIN DOOR CLOSED', 't_door', 'n_door');
+                addRow('PUSHBACK / RETROCEDER', 't_pushback', 'n_pushback');
+                addRow('AIRBORNE TIME (WHEELS UP)', 't_airborne', 'n_airborne');
+                addRow('GENEVA DEPARTURE TIME', 't_geneva', 'n_geneva');
 
                 doc.autoTable({ 
-                    startY: curY, margin: { left: 10, right: 10 },
-                    head: [['CARGO OPERATIONS', 'IMPORT (Start / Finish)', 'EXPORT (Start / Finish)', 'NOTES']], 
-                    body: cargoData, 
+                    startY: 85, margin: { left: 10, right: 10 },
+                    head: [['FLIGHT METRIC / EVENT', 'TIME (ZULU / LOCAL)', 'NOTES / DETAILS']], 
+                    body: tableData, 
                     theme: 'grid', 
                     headStyles: { fillColor: [10, 37, 64], halign: 'center' }, 
                     styles: { fontSize: 8, cellPadding: 2.5, overflow: 'linebreak' },
-                    columnStyles: { 0: { cellWidth: 35, fontStyle: 'bold' }, 1: { cellWidth: 40, halign: 'center' }, 2: { cellWidth: 40, halign: 'center' }, 3: { cellWidth: 80.9 } },
-                    didParseCell: function(data) {
-                        if(data.section === 'body') {
-                            const valStr = String(data.row.raw[data.column.index] || "");
-                            if (valStr.includes('NIL')) {
-                                data.cell.styles.textColor = [225, 29, 72];
-                                data.cell.styles.fontStyle = 'bold';
-                            }
-                        }
-                    }
-                });
-                curY = doc.lastAutoTable.finalY + 5;
-
-                // 3. SERVICES & DEPARTURE
-                const chkFuel = document.getElementById('chk_no_fuel');
-                const noFuel = chkFuel ? chkFuel.checked : false;
-                const fuelStr = noFuel ? "NIL (NO SERVICE)" : getSafeCombinedTimeFormat('t_fuel_start') + "\n" + getSafeCombinedTimeFormat('t_fuel_fin');
-                const fuelNote = noFuel ? "" : safeNotes(getV('n_fuel_start') + " " + getV('n_fuel_fin'));
-
-                doc.autoTable({ 
-                    startY: curY, margin: { left: 10, right: 10 },
-                    head: [['SERVICES & DEPARTURE', 'TIME (ZULU / LOCAL)', 'NOTES']], 
-                    body: [
-                        ['FUELING (START/FINISH)', fuelStr, fuelNote],
-                        ['TIME AMS SENT BY STATION', getSafeCombinedTimeFormat('t_ams'), safeNotes(getV('n_ams'))],
-                        ['RELEASE GIVEN BY MIA', getSafeCombinedTimeFormat('t_ease'), safeNotes(getV('n_ease'))],
-                        ['CARGO DOCUMENTATION ON BOARD', getSafeCombinedTimeFormat('t_docs'), safeNotes(getV('n_docs'))],
-                        ['CUSTOMS OVERTIME / TIEMPO EXTRA', '---', safeNotes(getV('n_customs'))],
-                        ['CABIN DOOR CLOSED', getSafeCombinedTimeFormat('t_door'), safeNotes(getV('n_door'))],
-                        ['PUSHBACK / RETROCEDER', getSafeCombinedTimeFormat('t_pushback'), safeNotes(getV('n_pushback'))],
-                        ['AIRBORNE TIME (WHEELS UP)', getSafeCombinedTimeFormat('t_airborne'), safeNotes(getV('n_airborne'))],
-                        ['GENEVA DEPARTURE TIME', getSafeCombinedTimeFormat('t_geneva'), safeNotes(getV('n_geneva'))]
-                    ], 
-                    theme: 'grid', 
-                    headStyles: { fillColor: [10, 37, 64], halign: 'center' }, 
-                    styles: { fontSize: 8.5, cellPadding: 2.5, overflow: 'linebreak' },
                     columnStyles: { 0: { cellWidth: 70, fontStyle: 'bold' }, 1: { cellWidth: 40, halign: 'center' }, 2: { cellWidth: 85.9 } },
                     didParseCell: function(data) {
                         if(data.section === 'body') {
-                            const valStr = String(data.row.raw[0] || "");
-                            const cellStr = String(data.row.raw[data.column.index] || "");
-                            
-                            if (valStr === 'PUSHBACK / RETROCEDER') {
+                            const val = data.row.raw[0];
+                            if (val === 'AIRCRAFT BLOCK TIME / PARQUEO' || val === 'PUSHBACK / RETROCEDER') {
                                 if(data.column.index === 0 || data.column.index === 1) {
                                     data.cell.styles.fillColor = [226, 232, 240];
                                     data.cell.styles.textColor = [15, 23, 42];
                                 }
                             }
-                            if (cellStr.includes('NIL')) {
+                            if (val.includes('NIL')) {
                                 if(data.column.index === 1) {
                                     data.cell.styles.textColor = [225, 29, 72];
                                     data.cell.styles.fontStyle = 'bold';
@@ -1464,12 +1405,11 @@
                     }
                 });
 
-                // Anexar la tabla de Delay si existe la alerta roja
+                // Tabla de Delay
                 const cBox = document.getElementById('calc_total_ramp');
                 if (cBox && cBox.classList.contains('alert')) {
                     doc.autoTable({
-                        startY: doc.lastAutoTable.finalY + 5,
-                        margin: { left: 10, right: 10 },
+                        startY: doc.lastAutoTable.finalY + 5, margin: { left: 10, right: 10 },
                         body: [['DELAY REPORTED (>90m Ramp)', getV('t_delay_time'), safeNotes(getV('t_delay_reason'))]],
                         theme: 'grid',
                         styles: { fontSize: 9, cellPadding: 3, fontStyle: 'bold', textColor: [159, 18, 57], overflow: 'linebreak' },
