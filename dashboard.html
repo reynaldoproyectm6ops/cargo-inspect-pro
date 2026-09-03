@@ -327,53 +327,16 @@
         .header-left-side { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
         
         /* PREVENCIÓN DE QUIEBRE DE TARJETA EN LA WEB */
-        .vuelo-title { font-size: 24px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; word-break: break-word; overflow-wrap: break-word;}
+        .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; word-break: break-word; overflow-wrap: break-word;}
         .header-badges-wrapper { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
         
-        .vuelo-tail { background: var(--amerijet-red); color: white; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 900; border: 1px solid rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.15);}
+        .vuelo-tail { background: rgba(255,255,255,0.15); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;}
         
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; text-transform: uppercase; white-space: nowrap;}
         .status-aperturado { background: #38BDF8; color: #0F172A; }
         .status-armando { background: #F59E0B; color: white; }
         .status-despachado { background: #8B5CF6; color: white; }
         .status-importacion { background: #EC4899; color: white; }
-
-        /* =========================================
-           INDICADORES DE FASE (NUEVO)
-        ========================================= */
-        .fases-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-        .fase-pill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 8px; border-radius: 20px; border: 1px solid #E2E8F0; color: #94A3B8; background: #F8FAFC; white-space: nowrap; }
-        .fase-pill.fase-done { background: #ECFDF5; color: #059669; border-color: #6EE7B7; }
-        .fase-pill.fase-current { background: var(--amerijet-blue); color: white; border-color: var(--amerijet-blue); }
-
-        /* =========================================
-           BLOQUEO VISUAL POST-DESPACHO (NUEVO)
-        ========================================= */
-        .card-locked-user .action-btn,
-        .card-locked-user .btn-save-times,
-        .card-locked-user .toggle-btn,
-        .card-locked-user .btn-start-armado { opacity: 0.45; filter: grayscale(55%); pointer-events: none; cursor: not-allowed; }
-        .card-locked-user .lock-banner { display: flex; }
-
-        .card-locked-supervisor .action-btn,
-        .card-locked-supervisor .btn-save-times,
-        .card-locked-supervisor .toggle-btn,
-        .card-locked-supervisor .btn-start-armado { background: #0F172A; color: #FBBF24; border-color: #334155; }
-        .card-locked-supervisor .action-btn:hover,
-        .card-locked-supervisor .btn-save-times:hover { background: #1E293B; color: #FCD34D; }
-        .card-locked-supervisor .lock-banner { display: flex; background: #FFFBEB; color: #92400E; border-color: #FDE68A; }
-
-        .lock-banner { display: none; align-items: center; gap: 8px; background: #F1F5F9; color: #64748B; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 8px 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 14px; }
-
-        /* =========================================
-           BITÁCORA EN VIVO POR TARJETA (NUEVO)
-        ========================================= */
-        .bitacora-card { margin-top: 20px; border-top: 1px solid #E2E8F0; padding-top: 14px; }
-        .bitacora-header { font-size: 10px; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .bitacora-list { display: flex; flex-direction: column; gap: 6px; max-height: 130px; overflow-y: auto; }
-        .bitacora-item { font-size: 10.5px; color: #475569; background: #F8FAFC; border-radius: 6px; padding: 6px 8px; display: flex; gap: 8px; align-items: baseline; }
-        .bitacora-hora { font-family: monospace; font-weight: 800; color: var(--amerijet-blue); flex-shrink: 0; }
-        .bitacora-empty { font-size: 10.5px; color: #94A3B8; font-style: italic; }
 
         /* BOTONES DE CONTROL DE ESQUINA EN TARJETA (CON ICONOS SVG) */
         .card-controls { display: flex; gap: 8px; flex-shrink: 0;}
@@ -464,8 +427,7 @@
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
             .vuelo-card-header { padding: 15px; gap: 10px; }
-            .vuelo-title { font-size: 19px; }
-            .vuelo-tail { font-size: 13px; padding: 6px 11px; }
+            .vuelo-title { font-size: 18px; }
             .ctrl-btn { width: 30px; height: 30px; }
         }
     </style>
@@ -937,155 +899,6 @@
             }
         }
 
-        // ==========================================================
-        // ===  CAPA DE VALIDACIÓN, SEGURIDAD Y BITÁCORA (NUEVO)   ===
-        // Envoltura añadida sobre los botones existentes. Ninguna
-        // función original (confirmarDespacho, finalizarVueloCompleto,
-        // irAlArmado, toggleOperacion, guardarTiemposLotificada, etc.)
-        // fue modificada: esta capa solo decide SI y CUÁNDO se
-        // ejecuta esa lógica original, tal como estaba.
-        // ==========================================================
-
-        // --- Bitácora en vivo (solo en memoria del navegador, se pierde al recargar) ---
-        const bitacoraPorVuelo = {};
-
-        function registrarEvento(idVuelo, accion) {
-            if (!bitacoraPorVuelo[idVuelo]) bitacoraPorVuelo[idVuelo] = [];
-            const horaStr = new Date().toLocaleTimeString('es-SV', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            bitacoraPorVuelo[idVuelo].unshift({ hora: horaStr, usuario: miNombre, rol: miRol, accion });
-            if (bitacoraPorVuelo[idVuelo].length > 15) bitacoraPorVuelo[idVuelo].pop();
-            pintarBitacora(idVuelo);
-        }
-
-        function pintarBitacora(idVuelo) {
-            const cont = document.getElementById(`bitacora_${idVuelo}`);
-            if (!cont) return;
-            const eventos = bitacoraPorVuelo[idVuelo] || [];
-            if (eventos.length === 0) {
-                cont.innerHTML = `<div class="bitacora-empty">Sin actividad registrada en esta sesión.</div>`;
-                return;
-            }
-            cont.innerHTML = eventos.map(ev => `
-                <div class="bitacora-item">
-                    <span class="bitacora-hora">${ev.hora}</span>
-                    <span class="bitacora-texto"><b>${ev.usuario}</b> (${ev.rol}) — ${ev.accion}</span>
-                </div>
-            `).join('');
-        }
-
-        function logYEjecutar(idVuelo, nombreAccion, fn) {
-            registrarEvento(idVuelo, nombreAccion);
-            fn();
-        }
-
-        // --- Roles con acceso "wrapper" (pueden forzar acciones sobre tarjetas ya cerradas) ---
-        const ROLES_SUPERVISION = ['admin', 'supervisor', 'supervisor_local'];
-
-        // Una tarjeta se considera "cerrada" para operarios normales cuando ya fue despachada o finalizada.
-        // OJO: 'EN IMPORTACION' YA NO cuenta como cerrada aquí — antes el botón de Despachar
-        // se deshabilitaba también con ese estado, que es la interferencia reportada
-        // (guardar Tiempos de Importación terminaba bloqueando el flujo de Despacho).
-        function tarjetaEstaCerrada(estado) {
-            return estado === 'DESPACHADO' || estado === 'FINALIZADO';
-        }
-
-        /**
-         * Envoltura genérica de seguridad para los botones de acción de una tarjeta.
-         * - Si la tarjeta no está cerrada: deja pasar directo a la lógica original.
-         * - Si está cerrada y el usuario es normal: bloquea y avisa.
-         * - Si está cerrada y el usuario es supervisor/admin: intercepta con advertencia;
-         *   solo si acepta, se ejecuta la lógica original (accionOriginal).
-         */
-        function ejecutarConSeguridad(idVuelo, numeroVuelo, estadoActual, nombreAccion, accionOriginal) {
-            const cerrada = tarjetaEstaCerrada(estadoActual);
-
-            if (!cerrada) {
-                registrarEvento(idVuelo, nombreAccion);
-                accionOriginal();
-                return;
-            }
-
-            if (!ROLES_SUPERVISION.includes(miRol)) {
-                showCustomAlert("Acción Bloqueada", `El vuelo <b>${numeroVuelo}</b> ya fue despachado/cerrado. Solo un supervisor o administrador puede modificarlo.`, "error");
-                return;
-            }
-
-            showCustomConfirm(
-                "Vuelo Ya Despachado",
-                `Este reporte ya se cerró. Si modificas algo, quedará registrado en la bitácora de la tarjeta.<br><br>¿Deseas continuar con <b>${nombreAccion}</b> de todas formas?`,
-                "Sí, Continuar",
-                "var(--amerijet-red)",
-                () => {
-                    registrarEvento(idVuelo, `${nombreAccion} (override de supervisor sobre vuelo cerrado)`);
-                    accionOriginal();
-                }
-            );
-        }
-
-        /**
-         * Pre-chequeo de flujo obligatorio antes de "Finalizar y Cerrar Operación".
-         * Si el vuelo tiene exportación planificada y aún no se ha despachado,
-         * se detiene la acción y se avisa (usuario normal), o se ofrece continuar
-         * bajo advertencia (supervisor/admin) — en cuyo caso finalizarVueloCompleto
-         * seguirá corriendo exactamente su lógica original (incluyendo su propio
-         * auto-despacho de respaldo, que no fue tocado).
-         */
-        function intentarFinalizarVuelo(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual, exportRequerido) {
-            const yaDespachado = tarjetaEstaCerrada(estadoActual) || estadoActual === 'EN IMPORTACION';
-
-            if (exportRequerido && !yaDespachado) {
-                if (!ROLES_SUPERVISION.includes(miRol)) {
-                    showCustomAlert("Paso Pendiente", `No puedes cerrar el vuelo <b>${numeroVuelo}</b> todavía: falta ejecutar <b>"Despachar Vuelo"</b> primero.`, "error");
-                    return;
-                }
-                showCustomConfirm(
-                    "Paso de Despacho Pendiente",
-                    `El vuelo <b>${numeroVuelo}</b> aún no ha sido despachado.<br><br>Si continúas, el sistema seguirá su lógica normal de cierre (incluyendo el despacho automático de respaldo). ¿Deseas continuar?`,
-                    "Continuar de Todas Formas",
-                    "var(--amerijet-red)",
-                    () => {
-                        registrarEvento(idVuelo, "Cierre forzado sin despacho previo (override de supervisor)");
-                        finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
-                    }
-                );
-                return;
-            }
-
-            registrarEvento(idVuelo, "Finalizar y Cerrar Operación");
-            finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
-        }
-
-        /**
-         * Envoltura de "Despachar Vuelo": agrega el aviso de reportes pendientes
-         * de descarga ANTES de permitir que corra confirmarDespacho tal cual estaba.
-         * (No existe en la base de datos actual una bandera real de "reporte descargado",
-         * así que esto es una confirmación manual explícita del usuario — si ya tienes
-         * esa bandera en otra tabla, dime cuál es y la conecto aquí en vez del checklist manual.)
-         */
-        function confirmarDespachoConAviso(idVuelo, numeroVuelo, ruta, matriculaAvion) {
-            showCustomConfirm(
-                "Verificación Previa al Despacho",
-                `Antes de despachar el vuelo <b>${numeroVuelo}</b>, confirma que ya descargaste/exportaste los reportes necesarios (Inspección, Detalle de Vuelo, GSE).<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">La memoria fotográfica se limpiará al despachar y no podrá recuperarse.</span>`,
-                "Ya Descargué los Reportes, Despachar",
-                "var(--amerijet-blue)",
-                () => {
-                    registrarEvento(idVuelo, "Confirmó descarga de reportes previos al despacho");
-                    confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion);
-                }
-            );
-        }
-
-        function indicadorFases(estadoActual) {
-            const orden = ['APERTURADO', 'ARMANDO CARGA', 'DESPACHADO', 'EN IMPORTACION'];
-            const idx = orden.indexOf(estadoActual);
-            return orden.map((f, i) => {
-                let cls = 'fase-pending';
-                if (i === idx) cls = 'fase-current';
-                else if (idx !== -1 && i < idx) cls = 'fase-done';
-                return `<span class="fase-pill ${cls}">${f}</span>`;
-            }).join('');
-        }
-
         async function cargarVuelosActivos() {
             const grid = document.getElementById('vuelosGrid');
             try {
@@ -1128,23 +941,12 @@
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
                     // Lógica del botón de despacho (Para que solo se pulse 1 vez)
-                    // CORRECCIÓN: antes también se deshabilitaba con 'EN IMPORTACION', lo que
-                    // hacía que guardar los Tiempos de Importación (botón ajeno) bloqueara este
-                    // botón sin que el vuelo hubiera sido despachado realmente. Ahora solo se
-                    // aísla por su propio estado real: 'DESPACHADO'.
                     let btnDespacharHtml = '';
-                    if (currentStatus === 'DESPACHADO') {
+                    if (currentStatus === 'DESPACHADO' || currentStatus === 'EN IMPORTACION') {
                         btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>Vuelo Despachado</button>`;
                     } else {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" onclick="confirmarDespachoConAviso('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
                     }
-
-                    const cerrada = tarjetaEstaCerrada(currentStatus);
-                    const esSupervisor = ROLES_SUPERVISION.includes(miRol);
-                    const lockClass = !cerrada ? '' : (esSupervisor ? 'card-locked-supervisor' : 'card-locked-user');
-                    const lockBannerTxt = esSupervisor
-                        ? '🔓 Cerrado — acceso de supervisor (toda modificación queda registrada)'
-                        : '🔒 Vuelo despachado — edición bloqueada para tu rol';
 
                     const card = document.createElement('div'); card.className = 'vuelo-card';
                     card.innerHTML = `
@@ -1157,27 +959,23 @@
                                 </div>
                             </div>
                             <div class="card-controls" style="display: ${displayCardBtns};">
-                                <button class="ctrl-btn ctrl-edit" onclick="logYEjecutar('${v.id}', 'Abrió edición de datos clave', () => abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}'))" title="Editar Vuelo">
+                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')" title="Editar Vuelo">
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                                 </button>
-                                <button class="ctrl-btn ctrl-delete" onclick="logYEjecutar('${v.id}', 'Eliminó el registro del vuelo', () => eliminarVuelo('${v.id}', '${v.vuelo_id}'))" title="Eliminar Vuelo">
+                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')" title="Eliminar Vuelo">
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                                 </button>
                             </div>
                         </div>
-                        <div class="vuelo-card-body ${lockClass}">
-                            <div class="lock-banner">${lockBannerTxt}</div>
-
-                            <div class="fases-strip">${indicadorFases(currentStatus)}</div>
-
+                        <div class="vuelo-card-body">
                             <div class="vuelo-meta-info">
                                 <div><span>Ruta Op:</span><strong>${v.ruta || "N/A"}</strong></div>
                                 <div><span>Fecha Op:</span><strong>${v.fecha}</strong></div>
                             </div>
 
                             <div class="toggle-group">
-                                <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="ejecutarConSeguridad('${v.id}', '${v.vuelo_id}', '${currentStatus}', 'Cambiar interruptor EXPORT', () => toggleOperacion('${v.id}', 'export', ${exportActivo}))" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
-                                <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="ejecutarConSeguridad('${v.id}', '${v.vuelo_id}', '${currentStatus}', 'Cambiar interruptor IMPORT', () => toggleOperacion('${v.id}', 'import', ${importActivo}))" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
+                                <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
+                                <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
                             </div>
 
                             <!-- PASO 1 -->
@@ -1187,7 +985,7 @@
                                     <div class="step-title">Procesamiento Inicial</div>
                                 </div>
                                 <div style="display: ${displayExport};">
-                                    <button class="action-btn btn-start-armado" onclick="ejecutarConSeguridad('${v.id}', '${v.vuelo_id}', '${currentStatus}', 'Iniciar Armado y Manifiesto ULD', () => irAlArmado('${v.id}'))">Iniciar Armado y Manifiesto ULD</button>
+                                    <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">Iniciar Armado y Manifiesto ULD</button>
                                 </div>
                                 <div style="display: ${displayMsgExport};">
                                     <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
@@ -1245,7 +1043,7 @@
                                                 <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}')">AHORA</button>
                                             </div>
                                         </div>
-                                        <button class="btn-save-times" onclick="ejecutarConSeguridad('${v.id}', '${v.vuelo_id}', '${currentStatus}', 'Sincronizar Tiempos de Importación', () => guardarTiemposLotificada('${v.id}'))">Sincronizar Tiempos</button>
+                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Sincronizar Tiempos</button>
                                     </div>
                                 </div>
                                 <div style="display: ${displayMsgImport};">
@@ -1255,24 +1053,17 @@
 
                             <!-- PASO 5 -->
                             <div style="margin-top: 20px;">
-                                <button class="btn-close-flight" onclick="intentarFinalizarVuelo('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}', ${exportActivo})">Finalizar y Cerrar Operación Definitivamente</button>
-                            </div>
-
-                            <!-- BITÁCORA EN VIVO (NUEVO) -->
-                            <div class="bitacora-card">
-                                <div class="bitacora-header">📋 Bitácora de Actividad (sesión actual)</div>
-                                <div class="bitacora-list" id="bitacora_${v.id}"></div>
+                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Operación Definitivamente</button>
                             </div>
                         </div>
                     `;
                     grid.appendChild(card);
                 });
 
-                // Inicializar labels Zulu y bitácora visualmente al cargar
+                // Inicializar labels Zulu visualmente al cargar
                 vuelosActivos.forEach(v => {
                     actualizarLabelZulu(`t_inicio_${v.id}`);
                     actualizarLabelZulu(`t_fin_${v.id}`);
-                    pintarBitacora(v.id);
                 });
 
             } catch (err) { grid.innerHTML = `<p style="color:var(--amerijet-red); font-weight:bold; padding:20px; text-align:center;">Error de sincronización de base de datos.</p>`; }
