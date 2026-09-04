@@ -306,16 +306,15 @@
         .panel-vuelos { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
         .panel-vuelos h2 { font-size: 18px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 20px; text-transform: uppercase;}
         
-        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 25px; align-content: start; width: 100%;}
+        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 25px; align-content: start; width: 100%;}
 
-        /* DISEÑO MODERNO DE TARJETA DE VUELO - UI MOVIL REFORZADA */
+        /* TARJETA DE VUELO */
         .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; width: 100%; box-sizing: border-box; position: relative;}
         .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1; }
         
         .vuelo-card-header { padding: 18px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: nowrap; border-bottom: 3px solid #38BDF8;}
         .header-left-side { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
         
-        /* JERARQUÍA DE DATOS REFORZADA PARA MÓVIL */
         .vuelo-title-badge { font-size: 24px; font-weight: 900; color: #38BDF8; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; word-break: break-word;}
         .vuelo-tail-highlight { background: #38BDF8; color: #051529; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; display: inline-block;}
         
@@ -323,14 +322,75 @@
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; text-transform: uppercase; white-space: nowrap;}
         .status-aperturado { background: #38BDF8; color: #0F172A; }
         .status-armando { background: #F59E0B; color: white; }
-        .status-despachado { background: #8B5CF6; color: white; }
+        .status-despachado { background: #10B981; color: white; }
         .status-importacion { background: #EC4899; color: white; }
 
-        .phase-indicator-bar { background: #F8FAFC; border-bottom: 1px solid #E2E8F0; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 800; color: #64748B; text-transform: uppercase;}
-        .phase-tag { display: flex; align-items: center; gap: 4px; }
-        .phase-dot { width: 8px; height: 8px; border-radius: 50%; background: #CBD5E1; }
-        .phase-dot.completed { background: #10B981; }
-        .phase-dot.active { background: #F59E0B; }
+        /* STEPPER VISUAL SUPERIOR DE PROCESOS (MULTINIVEL) */
+        .process-stepper-container {
+            background: #0F172A;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            border-bottom: 1px solid #1E293B;
+            overflow-x: auto;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .process-step.completed {
+            background: rgba(30, 41, 59, 0.8);
+            color: #94A3B8;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .process-step.active {
+            background: #38BDF8;
+            color: #0F172A;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .process-step.pending {
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            color: #64748B;
+        }
+
+        .step-icon-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .process-step.active .step-icon-dot {
+            background: #0F172A;
+            animation: pulseDot 1.5s infinite;
+        }
+
+        @keyframes pulseDot {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.4); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        .step-connector {
+            flex: 1;
+            height: 1px;
+            background: #1E293B;
+            min-width: 6px;
+        }
 
         .card-controls { display: flex; gap: 8px; flex-shrink: 0;}
         .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding:0;}
@@ -373,7 +433,8 @@
         /* BOTÓN ISOLATED DE DESPACHO */
         .btn-despachar-vuelo { background: var(--amerijet-blue); color: white; font-weight: 800; font-size: 12px; text-transform: uppercase; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(10,37,64,0.15); letter-spacing: 0.5px; box-sizing: border-box;}
         .btn-despachar-vuelo:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(10,37,64,0.25); }
-        .btn-despachar-vuelo:disabled { opacity: 0.85; transform: none !important; }
+        .btn-despachar-vuelo.is-despachado { background: #10B981 !important; color: white !important; cursor: not-allowed; opacity: 0.9; }
+        .btn-despachar-vuelo:disabled { transform: none !important; }
         
         .import-time-box { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .time-input-group { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
@@ -398,8 +459,12 @@
         .live-history-item { display: flex; justify-content: space-between; border-bottom: 1px dashed #1E293B; padding-bottom: 2px;}
         .live-history-item span.time { color: #64748B; font-weight: bold;}
 
-        /* CAPA VISUAL ADM/SUPERVISOR WRAPPER */
-        .card-supervisor-locked { filter: grayscale(20%); opacity: 0.95; border: 2px dashed #8B5CF6 !important; }
+        /* CAPA VISUAL ADM/SUPERVISOR WRAPPER Y ESTADOS DESPACHADOS */
+        .card-supervisor-locked { border: 2px dashed #8B5CF6 !important; }
+        .card-despachada-disabled { opacity: 0.75; filter: grayscale(15%); }
+        .card-despachada-disabled .action-btn, 
+        .card-despachada-disabled .btn-ahora, 
+        .card-despachada-disabled .btn-save-times { opacity: 0.5; pointer-events: none; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; box-sizing: border-box;}
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box;}
@@ -620,7 +685,6 @@
 
         let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario"; let todasLasEstacionesBD = [];
 
-        // ALMACENAMIENTO DE HISTORIAL EN VIVO EN MEMORIA
         const historyLogStore = {};
 
         const stationTimezones = {
@@ -698,9 +762,6 @@
         }
         ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
 
-        // ==========================================
-        // 3. MÓDULO DE HISTORIAL EN VIVO (MÉTODO)
-        // ==========================================
         function registrarEventoHistorial(idVuelo, accionTexto) {
             if(!historyLogStore[idVuelo]) historyLogStore[idVuelo] = [];
             const now = new Date();
@@ -867,7 +928,6 @@
         }
 
         function marcarTiempoAhora(inputId, idVuelo) {
-            // Interceptor / Pre-check
             if(!wrapperCheckAccion(idVuelo, "Modificar Tiempos Importación")) return;
 
             const nowUtc = new Date().toISOString();
@@ -912,23 +972,20 @@
             }
         }
 
-        // ==========================================
-        // 2. CAPA WRAPPER PARA SUPERVISORES / ADM
-        // ==========================================
         function wrapperCheckAccion(idVuelo, nombreAccion) {
             const card = document.getElementById(`card_vuelo_${idVuelo}`);
-            const isClosed = card && card.getAttribute('data-closed') === 'true';
+            const isDespachado = card && card.getAttribute('data-despachado') === 'true';
 
-            if (isClosed) {
+            if (isDespachado) {
                 if (['admin', 'supervisor', 'supervisor_local'].includes(miRol)) {
-                    const continuar = confirm(`[AVISO DE SUPERVISOR]\nEste reporte ya fue despachado/cerrado.\nCualquier cambio de '${nombreAccion}' quedará registrado en la auditoría del sistema.\n\n¿Desea continuar?`);
+                    const continuar = confirm(`[MODO AUDITORÍA DE SUPERVISOR]\nEsta tarjeta ya fue despachada.\nCualquier modificación de '${nombreAccion}' quedará registrada en el sistema.\n\n¿Desea continuar?`);
                     if (continuar) {
                         registrarEventoHistorial(idVuelo, `SUP-OVERRIDE: ${nombreAccion}`);
                         return true;
                     }
                     return false;
                 } else {
-                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para modificaciones.", "error");
+                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para ediciones directas.", "error");
                     return false;
                 }
             }
@@ -957,14 +1014,14 @@
                 const displayCardBtns = canModify ? `flex` : `none`;
 
                 vuelosActivos.forEach(v => {
-                    const currentStatus = v.estado || "APERTURADO";
+                    const currentStatus = (v.estado || "APERTURADO").toUpperCase();
+                    const isDespachado = (currentStatus === 'DESPACHADO');
+                    const isSupervisorOrAdmin = ['admin', 'supervisor', 'supervisor_local'].includes(miRol);
+
                     let statusClass = "status-aperturado";
                     if (currentStatus === "ARMANDO CARGA") statusClass = "status-armando";
                     if (currentStatus === "DESPACHADO") statusClass = "status-despachado";
                     if (currentStatus === "EN IMPORTACION") statusClass = "status-importacion";
-
-                    const isClosed = (currentStatus === 'DESPACHADO' || currentStatus === 'EN IMPORTACION');
-                    const isSupervisorOrAdmin = ['admin', 'supervisor', 'supervisor_local'].includes(miRol);
 
                     const badgeEstacion = (estacionActual === 'ALL') ? `<span style="background: rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: auto;">EST: ${v.estacion_registro}</span>` : '';
                     
@@ -979,28 +1036,33 @@
                     const displayMsgExport = exportActivo ? 'none' : 'block';
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
-                    // 1. AISLAMIENTO DEL BOTÓN DESPACHAR
+                    // LÓGICA DEL BOTÓN DESPACHAR
                     let btnDespacharHtml = '';
-                    if (isClosed) {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>Vuelo Despachado</button>`;
+                    if (isDespachado) {
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo is-despachado" disabled>✓ VUELO DESPACHADO (OUTBOUND)</button>`;
                     } else {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="ejecutarWrapperDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="ejecutarWrapperDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">DESPACHAR VUELO (OUTBOUND LISTO)</button>`;
                     }
 
-                    // 4. INDICADORES DE FASE
-                    const isArmadoDone = currentStatus === 'ARMANDO CARGA' || isClosed;
-                    const isDespachoDone = isClosed;
-                    const isImportDone = currentStatus === 'EN IMPORTACION' && (v.hora_fin_lotificada != null);
+                    // STEPPER DE PROCESOS SIMULTÁNEOS
+                    const stArmadoDone = currentStatus === 'ARMANDO CARGA' || isDespachado;
+                    const stImportDone = (v.hora_fin_lotificada != null);
+                    const stImportInProg = (v.hora_inicio_lotificada != null);
 
                     const card = document.createElement('div'); 
-                    card.className = `vuelo-card ${isClosed && isSupervisorOrAdmin ? 'card-supervisor-locked' : ''}`;
+                    
+                    let cardClasses = `vuelo-card`;
+                    if (isDespachado) {
+                        if (isSupervisorOrAdmin) cardClasses += ` card-supervisor-locked`;
+                        else cardClasses += ` card-despachada-disabled`;
+                    }
+                    card.className = cardClasses;
                     card.id = `card_vuelo_${v.id}`;
-                    card.setAttribute('data-closed', isClosed ? 'true' : 'false');
+                    card.setAttribute('data-despachado', isDespachado ? 'true' : 'false');
 
                     card.innerHTML = `
                         <div class="vuelo-card-header">
                             <div class="header-left-side">
-                                <!-- 4. IDENTIFICADOR PRINCIPAL INCONFUNDIBLE (UI MÓVIL) -->
                                 <div class="vuelo-title-badge">
                                     <span>${v.vuelo_id}</span>
                                     <span class="vuelo-tail-highlight">TAIL: ${v.matricula_avion}</span>
@@ -1020,11 +1082,27 @@
                             </div>
                         </div>
 
-                        <!-- 4. BARRA INDICADORA DE FASE -->
-                        <div class="phase-indicator-bar">
-                            <div class="phase-tag"><span class="phase-dot ${isArmadoDone ? 'completed' : 'active'}"></span> Armado</div>
-                            <div class="phase-tag"><span class="phase-dot ${isDespachoDone ? 'completed' : ''}"></span> Despacho</div>
-                            <div class="phase-tag"><span class="phase-dot ${isImportDone ? 'completed' : ''}"></span> Import</div>
+                        <!-- STEPPER HORIZONTAL INTEGRI-PROCESS -->
+                        <div class="process-stepper-container">
+                            <div class="process-step ${stArmadoDone ? 'completed' : (currentStatus === 'ARMANDO CARGA' ? 'active' : 'pending')}">
+                                <span class="step-icon-dot"></span>
+                                <span>1. Armado</span>
+                            </div>
+                            <span class="step-connector"></span>
+                            <div class="process-step completed">
+                                <span class="step-icon-dot"></span>
+                                <span>2. Inspección</span>
+                            </div>
+                            <span class="step-connector"></span>
+                            <div class="process-step ${isDespachado ? 'completed' : 'pending'}">
+                                <span class="step-icon-dot"></span>
+                                <span>3. Despacho</span>
+                            </div>
+                            <span class="step-connector"></span>
+                            <div class="process-step ${stImportDone ? 'completed' : (stImportInProg ? 'active' : 'pending')}">
+                                <span class="step-icon-dot"></span>
+                                <span>4. Import</span>
+                            </div>
                         </div>
 
                         <div class="vuelo-card-body">
@@ -1065,11 +1143,11 @@
                                 </div>
                             </div>
 
-                            <!-- PASO 3 (DESPACHO ISOLATED) -->
+                            <!-- PASO 3 -->
                             <div class="step-container">
                                 <div class="step-header">
                                     <div class="step-number">3</div>
-                                    <div class="step-title">Salida de Aeronave</div>
+                                    <div class="step-title">Salida de Aeronave (Outbound)</div>
                                 </div>
                                 ${btnDespacharHtml}
                             </div>
@@ -1102,7 +1180,7 @@
                                                 <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}', '${v.id}')">AHORA</button>
                                             </div>
                                         </div>
-                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Sincronizar Tiempos</button>
+                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Sincronizar Tiempos Import</button>
                                     </div>
                                 </div>
                                 <div style="display: ${displayMsgImport};">
@@ -1115,7 +1193,7 @@
                                 <button class="btn-close-flight" onclick="ejecutarWrapperCierre('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Operación Definitivamente</button>
                             </div>
 
-                            <!-- 3. MÓDULO DE HISTORIAL EN VIVO -->
+                            <!-- HISTORIAL EN VIVO -->
                             <div class="live-history-box">
                                 <div class="live-history-title">
                                     <span>Bitácora de Eventos (En Vivo)</span>
@@ -1238,14 +1316,10 @@
             } catch (e) { console.error("Fallo de transferencia cruzada:", e); }
         }
 
-        // ==========================================
-        // 1 & 2. WRAPPER Y PRE-CHECKS PARA DESPACHO
-        // ==========================================
         function ejecutarWrapperDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
-            // Pre-check de avisos pendientes
-            const confirmReportes = confirm(`[VALIDACIÓN PREVIA DE SEGURIDAD]\n¿Se han verificado y descargado los reportes obligatorios de rampa antes de despachar el vuelo ${numeroVuelo}?`);
+            const confirmReportes = confirm(`[VALIDACIÓN PREVIA DE SEGURIDAD]\n¿Se han verificado los procesos de rampa obligatorios antes de despachar el vuelo ${numeroVuelo}?`);
             if(!confirmReportes) {
-                showCustomAlert("Acción Detenida", "Por favor descargue los reportes pendientes antes de proceder con el despacho del vuelo.", "error");
+                showCustomAlert("Acción Detenida", "Por favor completa la verificación de rampa antes de proceder.", "error");
                 return;
             }
             confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion);
@@ -1254,7 +1328,7 @@
         function confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
             showCustomConfirm(
                 "Despachar Outbound", 
-                `Se confirmará el despacho del vuelo <b>${numeroVuelo}</b>.<br><br><i>NOTA LOGÍSTICA: La memoria fotográfica temporal será limpiada para liberar espacio en la base de datos y <b>los ULDs armados pasarán a estado IN TRANSIT hacia sus destinos correspondientes</b>.</i>`, 
+                `Se confirmará el despacho del vuelo <b>${numeroVuelo}</b>.<br><br><i>NOTA LOGÍSTICA: Se purgará la memoria fotográfica y <b>los ULDs armados pasarán a estado IN TRANSIT</b>.</i>`, 
                 "Ejecutar Despacho", 
                 "var(--amerijet-blue)",
                 async () => {
@@ -1267,7 +1341,7 @@
                         
                         registrarEventoHistorial(idVuelo, "Vuelo Despachado (Outbound)");
                         cargarVuelosActivos();
-                        showCustomAlert("Proceso Completado", "Vuelo despachado, memoria fotográfica purgada y ULDs en tránsito.", "success");
+                        showCustomAlert("Proceso Completado", "Vuelo despachado correctamente.", "success");
                     } catch(e) { showCustomAlert("Fallo de Despacho", e.message, "error"); }
                 }
             );
@@ -1283,21 +1357,21 @@
             const hFinUTC = hFin ? convertStationLocalToUTC(hFin, estacionActual) : null;
 
             try { 
-                const { error } = await supabaseClient.from('vuelos_operaciones').update({ hora_inicio_lotificada: hInicioUTC, hora_fin_lotificada: hFinUTC, estado: 'EN IMPORTACION' }).eq('id', idVuelo); 
+                const { error } = await supabaseClient.from('vuelos_operaciones').update({ 
+                    hora_inicio_lotificada: hInicioUTC, 
+                    hora_fin_lotificada: hFinUTC 
+                }).eq('id', idVuelo); 
+
                 if(error) throw error;
                 registrarEventoHistorial(idVuelo, "Tiempos Importación Sincronizados");
                 cargarVuelosActivos(); 
-                showCustomAlert("Sincronizado", "Los tiempos se guardaron en la base de datos central.", "success");
+                showCustomAlert("Sincronizado", "Los tiempos de importación se guardaron correctamente sin alterar el despacho.", "success");
             } catch(e) { showCustomAlert("Error de Red", e.message, "error"); } 
         }
 
-        // ==========================================
-        // 1 & 2. PRE-CHECKS Y WRAPPER DE CIERRE
-        // ==========================================
         function ejecutarWrapperCierre(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) {
-            // Pre-check de cierre
-            if(estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION') {
-                const atencion = confirm(`[ADVERTENCIA DE FLUJO]\nEl vuelo ${numeroVuelo} aún no ha completado el paso de "Despacho".\n\nSi continúa, el sistema ejecutará el despacho automático y la purga de registros ahora.\n¿Desea forzar la ejecución?`);
+            if(estadoActual !== 'DESPACHADO') {
+                const atencion = confirm(`[ADVERTENCIA DE FLUJO]\nEl vuelo ${numeroVuelo} no ha marcado su despacho Outbound.\n\nSi continúa, el sistema ejecutará el despacho y purga automática en este momento.\n¿Desea forzar el cierre?`);
                 if(!atencion) return;
             }
             finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
@@ -1306,12 +1380,12 @@
         function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) { 
             showCustomConfirm(
                 "Cierre Total de Operación", 
-                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">Si olvidaste despachar el vuelo, el sistema ejecutará el despacho y borrado de fotos automáticamente ahora.</span>`, 
+                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.`, 
                 "Finalizar Operación", 
                 "var(--amerijet-red)",
                 async () => {
                     try { 
-                        if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION') {
+                        if (estadoActual !== 'DESPACHADO') {
                             await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
                             await transferirULDsAlDespachar(idVuelo, ruta);
                         }
@@ -1330,7 +1404,7 @@
 
             showCustomConfirm(
                 "Eliminación de Registros", 
-                `Esta acción purgará el vuelo <b>${vuelo_id}</b> de la base de datos local.<br><br><i><b>NOTA DE SISTEMA:</b> Los ULDs atados a esta tarjeta se liberarán a estado EMPTY en su ubicación actual. Los registros de daños estructurales de fuselaje se mantienen protegidos.</i>`, 
+                `Esta acción purgará el vuelo <b>${vuelo_id}</b> de la base de datos local.<br><br><i><b>NOTA DE SISTEMA:</b> Los ULDs atados a esta tarjeta se liberarán a estado EMPTY.</i>`, 
                 "Confirmar Eliminación", 
                 "var(--amerijet-red)",
                 async () => {
