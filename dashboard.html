@@ -874,7 +874,7 @@
             // Refrescar modal si está abierto actualmente para este vuelo
             if (document.getElementById('historyModal').style.display === 'flex' && 
                 document.getElementById('modalHistoryTitle').innerText.includes(idVuelo)) {
-                abrirModalHistorial(idVuelo, idVuelo); // Re-renderiza rápido
+                abrirModalHistorial(idVuelo, idVuelo); 
             }
 
             // Emitir por WebSockets (Broadcast) a otros usuarios
@@ -903,7 +903,6 @@
             const title = document.getElementById('modalHistoryTitle');
             const list = document.getElementById('modalHistoryList');
             
-            // Usamos el id para el renderizado dinámico futuro, aunque mostramos el numero en UI si llega
             title.innerText = `Historial de Actividad - Vuelo ${numeroVuelo}`;
             const logs = historyLogStore[idVuelo] || [];
             
@@ -939,7 +938,6 @@
                 historyLogStore[data.idVuelo].unshift({ time: data.time, user: data.user, action: data.accionTexto });
                 actualizarBotonHistorialUI(data.idVuelo);
                 
-                // Actualizar el modal dinámicamente si está abierto visualizando este vuelo
                 if (document.getElementById('historyModal').style.display === 'flex') {
                     const list = document.getElementById('modalHistoryList');
                     list.innerHTML = historyLogStore[data.idVuelo].map(l => `
@@ -954,7 +952,7 @@
                 }
             });
 
-            // Escuchar Actualización de Cambios (Anti-Colisiones) en Base de Datos
+            // Escuchar Actualización de Cambios en Vivo (Supabase Realtime)
             canalVivo.on('postgres_changes', { event: '*', schema: 'public', table: 'vuelos_operaciones' }, (payload) => {
                 cargarVuelosActivos();
             });
@@ -994,7 +992,7 @@
             } catch (err) {}
             
             document.getElementById('fecha').valueAsDate = new Date();
-            iniciarCanalVivo(); // Iniciar WebSockets
+            iniciarCanalVivo(); 
             await cargarFlotaAviones(); 
             cargarVuelosActivos();
         }
@@ -1057,7 +1055,6 @@
                 const { error } = await supabaseClient.from('vuelos_operaciones').insert([payload]); if (error) throw error;
                 document.getElementById('vuelo_id').value = ""; document.getElementById('matricula_avion').value = "";
                 actualizarRutaFormulario(); 
-                // Se comentaron los cargarVuelosActivos explícitos debido a que el listener postgres_changes lo hace solo, pero se conservan para retro-compatibilidad por seguridad
                 cargarVuelosActivos(); 
                 showCustomAlert("Proceso Completado", "La tarjeta de operación se inicializó con éxito.", "success");
                 toggleCrearVuelo(); 
@@ -1140,7 +1137,6 @@
                     const { error } = await supabaseClient.from('vuelos_operaciones').update({ [columna]: nuevoEstado }).eq('id', idVuelo);
                     if (error) throw error;
                     registrarEventoHistorial(idVuelo, `Conmutación ${tipoOp.toUpperCase()}: ${nuevoEstado ? 'ON' : 'OFF'}`);
-                    // Listener actualiza automáticamente la grilla al detectar el update
                 } catch (e) {
                     showCustomAlert("Error de Sistema", "No se pudo actualizar el tipo de operación.", "error");
                 }
@@ -1373,7 +1369,11 @@
         async function irAlArmado(idVuelo) { 
             ejecutarAccionSegura(idVuelo, "Iniciar Armado", async () => {
                 try { 
-                    await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); 
+                    const card = document.getElementById(`card_vuelo_${idVuelo}`);
+                    const isDespachado = card && card.getAttribute('data-despachado') === 'true';
+                    if (!isDespachado) {
+                        await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); 
+                    }
                     registrarEventoHistorial(idVuelo, "Apertura módulo Armado");
                     window.location.href = `tiempo_armado.html?id=${idVuelo}`; 
                 } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } 
@@ -1510,6 +1510,7 @@
             const hFinUTC = hFin ? convertStationLocalToUTC(hFin, estacionActual) : null;
 
             try { 
+                // Únicamente se actualizan los tiempos de importación sin tocar el estado del vuelo.
                 const { error } = await supabaseClient.from('vuelos_operaciones').update({ 
                     hora_inicio_lotificada: hInicioUTC, 
                     hora_fin_lotificada: hFinUTC 
@@ -1517,7 +1518,7 @@
 
                 if(error) throw error;
                 registrarEventoHistorial(idVuelo, "Tiempos Importación Sincronizados");
-                showCustomAlert("Sincronizado", "Los tiempos de importación se guardaron correctamente sin alterar el despacho.", "success");
+                showCustomAlert("Sincronizado", "Los tiempos de importación se guardaron correctamente sin alterar el estado de despacho.", "success");
             } catch(e) { showCustomAlert("Error de Red", e.message, "error"); } 
         }
 
