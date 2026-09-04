@@ -325,7 +325,7 @@
         .status-despachado { background: #10B981; color: white; }
         .status-importacion { background: #EC4899; color: white; }
 
-        /* STEPPER VISUAL SUPERIOR DE PROCESOS (MULTINIVEL) */
+        /* STEPPER VISUAL SUPERIOR DE PROCESOS */
         .process-stepper-container {
             background: #0F172A;
             padding: 10px 14px;
@@ -419,10 +419,10 @@
 
         .actions-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         
-        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 11px; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; text-transform: uppercase; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); box-sizing: border-box;}
+        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 11px; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; text-transform: uppercase; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); box-sizing: border-box; display: inline-block;}
         .action-btn:hover { background: #F8FAFC; border-color: #CBD5E1; color: var(--amerijet-blue); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.04);}
         
-        .btn-start-armado { background: #FFFBEB; color: #D97706; border-color: #FDE68A; grid-column: 1 / -1;}
+        .btn-start-armado { background: #FFFBEB; color: #D97706; border-color: #FDE68A; width: 100%;}
         .btn-start-armado:hover { background: #FEF3C7; border-color: #FCD34D;}
         .btn-inspect { border-color: #BAE6FD; color: #0369A1; }
         .btn-inspect:hover { background: #F0F9FF; }
@@ -430,7 +430,6 @@
         .btn-com:hover { background: #ECFDF5; }
         .btn-gse { border-color: #CBD5E1; color: #475569; grid-column: 1 / -1;}
 
-        /* BOTÓN ISOLATED DE DESPACHO */
         .btn-despachar-vuelo { background: var(--amerijet-blue); color: white; font-weight: 800; font-size: 12px; text-transform: uppercase; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(10,37,64,0.15); letter-spacing: 0.5px; box-sizing: border-box;}
         .btn-despachar-vuelo:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(10,37,64,0.25); }
         .btn-despachar-vuelo.is-despachado { background: #10B981 !important; color: white !important; cursor: not-allowed; opacity: 0.9; }
@@ -452,23 +451,82 @@
         .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 11px; text-transform: uppercase; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; box-sizing: border-box;}
         .btn-close-flight:hover { background: #FFF1F2; transform: translateY(-1px); }
 
-        /* MÓDULO DE HISTORIAL EN VIVO EN TARJETA */
-        .live-history-box { background: #0F172A; border-radius: 8px; padding: 10px; margin-top: 15px; border: 1px solid #1E293B; max-height: 110px; overflow-y: auto;}
-        .live-history-title { font-size: 9px; font-weight: 900; color: #38BDF8; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;}
-        .live-history-list { list-style: none; display: flex; flex-direction: column; gap: 4px; font-family: monospace; font-size: 10px; color: #94A3B8; }
-        .live-history-item { display: flex; justify-content: space-between; border-bottom: 1px dashed #1E293B; padding-bottom: 2px;}
-        .live-history-item span.time { color: #64748B; font-weight: bold;}
+        /* BOTÓN DE HISTORIAL Y MODAL COMPLETO */
+        .btn-history-trigger {
+            background: #0F172A;
+            color: #38BDF8;
+            border: 1px solid #1E293B;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn-history-trigger:hover {
+            background: #1E293B;
+            border-color: #38BDF8;
+            color: white;
+        }
 
-        /* CAPA VISUAL ADM/SUPERVISOR WRAPPER Y ESTADOS DESPACHADOS */
-        .card-supervisor-locked { border: 2px dashed #8B5CF6 !important; }
-        .card-despachada-disabled { opacity: 0.75; filter: grayscale(15%); }
-        .card-despachada-disabled .action-btn, 
-        .card-despachada-disabled .btn-ahora, 
-        .card-despachada-disabled .btn-save-times { opacity: 0.5; pointer-events: none; }
+        .outbound-section-disabled {
+            opacity: 0.55;
+            pointer-events: none;
+            position: relative;
+            filter: grayscale(40%);
+        }
+
+        .card-supervisor-locked { 
+            border: 2px dashed #8B5CF6 !important; 
+        }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; box-sizing: border-box;}
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box;}
         .modal-generic { text-align: center; max-width: 350px; }
+
+        .modal-history-content {
+            background: #0F172A;
+            color: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 550px;
+            padding: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            border: 1px solid #1E293B;
+            text-align: left;
+        }
+
+        .history-list-full {
+            list-style: none;
+            max-height: 350px;
+            overflow-y: auto;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 5px;
+        }
+
+        .history-list-item {
+            background: #1E293B;
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            border-left: 3px solid #38BDF8;
+        }
+
+        .history-list-item .user-act { font-weight: 800; color: #F8FAFC; }
+        .history-list-item .action-act { color: #94A3B8; margin-top: 2px; font-size: 11px; }
+        .history-list-item .time-act { color: #38BDF8; font-family: monospace; font-size: 11px; font-weight: bold; white-space: nowrap; }
 
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
@@ -647,6 +705,22 @@
         </div>
     </div>
 
+    <!-- MODAL HISTORIAL COMPLETO -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-history-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:12px;">
+                <h3 style="font-size:15px; font-weight:900; color:#38BDF8; text-transform:uppercase; margin:0;" id="modalHistoryTitle">Historial de Operación</h3>
+                <span style="font-size:10px; color:#64748B; font-weight:800;">AUDITORÍA DE SESIÓN</span>
+            </div>
+            
+            <ul class="history-list-full" id="modalHistoryList">
+                <li style="text-align:center; color:#64748B; padding:20px;">Cargando historial...</li>
+            </ul>
+
+            <button type="button" onclick="cerrarModalHistorial()" style="background:#1E293B; color:white; border:1px solid #334155; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; text-transform:uppercase; margin-top:10px;">Cerrar Historial</button>
+        </div>
+    </div>
+
     <!-- MODALES UNIVERSALES -->
     <div class="modal-overlay" id="customAlertModal">
         <div class="modal-content modal-generic">
@@ -768,25 +842,46 @@
             const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
             
             historyLogStore[idVuelo].unshift({ time: timeStr, user: miNombre, action: accionTexto });
-            renderizarHistorialEnVivo(idVuelo);
+            actualizarBotonHistorialUI(idVuelo);
         }
 
-        function renderizarHistorialEnVivo(idVuelo) {
-            const listEl = document.getElementById(`history_list_${idVuelo}`);
-            if(!listEl) return;
+        function actualizarBotonHistorialUI(idVuelo) {
+            const lbl = document.getElementById(`lbl_last_hist_${idVuelo}`);
+            if(!lbl) return;
+            const logs = historyLogStore[idVuelo] || [];
+            if(logs.length > 0) {
+                lbl.innerHTML = `Último: <b>${logs[0].user}</b> (${logs[0].action})`;
+            } else {
+                lbl.innerText = "Sin interacciones grabadas";
+            }
+        }
+
+        function abrirModalHistorial(idVuelo, numeroVuelo) {
+            const modal = document.getElementById('historyModal');
+            const title = document.getElementById('modalHistoryTitle');
+            const list = document.getElementById('modalHistoryList');
+            
+            title.innerText = `Historial de Actividad - Vuelo ${numeroVuelo}`;
             const logs = historyLogStore[idVuelo] || [];
             
             if(logs.length === 0) {
-                listEl.innerHTML = `<li style="text-align:center; color:#64748B;">Sin interacciones recientes</li>`;
-                return;
+                list.innerHTML = `<li style="text-align:center; color:#64748B; padding:20px;">Sin interacciones registradas en esta sesión.</li>`;
+            } else {
+                list.innerHTML = logs.map(l => `
+                    <li class="history-list-item">
+                        <div>
+                            <div class="user-act">${l.user}</div>
+                            <div class="action-act">${l.action}</div>
+                        </div>
+                        <div class="time-act">${l.time}</div>
+                    </li>
+                `).join('');
             }
-            
-            listEl.innerHTML = logs.slice(0, 5).map(l => `
-                <li class="live-history-item">
-                    <span><b>${l.user}:</b> ${l.action}</span>
-                    <span class="time">${l.time}</span>
-                </li>
-            `).join('');
+            modal.style.display = 'flex';
+        }
+
+        function cerrarModalHistorial() {
+            document.getElementById('historyModal').style.display = 'none';
         }
 
         async function inicializarDashboard() {
@@ -928,8 +1023,6 @@
         }
 
         function marcarTiempoAhora(inputId, idVuelo) {
-            if(!wrapperCheckAccion(idVuelo, "Modificar Tiempos Importación")) return;
-
             const nowUtc = new Date().toISOString();
             const localStr = convertUTCToStationLocal(nowUtc, estacionActual);
             document.getElementById(inputId).value = localStr;
@@ -978,14 +1071,19 @@
 
             if (isDespachado) {
                 if (['admin', 'supervisor', 'supervisor_local'].includes(miRol)) {
-                    const continuar = confirm(`[MODO AUDITORÍA DE SUPERVISOR]\nEsta tarjeta ya fue despachada.\nCualquier modificación de '${nombreAccion}' quedará registrada en el sistema.\n\n¿Desea continuar?`);
-                    if (continuar) {
-                        registrarEventoHistorial(idVuelo, `SUP-OVERRIDE: ${nombreAccion}`);
-                        return true;
-                    }
+                    showCustomConfirm(
+                        "Modo Auditoría Supervisor",
+                        `Esta tarjeta ya fue despachada.<br><br>Cualquier modificación de '<b>${nombreAccion}</b>' quedará registrada en el sistema.<br><br>¿Desea continuar?`,
+                        "Continuar y Registrar",
+                        "#8B5CF6",
+                        () => {
+                            registrarEventoHistorial(idVuelo, `SUP-OVERRIDE: ${nombreAccion}`);
+                            return true;
+                        }
+                    );
                     return false;
                 } else {
-                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para ediciones directas.", "error");
+                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para ediciones directas de la sección Outbound.", "error");
                     return false;
                 }
             }
@@ -1036,7 +1134,6 @@
                     const displayMsgExport = exportActivo ? 'none' : 'block';
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
-                    // LÓGICA DEL BOTÓN DESPACHAR
                     let btnDespacharHtml = '';
                     if (isDespachado) {
                         btnDespacharHtml = `<button class="btn-despachar-vuelo is-despachado" disabled>✓ VUELO DESPACHADO (OUTBOUND)</button>`;
@@ -1044,7 +1141,6 @@
                         btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="ejecutarWrapperDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">DESPACHAR VUELO (OUTBOUND LISTO)</button>`;
                     }
 
-                    // STEPPER DE PROCESOS SIMULTÁNEOS
                     const stArmadoDone = currentStatus === 'ARMANDO CARGA' || isDespachado;
                     const stImportDone = (v.hora_fin_lotificada != null);
                     const stImportInProg = (v.hora_inicio_lotificada != null);
@@ -1052,13 +1148,14 @@
                     const card = document.createElement('div'); 
                     
                     let cardClasses = `vuelo-card`;
-                    if (isDespachado) {
-                        if (isSupervisorOrAdmin) cardClasses += ` card-supervisor-locked`;
-                        else cardClasses += ` card-despachada-disabled`;
+                    if (isDespachado && isSupervisorOrAdmin) {
+                        cardClasses += ` card-supervisor-locked`;
                     }
                     card.className = cardClasses;
                     card.id = `card_vuelo_${v.id}`;
                     card.setAttribute('data-despachado', isDespachado ? 'true' : 'false');
+
+                    const outboundDisabledClass = (isDespachado && !isSupervisorOrAdmin) ? 'outbound-section-disabled' : '';
 
                     card.innerHTML = `
                         <div class="vuelo-card-header">
@@ -1111,52 +1208,55 @@
                                 <div><span>Fecha Op:</span><strong>${v.fecha}</strong></div>
                             </div>
 
-                            <div class="toggle-group">
-                                <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
-                                <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
+                            <!-- BLOQUE SUPERIOR DESHABILITADO PARA USUARIO SI YA FUE DESPACHADO -->
+                            <div class="${outboundDisabledClass}">
+                                <div class="toggle-group">
+                                    <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
+                                    <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
+                                </div>
+
+                                <!-- PASO 1 -->
+                                <div class="step-container">
+                                    <div class="step-header">
+                                        <div class="step-number">1</div>
+                                        <div class="step-title">Procesamiento Inicial</div>
+                                    </div>
+                                    <div style="display: ${displayExport};">
+                                        <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">Iniciar Armado y Manifiesto ULD</button>
+                                    </div>
+                                    <div style="display: ${displayMsgExport};">
+                                        <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- PASO 2 -->
+                                <div class="step-container">
+                                    <div class="step-header">
+                                        <div class="step-number">2</div>
+                                        <div class="step-title">Inspecciones y Equipo</div>
+                                    </div>
+                                    <div class="actions-subgrid">
+                                        <button onclick="if(wrapperCheckAccion('${v.id}', 'Ir a Inspección')) window.location.href='inspeccion_avion.html?id=${v.id}'" class="action-btn btn-inspect">Inspección Física</button>
+                                        <button onclick="if(wrapperCheckAccion('${v.id}', 'Ir a Detalle Tiempos')) window.location.href='detalle_vuelo_tiempos.html?id=${v.id}'" class="action-btn btn-com">Detalle Vuelo Tiempos</button>
+                                        <button onclick="if(wrapperCheckAccion('${v.id}', 'Ir a Equipos GSE')) window.location.href='gse_equipos.html?id=${v.id}'" class="action-btn btn-gse">Equipos GSE</button>
+                                    </div>
+                                </div>
+
+                                <!-- PASO 3 -->
+                                <div class="step-container">
+                                    <div class="step-header">
+                                        <div class="step-number">3</div>
+                                        <div class="step-title">Salida de Aeronave (Outbound)</div>
+                                    </div>
+                                    ${btnDespacharHtml}
+                                </div>
                             </div>
 
-                            <!-- PASO 1 -->
-                            <div class="step-container">
+                            <!-- PASO 4 (IMPORTACION - SIEMPRE SIEMPRE HABILITADO) -->
+                            <div class="step-container" style="border-left: 3px solid #EC4899;">
                                 <div class="step-header">
-                                    <div class="step-number">1</div>
-                                    <div class="step-title">Procesamiento Inicial</div>
-                                </div>
-                                <div style="display: ${displayExport};">
-                                    <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">Iniciar Armado y Manifiesto ULD</button>
-                                </div>
-                                <div style="display: ${displayMsgExport};">
-                                    <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
-                                </div>
-                            </div>
-                            
-                            <!-- PASO 2 -->
-                            <div class="step-container">
-                                <div class="step-header">
-                                    <div class="step-number">2</div>
-                                    <div class="step-title">Inspecciones y Equipo</div>
-                                </div>
-                                <div class="actions-subgrid">
-                                    <a href="inspeccion_avion.html?id=${v.id}" onclick="return wrapperCheckAccion('${v.id}', 'Ir a Inspección')" class="action-btn btn-inspect">Inspección Física</a>
-                                    <a href="detalle_vuelo_tiempos.html?id=${v.id}" onclick="return wrapperCheckAccion('${v.id}', 'Ir a Detalle Tiempos')" class="action-btn btn-com">Detalle Vuelo Tiempos</a>
-                                    <a href="gse_equipos.html?id=${v.id}" onclick="return wrapperCheckAccion('${v.id}', 'Ir a Equipos GSE')" class="action-btn btn-gse">Equipos GSE</a>
-                                </div>
-                            </div>
-
-                            <!-- PASO 3 -->
-                            <div class="step-container">
-                                <div class="step-header">
-                                    <div class="step-number">3</div>
-                                    <div class="step-title">Salida de Aeronave (Outbound)</div>
-                                </div>
-                                ${btnDespacharHtml}
-                            </div>
-
-                            <!-- PASO 4 -->
-                            <div class="step-container">
-                                <div class="step-header">
-                                    <div class="step-number">4</div>
-                                    <div class="step-title">Despaletizado (Import)</div>
+                                    <div class="step-number" style="background:#EC4899;">4</div>
+                                    <div class="step-title" style="color:#EC4899;">Despaletizado (Import)</div>
                                 </div>
                                 <div style="display: ${displayImport};">
                                     <div class="import-time-box">
@@ -1180,7 +1280,7 @@
                                                 <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}', '${v.id}')">AHORA</button>
                                             </div>
                                         </div>
-                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Sincronizar Tiempos Import</button>
+                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Guardar Tiempos Import</button>
                                     </div>
                                 </div>
                                 <div style="display: ${displayMsgImport};">
@@ -1190,24 +1290,19 @@
 
                             <!-- PASO 5 -->
                             <div style="margin-top: 15px;">
-                                <button class="btn-close-flight" onclick="ejecutarWrapperCierre('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Operación Definitivamente</button>
+                                <button class="btn-close-flight" onclick="ejecutarWrapperCierre('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar Operación</button>
                             </div>
 
-                            <!-- HISTORIAL EN VIVO -->
-                            <div class="live-history-box">
-                                <div class="live-history-title">
-                                    <span>Bitácora de Eventos (En Vivo)</span>
-                                    <span style="font-size:8px; color:#64748B;">SESIÓN</span>
-                                </div>
-                                <ul class="live-history-list" id="history_list_${v.id}">
-                                    <li style="text-align:center; color:#64748B;">Iniciando bitácora...</li>
-                                </ul>
-                            </div>
+                            <!-- BOTÓN DE VER HISTORIAL COMPLETO -->
+                            <button type="button" class="btn-history-trigger" onclick="abrirModalHistorial('${v.id}', '${v.vuelo_id}')">
+                                <span>📋 Ver Historial del Vuelo</span>
+                                <span id="lbl_last_hist_${v.id}" style="font-size:9px; text-transform:none; font-weight:normal; opacity:0.8;">Sin interacciones grabadas</span>
+                            </button>
 
                         </div>
                     `;
                     grid.appendChild(card);
-                    renderizarHistorialEnVivo(v.id);
+                    actualizarBotonHistorialUI(v.id);
                 });
 
                 vuelosActivos.forEach(v => {
@@ -1317,12 +1412,15 @@
         }
 
         function ejecutarWrapperDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
-            const confirmReportes = confirm(`[VALIDACIÓN PREVIA DE SEGURIDAD]\n¿Se han verificado los procesos de rampa obligatorios antes de despachar el vuelo ${numeroVuelo}?`);
-            if(!confirmReportes) {
-                showCustomAlert("Acción Detenida", "Por favor completa la verificación de rampa antes de proceder.", "error");
-                return;
-            }
-            confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion);
+            showCustomConfirm(
+                "Validación de Seguridad",
+                `¿Se han verificado todos los procesos de rampa obligatorios antes de despachar el vuelo <b>${numeroVuelo}</b>?`,
+                "Sí, Despachar",
+                "var(--amerijet-blue)",
+                () => {
+                    confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion);
+                }
+            );
         }
 
         function confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
@@ -1348,8 +1446,6 @@
         }
         
         async function guardarTiemposLotificada(idVuelo) { 
-            if(!wrapperCheckAccion(idVuelo, "Guardar Tiempos Importación")) return;
-
             const hInicio = document.getElementById(`t_inicio_${idVuelo}`).value; 
             const hFin = document.getElementById(`t_fin_${idVuelo}`).value; 
             
@@ -1371,8 +1467,16 @@
 
         function ejecutarWrapperCierre(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) {
             if(estadoActual !== 'DESPACHADO') {
-                const atencion = confirm(`[ADVERTENCIA DE FLUJO]\nEl vuelo ${numeroVuelo} no ha marcado su despacho Outbound.\n\nSi continúa, el sistema ejecutará el despacho y purga automática en este momento.\n¿Desea forzar el cierre?`);
-                if(!atencion) return;
+                showCustomConfirm(
+                    "Advertencia de Flujo",
+                    `El vuelo <b>${numeroVuelo}</b> no ha marcado su despacho Outbound.<br><br>Si continúa, el sistema ejecutará el despacho y purga automática en este momento.<br><br>¿Desea forzar el cierre?`,
+                    "Forzar Cierre",
+                    "var(--amerijet-red)",
+                    () => {
+                        finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
+                    }
+                );
+                return;
             }
             finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
         }
