@@ -22,6 +22,7 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         
+        /* SCROLLBAR PERSONALIZADO TIPO APP NATIVA */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
@@ -36,6 +37,9 @@
             width: 100vw;
         }
         
+        /* =========================================
+           SIDEBAR OSCURO PROFESIONAL (ANIMADO)
+        ========================================= */
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--amerijet-blue-dark);
@@ -80,6 +84,7 @@
             overflow-y: auto;
         }
 
+        /* EFECTOS DINÁMICOS DE BOTONES */
         @keyframes iconBounce {
             0% { transform: scale(1) translateY(0); }
             50% { transform: scale(1.15) translateY(-3px); }
@@ -173,6 +178,9 @@
         }
         .btn-logout:hover { background-color: #E11D48; color: white; border-color: #E11D48; }
 
+        /* =========================================
+           TOP HEADER DINÁMICO Y MODERNO
+        ======================================== */
         .main-wrapper {
             flex: 1;
             display: flex;
@@ -209,6 +217,7 @@
         .header-title-group { display: flex; align-items: center; gap: 15px; overflow: hidden;}
         .header-title { font-weight: 900; font-size: 18px; color: var(--amerijet-blue); text-transform: uppercase; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
+        /* ZULU CLOCK LIVE Y STATION */
         .header-controls-wrapper { display:flex; align-items:center; gap: 10px; flex-wrap: nowrap; flex-shrink: 0;}
 
         .live-zulu-clock {
@@ -230,6 +239,7 @@
         .station-selector { background: transparent; color: #10B981; border: none; font-weight: 900; font-size: 14px; outline: none; cursor: pointer; text-transform: uppercase; }
         .station-static { color: #10B981; font-weight: 900; font-size: 14px; text-transform: uppercase; }
 
+        /* CONTENIDO PRINCIPAL */
         .main-content {
             flex: 1;
             overflow-y: auto;
@@ -249,6 +259,7 @@
             box-sizing: border-box;
         }
         
+        /* PANEL FORMULARIO DESPLEGABLE */
         .panel-form { 
             background: white; 
             padding: 20px 25px; 
@@ -306,92 +317,28 @@
         .panel-vuelos { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
         .panel-vuelos h2 { font-size: 18px; font-weight: 900; color: var(--amerijet-blue); margin-bottom: 20px; text-transform: uppercase;}
         
-        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 25px; align-content: start; width: 100%;}
+        .grid-vuelos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 25px; align-content: start; width: 100%;}
 
-        /* TARJETA DE VUELO */
-        .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; width: 100%; box-sizing: border-box; position: relative;}
+        /* DISEÑO MODERNO DE TARJETA DE VUELO */
+        .vuelo-card { background: white; border-radius: var(--border-radius); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; width: 100%; box-sizing: border-box;}
         .vuelo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,37,64,0.08); border-color: #CBD5E1; }
         
-        .vuelo-card-header { padding: 18px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: nowrap; border-bottom: 3px solid #38BDF8;}
-        .header-left-side { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+        .vuelo-card-header { padding: 20px; background: var(--amerijet-blue-dark); display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: nowrap; }
+        .header-left-side { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
         
-        .vuelo-title-badge { font-size: 24px; font-weight: 900; color: #38BDF8; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; word-break: break-word;}
-        .vuelo-tail-highlight { background: #38BDF8; color: #051529; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; display: inline-block;}
+        /* PREVENCIÓN DE QUIEBRE DE TARJETA EN LA WEB */
+        .vuelo-title { font-size: 22px; font-weight: 900; color: white; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; word-break: break-word; overflow-wrap: break-word;}
+        .header-badges-wrapper { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
         
-        .header-badges-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+        .vuelo-tail { background: rgba(255,255,255,0.15); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;}
+        
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: inline-flex; align-items: center; text-transform: uppercase; white-space: nowrap;}
         .status-aperturado { background: #38BDF8; color: #0F172A; }
         .status-armando { background: #F59E0B; color: white; }
-        .status-despachado { background: #10B981; color: white; }
+        .status-despachado { background: #8B5CF6; color: white; }
         .status-importacion { background: #EC4899; color: white; }
 
-        /* STEPPER VISUAL SUPERIOR DE PROCESOS */
-        .process-stepper-container {
-            background: #0F172A;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 4px;
-            border-bottom: 1px solid #1E293B;
-            overflow-x: auto;
-        }
-
-        .process-step {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-
-        .process-step.completed {
-            background: rgba(30, 41, 59, 0.8);
-            color: #94A3B8;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .process-step.active {
-            background: #38BDF8;
-            color: #0F172A;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-        }
-
-        .process-step.pending {
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            color: #64748B;
-        }
-
-        .step-icon-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .process-step.active .step-icon-dot {
-            background: #0F172A;
-            animation: pulseDot 1.5s infinite;
-        }
-
-        @keyframes pulseDot {
-            0% { transform: scale(0.9); opacity: 0.8; }
-            50% { transform: scale(1.4); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.8; }
-        }
-
-        .step-connector {
-            flex: 1;
-            height: 1px;
-            background: #1E293B;
-            min-width: 6px;
-        }
-
+        /* BOTONES DE CONTROL DE ESQUINA EN TARJETA (CON ICONOS SVG) */
         .card-controls { display: flex; gap: 8px; flex-shrink: 0;}
         .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding:0;}
         .ctrl-btn:hover { background: white; color: var(--amerijet-blue-dark); border-color: white; }
@@ -399,30 +346,33 @@
         
         .vuelo-card-body { padding: 20px; flex-grow: 1; background: white; width: 100%; box-sizing: border-box;}
         
-        .vuelo-meta-info { display: flex; justify-content: space-between; font-size: 11px; color: #64748B; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; text-transform: uppercase; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px solid #F1F5F9;}
+        /* PREVENCIÓN DE QUIEBRE EN DATOS INFERIORES */
+        .vuelo-meta-info { display: flex; justify-content: space-between; font-size: 11px; color: #64748B; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; text-transform: uppercase; }
         .vuelo-meta-info div { display: flex; flex-direction: column; gap: 2px;}
-        .vuelo-meta-info strong { color: var(--amerijet-blue-dark); font-size: 13px; font-weight: 800; word-break: break-word; overflow-wrap: break-word;}
+        .vuelo-meta-info strong { color: var(--amerijet-blue-dark); font-size: 14px; font-weight: 800; word-break: break-word; overflow-wrap: break-word;}
 
-        .toggle-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        /* TOGGLES MEJORADOS */
+        .toggle-group { display: flex; gap: 10px; margin-bottom: 20px; border-top: 1px solid #E2E8F0; padding-top: 15px;}
         .toggle-btn { padding: 8px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; flex-grow: 1; text-transform: uppercase;}
         .toggle-btn.active { background: #ECFDF5; color: #059669; border: 1px solid #6EE7B7; }
         .toggle-btn.active:hover { background: #D1FAE5; }
         .toggle-btn.inactive { background: #F8FAFC; color: #94A3B8; border: 1px dashed #CBD5E1; text-decoration: line-through;}
         .toggle-btn.inactive:hover { background: #F1F5F9; color: #475569;}
 
-        .step-container { background: white; border: 1px solid #E2E8F0; border-radius: 10px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.01);}
-        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        /* DISEÑO DE PASOS ESTRUCTURADOS */
+        .step-container { background: white; border: 1px solid #E2E8F0; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.01);}
+        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
         .step-number { background: var(--amerijet-blue); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 11px; font-weight: 900; flex-shrink: 0;}
         .step-title { font-size: 11px; font-weight: 800; color: var(--amerijet-blue-dark); text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .empty-state-box { background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 10px; text-align: center; color: #64748B; font-size: 10px; font-weight: 600; text-transform: uppercase;}
+        .empty-state-box { background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 12px; text-align: center; color: #64748B; font-size: 11px; font-weight: 600; text-transform: uppercase;}
 
-        .actions-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .actions-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 11px; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; text-transform: uppercase; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); box-sizing: border-box; display: inline-block;}
+        .action-btn { padding: 10px 12px; text-align: center; border-radius: 8px; font-size: 11px; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid #E2E8F0; background: white; color: #334155; text-transform: uppercase; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); box-sizing: border-box;}
         .action-btn:hover { background: #F8FAFC; border-color: #CBD5E1; color: var(--amerijet-blue); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.04);}
         
-        .btn-start-armado { background: #FFFBEB; color: #D97706; border-color: #FDE68A; width: 100%;}
+        .btn-start-armado { background: #FFFBEB; color: #D97706; border-color: #FDE68A; grid-column: 1 / -1;}
         .btn-start-armado:hover { background: #FEF3C7; border-color: #FCD34D;}
         .btn-inspect { border-color: #BAE6FD; color: #0369A1; }
         .btn-inspect:hover { background: #F0F9FF; }
@@ -432,104 +382,32 @@
 
         .btn-despachar-vuelo { background: var(--amerijet-blue); color: white; font-weight: 800; font-size: 12px; text-transform: uppercase; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(10,37,64,0.15); letter-spacing: 0.5px; box-sizing: border-box;}
         .btn-despachar-vuelo:hover { background: var(--amerijet-blue-dark); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(10,37,64,0.25); }
-        .btn-despachar-vuelo.is-despachado { background: #10B981 !important; color: white !important; cursor: not-allowed; opacity: 0.9; }
-        .btn-despachar-vuelo:disabled { transform: none !important; }
         
-        .import-time-box { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        /* ESTILOS DE IMPORTACIÓN */
+        .import-time-box { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .time-input-group { display: flex; flex-direction: column; width: 100%; box-sizing: border-box;}
-        .time-input-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 4px; text-transform: uppercase; }
+        .time-input-group label { font-size: 10px; font-weight: 800; color: #64748B; margin-bottom: 6px; text-transform: uppercase; }
         .time-controls-wrapper { display: flex; gap: 8px; align-items: flex-start; width: 100%;}
-        .time-controls-wrapper input { padding: 8px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; color: var(--text-main); font-weight: 700; width: 100%; outline: none; transition: 0.2s; box-sizing: border-box;}
+        .time-controls-wrapper input { padding: 9px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 12px; color: var(--text-main); font-weight: 700; width: 100%; outline: none; transition: 0.2s; box-sizing: border-box;}
         .time-controls-wrapper input:focus { border-color: var(--amerijet-blue); }
         
-        .btn-ahora { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0 10px; height: 34px; cursor: pointer; font-size: 10px; font-weight: 800; color: var(--amerijet-blue); transition: 0.2s; text-transform: uppercase; flex-shrink: 0;}
+        .btn-ahora { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0 12px; height: 36px; cursor: pointer; font-size: 11px; font-weight: 800; color: var(--amerijet-blue); transition: 0.2s; text-transform: uppercase; flex-shrink: 0;}
         .btn-ahora:hover { background: #E2E8F0; border-color: #94A3B8; }
         
-        .btn-save-times { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #1D4ED8; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 2px; box-sizing: border-box;}
+        .btn-save-times { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #1D4ED8; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 5px; box-sizing: border-box;}
         .btn-save-times:hover { background: #DBEAFE; }
 
-        .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 11px; text-transform: uppercase; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; box-sizing: border-box;}
+        .btn-close-flight { background: white; color: var(--amerijet-red); border: 2px solid var(--amerijet-red); font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; box-sizing: border-box;}
         .btn-close-flight:hover { background: #FFF1F2; transform: translateY(-1px); }
 
-        /* BOTÓN DE HISTORIAL Y MODAL COMPLETO */
-        .btn-history-trigger {
-            background: #0F172A;
-            color: #38BDF8;
-            border: 1px solid #1E293B;
-            border-radius: 8px;
-            padding: 10px;
-            width: 100%;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s ease;
-            margin-top: 10px;
-        }
-        .btn-history-trigger:hover {
-            background: #1E293B;
-            border-color: #38BDF8;
-            color: white;
-        }
-
-        .outbound-section-disabled {
-            opacity: 0.55;
-            pointer-events: none;
-            position: relative;
-            filter: grayscale(40%);
-        }
-
-        .card-supervisor-locked { 
-            border: 2px dashed #8B5CF6 !important; 
-        }
-
+        /* MODALES ALERTA CON ICONOS EMOJI */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); padding: 15px; box-sizing: border-box;}
         .modal-content { background: white; padding: 30px; border-radius: var(--border-radius); width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box;}
         .modal-generic { text-align: center; max-width: 350px; }
 
-        .modal-history-content {
-            background: #0F172A;
-            color: white;
-            border-radius: var(--border-radius);
-            width: 100%;
-            max-width: 550px;
-            padding: 25px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
-            border: 1px solid #1E293B;
-            text-align: left;
-        }
-
-        .history-list-full {
-            list-style: none;
-            max-height: 350px;
-            overflow-y: auto;
-            margin: 15px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding-right: 5px;
-        }
-
-        .history-list-item {
-            background: #1E293B;
-            padding: 10px 14px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            border-left: 3px solid #38BDF8;
-        }
-
-        .history-list-item .user-act { font-weight: 800; color: #F8FAFC; }
-        .history-list-item .action-act { color: #94A3B8; margin-top: 2px; font-size: 11px; }
-        .history-list-item .time-act { color: #38BDF8; font-family: monospace; font-size: 11px; font-weight: bold; white-space: nowrap; }
-
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); z-index: 999; backdrop-filter: blur(2px); }
 
+        /* RESPONSIVE */
         @media (max-width: 1024px) { 
             .dashboard-container { grid-template-columns: 1fr; padding: 15px; gap: 20px; width: 100vw;} 
             
@@ -537,6 +415,7 @@
             .sidebar.active { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
             
+            /* AJUSTES PARA EL HEADER MÓVIL (MENU HAMBURGUESA VISIBLE) */
             .top-header { padding: 10px 15px; height: auto; flex-wrap: wrap; gap: 10px; }
             .header-title-group { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
             .header-title { display: none; } 
@@ -548,7 +427,7 @@
             .station-module { padding: 4px 8px; border-radius: 12px; }
             
             .vuelo-card-header { padding: 15px; gap: 10px; }
-            .vuelo-title-badge { font-size: 20px; }
+            .vuelo-title { font-size: 18px; }
             .ctrl-btn { width: 30px; height: 30px; }
         }
     </style>
@@ -565,6 +444,7 @@
         
         <div class="sidebar-user">
             <div class="user-avatar">
+                <!-- Icono NATIVO Usuario -->
                 <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <div class="user-info-text">
@@ -633,6 +513,8 @@
 
     <!-- CONTENEDOR PRINCIPAL DERECHO -->
     <div class="main-wrapper">
+        
+        <!-- TOP HEADER -->
         <header class="top-header">
             <div class="header-title-group">
                 <button class="menu-toggle" onclick="toggleSidebar()">
@@ -642,6 +524,7 @@
             </div>
             
             <div class="header-controls-wrapper">
+                <!-- LIVE ZULU CLOCK -->
                 <div class="live-zulu-clock" id="liveZuluClock">00:00:00 ZULU</div>
                 
                 <div class="header-station">
@@ -657,8 +540,11 @@
             </div>
         </header>
 
+        <!-- DASHBOARD CONTENT -->
         <main class="main-content">
             <div class="dashboard-container">
+                
+                <!-- PANEL FORMULARIO ACORDEÓN (LIMPIO Y DINÁMICO) -->
                 <div class="panel-form">
                     <div class="panel-form-header" onclick="toggleCrearVuelo()">
                         <h2>Aperturar Nuevo Vuelo</h2>
@@ -705,23 +591,7 @@
         </div>
     </div>
 
-    <!-- MODAL HISTORIAL COMPLETO -->
-    <div class="modal-overlay" id="historyModal">
-        <div class="modal-history-content">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:12px;">
-                <h3 style="font-size:15px; font-weight:900; color:#38BDF8; text-transform:uppercase; margin:0;" id="modalHistoryTitle">Historial de Operación</h3>
-                <span style="font-size:10px; color:#64748B; font-weight:800;">AUDITORÍA DE SESIÓN</span>
-            </div>
-            
-            <ul class="history-list-full" id="modalHistoryList">
-                <li style="text-align:center; color:#64748B; padding:20px;">Cargando historial...</li>
-            </ul>
-
-            <button type="button" onclick="cerrarModalHistorial()" style="background:#1E293B; color:white; border:1px solid #334155; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:800; text-transform:uppercase; margin-top:10px;">Cerrar Historial</button>
-        </div>
-    </div>
-
-    <!-- MODALES UNIVERSALES -->
+    <!-- MODALES UNIVERSALES CON EMOJIS GIGANTES -->
     <div class="modal-overlay" id="customAlertModal">
         <div class="modal-content modal-generic">
             <div id="alertIcon" style="font-size: 50px; margin-bottom: 10px; line-height: 1; text-align:center;">ℹ️</div>
@@ -758,10 +628,10 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario"; let todasLasEstacionesBD = [];
-        let canalVivo;
 
-        const historyLogStore = {};
-
+        // ==========================================
+        // DICCIONARIO INTERNACIONAL DE HUSOS HORARIOS (IANA)
+        // ==========================================
         const stationTimezones = {
             'SAL': 'America/El_Salvador',
             'SAP': 'America/Tegucigalpa',
@@ -778,6 +648,9 @@
             return stationTimezones[code] || Intl.DateTimeFormat().resolvedOptions().timeZone;
         }
 
+        // ==========================================
+        // RELOJ ZULU (UTC) GLOBAL
+        // ==========================================
         function updateZuluClock() {
             const now = new Date();
             const hr = String(now.getUTCHours()).padStart(2, '0');
@@ -837,129 +710,6 @@
         }
         ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
 
-        // LÓGICA DE SUPERVISOR CON CALLBACK (REDISEÑADA)
-        function ejecutarAccionSegura(idVuelo, nombreAccion, callback) {
-            const card = document.getElementById(`card_vuelo_${idVuelo}`);
-            const isDespachado = card && card.getAttribute('data-despachado') === 'true';
-
-            if (isDespachado) {
-                if (['admin', 'supervisor', 'supervisor_local'].includes(miRol)) {
-                    showCustomConfirm(
-                        "Modo Auditoría Supervisor",
-                        `Esta tarjeta ya fue despachada.<br><br>Cualquier modificación de '<b>${nombreAccion}</b>' quedará registrada en el sistema.<br><br>¿Desea continuar?`,
-                        "Continuar y Registrar",
-                        "#8B5CF6",
-                        () => {
-                            registrarEventoHistorial(idVuelo, `SUP-OVERRIDE: ${nombreAccion}`);
-                            if(callback) callback();
-                        }
-                    );
-                } else {
-                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para ediciones directas de la sección Outbound.", "error");
-                }
-            } else {
-                if(callback) callback();
-            }
-        }
-
-        // FUNCIÓN BROADCAST DE HISTORIAL EN VIVO
-        function registrarEventoHistorial(idVuelo, accionTexto, omitirBroadcast = false) {
-            if(!historyLogStore[idVuelo]) historyLogStore[idVuelo] = [];
-            const now = new Date();
-            const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-            
-            historyLogStore[idVuelo].unshift({ time: timeStr, user: miNombre, action: accionTexto });
-            actualizarBotonHistorialUI(idVuelo);
-
-            // Refrescar modal si está abierto actualmente para este vuelo
-            if (document.getElementById('historyModal').style.display === 'flex' && 
-                document.getElementById('modalHistoryTitle').innerText.includes(idVuelo)) {
-                abrirModalHistorial(idVuelo, idVuelo); 
-            }
-
-            // Emitir por WebSockets (Broadcast) a otros usuarios
-            if (!omitirBroadcast && canalVivo) {
-                canalVivo.send({
-                    type: 'broadcast',
-                    event: 'nuevo-historial',
-                    payload: { idVuelo, accionTexto, user: miNombre, time: timeStr }
-                });
-            }
-        }
-
-        function actualizarBotonHistorialUI(idVuelo) {
-            const lbl = document.getElementById(`lbl_last_hist_${idVuelo}`);
-            if(!lbl) return;
-            const logs = historyLogStore[idVuelo] || [];
-            if(logs.length > 0) {
-                lbl.innerHTML = `Último: <b>${logs[0].user}</b> (${logs[0].action})`;
-            } else {
-                lbl.innerText = "Sin interacciones grabadas";
-            }
-        }
-
-        function abrirModalHistorial(idVuelo, numeroVuelo) {
-            const modal = document.getElementById('historyModal');
-            const title = document.getElementById('modalHistoryTitle');
-            const list = document.getElementById('modalHistoryList');
-            
-            title.innerText = `Historial de Actividad - Vuelo ${numeroVuelo}`;
-            const logs = historyLogStore[idVuelo] || [];
-            
-            if(logs.length === 0) {
-                list.innerHTML = `<li style="text-align:center; color:#64748B; padding:20px;">Sin interacciones registradas en esta sesión.</li>`;
-            } else {
-                list.innerHTML = logs.map(l => `
-                    <li class="history-list-item">
-                        <div>
-                            <div class="user-act">${l.user}</div>
-                            <div class="action-act">${l.action}</div>
-                        </div>
-                        <div class="time-act">${l.time}</div>
-                    </li>
-                `).join('');
-            }
-            modal.style.display = 'flex';
-        }
-
-        function cerrarModalHistorial() {
-            document.getElementById('historyModal').style.display = 'none';
-        }
-
-        // INICIALIZACIÓN CANAL DE SUPABASE (LISTENER Y BROADCAST)
-        function iniciarCanalVivo() {
-            if (canalVivo) return;
-            canalVivo = supabaseClient.channel('tablero-vivo');
-            
-            // Escuchar el Historial en Vivo (Broadcast)
-            canalVivo.on('broadcast', { event: 'nuevo-historial' }, (payload) => {
-                const data = payload.payload;
-                if(!historyLogStore[data.idVuelo]) historyLogStore[data.idVuelo] = [];
-                historyLogStore[data.idVuelo].unshift({ time: data.time, user: data.user, action: data.accionTexto });
-                actualizarBotonHistorialUI(data.idVuelo);
-                
-                if (document.getElementById('historyModal').style.display === 'flex') {
-                    const list = document.getElementById('modalHistoryList');
-                    list.innerHTML = historyLogStore[data.idVuelo].map(l => `
-                        <li class="history-list-item">
-                            <div>
-                                <div class="user-act">${l.user}</div>
-                                <div class="action-act">${l.action}</div>
-                            </div>
-                            <div class="time-act">${l.time}</div>
-                        </li>
-                    `).join('');
-                }
-            });
-
-            // Escuchar Actualización de Cambios en Vivo (Supabase Realtime)
-            canalVivo.on('postgres_changes', { event: '*', schema: 'public', table: 'vuelos_operaciones' }, (payload) => {
-                cargarVuelosActivos();
-            });
-
-            canalVivo.subscribe();
-        }
-
         async function inicializarDashboard() {
             resetInactivityTimers();
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -990,11 +740,8 @@
                     configurarSelectorEstacionInteligente();
                 }
             } catch (err) {}
-            
             document.getElementById('fecha').valueAsDate = new Date();
-            iniciarCanalVivo(); 
-            await cargarFlotaAviones(); 
-            cargarVuelosActivos();
+            await cargarFlotaAviones(); cargarVuelosActivos();
         }
 
         function configurarSelectorEstacionInteligente() {
@@ -1061,6 +808,10 @@
             } catch (err) { showCustomAlert("Error en Base de Datos", err.message, "error"); } finally { btn.disabled = false; btn.innerText = "Inicializar Tarjeta"; }
         });
 
+        // ==========================================
+        // MOTOR DE CONVERSIÓN DE ZONAS HORARIAS NATIVO
+        // ==========================================
+        
         function getStationOffsetMinutes(dateObj, stationCode) {
             const tz = getStationTimezone(stationCode);
             const utcDateStr = dateObj.toLocaleString('en-US', { timeZone: 'UTC' });
@@ -1101,12 +852,15 @@
             return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
         }
 
-        function marcarTiempoAhora(inputId, idVuelo) {
+        // ==========================================
+        // FUNCIONES DE INTERFAZ DEL MOTOR DE TIEMPO
+        // ==========================================
+
+        function marcarTiempoAhora(inputId) {
             const nowUtc = new Date().toISOString();
             const localStr = convertUTCToStationLocal(nowUtc, estacionActual);
             document.getElementById(inputId).value = localStr;
             actualizarLabelZulu(inputId);
-            registrarEventoHistorial(idVuelo, "Marca de tiempo (AHORA)");
         }
 
         function formatDateTimeLocal(isoString) {
@@ -1129,18 +883,20 @@
             label.innerText = `(${hr}:${mn} Z)`;
         }
 
+        // ==========================================
+        // FLUJO DE DATOS Y TARJETAS
+        // ==========================================
+
         async function toggleOperacion(idVuelo, tipoOp, estadoActual) {
-            ejecutarAccionSegura(idVuelo, "Cambio Tipo Operación", async () => {
-                const columna = tipoOp === 'export' ? 'aplica_export' : 'aplica_import';
-                const nuevoEstado = !estadoActual;
-                try {
-                    const { error } = await supabaseClient.from('vuelos_operaciones').update({ [columna]: nuevoEstado }).eq('id', idVuelo);
-                    if (error) throw error;
-                    registrarEventoHistorial(idVuelo, `Conmutación ${tipoOp.toUpperCase()}: ${nuevoEstado ? 'ON' : 'OFF'}`);
-                } catch (e) {
-                    showCustomAlert("Error de Sistema", "No se pudo actualizar el tipo de operación.", "error");
-                }
-            });
+            const columna = tipoOp === 'export' ? 'aplica_export' : 'aplica_import';
+            const nuevoEstado = !estadoActual;
+            try {
+                const { error } = await supabaseClient.from('vuelos_operaciones').update({ [columna]: nuevoEstado }).eq('id', idVuelo);
+                if (error) throw error;
+                cargarVuelosActivos();
+            } catch (e) {
+                showCustomAlert("Error de Sistema", "No se pudo actualizar el tipo de operación.", "error");
+            }
         }
 
         async function cargarVuelosActivos() {
@@ -1165,10 +921,7 @@
                 const displayCardBtns = canModify ? `flex` : `none`;
 
                 vuelosActivos.forEach(v => {
-                    const currentStatus = (v.estado || "APERTURADO").toUpperCase();
-                    const isDespachado = (currentStatus === 'DESPACHADO');
-                    const isSupervisorOrAdmin = ['admin', 'supervisor', 'supervisor_local'].includes(miRol);
-
+                    const currentStatus = v.estado || "APERTURADO";
                     let statusClass = "status-aperturado";
                     if (currentStatus === "ARMANDO CARGA") statusClass = "status-armando";
                     if (currentStatus === "DESPACHADO") statusClass = "status-despachado";
@@ -1187,133 +940,82 @@
                     const displayMsgExport = exportActivo ? 'none' : 'block';
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
-                    // Variables limpias para los event listeners (prevención de bugs de UI por comillas en la BD)
-                    const safeId = v.id;
-                    const safeVueloId = (v.vuelo_id || '').replace(/'/g, "\\'");
-                    const safeRuta = (v.ruta || '').replace(/'/g, "\\'");
-                    const safeTail = (v.matricula_avion || '').replace(/'/g, "\\'");
-                    const safeFecha = v.fecha || '';
-                    const safeStatus = currentStatus.replace(/'/g, "\\'");
-
+                    // Lógica del botón de despacho (Para que solo se pulse 1 vez)
                     let btnDespacharHtml = '';
-                    if (isDespachado) {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo is-despachado" disabled>✓ VUELO DESPACHADO (OUTBOUND)</button>`;
+                    if (currentStatus === 'DESPACHADO' || currentStatus === 'EN IMPORTACION') {
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>Vuelo Despachado</button>`;
                     } else {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="ejecutarWrapperDespacho('${safeId}', '${safeVueloId}', '${safeRuta}', '${safeTail}')">DESPACHAR VUELO (OUTBOUND LISTO)</button>`;
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
                     }
 
-                    const stArmadoDone = currentStatus === 'ARMANDO CARGA' || isDespachado;
-                    const stImportDone = (v.hora_fin_lotificada != null);
-                    const stImportInProg = (v.hora_inicio_lotificada != null);
-
-                    const card = document.createElement('div'); 
-                    
-                    let cardClasses = `vuelo-card`;
-                    if (isDespachado && isSupervisorOrAdmin) {
-                        cardClasses += ` card-supervisor-locked`;
-                    }
-                    card.className = cardClasses;
-                    card.id = `card_vuelo_${v.id}`;
-                    card.setAttribute('data-despachado', isDespachado ? 'true' : 'false');
-
-                    const outboundDisabledClass = (isDespachado && !isSupervisorOrAdmin) ? 'outbound-section-disabled' : '';
-
+                    const card = document.createElement('div'); card.className = 'vuelo-card';
                     card.innerHTML = `
                         <div class="vuelo-card-header">
                             <div class="header-left-side">
-                                <div class="vuelo-title-badge">
-                                    <span>${v.vuelo_id}</span>
-                                    <span class="vuelo-tail-highlight">TAIL: ${v.matricula_avion}</span>
-                                    ${badgeEstacion}
-                                </div>
+                                <h3 class="vuelo-title">${v.vuelo_id} ${badgeEstacion}</h3>
                                 <div class="header-badges-wrapper">
+                                    <span class="vuelo-tail">TAIL: ${v.matricula_avion}</span>
                                     <span class="status-badge ${statusClass}">${currentStatus}</span>
                                 </div>
                             </div>
                             <div class="card-controls" style="display: ${displayCardBtns};">
-                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${safeId}', '${safeVueloId}', '${safeTail}', '${safeRuta}', '${safeFecha}')" title="Editar Vuelo">
+                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')" title="Editar Vuelo">
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                                 </button>
-                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${safeId}', '${safeVueloId}')" title="Eliminar Vuelo">
+                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')" title="Eliminar Vuelo">
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                                 </button>
                             </div>
                         </div>
-
-                        <!-- STEPPER HORIZONTAL INTEGRI-PROCESS -->
-                        <div class="process-stepper-container">
-                            <div class="process-step ${stArmadoDone ? 'completed' : (currentStatus === 'ARMANDO CARGA' ? 'active' : 'pending')}">
-                                <span class="step-icon-dot"></span>
-                                <span>1. Armado</span>
-                            </div>
-                            <span class="step-connector"></span>
-                            <div class="process-step completed">
-                                <span class="step-icon-dot"></span>
-                                <span>2. Inspección</span>
-                            </div>
-                            <span class="step-connector"></span>
-                            <div class="process-step ${isDespachado ? 'completed' : 'pending'}">
-                                <span class="step-icon-dot"></span>
-                                <span>3. Despacho</span>
-                            </div>
-                            <span class="step-connector"></span>
-                            <div class="process-step ${stImportDone ? 'completed' : (stImportInProg ? 'active' : 'pending')}">
-                                <span class="step-icon-dot"></span>
-                                <span>4. Import</span>
-                            </div>
-                        </div>
-
                         <div class="vuelo-card-body">
                             <div class="vuelo-meta-info">
                                 <div><span>Ruta Op:</span><strong>${v.ruta || "N/A"}</strong></div>
                                 <div><span>Fecha Op:</span><strong>${v.fecha}</strong></div>
                             </div>
 
-                            <!-- BLOQUE SUPERIOR DESHABILITADO PARA USUARIO SI YA FUE DESPACHADO -->
-                            <div class="${outboundDisabledClass}">
-                                <div class="toggle-group">
-                                    <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${safeId}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
-                                    <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${safeId}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
-                                </div>
+                            <div class="toggle-group">
+                                <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
+                                <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
+                            </div>
 
-                                <!-- PASO 1 -->
-                                <div class="step-container">
-                                    <div class="step-header">
-                                        <div class="step-number">1</div>
-                                        <div class="step-title">Procesamiento Inicial</div>
-                                    </div>
-                                    <div style="display: ${displayExport};">
-                                        <button class="action-btn btn-start-armado" onclick="irAlArmado('${safeId}')">Iniciar Armado y Manifiesto ULD</button>
-                                    </div>
-                                    <div style="display: ${displayMsgExport};">
-                                        <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
-                                    </div>
+                            <!-- PASO 1 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Procesamiento Inicial</div>
                                 </div>
-                                
-                                <!-- PASO 2 -->
-                                <div class="step-container">
-                                    <div class="step-header">
-                                        <div class="step-number">2</div>
-                                        <div class="step-title">Inspecciones y Equipo</div>
-                                    </div>
-                                    <div class="actions-subgrid">
-                                        <button onclick="ejecutarAccionSegura('${safeId}', 'Ir a Inspección', () => { window.location.href='inspeccion_avion.html?id=${safeId}' })" class="action-btn btn-inspect">Inspección Física</button>
-                                        <button onclick="ejecutarAccionSegura('${safeId}', 'Ir a Detalle Tiempos', () => { window.location.href='detalle_vuelo_tiempos.html?id=${safeId}' })" class="action-btn btn-com">Detalle Vuelo Tiempos</button>
-                                        <button onclick="ejecutarAccionSegura('${safeId}', 'Ir a Equipos GSE', () => { window.location.href='gse_equipos.html?id=${safeId}' })" class="action-btn btn-gse">Equipos GSE</button>
-                                    </div>
+                                <div style="display: ${displayExport};">
+                                    <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">Iniciar Armado y Manifiesto ULD</button>
                                 </div>
-
-                                <!-- PASO 3 -->
-                                <div class="step-container">
-                                    <div class="step-header">
-                                        <div class="step-number">3</div>
-                                        <div class="step-title">Salida de Aeronave (Outbound)</div>
-                                    </div>
-                                    ${btnDespacharHtml}
+                                <div style="display: ${displayMsgExport};">
+                                    <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- PASO 2 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Inspecciones y Equipo</div>
+                                </div>
+                                <div class="actions-subgrid">
+                                    <a href="inspeccion_avion.html?id=${v.id}" class="action-btn btn-inspect">Inspección Física</a>
+                                    <!-- AQUI SE REEMPLAZÓ EL COM-106 POR EL NUEVO DETALLE DE VUELO -->
+                                    <a href="detalle_vuelo_tiempos.html?id=${v.id}" class="action-btn btn-com">Detalle de Vuelo Tiempos</a>
+                                    <a href="gse_equipos.html?id=${v.id}" class="action-btn btn-gse">Equipos GSE</a>
                                 </div>
                             </div>
 
-                            <!-- PASO 4 (IMPORTACION - ESTILO GENERICO Y SIEMPRE HABILITADO) -->
+                            <!-- PASO 3 -->
+                            <div class="step-container">
+                                <div class="step-header">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">Salida de Aeronave</div>
+                                </div>
+                                ${btnDespacharHtml}
+                            </div>
+
+                            <!-- PASO 4 -->
                             <div class="step-container">
                                 <div class="step-header">
                                     <div class="step-number">4</div>
@@ -1328,7 +1030,7 @@
                                                     <input type="datetime-local" id="t_inicio_${v.id}" value="${hInicio}" onchange="actualizarLabelZulu('t_inicio_${v.id}')">
                                                     <span id="zulu_lbl_t_inicio_${v.id}" style="font-size:10px; color:#1D4ED8; font-weight:800; margin-top:4px;">(00:00 Z)</span>
                                                 </div>
-                                                <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_inicio_${v.id}', '${v.id}')">AHORA</button>
+                                                <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_inicio_${v.id}')">AHORA</button>
                                             </div>
                                         </div>
                                         <div class="time-input-group">
@@ -1338,10 +1040,10 @@
                                                     <input type="datetime-local" id="t_fin_${v.id}" value="${hFin}" onchange="actualizarLabelZulu('t_fin_${v.id}')">
                                                     <span id="zulu_lbl_t_fin_${v.id}" style="font-size:10px; color:#1D4ED8; font-weight:800; margin-top:4px;">(00:00 Z)</span>
                                                 </div>
-                                                <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}', '${v.id}')">AHORA</button>
+                                                <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}')">AHORA</button>
                                             </div>
                                         </div>
-                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Guardar Tiempos Import</button>
+                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Sincronizar Tiempos</button>
                                     </div>
                                 </div>
                                 <div style="display: ${displayMsgImport};">
@@ -1350,22 +1052,15 @@
                             </div>
 
                             <!-- PASO 5 -->
-                            <div style="margin-top: 15px;">
-                                <button class="btn-close-flight" onclick="ejecutarWrapperCierre('${safeId}', '${safeVueloId}', '${safeRuta}', '${safeTail}', '${safeStatus}')">Finalizar Operación</button>
+                            <div style="margin-top: 20px;">
+                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Operación Definitivamente</button>
                             </div>
-
-                            <!-- BOTÓN DE VER HISTORIAL COMPLETO -->
-                            <button type="button" class="btn-history-trigger" onclick="abrirModalHistorial('${safeId}', '${safeVueloId}')">
-                                <span>📋 Ver Historial del Vuelo</span>
-                                <span id="lbl_last_hist_${v.id}" style="font-size:9px; text-transform:none; font-weight:normal; opacity:0.8;">Sin interacciones grabadas</span>
-                            </button>
-
                         </div>
                     `;
                     grid.appendChild(card);
-                    actualizarBotonHistorialUI(v.id);
                 });
 
+                // Inicializar labels Zulu visualmente al cargar
                 vuelosActivos.forEach(v => {
                     actualizarLabelZulu(`t_inicio_${v.id}`);
                     actualizarLabelZulu(`t_fin_${v.id}`);
@@ -1374,22 +1069,14 @@
             } catch (err) { grid.innerHTML = `<p style="color:var(--amerijet-red); font-weight:bold; padding:20px; text-align:center;">Error de sincronización de base de datos.</p>`; }
         }
 
-        async function irAlArmado(idVuelo) { 
-            ejecutarAccionSegura(idVuelo, "Iniciar Armado", async () => {
-                try { 
-                    const card = document.getElementById(`card_vuelo_${idVuelo}`);
-                    const isDespachado = card && card.getAttribute('data-despachado') === 'true';
-                    if (!isDespachado) {
-                        await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); 
-                    }
-                    registrarEventoHistorial(idVuelo, "Apertura módulo Armado");
-                    window.location.href = `tiempo_armado.html?id=${idVuelo}`; 
-                } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } 
-            });
-        }
+        async function irAlArmado(idVuelo) { try { await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); window.location.href = `tiempo_armado.html?id=${idVuelo}`; } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } }
         
+        // ==========================================
+        // LA NUEVA FUNCIÓN PARA ELIMINAR LAS FOTOS
+        // ==========================================
         async function limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo) {
             try {
+                // 1. Limpiar fotos de incidencias temporales
                 const { data: logs } = await supabaseClient.from('avion_inspecciones')
                     .select('id, notas_adicionales')
                     .eq('vuelo_operacion_id', idVuelo)
@@ -1411,6 +1098,7 @@
                     }
                 }
 
+                // 2. Limpiar fotos de daños estructurales reportados en ESTE vuelo específico
                 const { data: danos } = await supabaseClient.from('avion_danos')
                     .select('id, evidencia')
                     .eq('matricula_avion', matriculaAvion)
@@ -1421,9 +1109,11 @@
                         if (d.evidencia) {
                             try {
                                 let ev = JSON.parse(d.evidencia);
+                                // Vaciamos todas las fotos
                                 ev.fotos = [];
                                 ev.imgAvion = null;
                                 ev.imgPaleta = null;
+                                // Actualizamos la base de datos solo guardando el texto
                                 await supabaseClient.from('avion_danos').update({ evidencia: JSON.stringify(ev) }).eq('id', d.id);
                             } catch(e) {}
                         }
@@ -1457,10 +1147,7 @@
                             let dest = stackData.destino ? stackData.destino.toUpperCase() : destinoDefault;
                             let uldsArray = stackData.ulds || stackData || []; 
                             if (!uldsPorDestino[dest]) uldsPorDestino[dest] = new Set();
-                            uldsArray.forEach(u => {
-                                let uldNum = u.uld || u; // <-- CORRECCIÓN: Extracción segura como texto para evitar objetos 
-                                uldsPorDestino[dest].add(uldNum);
-                            });
+                            uldsArray.forEach(u => uldsPorDestino[dest].add(u));
                         }
                     }
                 });
@@ -1480,34 +1167,26 @@
             } catch (e) { console.error("Fallo de transferencia cruzada:", e); }
         }
 
-        function ejecutarWrapperDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
-            showCustomConfirm(
-                "Validación de Seguridad",
-                `¿Se han verificado todos los procesos de rampa obligatorios antes de despachar el vuelo <b>${numeroVuelo}</b>?`,
-                "Sí, Despachar",
-                "var(--amerijet-blue)",
-                () => {
-                    confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion);
-                }
-            );
-        }
-
         function confirmarDespacho(idVuelo, numeroVuelo, ruta, matriculaAvion) {
             showCustomConfirm(
                 "Despachar Outbound", 
-                `Se confirmará el despacho del vuelo <b>${numeroVuelo}</b>.<br><br><i>NOTA LOGÍSTICA: Se purgará la memoria fotográfica y <b>los ULDs armados pasarán a estado IN TRANSIT</b>.</i>`, 
+                `Se confirmará el despacho del vuelo <b>${numeroVuelo}</b>.<br><br><i>NOTA LOGÍSTICA: La memoria fotográfica temporal será limpiada para liberar espacio en la base de datos y <b>los ULDs armados pasarán a estado IN TRANSIT hacia sus destinos correspondientes</b>.</i>`, 
                 "Ejecutar Despacho", 
                 "var(--amerijet-blue)",
                 async () => {
                     try {
+                        // 1. Borramos las fotos dejando solo el texto del reporte.
                         await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
+                        
+                        // 2. Transferimos los ULDs.
                         await transferirULDsAlDespachar(idVuelo, ruta);
 
+                        // 3. Cambiamos el estatus a despachado para bloquear el botón.
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'DESPACHADO' }).eq('id', idVuelo);
                         if(error) throw error;
                         
-                        registrarEventoHistorial(idVuelo, "Vuelo Despachado (Outbound)");
-                        showCustomAlert("Proceso Completado", "Vuelo despachado correctamente.", "success");
+                        cargarVuelosActivos();
+                        showCustomAlert("Proceso Completado", "Vuelo despachado, memoria fotográfica purgada y ULDs en tránsito.", "success");
                     } catch(e) { showCustomAlert("Fallo de Despacho", e.message, "error"); }
                 }
             );
@@ -1521,49 +1200,28 @@
             const hFinUTC = hFin ? convertStationLocalToUTC(hFin, estacionActual) : null;
 
             try { 
-                // Únicamente se actualizan los tiempos de importación sin tocar el estado del vuelo.
-                const { error } = await supabaseClient.from('vuelos_operaciones').update({ 
-                    hora_inicio_lotificada: hInicioUTC, 
-                    hora_fin_lotificada: hFinUTC 
-                }).eq('id', idVuelo); 
-
+                const { error } = await supabaseClient.from('vuelos_operaciones').update({ hora_inicio_lotificada: hInicioUTC, hora_fin_lotificada: hFinUTC, estado: 'EN IMPORTACION' }).eq('id', idVuelo); 
                 if(error) throw error;
-                registrarEventoHistorial(idVuelo, "Tiempos Importación Sincronizados");
-                showCustomAlert("Sincronizado", "Los tiempos de importación se guardaron correctamente sin alterar el estado de despacho.", "success");
+                cargarVuelosActivos(); 
+                showCustomAlert("Sincronizado", "Los tiempos se guardaron en la base de datos central.", "success");
             } catch(e) { showCustomAlert("Error de Red", e.message, "error"); } 
-        }
-
-        function ejecutarWrapperCierre(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) {
-            if(estadoActual !== 'DESPACHADO') {
-                showCustomConfirm(
-                    "Advertencia de Flujo",
-                    `El vuelo <b>${numeroVuelo}</b> no ha marcado su despacho Outbound.<br><br>Si continúa, el sistema ejecutará el despacho y purga automática en este momento.<br><br>¿Desea forzar el cierre?`,
-                    "Forzar Cierre",
-                    "var(--amerijet-red)",
-                    () => {
-                        finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
-                    }
-                );
-                return;
-            }
-            finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual);
         }
 
         function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) { 
             showCustomConfirm(
                 "Cierre Total de Operación", 
-                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.`, 
+                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">Si olvidaste despachar el vuelo, el sistema ejecutará el despacho y borrado de fotos automáticamente ahora.</span>`, 
                 "Finalizar Operación", 
                 "var(--amerijet-red)",
                 async () => {
                     try { 
-                        if (estadoActual !== 'DESPACHADO') {
+                        if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION') {
                             await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
                             await transferirULDsAlDespachar(idVuelo, ruta);
                         }
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
                         if (error) throw error;
-                        registrarEventoHistorial(idVuelo, "Operación Finalizada y Archivada");
+                        cargarVuelosActivos(); 
                         showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
                     } catch(e) { showCustomAlert("Error de Cierre", e.message, "error"); }
                 }
@@ -1571,67 +1229,63 @@
         }
 
         function eliminarVuelo(id, vuelo_id) { 
-            ejecutarAccionSegura(id, "Eliminar Registro de Vuelo", () => {
-                showCustomConfirm(
-                    "Eliminación de Registros", 
-                    `Esta acción purgará el vuelo <b>${vuelo_id}</b> de la base de datos local.<br><br><i><b>NOTA DE SISTEMA:</b> Los ULDs atados a esta tarjeta se liberarán a estado EMPTY.</i>`, 
-                    "Confirmar Eliminación", 
-                    "var(--amerijet-red)",
-                    async () => {
-                        try { 
-                            const { data: armados } = await supabaseClient.from('tiempos_armado').select('ulds_armados, stacks_armados').eq('vuelo_operacion_id', id);
-                            let uldsToFree = [];
-                            if (armados) {
-                                armados.forEach(a => {
-                                    if (a.ulds_armados) {
-                                        a.ulds_armados.forEach(item => {
-                                            let uldStr = item.uld || item;
-                                            if(uldStr && typeof uldStr === 'string') uldsToFree.push(uldStr);
-                                        });
-                                    }
-                                    if (a.stacks_armados) {
-                                        Object.values(a.stacks_armados).forEach(stack => {
-                                            let arr = stack.ulds || stack || [];
-                                            arr.forEach(u => uldsToFree.push(u.uld || u)); // <-- CORRECCIÓN: Extracción segura a cadena de texto
-                                        });
-                                    }
-                                });
-                            }
-                            
-                            if (uldsToFree.length > 0) {
-                                await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', uldsToFree);
-                            }
+            showCustomConfirm(
+                "Eliminación de Registros", 
+                `Esta acción purgará el vuelo <b>${vuelo_id}</b> de la base de datos local.<br><br><i><b>NOTA DE SISTEMA:</b> Los ULDs atados a esta tarjeta se liberarán a estado EMPTY en su ubicación actual. Los registros de daños estructurales de fuselaje se mantienen protegidos.</i>`, 
+                "Confirmar Eliminación", 
+                "var(--amerijet-red)",
+                async () => {
+                    try { 
+                        const { data: armados } = await supabaseClient.from('tiempos_armado').select('ulds_armados, stacks_armados').eq('vuelo_operacion_id', id);
+                        let uldsToFree = [];
+                        if (armados) {
+                            armados.forEach(a => {
+                                if (a.ulds_armados) {
+                                    a.ulds_armados.forEach(item => {
+                                        let uldStr = item.uld || item;
+                                        if(uldStr && typeof uldStr === 'string') uldsToFree.push(uldStr);
+                                    });
+                                }
+                                if (a.stacks_armados) {
+                                    Object.values(a.stacks_armados).forEach(stack => {
+                                        let arr = stack.ulds || stack || [];
+                                        uldsToFree.push(...arr);
+                                    });
+                                }
+                            });
+                        }
+                        
+                        if (uldsToFree.length > 0) {
+                            await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', uldsToFree);
+                        }
 
-                            await supabaseClient.from('tiempos_armado').delete().eq('vuelo_operacion_id', id);
-                            await supabaseClient.from('com106_formularios').delete().eq('vuelo_operacion_id', id);
-                            await supabaseClient.from('vuelos_gse').delete().eq('vuelo_operacion_id', id);
-                            await supabaseClient.from('avion_inspecciones').delete().eq('vuelo_operacion_id', id);
-                            const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
-                            if(error) throw error;
-                            
-                            showCustomAlert("Purga Finalizada", "Registros eliminados y unidades liberadas en rampa.", "success");
-                        } catch(e) { showCustomAlert("Fallo Crítico", e.message, "error"); }
-                    }
-                );
-            });
+                        await supabaseClient.from('tiempos_armado').delete().eq('vuelo_operacion_id', id);
+                        await supabaseClient.from('com106_formularios').delete().eq('vuelo_operacion_id', id);
+                        await supabaseClient.from('vuelos_gse').delete().eq('vuelo_operacion_id', id);
+                        await supabaseClient.from('avion_inspecciones').delete().eq('vuelo_operacion_id', id);
+                        const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
+                        if(error) throw error;
+                        
+                        cargarVuelosActivos(); 
+                        showCustomAlert("Purga Finalizada", "Registros eliminados y unidades liberadas en rampa.", "success");
+                    } catch(e) { showCustomAlert("Fallo Crítico", e.message, "error"); }
+                }
+            );
         }
 
         function abrirModalEdit(id, vuelo, tail, ruta, fecha) { 
-            ejecutarAccionSegura(id, "Modificar Datos de Tarjeta", () => {
-                document.getElementById('edit_id').value = id; 
-                document.getElementById('edit_vuelo_id').value = vuelo; 
-                document.getElementById('edit_matricula_avion').value = tail; 
-                document.getElementById('edit_ruta').value = ruta; 
-                document.getElementById('edit_fecha').value = fecha;
-                document.getElementById('editModal').style.display = 'flex'; 
-            });
+            document.getElementById('edit_id').value = id; 
+            document.getElementById('edit_vuelo_id').value = vuelo; 
+            document.getElementById('edit_matricula_avion').value = tail; 
+            document.getElementById('edit_ruta').value = ruta; 
+            document.getElementById('edit_fecha').value = fecha;
+            document.getElementById('editModal').style.display = 'flex'; 
         }
         
         function cerrarModal() { document.getElementById('editModal').style.display = 'none'; }
         
         document.getElementById('formEditVuelo').addEventListener('submit', async function(e) { 
             e.preventDefault(); 
-            const editId = document.getElementById('edit_id').value;
             const btn = document.getElementById('btnModalSave'); btn.disabled = true; btn.innerText = "Sincronizando...";
             try { 
                 const {error} = await supabaseClient.from('vuelos_operaciones').update({ 
@@ -1639,11 +1293,10 @@
                     matricula_avion: document.getElementById('edit_matricula_avion').value, 
                     ruta: document.getElementById('edit_ruta').value.toUpperCase(),
                     fecha: document.getElementById('edit_fecha').value
-                }).eq('id', editId); 
+                }).eq('id', document.getElementById('edit_id').value); 
                 
                 if(error) throw error; 
-                registrarEventoHistorial(editId, "Edición de metadatos de tarjeta");
-                cerrarModal(); showCustomAlert("Base de Datos", "Los registros se actualizaron correctamente.", "success");
+                cerrarModal(); cargarVuelosActivos(); showCustomAlert("Base de Datos", "Los registros se actualizaron correctamente.", "success");
             } catch (err) { showCustomAlert("Error SQL", err.message, "error"); } 
             finally { btn.disabled = false; btn.innerText = "Guardar Cambios"; }
         });
