@@ -940,12 +940,18 @@
                     const displayMsgExport = exportActivo ? 'none' : 'block';
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
-                    // Lógica del botón de despacho (Para que solo se pulse 1 vez)
+                    // ==========================================
+                    // SOLUCIÓN: LÓGICA AISLADA DE DESPACHO
+                    // Evita bloquearse si solo guardaron la importación.
+                    // Prioriza la DB y un respaldo local para la persistencia.
+                    // ==========================================
+                    const yaDespachado = (currentStatus === 'DESPACHADO') || (v.despachado === true) || (localStorage.getItem(`despachado_${v.id}`) === 'true');
+
                     let btnDespacharHtml = '';
-                    if (currentStatus === 'DESPACHADO' || currentStatus === 'EN IMPORTACION') {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>Vuelo Despachado</button>`;
+                    if (yaDespachado) {
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" style="background: #10B981; cursor: not-allowed;" disabled>✅ Vuelo Despachado</button>`;
                     } else {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="confirmarDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">Despachar Vuelo (Outbound Listo)</button>`;
                     }
 
                     const card = document.createElement('div'); card.className = 'vuelo-card';
@@ -1174,6 +1180,10 @@
                 "Ejecutar Despacho", 
                 "var(--amerijet-blue)",
                 async () => {
+                    // Pre-bloqueamos el botón visualmente para evitar un doble-clic erróneo
+                    const btn = document.getElementById(`btn_despacho_${idVuelo}`);
+                    if(btn) { btn.disabled = true; btn.innerText = "Despachando..."; }
+
                     try {
                         // 1. Borramos las fotos dejando solo el texto del reporte.
                         await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
@@ -1181,13 +1191,20 @@
                         // 2. Transferimos los ULDs.
                         await transferirULDsAlDespachar(idVuelo, ruta);
 
-                        // 3. Cambiamos el estatus a despachado para bloquear el botón.
+                        // 3. Cambiamos el estatus
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'DESPACHADO' }).eq('id', idVuelo);
                         if(error) throw error;
+
+                        // GUARDIA DE PERSISTENCIA: Registramos en el localStorage que este idVuelo ya se despachó.
+                        // Si Sincronizar Tiempos cambia el estado a EN IMPORTACION después, el botón no perderá su bloqueo.
+                        localStorage.setItem(`despachado_${idVuelo}`, 'true');
                         
                         cargarVuelosActivos();
                         showCustomAlert("Proceso Completado", "Vuelo despachado, memoria fotográfica purgada y ULDs en tránsito.", "success");
-                    } catch(e) { showCustomAlert("Fallo de Despacho", e.message, "error"); }
+                    } catch(e) { 
+                        if(btn) { btn.disabled = false; btn.innerText = "Despachar Vuelo (Outbound Listo)"; }
+                        showCustomAlert("Fallo de Despacho", e.message, "error"); 
+                    }
                 }
             );
         }
@@ -1215,12 +1232,16 @@
                 "var(--amerijet-red)",
                 async () => {
                     try { 
-                        if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION') {
+                        const yaDespachado = localStorage.getItem(`despachado_${idVuelo}`) === 'true';
+                        if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION' && !yaDespachado) {
                             await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
                             await transferirULDsAlDespachar(idVuelo, ruta);
                         }
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
                         if (error) throw error;
+                        
+                        localStorage.removeItem(`despachado_${idVuelo}`); // Limpieza
+                        
                         cargarVuelosActivos(); 
                         showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
                     } catch(e) { showCustomAlert("Error de Cierre", e.message, "error"); }
@@ -1265,6 +1286,8 @@
                         await supabaseClient.from('avion_inspecciones').delete().eq('vuelo_operacion_id', id);
                         const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
                         if(error) throw error;
+                        
+                        localStorage.removeItem(`despachado_${id}`); // Limpieza
                         
                         cargarVuelosActivos(); 
                         showCustomAlert("Purga Finalizada", "Registros eliminados y unidades liberadas en rampa.", "success");
