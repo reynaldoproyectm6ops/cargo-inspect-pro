@@ -758,6 +758,7 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         let misEstaciones = []; let estacionActual = "SAL"; let miRol = "USER"; let miNombre = "Usuario"; let todasLasEstacionesBD = [];
+        let canalVivo;
 
         const historyLogStore = {};
 
@@ -836,13 +837,54 @@
         }
         ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimers, false));
 
-        function registrarEventoHistorial(idVuelo, accionTexto) {
+        // LÓGICA DE SUPERVISOR CON CALLBACK (REDISEÑADA)
+        function ejecutarAccionSegura(idVuelo, nombreAccion, callback) {
+            const card = document.getElementById(`card_vuelo_${idVuelo}`);
+            const isDespachado = card && card.getAttribute('data-despachado') === 'true';
+
+            if (isDespachado) {
+                if (['admin', 'supervisor', 'supervisor_local'].includes(miRol)) {
+                    showCustomConfirm(
+                        "Modo Auditoría Supervisor",
+                        `Esta tarjeta ya fue despachada.<br><br>Cualquier modificación de '<b>${nombreAccion}</b>' quedará registrada en el sistema.<br><br>¿Desea continuar?`,
+                        "Continuar y Registrar",
+                        "#8B5CF6",
+                        () => {
+                            registrarEventoHistorial(idVuelo, `SUP-OVERRIDE: ${nombreAccion}`);
+                            if(callback) callback();
+                        }
+                    );
+                } else {
+                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para ediciones directas de la sección Outbound.", "error");
+                }
+            } else {
+                if(callback) callback();
+            }
+        }
+
+        // FUNCIÓN BROADCAST DE HISTORIAL EN VIVO
+        function registrarEventoHistorial(idVuelo, accionTexto, omitirBroadcast = false) {
             if(!historyLogStore[idVuelo]) historyLogStore[idVuelo] = [];
             const now = new Date();
             const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
             
             historyLogStore[idVuelo].unshift({ time: timeStr, user: miNombre, action: accionTexto });
             actualizarBotonHistorialUI(idVuelo);
+
+            // Refrescar modal si está abierto actualmente para este vuelo
+            if (document.getElementById('historyModal').style.display === 'flex' && 
+                document.getElementById('modalHistoryTitle').innerText.includes(idVuelo)) {
+                abrirModalHistorial(idVuelo, idVuelo); // Re-renderiza rápido
+            }
+
+            // Emitir por WebSockets (Broadcast) a otros usuarios
+            if (!omitirBroadcast && canalVivo) {
+                canalVivo.send({
+                    type: 'broadcast',
+                    event: 'nuevo-historial',
+                    payload: { idVuelo, accionTexto, user: miNombre, time: timeStr }
+                });
+            }
         }
 
         function actualizarBotonHistorialUI(idVuelo) {
@@ -861,6 +903,7 @@
             const title = document.getElementById('modalHistoryTitle');
             const list = document.getElementById('modalHistoryList');
             
+            // Usamos el id para el renderizado dinámico futuro, aunque mostramos el numero en UI si llega
             title.innerText = `Historial de Actividad - Vuelo ${numeroVuelo}`;
             const logs = historyLogStore[idVuelo] || [];
             
@@ -882,6 +925,41 @@
 
         function cerrarModalHistorial() {
             document.getElementById('historyModal').style.display = 'none';
+        }
+
+        // INICIALIZACIÓN CANAL DE SUPABASE (LISTENER Y BROADCAST)
+        function iniciarCanalVivo() {
+            if (canalVivo) return;
+            canalVivo = supabaseClient.channel('tablero-vivo');
+            
+            // Escuchar el Historial en Vivo (Broadcast)
+            canalVivo.on('broadcast', { event: 'nuevo-historial' }, (payload) => {
+                const data = payload.payload;
+                if(!historyLogStore[data.idVuelo]) historyLogStore[data.idVuelo] = [];
+                historyLogStore[data.idVuelo].unshift({ time: data.time, user: data.user, action: data.accionTexto });
+                actualizarBotonHistorialUI(data.idVuelo);
+                
+                // Actualizar el modal dinámicamente si está abierto visualizando este vuelo
+                if (document.getElementById('historyModal').style.display === 'flex') {
+                    const list = document.getElementById('modalHistoryList');
+                    list.innerHTML = historyLogStore[data.idVuelo].map(l => `
+                        <li class="history-list-item">
+                            <div>
+                                <div class="user-act">${l.user}</div>
+                                <div class="action-act">${l.action}</div>
+                            </div>
+                            <div class="time-act">${l.time}</div>
+                        </li>
+                    `).join('');
+                }
+            });
+
+            // Escuchar Actualización de Cambios (Anti-Colisiones) en Base de Datos
+            canalVivo.on('postgres_changes', { event: '*', schema: 'public', table: 'vuelos_operaciones' }, (payload) => {
+                cargarVuelosActivos();
+            });
+
+            canalVivo.subscribe();
         }
 
         async function inicializarDashboard() {
@@ -914,8 +992,11 @@
                     configurarSelectorEstacionInteligente();
                 }
             } catch (err) {}
+            
             document.getElementById('fecha').valueAsDate = new Date();
-            await cargarFlotaAviones(); cargarVuelosActivos();
+            iniciarCanalVivo(); // Iniciar WebSockets
+            await cargarFlotaAviones(); 
+            cargarVuelosActivos();
         }
 
         function configurarSelectorEstacionInteligente() {
@@ -976,6 +1057,7 @@
                 const { error } = await supabaseClient.from('vuelos_operaciones').insert([payload]); if (error) throw error;
                 document.getElementById('vuelo_id').value = ""; document.getElementById('matricula_avion').value = "";
                 actualizarRutaFormulario(); 
+                // Se comentaron los cargarVuelosActivos explícitos debido a que el listener postgres_changes lo hace solo, pero se conservan para retro-compatibilidad por seguridad
                 cargarVuelosActivos(); 
                 showCustomAlert("Proceso Completado", "La tarjeta de operación se inicializó con éxito.", "success");
                 toggleCrearVuelo(); 
@@ -1051,43 +1133,18 @@
         }
 
         async function toggleOperacion(idVuelo, tipoOp, estadoActual) {
-            if(!wrapperCheckAccion(idVuelo, "Cambio Tipo Operación")) return;
-
-            const columna = tipoOp === 'export' ? 'aplica_export' : 'aplica_import';
-            const nuevoEstado = !estadoActual;
-            try {
-                const { error } = await supabaseClient.from('vuelos_operaciones').update({ [columna]: nuevoEstado }).eq('id', idVuelo);
-                if (error) throw error;
-                registrarEventoHistorial(idVuelo, `Conmutación ${tipoOp.toUpperCase()}: ${nuevoEstado ? 'ON' : 'OFF'}`);
-                cargarVuelosActivos();
-            } catch (e) {
-                showCustomAlert("Error de Sistema", "No se pudo actualizar el tipo de operación.", "error");
-            }
-        }
-
-        function wrapperCheckAccion(idVuelo, nombreAccion) {
-            const card = document.getElementById(`card_vuelo_${idVuelo}`);
-            const isDespachado = card && card.getAttribute('data-despachado') === 'true';
-
-            if (isDespachado) {
-                if (['admin', 'supervisor', 'supervisor_local'].includes(miRol)) {
-                    showCustomConfirm(
-                        "Modo Auditoría Supervisor",
-                        `Esta tarjeta ya fue despachada.<br><br>Cualquier modificación de '<b>${nombreAccion}</b>' quedará registrada en el sistema.<br><br>¿Desea continuar?`,
-                        "Continuar y Registrar",
-                        "#8B5CF6",
-                        () => {
-                            registrarEventoHistorial(idVuelo, `SUP-OVERRIDE: ${nombreAccion}`);
-                            return true;
-                        }
-                    );
-                    return false;
-                } else {
-                    showCustomAlert("Acceso Restringido", "Esta tarjeta se encuentra despachada y bloqueada para ediciones directas de la sección Outbound.", "error");
-                    return false;
+            ejecutarAccionSegura(idVuelo, "Cambio Tipo Operación", async () => {
+                const columna = tipoOp === 'export' ? 'aplica_export' : 'aplica_import';
+                const nuevoEstado = !estadoActual;
+                try {
+                    const { error } = await supabaseClient.from('vuelos_operaciones').update({ [columna]: nuevoEstado }).eq('id', idVuelo);
+                    if (error) throw error;
+                    registrarEventoHistorial(idVuelo, `Conmutación ${tipoOp.toUpperCase()}: ${nuevoEstado ? 'ON' : 'OFF'}`);
+                    // Listener actualiza automáticamente la grilla al detectar el update
+                } catch (e) {
+                    showCustomAlert("Error de Sistema", "No se pudo actualizar el tipo de operación.", "error");
                 }
-            }
-            return true;
+            });
         }
 
         async function cargarVuelosActivos() {
@@ -1236,9 +1293,9 @@
                                         <div class="step-title">Inspecciones y Equipo</div>
                                     </div>
                                     <div class="actions-subgrid">
-                                        <button onclick="if(wrapperCheckAccion('${v.id}', 'Ir a Inspección')) window.location.href='inspeccion_avion.html?id=${v.id}'" class="action-btn btn-inspect">Inspección Física</button>
-                                        <button onclick="if(wrapperCheckAccion('${v.id}', 'Ir a Detalle Tiempos')) window.location.href='detalle_vuelo_tiempos.html?id=${v.id}'" class="action-btn btn-com">Detalle Vuelo Tiempos</button>
-                                        <button onclick="if(wrapperCheckAccion('${v.id}', 'Ir a Equipos GSE')) window.location.href='gse_equipos.html?id=${v.id}'" class="action-btn btn-gse">Equipos GSE</button>
+                                        <button onclick="ejecutarAccionSegura('${v.id}', 'Ir a Inspección', () => { window.location.href='inspeccion_avion.html?id=${v.id}' })" class="action-btn btn-inspect">Inspección Física</button>
+                                        <button onclick="ejecutarAccionSegura('${v.id}', 'Ir a Detalle Tiempos', () => { window.location.href='detalle_vuelo_tiempos.html?id=${v.id}' })" class="action-btn btn-com">Detalle Vuelo Tiempos</button>
+                                        <button onclick="ejecutarAccionSegura('${v.id}', 'Ir a Equipos GSE', () => { window.location.href='gse_equipos.html?id=${v.id}' })" class="action-btn btn-gse">Equipos GSE</button>
                                     </div>
                                 </div>
 
@@ -1252,11 +1309,11 @@
                                 </div>
                             </div>
 
-                            <!-- PASO 4 (IMPORTACION - SIEMPRE SIEMPRE HABILITADO) -->
-                            <div class="step-container" style="border-left: 3px solid #EC4899;">
+                            <!-- PASO 4 (IMPORTACION - ESTILO GENERICO Y SIEMPRE HABILITADO) -->
+                            <div class="step-container">
                                 <div class="step-header">
-                                    <div class="step-number" style="background:#EC4899;">4</div>
-                                    <div class="step-title" style="color:#EC4899;">Despaletizado (Import)</div>
+                                    <div class="step-number">4</div>
+                                    <div class="step-title">Despaletizado (Import)</div>
                                 </div>
                                 <div style="display: ${displayImport};">
                                     <div class="import-time-box">
@@ -1314,12 +1371,13 @@
         }
 
         async function irAlArmado(idVuelo) { 
-            if(!wrapperCheckAccion(idVuelo, "Iniciar Armado")) return;
-            try { 
-                await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); 
-                registrarEventoHistorial(idVuelo, "Apertura módulo Armado");
-                window.location.href = `tiempo_armado.html?id=${idVuelo}`; 
-            } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } 
+            ejecutarAccionSegura(idVuelo, "Iniciar Armado", async () => {
+                try { 
+                    await supabaseClient.from('vuelos_operaciones').update({ estado: 'ARMANDO CARGA' }).eq('id', idVuelo); 
+                    registrarEventoHistorial(idVuelo, "Apertura módulo Armado");
+                    window.location.href = `tiempo_armado.html?id=${idVuelo}`; 
+                } catch(e) { showCustomAlert("Error", "No se pudo inicializar la carga: " + e.message, "error"); } 
+            });
         }
         
         async function limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo) {
@@ -1438,7 +1496,6 @@
                         if(error) throw error;
                         
                         registrarEventoHistorial(idVuelo, "Vuelo Despachado (Outbound)");
-                        cargarVuelosActivos();
                         showCustomAlert("Proceso Completado", "Vuelo despachado correctamente.", "success");
                     } catch(e) { showCustomAlert("Fallo de Despacho", e.message, "error"); }
                 }
@@ -1460,7 +1517,6 @@
 
                 if(error) throw error;
                 registrarEventoHistorial(idVuelo, "Tiempos Importación Sincronizados");
-                cargarVuelosActivos(); 
                 showCustomAlert("Sincronizado", "Los tiempos de importación se guardaron correctamente sin alterar el despacho.", "success");
             } catch(e) { showCustomAlert("Error de Red", e.message, "error"); } 
         }
@@ -1496,7 +1552,6 @@
                         const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
                         if (error) throw error;
                         registrarEventoHistorial(idVuelo, "Operación Finalizada y Archivada");
-                        cargarVuelosActivos(); 
                         showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
                     } catch(e) { showCustomAlert("Error de Cierre", e.message, "error"); }
                 }
@@ -1504,60 +1559,60 @@
         }
 
         function eliminarVuelo(id, vuelo_id) { 
-            if(!wrapperCheckAccion(id, "Eliminar Registro de Vuelo")) return;
+            ejecutarAccionSegura(id, "Eliminar Registro de Vuelo", () => {
+                showCustomConfirm(
+                    "Eliminación de Registros", 
+                    `Esta acción purgará el vuelo <b>${vuelo_id}</b> de la base de datos local.<br><br><i><b>NOTA DE SISTEMA:</b> Los ULDs atados a esta tarjeta se liberarán a estado EMPTY.</i>`, 
+                    "Confirmar Eliminación", 
+                    "var(--amerijet-red)",
+                    async () => {
+                        try { 
+                            const { data: armados } = await supabaseClient.from('tiempos_armado').select('ulds_armados, stacks_armados').eq('vuelo_operacion_id', id);
+                            let uldsToFree = [];
+                            if (armados) {
+                                armados.forEach(a => {
+                                    if (a.ulds_armados) {
+                                        a.ulds_armados.forEach(item => {
+                                            let uldStr = item.uld || item;
+                                            if(uldStr && typeof uldStr === 'string') uldsToFree.push(uldStr);
+                                        });
+                                    }
+                                    if (a.stacks_armados) {
+                                        Object.values(a.stacks_armados).forEach(stack => {
+                                            let arr = stack.ulds || stack || [];
+                                            uldsToFree.push(...arr);
+                                        });
+                                    }
+                                });
+                            }
+                            
+                            if (uldsToFree.length > 0) {
+                                await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', uldsToFree);
+                            }
 
-            showCustomConfirm(
-                "Eliminación de Registros", 
-                `Esta acción purgará el vuelo <b>${vuelo_id}</b> de la base de datos local.<br><br><i><b>NOTA DE SISTEMA:</b> Los ULDs atados a esta tarjeta se liberarán a estado EMPTY.</i>`, 
-                "Confirmar Eliminación", 
-                "var(--amerijet-red)",
-                async () => {
-                    try { 
-                        const { data: armados } = await supabaseClient.from('tiempos_armado').select('ulds_armados, stacks_armados').eq('vuelo_operacion_id', id);
-                        let uldsToFree = [];
-                        if (armados) {
-                            armados.forEach(a => {
-                                if (a.ulds_armados) {
-                                    a.ulds_armados.forEach(item => {
-                                        let uldStr = item.uld || item;
-                                        if(uldStr && typeof uldStr === 'string') uldsToFree.push(uldStr);
-                                    });
-                                }
-                                if (a.stacks_armados) {
-                                    Object.values(a.stacks_armados).forEach(stack => {
-                                        let arr = stack.ulds || stack || [];
-                                        uldsToFree.push(...arr);
-                                    });
-                                }
-                            });
-                        }
-                        
-                        if (uldsToFree.length > 0) {
-                            await supabaseClient.from('uld_inventario').update({ use_status: 'EMPTY' }).in('uld_number', uldsToFree);
-                        }
-
-                        await supabaseClient.from('tiempos_armado').delete().eq('vuelo_operacion_id', id);
-                        await supabaseClient.from('com106_formularios').delete().eq('vuelo_operacion_id', id);
-                        await supabaseClient.from('vuelos_gse').delete().eq('vuelo_operacion_id', id);
-                        await supabaseClient.from('avion_inspecciones').delete().eq('vuelo_operacion_id', id);
-                        const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
-                        if(error) throw error;
-                        
-                        cargarVuelosActivos(); 
-                        showCustomAlert("Purga Finalizada", "Registros eliminados y unidades liberadas en rampa.", "success");
-                    } catch(e) { showCustomAlert("Fallo Crítico", e.message, "error"); }
-                }
-            );
+                            await supabaseClient.from('tiempos_armado').delete().eq('vuelo_operacion_id', id);
+                            await supabaseClient.from('com106_formularios').delete().eq('vuelo_operacion_id', id);
+                            await supabaseClient.from('vuelos_gse').delete().eq('vuelo_operacion_id', id);
+                            await supabaseClient.from('avion_inspecciones').delete().eq('vuelo_operacion_id', id);
+                            const { error } = await supabaseClient.from('vuelos_operaciones').delete().eq('id', id); 
+                            if(error) throw error;
+                            
+                            showCustomAlert("Purga Finalizada", "Registros eliminados y unidades liberadas en rampa.", "success");
+                        } catch(e) { showCustomAlert("Fallo Crítico", e.message, "error"); }
+                    }
+                );
+            });
         }
 
         function abrirModalEdit(id, vuelo, tail, ruta, fecha) { 
-            if(!wrapperCheckAccion(id, "Modificar Datos de Tarjeta")) return;
-            document.getElementById('edit_id').value = id; 
-            document.getElementById('edit_vuelo_id').value = vuelo; 
-            document.getElementById('edit_matricula_avion').value = tail; 
-            document.getElementById('edit_ruta').value = ruta; 
-            document.getElementById('edit_fecha').value = fecha;
-            document.getElementById('editModal').style.display = 'flex'; 
+            ejecutarAccionSegura(id, "Modificar Datos de Tarjeta", () => {
+                document.getElementById('edit_id').value = id; 
+                document.getElementById('edit_vuelo_id').value = vuelo; 
+                document.getElementById('edit_matricula_avion').value = tail; 
+                document.getElementById('edit_ruta').value = ruta; 
+                document.getElementById('edit_fecha').value = fecha;
+                document.getElementById('editModal').style.display = 'flex'; 
+            });
         }
         
         function cerrarModal() { document.getElementById('editModal').style.display = 'none'; }
@@ -1576,7 +1631,7 @@
                 
                 if(error) throw error; 
                 registrarEventoHistorial(editId, "Edición de metadatos de tarjeta");
-                cerrarModal(); cargarVuelosActivos(); showCustomAlert("Base de Datos", "Los registros se actualizaron correctamente.", "success");
+                cerrarModal(); showCustomAlert("Base de Datos", "Los registros se actualizaron correctamente.", "success");
             } catch (err) { showCustomAlert("Error SQL", err.message, "error"); } 
             finally { btn.disabled = false; btn.innerText = "Guardar Cambios"; }
         });
