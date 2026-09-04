@@ -1049,7 +1049,7 @@
                                                 <button type="button" class="btn-ahora" onclick="marcarTiempoAhora('t_fin_${v.id}')">AHORA</button>
                                             </div>
                                         </div>
-                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Sincronizar Tiempos</button>
+                                        <button class="btn-save-times" onclick="guardarTiemposLotificada('${v.id}')">Guardar Tiempos Import</button>
                                     </div>
                                 </div>
                                 <div style="display: ${displayMsgImport};">
@@ -1059,7 +1059,7 @@
 
                             <!-- PASO 5 -->
                             <div style="margin-top: 20px;">
-                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Operación Definitivamente</button>
+                                <button class="btn-close-flight" onclick="finalizarVueloCompleto('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar y Cerrar Vuelo</button>
                             </div>
                         </div>
                     `;
