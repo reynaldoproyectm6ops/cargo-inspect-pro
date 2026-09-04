@@ -1187,11 +1187,19 @@
                     const displayMsgExport = exportActivo ? 'none' : 'block';
                     const displayMsgImport = importActivo ? 'none' : 'block';
 
+                    // Variables limpias para los event listeners (prevención de bugs de UI por comillas en la BD)
+                    const safeId = v.id;
+                    const safeVueloId = (v.vuelo_id || '').replace(/'/g, "\\'");
+                    const safeRuta = (v.ruta || '').replace(/'/g, "\\'");
+                    const safeTail = (v.matricula_avion || '').replace(/'/g, "\\'");
+                    const safeFecha = v.fecha || '';
+                    const safeStatus = currentStatus.replace(/'/g, "\\'");
+
                     let btnDespacharHtml = '';
                     if (isDespachado) {
                         btnDespacharHtml = `<button class="btn-despachar-vuelo is-despachado" disabled>✓ VUELO DESPACHADO (OUTBOUND)</button>`;
                     } else {
-                        btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="ejecutarWrapperDespacho('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}')">DESPACHAR VUELO (OUTBOUND LISTO)</button>`;
+                        btnDespacharHtml = `<button class="btn-despachar-vuelo" id="btn_despacho_${v.id}" onclick="ejecutarWrapperDespacho('${safeId}', '${safeVueloId}', '${safeRuta}', '${safeTail}')">DESPACHAR VUELO (OUTBOUND LISTO)</button>`;
                     }
 
                     const stArmadoDone = currentStatus === 'ARMANDO CARGA' || isDespachado;
@@ -1223,10 +1231,10 @@
                                 </div>
                             </div>
                             <div class="card-controls" style="display: ${displayCardBtns};">
-                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${v.id}', '${v.vuelo_id}', '${v.matricula_avion}', '${v.ruta || ''}', '${v.fecha}')" title="Editar Vuelo">
+                                <button class="ctrl-btn ctrl-edit" onclick="abrirModalEdit('${safeId}', '${safeVueloId}', '${safeTail}', '${safeRuta}', '${safeFecha}')" title="Editar Vuelo">
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                                 </button>
-                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${v.id}', '${v.vuelo_id}')" title="Eliminar Vuelo">
+                                <button class="ctrl-btn ctrl-delete" onclick="eliminarVuelo('${safeId}', '${safeVueloId}')" title="Eliminar Vuelo">
                                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                                 </button>
                             </div>
@@ -1264,8 +1272,8 @@
                             <!-- BLOQUE SUPERIOR DESHABILITADO PARA USUARIO SI YA FUE DESPACHADO -->
                             <div class="${outboundDisabledClass}">
                                 <div class="toggle-group">
-                                    <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
-                                    <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${v.id}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
+                                    <button class="toggle-btn ${exportActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${safeId}', 'export', ${exportActivo})" title="Clic para Apagar/Encender Exportación">EXPORT: ${exportActivo ? 'ON' : 'OFF'}</button>
+                                    <button class="toggle-btn ${importActivo ? 'active' : 'inactive'}" onclick="toggleOperacion('${safeId}', 'import', ${importActivo})" title="Clic para Apagar/Encender Importación">IMPORT: ${importActivo ? 'ON' : 'OFF'}</button>
                                 </div>
 
                                 <!-- PASO 1 -->
@@ -1275,7 +1283,7 @@
                                         <div class="step-title">Procesamiento Inicial</div>
                                     </div>
                                     <div style="display: ${displayExport};">
-                                        <button class="action-btn btn-start-armado" onclick="irAlArmado('${v.id}')">Iniciar Armado y Manifiesto ULD</button>
+                                        <button class="action-btn btn-start-armado" onclick="irAlArmado('${safeId}')">Iniciar Armado y Manifiesto ULD</button>
                                     </div>
                                     <div style="display: ${displayMsgExport};">
                                         <div class="empty-state-box">Vuelo sin carga de exportación planificada.</div>
@@ -1289,9 +1297,9 @@
                                         <div class="step-title">Inspecciones y Equipo</div>
                                     </div>
                                     <div class="actions-subgrid">
-                                        <button onclick="ejecutarAccionSegura('${v.id}', 'Ir a Inspección', () => { window.location.href='inspeccion_avion.html?id=${v.id}' })" class="action-btn btn-inspect">Inspección Física</button>
-                                        <button onclick="ejecutarAccionSegura('${v.id}', 'Ir a Detalle Tiempos', () => { window.location.href='detalle_vuelo_tiempos.html?id=${v.id}' })" class="action-btn btn-com">Detalle Vuelo Tiempos</button>
-                                        <button onclick="ejecutarAccionSegura('${v.id}', 'Ir a Equipos GSE', () => { window.location.href='gse_equipos.html?id=${v.id}' })" class="action-btn btn-gse">Equipos GSE</button>
+                                        <button onclick="ejecutarAccionSegura('${safeId}', 'Ir a Inspección', () => { window.location.href='inspeccion_avion.html?id=${safeId}' })" class="action-btn btn-inspect">Inspección Física</button>
+                                        <button onclick="ejecutarAccionSegura('${safeId}', 'Ir a Detalle Tiempos', () => { window.location.href='detalle_vuelo_tiempos.html?id=${safeId}' })" class="action-btn btn-com">Detalle Vuelo Tiempos</button>
+                                        <button onclick="ejecutarAccionSegura('${safeId}', 'Ir a Equipos GSE', () => { window.location.href='gse_equipos.html?id=${safeId}' })" class="action-btn btn-gse">Equipos GSE</button>
                                     </div>
                                 </div>
 
@@ -1343,11 +1351,11 @@
 
                             <!-- PASO 5 -->
                             <div style="margin-top: 15px;">
-                                <button class="btn-close-flight" onclick="ejecutarWrapperCierre('${v.id}', '${v.vuelo_id}', '${v.ruta || ''}', '${v.matricula_avion}', '${currentStatus}')">Finalizar Operación</button>
+                                <button class="btn-close-flight" onclick="ejecutarWrapperCierre('${safeId}', '${safeVueloId}', '${safeRuta}', '${safeTail}', '${safeStatus}')">Finalizar Operación</button>
                             </div>
 
                             <!-- BOTÓN DE VER HISTORIAL COMPLETO -->
-                            <button type="button" class="btn-history-trigger" onclick="abrirModalHistorial('${v.id}', '${v.vuelo_id}')">
+                            <button type="button" class="btn-history-trigger" onclick="abrirModalHistorial('${safeId}', '${safeVueloId}')">
                                 <span>📋 Ver Historial del Vuelo</span>
                                 <span id="lbl_last_hist_${v.id}" style="font-size:9px; text-transform:none; font-weight:normal; opacity:0.8;">Sin interacciones grabadas</span>
                             </button>
@@ -1449,7 +1457,10 @@
                             let dest = stackData.destino ? stackData.destino.toUpperCase() : destinoDefault;
                             let uldsArray = stackData.ulds || stackData || []; 
                             if (!uldsPorDestino[dest]) uldsPorDestino[dest] = new Set();
-                            uldsArray.forEach(u => uldsPorDestino[dest].add(u));
+                            uldsArray.forEach(u => {
+                                let uldNum = u.uld || u; // <-- CORRECCIÓN: Extracción segura como texto para evitar objetos 
+                                uldsPorDestino[dest].add(uldNum);
+                            });
                         }
                     }
                 });
@@ -1581,7 +1592,7 @@
                                     if (a.stacks_armados) {
                                         Object.values(a.stacks_armados).forEach(stack => {
                                             let arr = stack.ulds || stack || [];
-                                            uldsToFree.push(...arr);
+                                            arr.forEach(u => uldsToFree.push(u.uld || u)); // <-- CORRECCIÓN: Extracción segura a cadena de texto
                                         });
                                     }
                                 });
