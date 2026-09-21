@@ -1224,30 +1224,71 @@
             } catch(e) { showCustomAlert("Error de Red", e.message, "error"); } 
         }
 
+       // function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) { 
+          //  showCustomConfirm(
+            //    "Cierre Total de Operación", 
+              //  `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">Si olvidaste despachar el vuelo, el sistema ejecutará el despacho y borrado de fotos automáticamente ahora.</span>`, 
+                //"Finalizar Operación", 
+                //"var(--amerijet-red)",
+                //async () => {
+                  //  try { 
+                    //    const yaDespachado = localStorage.getItem(`despachado_${idVuelo}`) === 'true';
+                      //  if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION' && !yaDespachado) {
+                        //    await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
+                          //  await transferirULDsAlDespachar(idVuelo, ruta);
+                        //}
+                        //const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
+                        //if (error) throw error;
+                        
+                        //localStorage.removeItem(`despachado_${idVuelo}`); // Limpieza
+                        
+                        //cargarVuelosActivos(); 
+                        //showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
+                //    } catch(e) { showCustomAlert("Error de Cierre", e.message, "error"); }
+               // }
+           // );
+       // }
+
         function finalizarVueloCompleto(idVuelo, numeroVuelo, ruta, matriculaAvion, estadoActual) { 
-            showCustomConfirm(
-                "Cierre Total de Operación", 
-                `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.<br><br><span style="color:var(--amerijet-red); font-size:12px; text-transform:uppercase;">Si olvidaste despachar el vuelo, el sistema ejecutará el despacho y borrado de fotos automáticamente ahora.</span>`, 
-                "Finalizar Operación", 
-                "var(--amerijet-red)",
-                async () => {
-                    try { 
-                        const yaDespachado = localStorage.getItem(`despachado_${idVuelo}`) === 'true';
-                        if (estadoActual !== 'DESPACHADO' && estadoActual !== 'EN IMPORTACION' && !yaDespachado) {
-                            await limpiarFotosInspeccion(idVuelo, matriculaAvion, numeroVuelo);
-                            await transferirULDsAlDespachar(idVuelo, ruta);
-                        }
-                        const { error } = await supabaseClient.from('vuelos_operaciones').update({ estado: 'FINALIZADO' }).eq('id', idVuelo); 
-                        if (error) throw error;
-                        
-                        localStorage.removeItem(`despachado_${idVuelo}`); // Limpieza
-                        
-                        cargarVuelosActivos(); 
-                        showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
-                    } catch(e) { showCustomAlert("Error de Cierre", e.message, "error"); }
-                }
-            );
+    // 1. Validar si el vuelo ya fue despachado
+    const yaDespachado = (estadoActual === 'DESPACHADO') || (localStorage.getItem(`despachado_${idVuelo}`) === 'true');
+
+    // 2. Bloquear la acción si no está despachado
+    if (!yaDespachado) {
+        showCustomAlert(
+            "Despacho Requerido", 
+            `El vuelo <b>${numeroVuelo}</b> no puede ser cerrado porque aún no ha sido despachado. Por favor, ejecuta el despacho en el Paso 3.`, 
+            "error"
+        );
+        return; // Detiene la función, impidiendo el cierre
+    }
+
+    // 3. Si ya está despachado, procede con el modal de confirmación normal
+    showCustomConfirm(
+        "Cierre Total de Operación", 
+        `Se procederá a cerrar y remover del tablero activo el vuelo <b>${numeroVuelo}</b>.`, 
+        "Finalizar Operación", 
+        "var(--amerijet-red)",
+        async () => {
+            try { 
+                // Actualiza directamente a FINALIZADO ya que el despacho fue validado
+                const { error } = await supabaseClient.from('vuelos_operaciones')
+                    .update({ estado: 'FINALIZADO' })
+                    .eq('id', idVuelo); 
+                
+                if (error) throw error;
+                
+                // Limpieza de la bandera temporal
+                localStorage.removeItem(`despachado_${idVuelo}`); 
+                
+                cargarVuelosActivos(); 
+                showCustomAlert("Cierre Aprobado", `La operación ${numeroVuelo} ha sido archivada con éxito.`, "success");
+            } catch(e) { 
+                showCustomAlert("Error de Cierre", e.message, "error"); 
+            }
         }
+    );
+}
 
         function eliminarVuelo(id, vuelo_id) { 
             showCustomConfirm(
